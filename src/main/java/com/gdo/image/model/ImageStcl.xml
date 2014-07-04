@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.image.model.ImageStcl">
+
+	<prop name="Height" type="int"><data><![CDATA[20]]></data></prop>
+	<prop name="Width" type="int"><data><![CDATA[20]]></data></prop>
+	
+	<prop name="MimeType" type="string"><data><![CDATA[image/jpeg]]></data></prop>
+	
+</template>

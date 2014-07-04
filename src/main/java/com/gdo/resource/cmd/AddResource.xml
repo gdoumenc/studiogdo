@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.cmd.AddResource">
+	
+	<params_description>
+		<param0>Command should be performed for new resource or existing one :
+			if 'new' : creates a new resource and the associated file.
+			if 'get" : creates a resource from an already existing file.
+		</param0>
+		<param1>Resource template class name</param1>
+		<param2>Command should perform Url encoding or not (values are :?)</param2>
+	</params_description>
+	
+	<slot name="Contexts" delegate="Target/Contexts">
+		<description>Predefined contextes used to retrieve predefined resources to import.</description>
+	</slot>
+	
+	<prop name="SelectedContextPath" type="string"/>
+	
+	<slot name="SelectedContext" arity="1">
+		<description>The context which will be used to complete the resource.</description>
+	</slot>
+	
+	<prop name="CreationMode" type="string"/>
+	
+	<prop name="FileName" type="string"/>
+
+	<slot name="ResourceCreated" arity="1">
+		<description>The created resource will be stored here until its completion will be done.</description>
+	</slot>
+	
+	<inst id="1" template="com.gdo.project.model.StepStcl">
+		<description> Set Context for resource</description>
+	</inst>
+	
+	<inst id="2" template="com.gdo.project.model.StepStcl">
+		<description>Step will create specific resource(image/document)</description>
+	</inst>
+	
+	<inst id="3" template="com.gdo.project.model.StepStcl">
+		<description>Step will Plug the resource to ResourceCreated slot</description>
+	</inst>
+	
+	<inst id="4" template="com.gdo.project.model.StepStcl">
+		<description>Step will Plug the resource to ResourceMgr</description>
+	</inst>
+	
+	<plug ref="1" key="1" slot="Steps"/>
+	<plug ref="2" key="2" slot="Steps"/>
+	<plug ref="3" key="3" slot="Steps"/>
+	<plug ref="4" key="4" slot="Steps"/>
+	
+</template>

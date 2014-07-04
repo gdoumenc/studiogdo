@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>StudioGdo facet package</title>
+</head>
+<body>
+<p>Facet descriptor package.</p>
+
+<blockquote>
+<p>&copy; 2004, 2005 StudioGdo/Guillaume Doumenc. Tous droits réservés.
+Ce logiciel est la propriété de StudioGdo et Guillaume Doumenc.
+Son utilisation est restreinte aux termes de sa licence.</p>
+<p>&copy; 2004, 2005 StudioGdo/Guillaume Doumenc. All Rights Reserved.
+This software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
+Use is subject to license terms.</p>
+</blockquote>
+
+<p>
+A facet descriptor is a XML file defining the HTML rendering for a stencil. 
+</p>
+
+<p>The facets are defined for the following type :
+<code>label</code>,
+<code>panel</code>,
+<code>tree</code>,
+<code>debug</code>.
+The synatx is defined in {@link com.gdo.facet.facets.dtd}.
+</p>
+
+<p>
+The rendering is defined locally as a CData field or in a file thru the <code>file</code> attribute.
+For each type, a default value can be defined when the <code>default</code> attribute is set to <code>true</code>.
+Otherwise the first description serves as the default one.
+</p>
+
+</body>
+</html>

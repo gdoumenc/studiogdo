@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+<!--
+Copyright 2005 StudioGdo/Guillaume Doumenc.
+This software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
+All rights reserved. Use is subject to license terms.
+-->
+
+<!-- DTD for the templatedescriptor -->
+<!ELEMENT template (description*, params_description?, (param | inst | slot | command | plug | unplug | prop)*)>
+
+<!-- DTD for the stencil descriptor -->
+<!ELEMENT stencil (description*, params_description?, (inst | slot | command | plug | unplug | prop)*)>
+<!ELEMENT inst (description*, params_description?, (param | inst | slot | command | plug | unplug | prop)*)>
+<!ELEMENT command (description*, params_description?, (param | inst | slot | plug | unplug | prop)*)>
+
+<!ELEMENT slot (description*, (proto | default | link | param)*)>
+<!ELEMENT proto (description*)>
+<!ELEMENT default (description*, (param | slot | command | plug | unplug | prop)*)>
+<!ELEMENT link (description*)>
+
+<!ELEMENT plug (description*)>
+<!ELEMENT unplug (description*)>
+<!ELEMENT prop (description*, data?)>
+
+<!--
+ Meta data used for description and gdodoc.
+ -->
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT params_description (param0?, param1?, param2?, param3?, param4?, example*)>
+<!ELEMENT param0 (#PCDATA)>
+<!ELEMENT param1 (#PCDATA)>
+<!ELEMENT param2 (#PCDATA)>
+<!ELEMENT param3 (#PCDATA)>
+<!ELEMENT param4 (#PCDATA)>
+<!ELEMENT example (#PCDATA)>
+
+<!--
+ A default instance is defined by its java class and
+ initial parameters.
+ -->
+<!ELEMENT param (#PCDATA)>
+<!ELEMENT data (#PCDATA)>
+
+<!--
+ A stencil template is associated to a java class which may not
+ have the same name. Extension can be defined by java hierarchy
+ or explicitly defined (used if defined).
+ Facets redefined the facets file name associated.
+ -->
+<!ATTLIST template
+	java CDATA #IMPLIED
+	extends CDATA #IMPLIED
+	facets CDATA #IMPLIED
+>
+
+<!--
+ A stencil is defined by a template.
+ -->
+<!ATTLIST stencil
+	template CDATA #REQUIRED
+	id CDATA #IMPLIED
+	name CDATA #IMPLIED
+>
+
+<!--
+ A slot is defined by a name and an arity. It can be dual (parent is key)
+ and ordoned (comparator)
+ Then it can be transient (not stored), calculated (java defined)
+ or delegate (link to another one slot; then local or not)
+ -->
+<!ATTLIST slot
+	name CDATA #REQUIRED
+	
+	arity CDATA #IMPLIED
+	parent CDATA #IMPLIED
+	comparator CDATA #IMPLIED
+	calculated (true|false) "false"
+	transient (true|false) "false"
+
+	factory CDATA #IMPLIED
+
+	depends CDATA #IMPLIED
+	
+	final (true|false) "false"
+	override (true|false) "true"
+
+	delegate CDATA #IMPLIED
+	local (true|false) "true"
+>
+
+<!ATTLIST prop
+	name CDATA #REQUIRED
+	type (int|boolean|string) "string"
+ 	
+	file CDATA #IMPLIED
+	id CDATA #IMPLIED
+	
+	expand (true|false) "false"
+	transient (true|false) "false"
+	calculated (true|false) "false"
+	
+	final (true|false) "false"
+	override (true|false) "true"
+>
+
+<!-- WARNING : no command in command or you will get an stack error.. 
+     as any stencil (then a command has an unplug command which is a stencil..)
+-->
+<!ATTLIST command
+	name CDATA #REQUIRED
+	template CDATA #IMPLIED
+	
+	final (true|false) "false"
+	override (true|false) "true"
+>
+
+<!ATTLIST inst
+	id CDATA #REQUIRED
+	name CDATA #IMPLIED
+	template CDATA #REQUIRED
+	
+	file CDATA #IMPLIED
+	encoding CDATA #IMPLIED
+>
+
+<!ATTLIST plug
+	ref CDATA #REQUIRED
+	path CDATA #IMPLIED
+	slot CDATA #REQUIRED
+	key CDATA #IMPLIED
+	on (create|load|always) "create"
+>
+
+<!ATTLIST unplug
+	slot CDATA #REQUIRED
+	key CDATA #IMPLIED
+	on (create|load|always) "create"
+>
+
+<!ATTLIST link
+	slot CDATA #REQUIRED
+	key CDATA #IMPLIED
+	path CDATA #REQUIRED
+>
+
+<!ATTLIST default
+	template CDATA #REQUIRED
+>
+
+<!--
+ Expected java classes (interfaces), slots or commands that must be
+ defined to accept the plug.
+ -->
+<!ATTLIST proto
+	classes CDATA #IMPLIED
+	slots CDATA #IMPLIED
+	commands CDATA #IMPLIED
+	props CDATA #IMPLIED
+	template CDATA #IMPLIED
+>
+
+<!--
+ Parameter defined for java construction or command execution.
+ -->
+<!ATTLIST param
+	index CDATA #REQUIRED
+	type CDATA #REQUIRED
+>

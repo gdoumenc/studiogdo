@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<!-- Test a user connection : set the user defined in the session path -->
+<template java="com.gdo.project.cmd.ConnectFromSessionUser">
+	<description>
+		Test a user for connection. 
+	</description>
+	<params_description>
+		<param0>The user tested</param0>
+		<example><![CDATA[
+    	<template extends="com.gdo.project.cmd.Connect">
+				<param index="0" type="string">/LDAP/User</param>
+			</template>
+		]]></example>
+	</params_description>
+</template>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.cmd.MultiSendMail">
+	<description>
+		Send the mail. Parameters can be used to override fields (multiple parameters are ':' separated).
+	</description>
+	<params_description>
+		<param0>Title</param0>
+		<param1>From</param1>
+		<param2>To</param2>
+		<param3>CC</param3>
+		<param4>Content</param4>
+	</params_description>
+</template>

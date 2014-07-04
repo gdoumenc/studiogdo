@@ -1,0 +1,2 @@
+JAVA_OPTS="-Duser.language=fr -Dfile.encoding=utf-8 -Djava.awt.headless=true -Xmx1536m -Xms768m -XX:+UseConcMarkSweepGC"
+JAVA_OPTS="${JAVA_OPTS} -verbose:gc -XX:+PrintGCDetails -XX:-PrintGCTimeStamps -Xloggc:/tmp/gc.log"

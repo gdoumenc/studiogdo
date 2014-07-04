@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.model.ResourcesContainerStcl">
+
+	<description>
+		A resources container manages a list of resources.
+	</description>
+	
+	<!-- context file proxy -->
+	<slot name="Contexts" arity="*">
+		<description>Contextes used to access resources (Get to retrieve one at any level, Files: to have the list of them at this level).</description>
+		<proto slots="Files"/>
+	</slot>
+
+	<!-- resources managed -->
+	<slot name="Files" arity="*" transient="true"/>
+	<inst id="files" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FilesOnly]]></param>
+	</inst>
+	<inst id="folders" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FoldersOnly]]></param>
+	</inst>
+	<plug ref="files" slot="Files" on="always"/>
+	<plug ref="folders" slot="Files" on="always"/>
+	
+	<slot name="FilesOnly" arity="*">
+		<description>Contains all files managed</description>
+	</slot>
+	<slot name="FoldersOnly" arity="*">
+		<description>Contains all sub containers managed</description>
+	</slot>
+	
+	<slot name="Get" arity="*" calculated="true">
+		<description>File defined at a given path as key (may be composed)</description>
+	</slot>
+	
+</template>

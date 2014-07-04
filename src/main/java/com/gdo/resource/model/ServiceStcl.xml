@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.model.ServiceStcl">
+
+	<description>
+		Allows to manipulate resources from several managers.
+	</description>
+	
+	<!-- Holds the Resource Managers -->
+	<slot name="ResourcesMgrs" arity="*"/>
+	
+	<!-- This slot keeps the contexts and can be share between Resource Managers -->
+	<slot name="Contexts" arity="*"/>
+</template>
+

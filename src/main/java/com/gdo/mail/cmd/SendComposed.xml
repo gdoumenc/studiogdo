@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.cmd.SendComposed">
+	 
+	<description>Simple mail composed command</description>
+	
+	<inst id="1" template="com.gdo.project.model.StepStcl">
+		<description>The user must be able to send simple mail.</description>
+	</inst>
+	<inst id="2" template="com.gdo.project.model.StepStcl">
+		<description>Step sends the mail and show the message.</description>
+	</inst>
+	<plug ref="1" key="1" slot="Steps"/>
+	<plug ref="2" key="2" slot="Steps"/>
+	
+</template>

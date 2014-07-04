@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<!-- Execute a java.lang.String method, param1 : path to the stencil to be 
+	tested param2 : mode used to retrieve label param3 : String method name (matchAll, 
+	startsWith, ...) param4 : first method parameters call (String) param5 : 
+	second method parameters call if needed (Integer : fromIndex) -->
+<template java="com.gdo.project.cmd.StringTest" />

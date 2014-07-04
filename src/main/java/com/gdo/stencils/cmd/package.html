@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Stencils cmd package</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+</head>
+<body>
+<p>Provides command basic classes.</p>
+
+<blockquote>
+<p>&copy; 2004, 2007 StudioGdo/Guillaume Doumenc. Tous droits réservés.
+Ce logiciel est la propriété de StudioGdo et Guillaume Doumenc.
+Son utilisation est restreinte aux termes de sa licence.</p>
+<p>&copy; 2004, 2007 StudioGdo/Guillaume Doumenc. All Rights Reserved.
+This software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
+Use is subject to license terms.</p>
+</blockquote>
+
+<p>
+Every command must be a subclass of
+<a href="CommandStencil.html"><code>CommandStencil</code></a>.
+To each <code>CommandStencil</code> a java class must be associated which
+redefines the abstract method <a href="CommandStencil#doAction"><code>doAction</code></a>. This method has a
+<a href="CommandContext.html"><code>CommandContext</code></a> parameter
+and must return a <a href="CommandStatus.html"><code>CommandStatus</code></a>.
+</p>
+
+</body>
+</html>

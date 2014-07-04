@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.ftp.cmd.Put">
+	<params_description>
+		<param0>Content string</param0>
+		<param1>File name where the content will be written</param1>
+	</params_description>
+</template>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.sql.model.MySQLStcl">
+
+	<slot name="Records" arity="*" calculated="true" >
+		<description>keys are index</description>
+	</slot>
+	
+	<!-- query executed -->
+	<prop name="Query" type="string"><data><![CDATA[]]></data></prop>
+	
+</template>
+

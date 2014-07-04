@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+
+	<flex mode="create"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>create</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="create.complete"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>create.complete</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="modify.recipients"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>modify.recipients</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="view.content"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>view.content</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="view.all"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>view.all</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="view"><![CDATA[<flex>
+		<className>com.gdo.mail::IMAPMailStcl</className>
+		<initialState>view.all</initialState>
+	</flex>]]></flex>
+	
+  <model mode="modify.to"><![CDATA[<model>
+  	<subTreePath>To</subTreePath>
+  	<subTreeAttributes>Name:Address</subTreeAttributes>
+  </model>]]></model>
+
+</facets>

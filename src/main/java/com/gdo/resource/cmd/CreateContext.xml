@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.cmd.CreateContext">
+	<params_description>
+		<param0>Context Template Name</param0>
+	</params_description>
+</template>

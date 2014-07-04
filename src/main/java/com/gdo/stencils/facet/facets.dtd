@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+<!--
+Copyright 2005 StudioGdo/Guillaume Doumenc.
+This software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
+All rights reserved. Use is subject to license terms.
+-->
+
+<!-- DTD for the faces descriptor -->
+
+<!ELEMENT facets (label | debug | panel | tree)*>
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT debug (#PCDATA)>
+<!ELEMENT panel (#PCDATA)>
+<!ELEMENT tree (#PCDATA)>
+
+<!-- if extends == false, will not seach in super hierarchy
+        extends == name, will search in name file -->
+<!ATTLIST facets
+	extends CDATA #IMPLIED
+>
+
+<!ATTLIST label
+	mode CDATA #IMPLIED
+	default (true|false) "false"
+	container (true|false) "false"
+	file CDATA #IMPLIED
+	extends CDATA #IMPLIED
+	same CDATA #IMPLIED
+	profile CDATA #IMPLIED
+>
+
+<!ATTLIST debug
+	mode CDATA #IMPLIED
+	default (true|false) "false"
+	container (true|false) "false"
+	file CDATA #IMPLIED
+	extends CDATA #IMPLIED
+	same CDATA #IMPLIED
+	profile CDATA #IMPLIED
+>
+
+<!ATTLIST panel
+	mode CDATA #IMPLIED
+	default (true|false) "false"
+	container (true|false) "false"
+	file CDATA #IMPLIED
+	extends CDATA #IMPLIED
+	same CDATA #IMPLIED
+	profile CDATA #IMPLIED
+>
+
+<!ATTLIST tree
+	mode CDATA #IMPLIED
+	default (true|false) "false"
+	container (true|false) "false"
+	file CDATA #IMPLIED
+	extends CDATA #IMPLIED
+	same CDATA #IMPLIED
+	profile CDATA #IMPLIED
+>

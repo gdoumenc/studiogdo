@@ -1,0 +1,109 @@
+<project xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<!--
+	To add specific jars : Menu Windows/Preference/Ant/Runtime/Classpath (global entries)
+	To avoid Java Heap issue : Menu Configurations Outils externes, onglet JRE, Argument VM : -Xms512m -Xmx512m
+	-->
+
+	<property name="STUDIOGDO" value="C:\home\studiogdo" />
+	<property name="JAVA_WORKSPACE" value="${STUDIOGDO}/workspace" />
+	<property name="FLEX_WORKSPACE" value="${STUDIOGDO}/flex_workspace" />
+
+	<property name="JAVA_PROJECT" value="${JAVA_WORKSPACE}/${PROJECT}" />
+	<property name="FLEX_PROJECT" value="${FLEX_WORKSPACE}/${PROJECT}_launcher" />
+	
+  <property name="USERNAME" value="studiogdo"/>
+	<property name="HOME" value="/home/studiogdo/${PROJECT}" />
+	<property name="WWW" value="/var/www" />
+	<property name="BACKUP" value="/var/backups/studiogdo/deploy" />
+
+
+	<property name="FLEX_HOME"
+		value="C:\Program Files (x86)\Adobe\Adobe Flash Builder 4.6\sdks\4.6.0" />
+	<taskdef resource="flexTasks.tasks" />
+
+	<target name="flex_projectversion" description="generate product version number">
+		<tstamp />
+		<replaceregexp match="PROJECT_VERSION_NUMBER([^;])*"
+			replace="PROJECT_VERSION_NUMBER:String='${DSTAMP}${TSTAMP}'" flags="s">
+			<fileset dir="${FLEX_PROJECT}/src/main" includes="index.mxml" />
+		</replaceregexp>
+	</target>
+	
+	<macrodef name="flex_compiler">
+		<element name="libs"/>
+		<sequential>
+			<mxmlc file="${FLEX_PROJECT}/src/main/index.mxml"
+				keep-generated-actionscript="false" output="${FLEX_PROJECT}/deploy/index.swf"
+				actionscript-file-encoding="UTF-8" locale="fr_FR,en_US">
+				<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+				<source-path path-element="${FLEX_PROJECT}/src" />
+				<compiler.debug>${DEBUG}</compiler.debug>
+
+				<compiler.library-path dir="${FLEX_HOME}/frameworks"
+					append="true">
+					<include name="libs" />
+					<include name="locale/{locale}" />
+				</compiler.library-path>
+				<compiler.library-path dir="${FLEX_WORKSPACE}"
+					append="true">
+					<include name="themes/target/themes.swc" />
+				</compiler.library-path>
+
+				<compiler.include-libraries dir="${FLEX_WORKSPACE}"
+					append="true">
+					<libs/>
+				</compiler.include-libraries> 
+			</mxmlc>
+		</sequential>
+	</macrodef>
+
+	<target name="deploy_flex">
+		<tstamp />
+		<sshexec host="${HOST}" username="${USERNAME}" password="${PASSWORD}"
+			command="cp ${WWW}/${SITE}/index.swf ${BACKUP}/${PROJECT}.index.swf.${DSTAMP}"
+			trust="true" failonerror="false" />
+		<scp localFile="${FLEX_PROJECT}/deploy/index.swf"
+			remoteTofile="${USERNAME}@${HOST}:${WWW}/${SITE}/index.swf" trust="true"
+			password="${PASSWORD}" failonerror="true" />
+		<sshexec host="${HOST}" username="${USERNAME}" password="${PASSWORD}" 
+			command="chmod a+r ${WWW}/${SITE}/index.swf" trust="true" />
+	</target>
+	
+  <!--
+	  Copies skeletons to tomcat work directory
+	-->
+  <target name="skel">
+    <delete>
+      <fileset dir="C:/var/lib/tomcat/work/${PROJECT}/skel/"/>
+    </delete>
+    <copy toDir="C:/var/lib/tomcat/work/${PROJECT}/skel/">
+      <fileset dir="src/main/skel"/>
+    </copy>
+  </target>
+     
+	<target name="package_java">
+		<artifact:mvn mavenHome="C:\Program Files (x86)\Maven"
+			fork="true" pom="${JAVA_PROJECT}/pom.xml" failonerror="true">
+			<arg value="package" />
+		</artifact:mvn>
+	</target>
+
+	<target name="deploy_java" depends="package_java" > 
+		<tstamp>
+			<format property="DSTAMP" pattern="yyyy-MM-dd"/>
+		</tstamp>
+		<sshexec host="${HOST}" username="${USERNAME}" password="${PASSWORD}"
+			command="cp ${HOME}/${PROJECT}.war ${BACKUP}/${PROJECT}.war.${DSTAMP}"
+			trust="true" failonerror="false" />
+		<scp localFile="${JAVA_PROJECT}/deploy/${PROJECT}.war"
+			remoteTofile="${USERNAME}@${HOST}:${HOME}/${PROJECT}.new" trust="true"
+			password="${PASSWORD}" failonerror="true" />
+    <sshexec host="${HOST}" username="${USERNAME}" password="${PASSWORD}"
+      command="mv ${HOME}/${PROJECT}.new ${HOME}/${PROJECT}.war" trust="true"
+      failonerror="true" />
+    <sshexec host="${HOST}" username="${USERNAME}" password="${PASSWORD}"
+      command="cd ${PROJECT}; bin/update.sh" trust="true" failonerror="true" />
+	</target>
+
+</project>

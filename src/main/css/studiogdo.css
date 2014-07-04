@@ -1,0 +1,337 @@
+/*
+ * FORM PART
+ */
+
+.not_editable {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.not_editable:after {
+    position :absolute;
+    left     : 0;
+    top      : 0;
+    width    : 100%;
+    height   : 100%;
+    content  : ' ';
+}
+
+td form {
+    padding: 0;
+    margin: 0;
+}
+
+label {
+    display: inline-block;
+    height: 20px;
+    padding: 0px 5px 0px 0px;
+    font-weight: normal;
+}
+
+select, input[type="file"] {
+  height: 25px;
+}
+
+input {
+  height: 25px;
+}
+
+label,
+input[type="radio"], input[type="checkbox"], input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
+select {
+  margin: 1px 1px;
+  padding: 1px 1px;
+  vertical-align: top;
+}
+
+.input_tiny {
+  width: 50px;
+}
+
+.input_small {
+  width: 100px;
+}
+
+.input_medium {
+  width: 150px;
+}
+
+.input_large {
+  width: 200px;
+}
+
+.input_xlarge {
+  width: 350px;
+}
+
+.input_xxlarge {
+  width: 600px;
+}
+
+.input_full {
+  width: 100%;
+}
+
+.input_full_wrap {
+  display: block;
+  padding-right: 8px;
+}
+
+/*
+ * POCHOIR
+ */
+
+
+div#pochoir {
+  display: inline-block;
+  overflow-y: hidden;
+  vertical-align: top;
+}
+
+nav.lmenu {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  z-index: 20;
+}
+
+section.fewColumns {
+  display: inline-block;
+  height: 300px;
+  width: 570px;
+}
+
+form.fewColumns {
+  display: inline-block;
+  position: absolute;
+  top: 100px;
+  left: 620px;
+  width: 300px;
+  margin-left: 15px;
+}
+
+form.fullScreen {
+  display: block;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  z-index: 10;
+  background-color: white;
+}
+
+div.loadIndicator {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+}
+
+div.caption {
+  text-align: left;
+  color: #AABBB5;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+  margin-bottom: 5px;
+}
+
+/*
+ * BUTTON PART
+ */
+h3 button#annuler, h3 button#valider, h3 button#editer, h3 button#liberer {
+  font-size: small;
+}
+
+button#annuler {
+  background: #fcafac repeat-x;
+}
+
+button#annuler:hover {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcafac));
+  background-image: -webkit-linear-gradient(#ffffff, #fcafac);
+  background-image: -moz-linear-gradient(#ffffff, #fcafac);
+  background-image: -o-linear-gradient(#ffffff, #fcafac);
+  background-image: -ms-linear-gradient(#ffffff, #fcafac);
+  background-image: linear-gradient(#ffffff, #fcafac);
+  padding-right: 5px;
+}
+
+button#valider {
+  background: #acca7d repeat-x;
+}
+
+button#valider:hover {
+  background: #acca7d repeat-x;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #acca7d));
+  background-image: -webkit-linear-gradient(#ffffff, #acca7d);
+  background-image: -moz-linear-gradient(#ffffff, #acca7d);
+  background-image: -o-linear-gradient(#ffffff, #acca7d);
+  background-image: -ms-linear-gradient(#ffffff, #acca7d);
+  background-image: linear-gradient(#ffffff, #acca7d);
+  background-color: #acca7d;
+}
+
+button.warning:hover {
+  background: #acca7d repeat-x;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #ffd29b));
+  background-image: -webkit-linear-gradient(#ffffff, #ffd29b);
+  background-image: -moz-linear-gradient(#ffffff, #ffd29b);
+  background-image: -o-linear-gradient(#ffffff, #ffd29b);
+  background-image: -ms-linear-gradient(#ffffff, #ffd29b);
+  background-image: linear-gradient(#ffffff, #ffd29b);
+  background-color: #ffd29b;
+}
+
+button#editer {
+    color: green;
+}
+
+button#liberer {
+    color: #EEA236;
+}
+
+/*
+ * TABLE PART
+ */
+table {
+  border-collapse: collapse;
+}
+
+table caption {
+  text-align: left;
+  color: #AABBB5;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+  margin-bottom: 5px;
+}
+
+table thead {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+}
+
+table td, table th {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+table td.centered, table th.centered {
+  text-align: center;
+}
+
+table td.right-aligned, table th.right-aligned {
+  text-align: right;
+}
+
+table th.header {
+  padding-left: 20px;
+  background-repeat: no-repeat;
+  background-position-y: 50%;
+}
+
+table th.headerSort {
+  background-image: url('/shared/css/images/sort.gif');
+}
+
+table th.headerSortUp {
+  background-image: url('/shared/css/images/sort-asc.gif');
+}
+
+table th.headerSortDown {
+  background-image: url('/shared/css/images/sort-desc.gif');
+}
+
+table span.info {
+  background-image: url('/shared/css/images/tooltip.png');
+  display: inline-block;
+  width: 16px;
+}
+
+/* Table style liste de clients, de rencontres, ... */
+table.grid {
+  min-width: 960px;
+  width: 100%;
+}
+
+table.grid thead {
+  color: #4d70a8;
+  border-bottom: 1px dotted #4d79a8;
+}
+
+table.grid tbody tr:nth-child(even) {
+  background-color: #F5F5F5;
+}
+
+table.grid tbody tr:hover {
+  background-color: #A8DD93;
+}
+
+table.grid tbody tr.selected {
+  background-color: #D7FAC9;
+}
+
+/* Tables d'administration */
+table.admin {
+  min-width: 300px;
+  border: 1px solid;
+}
+
+table.admin th {
+  color: #DABC36;
+  border-bottom: 1px dashed;
+}
+
+table.admin tr:nth-child(even) {
+  background-color: #fff6e8;
+}
+
+/* Colonnes de suppression */
+td.delLine {
+  padding: 0;
+  width: 12px;
+  height: 12px;
+}
+
+span#table_limit_warn {
+  color: #fe352b;
+}
+
+/*
+ * COMMAND PART
+ */
+ol.multi_step_menu {
+
+}
+
+ol.multi_step_menu li {
+  display: inline-block;
+  border: solid 1px #555;
+  padding: 10px;
+  max-width: 200px;
+}
+
+ol.multi_step_menu li.current_step {
+  background-color: #A65800;
+}
+
+ol.multi_step_menu li a {
+  text-decoration: none;
+  color: #FF8700;
+}
+
+ol.multi_step_menu li.next_step {
+  border: dashed 1px grey;
+}
+
+ol.multi_step_menu li.next_step a {
+  color: #FFBD73;
+  cursor: default;
+}

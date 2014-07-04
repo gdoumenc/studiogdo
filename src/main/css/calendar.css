@@ -1,0 +1,25 @@
+table.calendar {
+    border-radius: 5px; margin-left: 20px;
+    border: 1px solid #30F; 
+    -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;
+    /* EmpÃÂªche la sÃÂ©lection pour la gÃÂ©rer uniquement par JS */
+    display: inline-block}
+
+table.calendar th, table.calendar td {
+    border-left: 8px; border-right: 10px;
+    width: 80px;}
+
+table.calendar th {
+    color: #009; text-decoration: underline;}
+
+table.calendar tbody tr:nth-child(even) {
+    background-color: #ccf;}
+table.calendar td:not(:first-child)
+    {color: red; border: 1px dotted grey;}
+    /* Couleur rouge: cette situation ne doit pas arriver => Marqueur!! */
+table.calendar td.selected {background-color: #fcc !important;}
+table.calendar td.booked {background-color: #EED; color: #876; text-align: center}
+table.calendar td.superselected {border-style: solid;}
+
+table.calendar tr th.horaire {text-decoration: none; font-size: 8pt;}
+table.calendar tr th:first-child {width: 100px;}

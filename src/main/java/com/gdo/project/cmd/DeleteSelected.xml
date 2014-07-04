@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.project.cmd.DeleteSelected">
+	<description>
+		Deletes a stencil from a selected slot.
+		The java methods
+		beforeUnplug may be redefined for specific stencil deletion. 
+	</description>
+	<params_description>
+		<param0>deletion step (at which step index the stencil will be
+			deleted)</param0>
+		<example><![CDATA[
+    	<template extends="com.gdo.project.cmd.DeleteSelected">
+				<param index="0" type="int">2</param> <!-- no confirmation -->
+			</template>
+		]]></example>
+	</params_description>
+
+	<!-- model part -->
+	<param index="0" type="int"><![CDATA[3]]></param>
+
+	<slot name="Source" arity="*">
+		<description>slot path where the selected stencils can be found (for
+			selection)</description>
+		<description>should be redefined (usually delegated slot)</description>
+	</slot>
+
+	<!-- used in rendering the command -->
+	<prop name="StencilType" type="string">
+		<data>stencil</data>
+	</prop>
+
+	<!-- presentation part -->
+	<prop name="Title" id="title" />
+
+	<!-- Selection Step -->
+	<inst id="_1" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" id="step1.title" />
+		<prop name="Render" id="step1.render" />
+	</inst>
+
+	<!-- Deletion Step -->
+	<inst id="_2" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" id="step2.title" />
+		<prop name="Render" id="step2.render" />
+	</inst>
+
+	<plug ref="_1" key="1" slot="Steps" />
+	<plug ref="_2" key="2" slot="Steps" />
+
+</template>
+

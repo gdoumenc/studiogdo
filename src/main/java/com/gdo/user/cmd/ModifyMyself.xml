@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.user.cmd.ModifyMyself">
+
+   <prop name="Title" type="string" file="com.gdo.user.prop" id="modify.title"/>
+
+	<!-- faces steps -->
+	<inst id="_1" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" type="string" file="com.gdo.user.prop" 
+			id="modifyMyself.step1.title">
+		</data></prop>
+		<prop name="Render" type="string" file="com.gdo.user.prop" 
+			id="modifyMyself.step1.render">
+		</data></prop>
+	</inst>
+	<inst id="_2" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" type="string" file="com.gdo.user.prop"
+			id="modifyMyself.step2.title">
+		</data></prop>
+		<prop name="Render" type="string" file="com.gdo.user.prop" 
+			id="modifyMyself.step2.render">
+		</data></prop>
+	</inst>
+	<plug ref="_1" key="1" slot="Steps" />
+	<plug ref="_2" key="2" slot="Steps" />
+</template>

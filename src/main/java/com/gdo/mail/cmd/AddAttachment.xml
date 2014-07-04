@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.cmd.AddAttachment">
+	 
+	<description>Attaches a resource to an email</description>
+	
+	<prop name="Type" type="int">
+		<description>1=File, 2=Image(embed)</description>
+	</prop>
+	
+	<inst id="1" template="com.gdo.project.model.StepStcl">
+		<description>The user selects the resource to add.</description>
+	</inst>
+	<inst id="2" template="com.gdo.project.model.StepStcl">
+		<description>Adds the resource to the mail.</description>
+	</inst>
+	
+	<plug ref="1" key="1" slot="Steps"/>
+	<plug ref="2" key="2" slot="Steps"/>
+	 
+	
+</template>

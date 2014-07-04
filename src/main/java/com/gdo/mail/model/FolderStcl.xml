@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.FolderStcl">
+
+	<prop name="FolderTemplate" type="string"><data>com.gdo.mail.model.FolderStcl</data></prop>
+	<prop name="FileTemplate" type="string"><data>com.gdo.mail.model.IMAPMailStcl</data></prop>
+
+	<slot name="Context" arity="1"/>
+	
+	<slot name="Parent" arity="1"/>
+
+	<slot name="Files" arity="*" transient="true">
+		<description>Files and folders defined in the directory</description>
+	</slot>
+	<inst id="folders" template="com.gdo.project.adaptor.LinkStcl">
+		<prop name="Path" type="string"><data>../FoldersOnly</data></prop>
+	</inst>
+	<inst id="files" template="com.gdo.project.adaptor.LinkStcl">
+		<prop name="Path" type="string"><data>../FilesOnly</data></prop>
+	</inst>
+	<plug ref="folders" slot="Files"/>
+	<plug ref="files" slot="Files"/>
+	
+	<slot name="FilesOnly" arity="*" calculated="true">
+		<description>Files only defined in the directory</description>
+		<proto slots="Name"/>
+	</slot>
+	
+	<slot name="FoldersOnly" arity="*" calculated="true">
+		<description>Folders only defined in the directory</description>
+		<proto slots="Name"/>
+	</slot>
+
+	<slot name="AttachmentsOnly" arity="*" calculated="true">
+		<description>Files only defined in the attachments</description>
+		<proto slots="Name"/>
+	</slot>
+	
+	<slot name="Get" arity="*" calculated="true">
+		<description>File defined at a given path as key (may be composed)</description>
+		<proto slots="Name" commands="Delete:Rename"/>
+	</slot>
+	
+	<!-- command name="Delete" template="com.gdo.mail.cmd.Delete"/>
+	<command name="Rename" template="com.gdo.mail.cmd.RenameFolder"/-->
+
+</template>
+

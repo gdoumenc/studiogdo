@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dev Facet</title>
+    <link rel="stylesheet" type="text/css" href="/shared/javascript/studiogdo.css" />
+    <link rel="stylesheet" type="text/css" href="dev.css" />
+    <script src="/shared/javascript/studiogdo.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="dev.js"></script>
+  </head>
+  <body>
+    Serveur :
+    <select id="bocall_host">
+      <option value="localhost">localhost</option>
+      <option value="localhost/gd1">gd1</option>
+      <option value="localhost/gd3">gd3</option>
+      <option value="localhost/gd6">gd6</option>
+    </select>
+    /
+    War :
+    <select id="bocall_war">
+      <option value="ab">ab</option>
+      <option value="asis">asis</option>
+      <option value="avance">avance</option>
+      <option value="barolles">barolles</option>
+      <option value="cmco">cmco</option>
+      <option value="imaxio">imaxio</option>
+      <option value="massey">massey</option>
+      <option value="mssa">mssa</option>
+      <option value="morassuti">morassuti</option>
+      <option value="union">union</option>
+    </select>
+    /
+    Servlet :
+    <select id="bocall_servlet">
+      <option value="bo">bo</option>
+      <option value="html">html</option>
+      <option value="local/rpc">local</option>
+      <option value="pip">pip</option>
+    </select>
+    <label for="user" >Login : </label>
+    <input id="user" type="text" />
+    <label for="passwd" > Passwd : </label>
+    <input id="passwd" type="text" />
+    <input type="button" value="Go" onclick="config(event)" /> (ne pas saisir d'utilisateur si pas besoin de se connecter)
+    <hr />
+    <div id="path">
+      <div>
+        <img id="loading" src="loading.gif" />
+      </div>
+      Chemin courant : <span id="currentEditablePath" title="double-clic pour éditer"
+      ondblclick="var edit = this.nextElementSibling; edit.children[0].value = this.innerHTML; edit.style.display='block'; this.style.display='none';"> </span>
+      <div id="pathEdit">
+        <input type="text" style="width: 80%;" />
+        <input type="button" value="Cancel" onclick="this.parentNode.previousElementSibling.style.display='block';this.parentNode.style.display='none';" />
+        <input type="button" value="refresh" onclick="this.parentNode.children[0].value = this.parentNode.previousElementSibling.innerHTML" />
+        <input type="button" value="Set" onclick="setUserPath(this.parentNode.children[0].value, this.nextElementSibling.checked);" />
+        <input type="checkbox" name="recursiveExpand" checked value="récursif">
+      </div>
+      <div></div>
+      Chemin interactif : /<span id="slotSelect"></span>
+    </div>
+    <div id="dashboard">
+      <div id="dashboard_stencils" class="dashboard_section">
+        <input id="stencilButton" type="button" value="STENCILS"
+        class="buttonOff" onclick="stencilAction(event);">
+        <input id="stencilButtonPath" type="text">
+        <br>
+        <input type="checkbox" name="slots"
+        onclick="if (this.nextElementSibling.checked && this.checked) this.nextElementSibling.checked = false;">
+        $Slots
+        <input type="checkbox" name="commands"
+        onclick="if (this.previousElementSibling.checked && this.checked) this.previousElementSibling.checked = false;">
+        $Commands
+        <!-- //TODO mettre a jour le disable des autres checkbox -->
+        <br>
+        <input type="checkbox" name="attribut">
+        Attributs
+        <input type="text" name="attributs">
+      </div>
+      <div id="dashboard_get" class="dashboard_section">
+        <input type="button" value="GET" onclick="getAction(event)">
+      </div>
+      <div id="dashboard_set" class="dashboard_section">
+        <input type="button" value="SET" onclick="setAction(event)">
+        <br>
+        <label>valeur </label>
+        <input type="text" name="v">
+      </div>
+      <div id="dashboard_facets" class="dashboard_section">
+        <input type="button" value="FACETS" onclick="facetAction(event)">
+        <br>
+        <label for="format_facet">facet </label>
+        <select id="format_facet">
+          <option value="html5">HTML skel</option>
+          <option value="jskel">JSON skel</option>
+        </select>
+        <input id="model_facet" name="m"/>
+        <br>
+        <label for="format_facet_dev">facet </label>
+        <select id="format_facet_dev" class="input_xlarge"> 
+          <option value="">---</option>ro
+          <option value="file:///C:/home/studiogdo/workspace/studiogdo/src/main/dev/skel/sql_context.html">SQL Context</option>
+        </select>
+        <br>
+      </div>
+      <div id="dashboard_apply" class="dashboard_section">
+        <input type="button" value="APPLY" onclick="applyAction(event);">
+        <br>
+        <span id="commands"></span>
+        <input type="text" name="c">
+        <span id="addparam" onclick="addParam(event);">&oplus;</span>
+        <div id="params"></div>
+      </div>
+    </div>
+    <div id="response">
+      <img id="responseloading" src="loading.gif" />
+      <div id="responseText"></div>
+      <div id="responseHTML"></div>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+
+	<flex mode="performing"><![CDATA[<flex>
+			<className>com.gdo.studiogdo::ComposedActionStcl</className>
+			<initialState>performing</initialState>
+	 </flex>]]></flex>
+	 
+	 <model mode="existing.context"><![CDATA[<model>
+			<subTreePath>Target/Contexts</subTreePath>
+			<stclSelectedMode>modify</stclSelectedMode>
+			</model>]]></model>
+
+</facets>

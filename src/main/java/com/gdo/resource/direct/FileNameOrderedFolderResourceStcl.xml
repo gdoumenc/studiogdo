@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.resource.model.DirectFolderResourceStcl">
+
+	<description>
+		Files and folders are sorted by name.
+	</description>
+	
+	<!-- default template for folder -->
+	<prop name="FolderTemplate" type="string"><data>com.gdo.resource.direct.FileNameOrderedFolderResourceStcl</data></prop>
+
+	<!-- resources managed -->
+	<slot name="FileResources" arity="*" calculated="true" comparator="string[Name]">
+		<description>Contains all files managed</description>
+	</slot>
+	
+	<slot name="FolderResources" arity="*" calculated="true" comparator="string[Name]">
+		<description>Contains all folders managed</description>
+	</slot>
+</template>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.project.cmd.Move">
+	<description>
+		Move a stencil in a slot (up or down).
+	</description>
+	<params_description>
+		<param0>up, down, first, last</param0>
+		<param1>if up or down, key reference (up to this key, down to this
+			key)</param1>
+	</params_description>
+</template>

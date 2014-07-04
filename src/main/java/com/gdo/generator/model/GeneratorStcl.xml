@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.generator.model.GeneratorStcl">
+
+	<!-- mask used for expansion -->
+	<prop name="Mask" type="string"/>
+
+	<!-- mumber of expansion iteration (the result is expanded as many time) -->
+	<prop name="Iteration" type="int"><data>1</data></prop>
+	
+	<!-- escape content (if defined all meta characters are escaped in result)  -->
+	<!-- values are : (null), xml, html, java, javascript, sql -->
+	<prop name="Escape" type="string"/>
+	<slot name="Remove" arity="*">
+		<description>exp to be removed from content defined as property and plugged here (done before escape)</description>
+	</slot>
+	
+	
+	<!-- sub generators defined for stencil chidren (key is mask mode) -->
+	<slot name="Children" arity="*">
+		<proto classes="com.gdo.generator.model.GeneratorStcl"/>
+	</slot>
+	
+	<!-- Ftp context to retrieve resources in the editor -->
+	<slot name="FtpContext" arity="?">
+		<description>A FtpContext is set to retrieve resource to render them on editor.</description>
+	</slot>
+	
+	<!-- files generated (contains at least one; key as url, value as property containing content) -->
+	<slot name="FilesGenerated" arity="*" calculated="true"/>
+	
+	<!-- url file for generation (dir is used for ftp reading all ressource are from this dir) -->
+	<prop name="Dir" type="string"/>
+	<prop name="Url" type="string"/>
+	
+	<!-- boolean prop to allow directory creation -->
+	<prop name="CreateDir" type="boolean"><data><![CDATA[false]]></data></prop>
+	<!-- if true the url is used to generate a file -->
+	<prop name="GenerateFile" type="boolean"><data><![CDATA[false]]></data></prop>
+	<!-- if true the content is added to the file -->
+	<prop name="AppendInFile" type="boolean"><data><![CDATA[false]]></data></prop>
+	<!-- if true the text is return as expansion -->
+	<prop name="GenerateText" type="boolean"><data><![CDATA[true]]></data></prop>
+
+	<!-- used to defined if xinha should be used or not -->
+	<prop name="IsHtml" type="boolean"><data>true</data></prop>
+
+	<!-- contains the user id of the current writer (to be inherited form shared stencil) -->
+	<prop name="InModification" type="boolean"><data>false</data></prop>
+	
+	<!-- trace on content generated -->
+	<prop name="HtmlTrace" type="boolean"><data>true</data></prop>
+
+	<command name="CreateSubGenerator" template="com.gdo.project.cmd.CreateAtomic">
+		<description>Create a sub Generator in Children.</description>
+		<param index="0" type="string">com.gdo.generator.model.GeneratorStcl</param>
+		<param index="1" type="string">Target/Children</param>
+		<param index="2" type="string">int</param>
+		<param index="3" type="string">1</param>
+	</command>
+
+</template>

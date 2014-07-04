@@ -1,0 +1,482 @@
+/*
+// Default CSS for StudioGdo
+*/
+
+
+body {
+  background: white;
+  font-size: 14px;
+  margin: 0;
+  padding: 1%;
+}
+
+h1  {
+  color: #C03;
+  font-size: 16px;
+  margin: 10px 0px 0px 0px;
+}
+
+h2  {
+  background-color: #E4FFF2;
+  color: #666666;
+  font-size: 16px;
+  margin: 10px 0px 0px 0px;
+  border-top : medium double black;
+  border-bottom : thin dotted black;
+}
+
+h3  {
+  background-color: #E4FFF2;
+  color: #666666;
+  font-size: smaller;
+  font-style: italic;
+  margin: 5px 0px 0px 0px;
+  border-top : medium solid black;
+  border-bottom : thin dotted black;
+}
+
+w1  {
+  display: block;
+  color: #C03;
+  font-size: 16px;
+  margin: 10px 0px 0px 0px;
+}
+
+w2  {
+  display: block;
+  background-color: #FFBCAF;
+  color: #666666;
+  font-size: 16px;
+  margin: 10px 0px 0px 0px;
+  border-top : medium double black;
+  border-bottom : thin dotted black;
+}
+
+w3  {
+  display: block;
+  background-color: #FFBCAF;
+  color: black;
+  font-size: smaller;
+  font-style: italic;
+  margin: 5px 0px 0px 0px;
+  border-top : medium solid black;
+  border-bottom : thin dotted black;
+}
+
+w4  {
+  background-color: #FFBCAF;
+  color: black;
+  font-size: smaller;
+  font-style: italic;
+  margin: 5px 0px 0px 0px;
+}
+
+input, select {
+  vertical-align: middle;
+  font-size: 10px;
+}
+
+img {
+  border: 0;
+}
+
+/*
+// Login
+*/
+
+fieldset.login {
+  width: 300px;
+}
+
+input.flag {
+  float: right;
+  padding : 0px 5px;
+}
+a.flag img {
+  float: right;
+  padding : 0px 5px;
+}
+
+fieldset.login legend {
+  color: blue;
+}
+
+fieldset.full {
+  border-color: black;
+  border-style: none;
+  width: 300px;
+}
+
+fieldset.full legend {
+  background-color: #FF33FF;
+  border-color: black;
+  border-style: inset;
+  color: black;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+fieldset.full div {
+  display: none;
+}
+
+img.logo {
+}
+
+/*
+// command button
+*/
+
+span.studio_button > input {
+  background-color: #D4E2EF;
+  background-position: center center;
+  background-repeat: no-repeat;
+  font-weight:bold;
+  color:#005090;
+}
+
+span.studio_button input, span.studio_button img {
+  background-color: #D4E2EF;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 20px;
+}
+
+span.studio_button input.add_chapter {
+  background-image: url(../img/add_chapter.png);
+  width: 20px;
+}
+
+span.studio_button input.add_document {
+  background-image: url(../img/add_document.png);
+  width: 20px;
+}
+
+span.studio_button input.add_image {
+  background-image: url(../img/add_image.png);
+  width: 20px;
+}
+
+span.studio_button input.add_struct_chapter {
+  background-image: url(../img/add_struct_chapter.png);
+  width: 20px;
+}
+
+span.studio_button input.close {
+  background-image: url(../img/close.png);
+  width: 20px;
+}
+
+span.studio_button input.delete {
+  background-image: url(../img/delete.png);
+  width: 20px;
+}
+
+span.studio_button input.down {
+  background-image: url(../img/down.png);
+  width: 20px;
+}
+
+span.studio_button input.edit {
+  background-image: url(../img/edit.png);
+  width: 20px;
+}
+
+span.studio_button input.first {
+  background-image: url(../img/first.png);
+  width: 20px;
+}
+
+span.studio_button input.go {
+  background-image: url(../img/go.png);
+  width: 20px;
+}
+
+span.studio_button input.help {
+  background-image: url(../img/help.png);
+  width: 20px;
+}
+
+span.studio_button input.hide {
+  background-image: url(../img/hide.png);
+  width: 20px;
+}
+
+span.studio_button input.last {
+  background-image: url(../img/last.png);
+  width: 20px;
+}
+
+span.studio_button input.less {
+  background-image: url(../img/less.png);
+  width: 20px;
+}
+
+span.studio_button input.more {
+  background-image: url(../img/more.png);
+  width: 20px;
+}
+
+span.studio_button input.next {
+  background-image: url(../img/next_step.png);
+  width: 20px;
+}
+
+span.studio_button input.prev {
+  background-image: url(../img/prev_step.png);
+  width: 20px;
+}
+
+span.studio_button input.reset {
+  background-image: url(../img/reset.png);
+  width: 20px;
+}
+
+span.studio_button input.see {
+  background-image: url(../img/see.png);
+  width: 20px;
+}
+
+span.studio_button input.send {
+  background-image: url(../img/send.png);
+  width: 20px;
+}
+
+span.studio_button input.stop_edit {
+  background-image: url(../img/stop_edit.png);
+  width: 20px;
+}
+
+span.studio_button input.tool {
+  background-image: url(../img/tool.png);
+  width: 20px;
+}
+
+span.studio_button input.tree_close {
+  background-image: url(../img/tree_close.png);
+  width: 20px;
+}
+
+span.studio_button input.tree_open {
+  background-image: url(../img/tree_open.png);
+  width: 20px;
+}
+
+span.studio_button input.up {
+  background-image: url(../img/up.png);
+  width: 20px;
+}
+
+span.studio_button input.upload {
+  background-image: url(../img/upload.png);
+  width: 20px;
+}
+
+/*
+// Action
+*/
+
+div.actions_list div.title,
+div.actions_list td.title_label {
+  background-color: #D4E2Ef;
+  border-top: 2px solid #000070;
+  border-bottom: 2px solid #000070;
+  color: #000070;
+  font-weight: bold;
+  padding: 2px 0px 2px 2px;
+}
+
+div.actions_list table.action {
+  width: 100%;
+}
+
+div.actions_list td.label {
+  border-bottom: 1px solid #D4E2Ef;
+  border-left: 1px solid #D4E2Ef;
+  padding: 0px 0px 2px 15px;
+}
+
+td.label span.menu {
+  padding: 0px 20px 0px 5px;
+}
+
+div.actions_list td.action {
+  text-align: right;
+  width: 100px;
+}
+div.actions_list input.action {
+  width: 50px;
+}
+div.actions_list td {
+  border-width: 0;
+  margin: 0px;
+  padding: 0px;
+}
+
+div.action_result div.not_active,
+div.action_result td.not_active {
+  background-color: #D4EFE2;
+  border-top: 1px solid #007000;
+  border-bottom: 1px solid #007000;
+  color: #007000;
+  margin-top: 5px;
+  padding: 2px 0px 2px 10px;
+}
+
+div.action_result table {
+  border-spacing:0;
+}
+
+div.action_result div.title,
+div.action_result td.title_label {
+  background-color: #D4EFE2;
+  border-top: 2px solid #007000;
+  border-bottom: 2px solid #007000;
+  color: #007000;
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 2px 0px 2px 10px;
+}
+
+div.action_result td.title_action {
+  background-color: #D4EFE2;
+  border-top: 2px solid #007000;
+  border-bottom: 2px solid #007000;
+  width: 150px;
+}
+
+td.title_action input {
+  float: right;
+}
+
+/*
+// content
+*/
+
+span.button_text {
+  color: #019F00;
+  font-size: smaller;
+  font-style: italic;
+}
+
+span.alert_text {
+  color: #FF0000;
+  font-size: smaller;
+  font-style: italic;
+}
+
+/*
+// input
+*/
+
+span.input_error {
+  background-color: #EFD4D4;
+  border-top: 2px solid #E00000;
+  border-bottom: 2px solid #E00000;
+  color: #E00000;
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 0px 0px 3px 5px;
+}
+
+/*
+// logger
+*/
+
+div.log_error {
+  background-image: url(../img/error.png);
+  background-repeat: no-repeat;
+  background-color: #FF9F9F;
+  border: 2px solid red;
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+div.log_warning {
+  background-image: url(../img/warning.png);
+  background-repeat: no-repeat;
+  background-color: #F48900;
+  border: 2px solid red;
+  font-style: italic;
+  padding-left: 20px;
+}
+
+div.log_ok {
+  background-image: url(../img/ok.png);
+  background-repeat: no-repeat;
+  background-color: #00FF22;
+  border: 1px solid green;
+  font-style: italic;
+  padding-left: 20px;
+}
+
+/*
+// toggle zone
+*/
+
+div.toggled {
+  border: medium groove black;
+  left: 5px;
+  margin: 5px 0px 5px 0px;
+  padding: 5px 15px 5px 5px;
+  position: relative;
+}
+
+div.toggled input.close {
+  background: url(../img/close.png);
+  border: thin inset black;
+  height: 18px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 18px;
+}
+
+/*
+// tree zone
+*/
+
+div.tree_label {
+  border: medium groove black;
+  padding: 3px 3px 3px 3px;
+}
+
+div.tree_panel {
+  border: 2px ridge  black;
+}
+
+/*
+// help info
+*/
+
+div.help {
+  color: grey;
+  font-style: italic;
+}
+
+div.conseil {
+  color: grey;
+  font-style: italic;
+}
+
+/*
+// debug info
+*/
+
+div.debug {
+	border: 1px solid red;
+	padding : 1px 1px 1px 1px;
+}
+
+div.menu_debug div.menu {
+  background-image: url(../img/debug.gif);
+  cursor: pointer;
+  width: 15px;
+}
+div.menu_debug div.debug {
+	display: none;
+	border: 1px dashed green;
+}
+

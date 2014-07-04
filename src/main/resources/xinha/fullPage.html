@@ -1,0 +1,27 @@
+<html>
+<header>
+<script type="text/javascript">
+var _editor_url="htmlarea/";var _editor_lang="%2";
+xinha_init=function(){
+  if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
+	var ed=new Xinha("text", xinha_config());
+	ed.registerPlugins(xinha_plugins);
+	ed.generate();
+}
+xinha_config=function(){
+	var c=new Xinha.Config();
+	c.showLoading=true;
+	c.baseHref="%3";
+	c.expandRelativeUrl=false;
+	c.stripScripts=false;
+	c.width='90%';
+	return c;
+}
+window.onload = xinha_init;
+</script>
+</header>
+<body>
+<textarea name="text" id="text" width="100%" height="100%">%1</textarea>
+</body>
+</html>
+

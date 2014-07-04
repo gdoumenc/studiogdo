@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.IMAPMailStcl">
+
+	<description>Mail associated to an inbox mail (imap)</description>
+            
+	<slot name="From" arity="1" calculated="true"/>
+	<prop name="FromName" type="string" calculated="true"/>
+	<prop name="SentDate" type="string" calculated="true"/>
+	<slot name="To" arity="*" calculated="true"/>
+	<slot name="CC" arity="*" calculated="true"/>
+	<slot name="BCC" arity="*" calculated="true"/>
+	<prop name="Title" type="string" calculated="true"/>
+	<prop name="Content" type="string" calculated="true"/>
+	
+ 	<command name="Delete" template="com.gdo.mail.cmd.DeleteIMAPMsg"/>
+
+</template>
+

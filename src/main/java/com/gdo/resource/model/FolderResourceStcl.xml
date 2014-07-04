@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.model.FolderResourceStcl">
+
+	<!-- resources managed -->
+	<slot name="Resources" arity="*"/>
+	<inst id="files" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FileResources]]></param>
+	</inst>
+	<inst id="folders" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FolderResources]]></param>
+	</inst>
+	<plug ref="files" slot="Resources"/>
+	<plug ref="folders" slot="Resources"/>
+	<slot name="FileResources" arity="*">
+		<description>Contains all files managed</description>
+		<!--link slot="ContainerManager" path="../ContainerManager"/>
+		<link slot="ContainerFolder" path=".."/-->
+	</slot>
+	<slot name="FolderResources" arity="*">
+		<description>Contains all folders managed</description>
+		<!--link slot="ContainerManager" path="../ContainerManager"/>
+		<link slot="ContainerFolder" path=".."/-->
+	</slot>
+
+	<slot name="Get" arity="*" calculated="true">
+		<description>File defined at a given path as key (may be composed)</description>
+	</slot>
+
+</template>

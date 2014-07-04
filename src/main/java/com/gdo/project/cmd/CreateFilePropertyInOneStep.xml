@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.project.cmd.CreateInOneStep">
+
+	<description>Creates a property file stencil, validates it and then
+		only plugs it in target slot.</description>
+	<params_description>
+		<param0>Set as simple propert, the value will be put in file after
+			plug</param0>
+		<param1>destination slot path (where the stencil created will be
+			plugged in - relative to action)</param1>
+		<param2>key type (none or string, int, uniquefor unicity - default :
+			none) </param2>
+		<param3>initial key value (default 1 for int, "a" for string)</param3>
+		<param4>initial parameter for constructor if needed</param4>
+	</params_description>
+
+	<param0>com.gdo.project.PropStcl</param0>
+
+</template>

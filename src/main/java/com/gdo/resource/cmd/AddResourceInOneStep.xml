@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.cmd.AddResourceInOneStep">
+	
+	<description>
+		Command will perform AddResource command in one step.
+	</description>
+	
+	<slot name="ResourceCreated" arity="1">
+		<description>The created resource will be stored here until its completion will be done.</description>
+	</slot>
+	
+</template>

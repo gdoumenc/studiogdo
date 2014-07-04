@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<!-- Test a user connection : check login/paswd and set the user in /Session/User. 
+	The users are defined in slot Users (except dev user defined in code) -->
+<template java="com.gdo.project.cmd.Connect">
+	<description>
+		Test a user for connection. 
+	</description>
+	<params_description>
+		<param0>The user login (if login is null then login access, if login
+			is "" then anonymous access)</param0>
+		<param1>The user passwd</param1>
+		<param2>Template class name for user plugged in /Session/User</param2>
+		<param3>Anonymous login path ("/" by default)</param3>
+		<param4>Anonymous login mode ("login" by default)</param4>
+	</params_description>
+
+	<prop name="UserTemplate" type="string" />
+
+	<slot name="Users" arity="*">
+		<description>Users defined for login</description>
+		<proto props="Name:Passwd:Path:Mode" />
+	</slot>
+
+</template>

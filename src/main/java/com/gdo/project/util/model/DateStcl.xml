@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.project.util.model.DateStcl">
+
+	<slot name="Now" calculated="true">
+		<description>Date format as key (no key returns time int value)</description>
+	</slot>
+	<slot name="DateFormat" calculated="true">
+		<description>Formatted date; number and string format as key
+			(time:format)</description>
+	</slot>
+
+	<slot name="Year" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+	<slot name="Month" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+	<slot name="Day" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+	<slot name="DayOfWeek" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+	<slot name="DayOfYear" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+	<slot name="Hour" calculated="true">
+		<description>Date as key (now if no key)</description>
+	</slot>
+
+	<slot name="MonthName" calculated="true">
+		<description>Month name; number and string format as key
+			(number:format, ex. 3:%TB - on url interface 3:%25TB)</description>
+	</slot>
+	<slot name="DayName" calculated="true">
+		<description>Day name; number and string format as key (number:format,
+			ex. 1:%Ta - on url interface 1:%25Ta)</description>
+	</slot>
+
+</template>

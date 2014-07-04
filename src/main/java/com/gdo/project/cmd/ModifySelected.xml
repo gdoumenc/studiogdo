@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.project.cmd.Selected">
+	<description>
+		Allow stencil modification.
+		Select stencils from "Source"
+		slots.
+	</description>
+
+	<!-- presentation part -->
+	<prop name="Title" id="title" />
+
+	<!-- Modification Step -->
+	<inst id="_1" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" id="step1.title" />
+		<prop name="Render" id="step1.render" />
+	</inst>
+	<inst id="_2" template="com.gdo.project.model.StepStcl">
+		<prop name="Title" id="step2.title" />
+		<prop name="Render" id="step2.render" />
+	</inst>
+
+	<plug ref="_1" key="1" slot="Steps" />
+	<plug ref="_2" key="2" slot="Steps" />
+
+</template>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.resource.model.ResourcesMgrStcl">
+
+	<description>
+		A resources manager manages a list of resources.
+		Children (sub resources managers) can be defined to allow structured service (search, list,..)
+	</description>
+	
+	<!-- context file proxy -->
+	<slot name="Contexts" arity="*">
+		<description>Contextes used to access resources (Get to retrieve one at any level, Files: to have the list of them at this level).</description>
+		<proto slots="Dir:Get:Files"/>
+	</slot>
+
+	<!-- manager hierarchy -->
+	<slot name="Children" arity="*">
+		<description>Resources submanagers.</description>
+	</slot>
+
+	<!-- resources managed -->
+	<slot name="Resources" arity="*" transient="true"/>
+	<inst id="files" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FileResources]]></param>
+	</inst>
+	<inst id="folders" template="com.gdo.project.adaptor.LinkStcl">
+  	<param index="0" type="string"><![CDATA[../FolderResources]]></param>
+	</inst>
+	<plug ref="files" slot="Resources" on="always"/>
+	<plug ref="folders" slot="Resources" on="always"/>
+	<slot name="FileResources" arity="*">
+		<description>Contains all files managed</description>
+		<!--link slot="ContainerManager" path=".."/>
+		<link slot="ContainerFolder" path=".."/-->
+	</slot>
+	<slot name="FolderResources" arity="*">
+		<description>Contains all folders managed</description>
+		<!--link slot="ContainerManager" path=".."/>
+		<link slot="ContainerFolder" path=".."/-->
+	</slot>
+	
+	<slot name="ContainerManager" delegate="."/>
+	<slot name="ContainerFolder" delegate="."/>
+
+	<slot name="Get" arity="*" calculated="true">
+		<description>File defined at a given path as key (may be composed)</description>
+	</slot>
+
+	<prop name="Url" type="string"/>
+	
+	<!-- resources commands -->
+	<command name="AddResource" template="com.gdo.resource.cmd.AddResource"/>
+	<command name="AddResourceInOneStep" template="com.gdo.resource.cmd.AddResourceInOneStep"/>
+	<command name="NewResource" template="com.gdo.resource.cmd.AddResource">
+	  <param index="0" type="string">new</param>
+	  <param index="1" type="string">com.gdo.resource.model.FileResourceStcl</param>
+	  <param index="2" type="string">true</param>
+	</command>
+	<!-- <command name="AddImage" template="com.gdo.resource.cmd.AddResource">
+	  <param index="0" type="string">com.gdo.image.model.ImageStcl</param>
+	  <param index="1" type="string">Resources</param>
+	  <param index="2" type="string">Contexts</param>
+	</command>
+	<command name="AddDocument" template="com.gdo.resource.cmd.AddResource">
+	  <param index="0" type="string">com.gdo.document.model.DocumentStcl</param>
+	  <param index="1" type="string">Resources</param>
+	  <param index="2" type="string">Contexts</param>
+	</command> -->
+	
+	<command name="CreateContext" template="com.gdo.resource.cmd.CreateContext"/>
+
+	<command name="AddChild" template="com.gdo.project.cmd.CreateAtomic">
+	  <param index="0" type="string"><![CDATA[com.gdo.resource.model.ResourcesMgrStcl]]></param>
+	  <param index="1" type="string"><![CDATA[Target/Children]]></param>
+	  <param index="2" type="string"><![CDATA[int]]></param>
+	</command>
+	
+</template>
