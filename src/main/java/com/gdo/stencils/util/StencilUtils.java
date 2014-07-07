@@ -150,6 +150,17 @@ public class StencilUtils {
 		return false;
 	}
 
+    /**
+     * Returns an empty stencil iterator.
+     * 
+     * @param result
+     *          the reason why this iterator is empty.
+     * @return an empty stencil iterator.
+     */
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(Result result) {
+        return new EmptyIterator<C, S>(result);
+    }
+
 	/**
 	 * Returns an empty stencil iterator.
 	 * 
@@ -157,17 +168,6 @@ public class StencilUtils {
 	 */
 	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator() {
 		return iterator(Result.success());
-	}
-
-	/**
-	 * Returns an empty stencil iterator.
-	 * 
-	 * @param result
-	 *          the reason why this iterator is empty.
-	 * @return an empty stencil iterator.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(Result result) {
-		return new EmptyIterator<C, S>(result);
 	}
 
 	/**
