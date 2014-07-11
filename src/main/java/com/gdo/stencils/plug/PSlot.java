@@ -198,7 +198,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
     public final S plug(C stclContext, S stencil, IKey key) {
         if (this._slot != null)
             return this._slot.plug(stclContext, stencil, key, this);
-        return StencilUtils.nullPStencil(stclContext, Result.error("cannot plug in an empty slot"));
+        return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("cannot plug in an empty slot"));
     }
 
     public final void unplug(C stclContext, S stencil, IKey key) {
@@ -256,14 +256,14 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     public S getStencil(C stclContext, StencilCondition<C, S> cond) {
         if (this._slot == null) {
-            return StencilUtils.nullPStencil(stclContext, getResult());
+            return StencilUtils.<C, S> nullPStencil(stclContext, getResult());
         }
         return this._slot.getStencil(stclContext, cond, this);
     }
 
     public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond) {
         if (this._slot == null) {
-            return StencilUtils.iterator(getResult());
+            return StencilUtils.<C, S> iter(getResult());
         }
         return this._slot.getStencils(stclContext, cond, this);
     }

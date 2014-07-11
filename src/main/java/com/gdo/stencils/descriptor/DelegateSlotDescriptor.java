@@ -29,7 +29,7 @@ public class DelegateSlotDescriptor<C extends _StencilContext, S extends _PStenc
 		// adds link stencil
 		MultiSlot<C, S> slot = new MultiSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, PSlot.AT_LEAST_ONE, true, false);
 		PSlot<C, S> pslot = new PSlot<C, S>(slot, self);
-		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.getStencilFactory();
+		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
 		S plugged = factory.createPStencil(stclContext, pslot, Key.NO_KEY, LinkStcl.class.getName(), path);
 		//slot.setContainedStencil(stclContext, plugged, pslot);
 		slot.addStencilInList(stclContext, plugged, pslot);

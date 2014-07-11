@@ -52,12 +52,12 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return StencilUtils.iterator();
+		return StencilUtils.<C, S> iter();
 	}
 
 	@Override
     public S getStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return StencilUtils.nullPStencil(stclContext, Result.error("No stencil in empty slot"));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("No stencil in empty slot"));
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	public S getAdaptorStencil(C stclContext, PSlot<C, S> self) {
-		return StencilUtils.nullPStencil(stclContext, Result.error("No stencil in empty slot"));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("No stencil in empty slot"));
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-		return StencilUtils.nullPStencil(stclContext, Result.error("Cannot plug in an empty slot"));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("Cannot plug in an empty slot"));
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	protected StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self) {
-		return StencilUtils.iterator();
+		return StencilUtils.<C, S> iter();
 	}
 
 }

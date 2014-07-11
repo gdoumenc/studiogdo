@@ -44,12 +44,12 @@ public class FolderResourceStcl extends _ResourceStcl {
 			// key should be the path of the resource (in get slot, path must be
 			// defined)
 			if (cond == null || !(cond instanceof PathCondition)) {
-				return StencilUtils.iterator(Result.error("Can get resource only if a path is defined"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("Can get resource only if a path is defined"));
 			}
 			PathCondition<StclContext, PStcl> c = (PathCondition<StclContext, PStcl>) cond;
 			String path = PathUtils.getKeyContained(c.getCondition());
 			if (StringUtils.isEmpty(path)) {
-				return StencilUtils.iterator(Result.error("Path condition cannot be empty to get a resource"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("Path condition cannot be empty to get a resource"));
 			}
 
 			// key should be the path of the resource
@@ -61,7 +61,7 @@ public class FolderResourceStcl extends _ResourceStcl {
 				String tail = PathUtils.getTailName(path);
 				PStcl f = folder.getStencil(stclContext, PathUtils.createPath(Slot.FOLDER_RESOURCES, first));
 				if (StencilUtils.isNull(f))
-					return StencilUtils.iterator(Result.error(f.getNullReason()));
+					return StencilUtils.< StclContext, PStcl> iter(Result.error(f.getNullReason()));
 				return f.getStencils(stclContext, PathUtils.createPath(Slot.GET, tail));
 			}
 			return folder.getStencils(stclContext, PathUtils.createPath(Slot.FILE_RESOURCES, path));

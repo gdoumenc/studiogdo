@@ -187,7 +187,7 @@ public class GeneratorStcl extends NamedStcl implements IMaskFacetGenerator {
 			InputStream is = getFacet(stclContext, null, on, generator, generator);
 			Reader reader = new InputStreamReader(is);
 			generator.newPProperty(stclContext, Slot.FILES_GENERATED, new Key<String>("$content"), StringHelper.read(reader));
-			return StencilUtils.iterator(stclContext, GeneratorStcl.this._filesGenerated.iterator(), cond, self);
+			return StencilUtils.< StclContext, PStcl> iter(stclContext, GeneratorStcl.this._filesGenerated.iterator(), cond, self);
 		}
 
 		@Override

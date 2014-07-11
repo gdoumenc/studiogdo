@@ -73,7 +73,7 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 		// checks the calculator is defined
 		if (this._calculator == null) {
 			String msg = String.format("no calculator associated to the calculated property %s", self);
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// creates the new property (each time as self may not be same)

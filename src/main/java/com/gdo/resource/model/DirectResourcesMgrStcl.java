@@ -44,13 +44,13 @@ public class DirectResourcesMgrStcl extends ResourcesMgrStcl {
 			// a context needs to be defined
 			if (!hasContext(stclContext, manager)) {
 				String msg = String.format("no context defined for the resource manager %s", manager);
-				return StencilUtils.iterator(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
 			}
 
 			// get the template used to create the file resource
 			String template = self.getContainer().getString(stclContext, Slot.FILE_TEMPLATE, "");
 			if (StringUtils.isEmpty(template))
-				return StencilUtils.iterator(Result.error("File template property undefined"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("File template property undefined"));
 
 			// creates the file resources
 			String path = PathUtils.compose(Slot.CONTEXTS, FolderStcl.Slot.FILES_ONLY);
@@ -81,7 +81,7 @@ public class DirectResourcesMgrStcl extends ResourcesMgrStcl {
 			// a context needs to be defined
 			if (!hasContext(stclContext, manager)) {
 				String msg = String.format("no context defined for the resource manager %s", manager);
-				return StencilUtils.iterator(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
 			}
 
 			// if path is root then returns this manager
@@ -89,14 +89,14 @@ public class DirectResourcesMgrStcl extends ResourcesMgrStcl {
 				PathCondition<StclContext, PStcl> c = (PathCondition<StclContext, PStcl>) cond;
 				String path = PathUtils.getKeyContained(c.getCondition());
 				if (PathUtils.ROOT.equals(path)) {
-					return StencilUtils.iterator(stclContext, manager, self);
+					return StencilUtils.< StclContext, PStcl> iter(stclContext, manager, self);
 				}
 			}
 
 			// get the template used to create the folder resource
 			String template = self.getContainer().getString(stclContext, Slot.FOLDER_TEMPLATE, "");
 			if (StringUtils.isEmpty(template))
-				return StencilUtils.iterator(Result.error("Folder template property undefined"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("Folder template property undefined"));
 
 			// creates the folder resources
 			String path = PathUtils.compose(Slot.CONTEXTS, FolderStcl.Slot.FOLDERS_ONLY);

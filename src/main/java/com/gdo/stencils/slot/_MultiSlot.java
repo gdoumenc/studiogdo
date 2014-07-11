@@ -58,7 +58,7 @@ public abstract class _MultiSlot<C extends _StencilContext, S extends _PStencil<
 
 	@Override
 	protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-		return StencilUtils.nullPStencil(stclContext, Result.error("cannot plug [_MultiSlot]"));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("cannot plug [_MultiSlot]"));
 	}
 
 	@Override

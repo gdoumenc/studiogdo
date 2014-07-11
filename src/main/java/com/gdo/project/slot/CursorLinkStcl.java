@@ -24,7 +24,7 @@ public class CursorLinkStcl extends LinkStcl {
 		// the link stencil must verify the condition (as condition is propagated to
 		// the link and don't apply to the stencil referenced as for usual links)
 		if (cond != null && !cond.verify(stclContext, self)) {
-			return StencilUtils.iterator();
+			return StencilUtils.< StclContext, PStcl> iter();
 		}
 
 		// gets the stencil
@@ -33,7 +33,7 @@ public class CursorLinkStcl extends LinkStcl {
 		// changes containing slot and key
 		StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 		PStcl created = factory.createPStencil(stclContext, slot, self.getKey(), stcl);
-		return StencilUtils.iterator(stclContext, created, slot);
+		return StencilUtils.< StclContext, PStcl> iter(stclContext, created, slot);
 	}
 
 	@Override

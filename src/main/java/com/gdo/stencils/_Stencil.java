@@ -433,7 +433,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 		if (StencilUtils.isNull(stcl)) {
 			String reason = stcl.getNullReason();
 			logWarn(stclContext, "Cannot create stencil %s (%s)", clazz, reason);
-			return StencilUtils.nullPStencil(stclContext, Result.error(reason));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(reason));
 		}
 
 		// plugs it in the slot (if defined)
@@ -1024,7 +1024,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 			PSlot<C, S> slot = getLocalSlot(stclContext, slotPath, self);
 			if (SlotUtils.isNull(slot)) {
 				String msg = logWarn(stclContext, "Cannot get stencils at slot %s as the slot %s doesn't exists in %s", path, slotPath, self);
-				return StencilUtils.iterator(Result.error(msg));
+				return StencilUtils.<C, S> iter(Result.error(msg));
 			}
 
 			// add path condition
@@ -1177,13 +1177,13 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
 		// checks name is not empty
 		if (StringUtils.isEmpty(name)) {
-			return StencilUtils.nullPStencil(stclContext, Result.error("empty command name"));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("empty command name"));
 		}
 
 		// if name is a template class name
 		if (name.indexOf('.') != -1) {
 			String msg = String.format("cannot create command %s (deprecated)", name);
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// if the name is composed
@@ -1197,7 +1197,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 		// checks an associated command descriptor exists in stencil
 		if (_command_descs == null || !_command_descs.containsKey(name)) {
 			String msg = String.format("cannot found command %s in %s", name, self);
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// creates command
@@ -1286,7 +1286,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 			 */
 			return (IPPropStencil<C, S>) prop;
 		} catch (WrongPathException e) {
-			S stcl = StencilUtils.nullPStencil(stclContext, Result.error(e));
+			S stcl = StencilUtils.<C, S> nullPStencil(stclContext, Result.error(e));
 			return (IPPropStencil<C, S>) stcl;
 		}
 	}
@@ -1557,7 +1557,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
 		@Override
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-			return StencilUtils.iterator(stclContext, getCalculatedStencil(stclContext, cond, self), self);
+			return StencilUtils.<C, S> iter(stclContext, getCalculatedStencil(stclContext, cond, self), self);
 		}
 
 		@Override
@@ -1593,9 +1593,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 			S contained = getStencil(stclContext, cond, self);
 			if (StencilUtils.isNull(contained)) {
 				logWarn(stclContext, "Cannot get stencils list from %s", self);
-				return StencilUtils.iterator();
+				return StencilUtils.<C, S> iter();
 			}
-			return StencilUtils.iterator(stclContext, contained, contained.getContainingSlot());
+			return StencilUtils.<C, S> iter(stclContext, contained, contained.getContainingSlot());
 		}
 	}
 

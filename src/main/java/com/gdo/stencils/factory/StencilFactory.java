@@ -114,7 +114,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 		// an error may occur in construction
 		if (stcl == null) {
 			String msg = logError(stclContext, "error when creating plugged stencil with class %s", clazz);
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// property stencil case
@@ -180,7 +180,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 		// an error may occur in construction
 		if (prop == null) {
 			String msg = logError(stclContext, "error when creating plugged property");
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// returns plugged property

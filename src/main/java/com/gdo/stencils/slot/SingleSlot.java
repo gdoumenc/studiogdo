@@ -119,7 +119,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		// get stencil contained (may be null)
 		S contained = getContainedStencilOrCreateDefault(stclContext, self);
 		if (StencilUtils.isNull(contained))
-			return StencilUtils.iterator(StencilUtils.getResult(contained));
+			return StencilUtils.<C, S> iter(StencilUtils.getResult(contained));
 
 		// nothing found
 		if (contained.isNull())
@@ -134,8 +134,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 
 		// return stencil if conditition verified
 		if (cond == null || cond.verify(stclContext, contained))
-			return StencilUtils.iterator(stclContext, contained, self);
-		return StencilUtils.iterator();
+			return StencilUtils.<C, S> iter(stclContext, contained, self);
+		return StencilUtils.<C, S> iter();
 	}
 
 	/*
@@ -166,7 +166,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		// gets real contained stencil (do not propagate to stencil contained in
 		// slot emulation)
 		S contained = getContainedStencilOrCreateDefault(stclContext, self);
-		return StencilUtils.iterator(stclContext, contained, self);
+		return StencilUtils.<C, S> iter(stclContext, contained, self);
 	}
 
 	@Override
@@ -319,7 +319,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		// creates it only arity is set to one
 		if (getArity(stclContext, self) != PSlot.ONE) {
 			String msg = String.format("empty single slot %s", self);
-			return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
 		// uses default descriptor for creation
@@ -338,7 +338,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 				return plug(stclContext, stcl, stcl.getKey(), self);
 			} catch (Exception e) {
 				String msg = logError(stclContext, "exception when creating default instance %s in %s", def, this);
-				return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+				return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 			}
 		}
 
@@ -350,23 +350,23 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 					String msg = String.format("no default factory to create default property value %s in %s", this._defaultValue, self);
 					if (getLog().isErrorEnabled())
 						getLog().error(stclContext, msg);
-					return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
 				IPPropStencil<C, S> prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._defaultValue);
 				if (StencilUtils.isNull((S) prop)) {
 					String msg = String.format("cannot create default property value %s in %s", this._defaultValue, self);
 					if (getLog().isErrorEnabled())
 						getLog().error(stclContext, msg);
-					return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
 				return (S) prop;
 			} catch (Exception e) {
 				String msg = logError(stclContext, "exception when creating default value %s in %s", this._defaultValue, self);
-				return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+				return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 			}
 		}
 
 		String msg = String.format("Cannot create default stencil as no default descriptor and no default value for %s", self);
-		return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 	}
 }

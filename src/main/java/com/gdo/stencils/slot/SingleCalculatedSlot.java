@@ -85,7 +85,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 
 	@Override
 	public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return StencilUtils.iterator(stclContext, getStencil(stclContext, cond, self), self);
+		return StencilUtils.<C, S> iter(stclContext, getStencil(stclContext, cond, self), self);
 	}
 
 	public abstract S getCalculatedStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self);
@@ -99,7 +99,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 		if (acceptPlug())
 			return getCalculatedStencil(stclContext, null, self);
 		String msg = String.format("Cannot create default calculated property for %s [sgould not goes here]", self);
-		return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 		if (acceptPlug())
 			return super.doPlug(stclContext, stencil, key, self);
 		String msg = String.format("Cannot plug in the calculated slot %s", self);
-		return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 	public StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self) {
 		if (acceptPlug())
 			return super.getStencilsToSave(stclContext, self);
-		return StencilUtils.iterator();
+		return StencilUtils.<C, S> iter();
 	}
 
 	/**

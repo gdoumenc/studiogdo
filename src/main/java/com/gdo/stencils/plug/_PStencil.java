@@ -833,7 +833,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (PathUtils.isAbsolute(path)) {
             S root = getRootStencil(stclContext);
             if (PathUtils.ROOT.equals(path)) {
-                return StencilUtils.iterator(stclContext, root, root.getContainingSlot());
+                return StencilUtils.<C, S> iter(stclContext, root, root.getContainingSlot());
             }
             String tail = PathUtils.getTailName(path);
             return root.getStencils(stclContext, tail, cond);
@@ -1129,11 +1129,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return the null plugged stencil.
      */
     public S nullPStencil(C stclContext) {
-        return StencilUtils.nullPStencil(stclContext, Result.success());
+        return StencilUtils.<C, S> nullPStencil(stclContext, Result.success());
     }
 
     public S nullPStencil(C stclContext, Result reasons) {
-        return StencilUtils.nullPStencil(stclContext, reasons);
+        return StencilUtils.<C, S> nullPStencil(stclContext, reasons);
     }
 
     public S newPStencil(C stclContext, String path, IKey key, Class<? extends _Stencil<C, S>> clazz, Object... params) {
@@ -1365,7 +1365,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         PSlot<C, S> slot = getSlot(stclContext, slotPath);
         if (SlotUtils.isNull(slot)) {
             String msg = logWarn(stclContext, "Cannot plug as slot %s doesn't exist in %s", slotPath, this);
-            return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+            return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }
         return plug(stclContext, stencil, slot, key);
     }

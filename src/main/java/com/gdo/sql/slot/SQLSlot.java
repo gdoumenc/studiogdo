@@ -52,7 +52,7 @@ import com.gdo.stencils.util.StencilUtils;
  * @author Guillaume Doumenc (<a
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
-public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
+public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotFilter {
 
     // prefix to retrieve the plugged stencil after insertion
     public static final String PLUGGED_PREFIX = "plugged";
@@ -992,7 +992,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         // without
         // any condition
         if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
-            return StencilUtils.iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
+            return StencilUtils.< StclContext, PStcl> iter(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
         }
 
         SQLCursor cursor = getCursor(stclContext, self);
@@ -1000,7 +1000,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         // should be initialized before used
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
-            return StencilUtils.iterator(Result.error(msg));
+            return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
         }
 
         // creates the stencil list

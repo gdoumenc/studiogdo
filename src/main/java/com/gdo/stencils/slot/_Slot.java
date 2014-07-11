@@ -418,11 +418,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         try {
             Result before = beforePlug(stclContext, stencil, key, self);
             if (!before.isSuccess()) {
-                return StencilUtils.nullPStencil(stclContext, before);
+                return StencilUtils.<C, S> nullPStencil(stclContext, before);
             }
         } catch (Exception e) {
             String msg = logError(stclContext, "Exception in beforePlug method on %s in %s: %s", stencil, self, e);
-            return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+            return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }
 
         try {
@@ -439,7 +439,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
             return plugged;
         } catch (Exception e) {
             String msg = logError(stclContext, "Exception in doPlug method on %s in %s: %s", stencil, self, e);
-            return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+            return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }
     }
 

@@ -276,7 +276,7 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 		@Override
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond) {
-			return StencilUtils.iterator(stclContext, this._container.self(), this._container.getContainingSlot());
+			return StencilUtils.<C, S> iter(stclContext, this._container.self(), this._container.getContainingSlot());
 		}
 
 		@Override

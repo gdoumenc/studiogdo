@@ -125,7 +125,7 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 			FTPFile file = getFile(stclContext, client, container);
 			if (file == null) {
 				closeClient(stclContext, client, container);
-				return StencilUtils.iterator();
+				return StencilUtils.< StclContext, PStcl> iter();
 			}
 
 			Date lastModified = file.getTimestamp().getTime();
@@ -139,7 +139,7 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 
 			PStcl prop = self.getContainer().newPProperty(stclContext, (PSlot<StclContext, PStcl>) null, Key.NO_KEY, date);
 			closeClient(stclContext, client, container);
-			return StencilUtils.iterator(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
 		}
 	}
 

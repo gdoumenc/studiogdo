@@ -82,9 +82,9 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 	@Override
 	protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 		if (ClassHelper.isEmpty(this._stencils)) {
-			return StencilUtils.iterator();
+			return StencilUtils.<C, S> iter();
 		}
-		return StencilUtils.iterator(stclContext, this._stencils, cond, self);
+		return StencilUtils.<C, S> iter(stclContext, this._stencils, cond, self);
 	}
 
 	private synchronized StencilIterator<C, S> getSynchronizedStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
@@ -130,7 +130,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 			return stencils.next();
 		}
 		String msg = logWarn(stclContext, "no stencil in %s for cond %s", self, cond);
-		return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 	}
 
 	@Override

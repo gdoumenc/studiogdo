@@ -52,7 +52,7 @@ public class AggregationSlot<C extends _StencilContext, S extends _PStencil<C, S
 	@Override
 	protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 		if (ClassHelper.isEmpty(this._pathes))
-			return StencilUtils.iterator();
+			return StencilUtils.<C, S> iter();
 		List<S> stencils = new ArrayList<S>();
 		for (String path : this._pathes) {
 			StencilIterator<C, S> iter = self.getContainer().getStencils(stclContext, path);
@@ -60,6 +60,6 @@ public class AggregationSlot<C extends _StencilContext, S extends _PStencil<C, S
 				stencils.add(stcl);
 			}
 		}
-		return StencilUtils.iterator(stclContext, stencils, cond, self);
+		return StencilUtils.<C, S> iter(stclContext, stencils, cond, self);
 	}
 }

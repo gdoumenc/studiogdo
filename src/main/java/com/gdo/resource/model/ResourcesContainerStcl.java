@@ -62,26 +62,26 @@ public class ResourcesContainerStcl extends NamedStcl {
 			// key should be the path of the resource (in get slot, path must be
 			// defined)
 			if (cond == null || !(cond instanceof PathCondition)) {
-				return StencilUtils.iterator(Result.error("Can get resource only if a path is defined"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("Can get resource only if a path is defined"));
 			}
 			PathCondition<StclContext, PStcl> c = (PathCondition<StclContext, PStcl>) cond;
 			String path = PathUtils.getKeyContained(c.getCondition());
 			if (StringUtils.isEmpty(path)) {
-				return StencilUtils.iterator(Result.error("Path condition cannot be empty to get a resource"));
+				return StencilUtils.< StclContext, PStcl> iter(Result.error("Path condition cannot be empty to get a resource"));
 			}
 
 			// gets the resource
 			PStcl manager = self.getContainer();
 			if (PathUtils.isComposed(path)) {
 				if (PathUtils.ROOT.equals(path)) {
-					return StencilUtils.iterator(stclContext, manager, self);
+					return StencilUtils.< StclContext, PStcl> iter(stclContext, manager, self);
 				}
 				String first = PathUtils.getFirstName(path);
 				String tail = PathUtils.getTailName(path);
 				PStcl f = manager.getStencil(stclContext, PathUtils.createPath(Slot.FOLDERS_ONLY, first));
 				if (StencilUtils.isNull(f)) {
 					String msg = String.format("cannot found %s folder", first);
-					return StencilUtils.iterator(Result.error(msg));
+					return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
 				}
 				return f.getStencils(stclContext, PathUtils.createPath(Slot.GET, tail));
 			}

@@ -67,7 +67,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 	@Override
 	protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
 		String msg = String.format("by default cannot plug in a multi calculated slot %s", self);
-		return StencilUtils.nullPStencil(stclContext, Result.error(msg));
+		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 		}
 
 		// creates the iterator from list
-		return StencilUtils.iterator(stclContext, list, cond, self);
+		return StencilUtils.<C, S> iter(stclContext, list, cond, self);
 	}
 
 	class CalculatedMap {
