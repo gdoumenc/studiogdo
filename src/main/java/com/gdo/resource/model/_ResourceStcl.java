@@ -154,7 +154,7 @@ public abstract class _ResourceStcl extends Stcl {
 		protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 			PStcl file = self.getContainer().getStencil(stclContext, Slot.FILE);
 			if (StencilUtils.isNull(file))
-				return StencilUtils.< StclContext, PStcl> iter();
+				return StencilUtils.< StclContext, PStcl> iterator();
 			return file.getStencils(stclContext, FileStcl.Slot.LAST_MODIFIED, cond);
 		}
 	}

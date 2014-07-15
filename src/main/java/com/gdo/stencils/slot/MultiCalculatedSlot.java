@@ -132,7 +132,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 		}
 
 		// creates the iterator from list
-		return StencilUtils.<C, S> iter(stclContext, list, cond, self);
+		return StencilUtils.<C, S> iterator(stclContext, list, cond, self);
 	}
 
 	class CalculatedMap {

@@ -833,7 +833,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (PathUtils.isAbsolute(path)) {
             S root = getRootStencil(stclContext);
             if (PathUtils.ROOT.equals(path)) {
-                return StencilUtils.<C, S> iter(stclContext, root, root.getContainingSlot());
+                return StencilUtils.<C, S> iterator(stclContext, root, root.getContainingSlot());
             }
             String tail = PathUtils.getTailName(path);
             return root.getStencils(stclContext, tail, cond);

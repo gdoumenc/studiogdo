@@ -299,7 +299,7 @@ public class ServletStcl extends Stcl {
 
         @Override
         protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-            return StencilUtils.< StclContext, PStcl> iter(stclContext, this._values.iterator(), cond, self);
+            return StencilUtils.< StclContext, PStcl> iterator(stclContext, this._values.iterator(), cond, self);
         }
     }
 

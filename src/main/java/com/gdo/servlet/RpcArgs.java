@@ -244,7 +244,7 @@ public class RpcArgs {
         PStcl stcl = stclContext.getServletStcl();
 
         if (StringUtils.isBlank(this._path)) {
-            return StencilUtils.< StclContext, PStcl> iter(stclContext, stcl, null);
+            return StencilUtils.< StclContext, PStcl> iterator(stclContext, stcl, null);
         }
         return stcl.getStencils(stclContext, this._path);
     }

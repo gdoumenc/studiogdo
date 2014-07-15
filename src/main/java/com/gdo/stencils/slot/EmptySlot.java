@@ -52,7 +52,7 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return StencilUtils.<C, S> iter();
+		return StencilUtils.<C, S> iterator();
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	protected StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self) {
-		return StencilUtils.<C, S> iter();
+		return StencilUtils.<C, S> iterator();
 	}
 
 }

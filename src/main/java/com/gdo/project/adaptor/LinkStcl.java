@@ -126,7 +126,7 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 
 		// if the condition is defined to retrieve the link itself
 		if (LinkCondition.isWithLinksCondition(stclContext, self, cond)) {
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, self, slot);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, self, slot);
 		}
 
 		// get stencils from slot
@@ -180,7 +180,7 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 			String path = self.getString(stclContext, Slot.PATH, null);
 			if (StringUtils.isBlank(path)) {
 				String msg = logWarn(stclContext, "No path defined for the link %s", self);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// returns stencil list

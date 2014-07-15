@@ -263,7 +263,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond) {
         if (this._slot == null) {
-            return StencilUtils.<C, S> iter(getResult());
+            return StencilUtils.<C, S> iterator(getResult());
         }
         return this._slot.getStencils(stclContext, cond, this);
     }

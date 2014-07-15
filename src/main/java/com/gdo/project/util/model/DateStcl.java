@@ -82,7 +82,7 @@ public class DateStcl extends Stcl {
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 			PStcl prop = factory.createPProperty(stclContext, null, Key.NO_KEY, date);
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class DateStcl extends Stcl {
 			String key = PathCondition.getKeyCondition(cond);
 			if (StringUtils.isEmpty(key)) {
 				String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// gets time
@@ -108,7 +108,7 @@ public class DateStcl extends Stcl {
 				time = Long.parseLong(str[0]);
 			} catch (Exception e) {
 				String msg = String.format("The time should be defined as a long (not %s)", time);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// creates date format
@@ -119,7 +119,7 @@ public class DateStcl extends Stcl {
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 			PStcl prop = factory.createPProperty(stclContext, null, Key.NO_KEY, formatted);
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class DateStcl extends Stcl {
 			String key = PathCondition.getKeyCondition(cond);
 			if (StringUtils.isEmpty(key)) {
 				String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// gets month index
@@ -181,7 +181,7 @@ public class DateStcl extends Stcl {
 			month = Integer.parseInt(str[0]);
 			if (month < 0 || month > 11) {
 				String msg = String.format("The month should be defined between 0 and 11 (not %s)", month);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// creates date format
@@ -193,7 +193,7 @@ public class DateStcl extends Stcl {
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 			PStcl prop = factory.createPProperty(stclContext, null, Key.NO_KEY, name);
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class DateStcl extends Stcl {
 			String key = PathCondition.getKeyCondition(cond);
 			if (StringUtils.isEmpty(key)) {
 				String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// gets month index
@@ -219,7 +219,7 @@ public class DateStcl extends Stcl {
 			day = Integer.parseInt(str[0]);
 			if (day < 0 || day > 6) {
 				String msg = String.format("The day should be defined between 0 and 6 (not %s)", day);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 
 			// creates date format
@@ -231,7 +231,7 @@ public class DateStcl extends Stcl {
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 			PStcl prop = factory.createPProperty(stclContext, (PSlot<StclContext, PStcl>) null, Key.NO_KEY, name);
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
 		}
 	}
 
@@ -256,7 +256,7 @@ public class DateStcl extends Stcl {
 					date = new Date(Long.parseLong(time));
 				} catch (Exception e) {
 					String msg = String.format("A time long should be defined for slot %s (not %s)", getName(stclContext), time);
-					return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+					return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 				}
 			}
 
@@ -268,7 +268,7 @@ public class DateStcl extends Stcl {
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 			PStcl prop = factory.createPProperty(stclContext, (PSlot<StclContext, PStcl>) null, Key.NO_KEY, field);
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, prop, self);
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
 		}
 	}
 

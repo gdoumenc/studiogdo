@@ -119,7 +119,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		// get stencil contained (may be null)
 		S contained = getContainedStencilOrCreateDefault(stclContext, self);
 		if (StencilUtils.isNull(contained))
-			return StencilUtils.<C, S> iter(StencilUtils.getResult(contained));
+			return StencilUtils.<C, S> iterator(StencilUtils.getResult(contained));
 
 		// nothing found
 		if (contained.isNull())
@@ -134,8 +134,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 
 		// return stencil if conditition verified
 		if (cond == null || cond.verify(stclContext, contained))
-			return StencilUtils.<C, S> iter(stclContext, contained, self);
-		return StencilUtils.<C, S> iter();
+			return StencilUtils.<C, S> iterator(stclContext, contained, self);
+		return StencilUtils.<C, S> iterator();
 	}
 
 	/*
@@ -166,7 +166,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		// gets real contained stencil (do not propagate to stencil contained in
 		// slot emulation)
 		S contained = getContainedStencilOrCreateDefault(stclContext, self);
-		return StencilUtils.<C, S> iter(stclContext, contained, self);
+		return StencilUtils.<C, S> iterator(stclContext, contained, self);
 	}
 
 	@Override

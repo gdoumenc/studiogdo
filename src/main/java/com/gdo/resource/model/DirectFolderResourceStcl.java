@@ -72,7 +72,7 @@ public class DirectFolderResourceStcl extends FolderResourceStcl {
 			// gets the template used to create the file resource
 			String template = container.getString(stclContext, Slot.FILE_TEMPLATE, "");
 			if (StringUtils.isEmpty(template))
-				return StencilUtils.< StclContext, PStcl> iter(Result.error("File template property undefined"));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error("File template property undefined"));
 
 			// creates the file resources
 			PStcl folder = container.getStencil(stclContext, Slot.FOLDER_ENCAPSULATED);
@@ -113,7 +113,7 @@ public class DirectFolderResourceStcl extends FolderResourceStcl {
 			// gets the template used to create the folder resource
 			String template = container.getString(stclContext, Slot.FOLDER_TEMPLATE, "");
 			if (StringUtils.isEmpty(template))
-				return StencilUtils.< StclContext, PStcl> iter(Result.error("Folder template property undefined"));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error("Folder template property undefined"));
 
 			// creates the folder resources
 			PStcl folder = container.getStencil(stclContext, Slot.FOLDER_ENCAPSULATED);

@@ -1024,7 +1024,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 			PSlot<C, S> slot = getLocalSlot(stclContext, slotPath, self);
 			if (SlotUtils.isNull(slot)) {
 				String msg = logWarn(stclContext, "Cannot get stencils at slot %s as the slot %s doesn't exists in %s", path, slotPath, self);
-				return StencilUtils.<C, S> iter(Result.error(msg));
+				return StencilUtils.<C, S> iterator(Result.error(msg));
 			}
 
 			// add path condition
@@ -1557,7 +1557,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
 		@Override
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-			return StencilUtils.<C, S> iter(stclContext, getCalculatedStencil(stclContext, cond, self), self);
+			return StencilUtils.<C, S> iterator(stclContext, getCalculatedStencil(stclContext, cond, self), self);
 		}
 
 		@Override
@@ -1593,9 +1593,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 			S contained = getStencil(stclContext, cond, self);
 			if (StencilUtils.isNull(contained)) {
 				logWarn(stclContext, "Cannot get stencils list from %s", self);
-				return StencilUtils.<C, S> iter();
+				return StencilUtils.<C, S> iterator();
 			}
-			return StencilUtils.<C, S> iter(stclContext, contained, contained.getContainingSlot());
+			return StencilUtils.<C, S> iterator(stclContext, contained, contained.getContainingSlot());
 		}
 	}
 

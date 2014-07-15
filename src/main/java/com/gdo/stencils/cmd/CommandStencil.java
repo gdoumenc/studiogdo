@@ -414,8 +414,8 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 			S contained = getStencil(stclContext, cond, self);
 			if (StencilUtils.isNull(contained))
-				return StencilUtils.<C, S> iter();
-			return StencilUtils.<C, S> iter(stclContext, contained, contained.getContainingSlot());
+				return StencilUtils.<C, S> iterator();
+			return StencilUtils.<C, S> iterator(stclContext, contained, contained.getContainingSlot());
 		}
 
 		@Override
@@ -447,7 +447,7 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 		@Override
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 			S contained = getStencil(stclContext, cond, self);
-			return StencilUtils.<C, S> iter(stclContext, contained, self);
+			return StencilUtils.<C, S> iterator(stclContext, contained, self);
 		}
 
 		@Override

@@ -104,7 +104,7 @@ public class KeyStcl extends Stcl {
 		@Override
 		public StencilIterator<StclContext, PStcl> getStencils(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 			// change slot container to have original one
-			return StencilUtils.< StclContext, PStcl> iter(stclContext, KeyStcl.this._stencil, KeyStcl.this._stencil.getContainingSlot());
+			return StencilUtils.< StclContext, PStcl> iterator(stclContext, KeyStcl.this._stencil, KeyStcl.this._stencil.getContainingSlot());
 		}
 	}
 

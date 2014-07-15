@@ -759,7 +759,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the container stencil.
      * @return the key of the plugged stencil.
      */
-    public Result insertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
+    public synchronized Result insertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
         try {
 
             // verifies if insert can be done
@@ -992,7 +992,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // without
         // any condition
         if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
-            return StencilUtils.< StclContext, PStcl> iter(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
+            return StencilUtils.< StclContext, PStcl> iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
         }
 
         SQLCursor cursor = getCursor(stclContext, self);
@@ -1000,7 +1000,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // should be initialized before used
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
-            return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+            return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
         }
 
         // creates the stencil list

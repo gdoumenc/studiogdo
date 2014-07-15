@@ -142,7 +142,7 @@ public class FolderStcl extends _FileStcl {
 				}
 			} catch (Exception e) {
 				String msg = logWarn(stclContext, "Cannot get files list : %s", e);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 		}
 	}
@@ -178,10 +178,10 @@ public class FolderStcl extends _FileStcl {
 
 				// cannot accept no path condition as key contained
 				if (!(condition instanceof PathCondition))
-					return StencilUtils.< StclContext, PStcl> iter();
+					return StencilUtils.< StclContext, PStcl> iterator();
 				String pathCond = ((PathCondition<StclContext, PStcl>) condition).getCondition();
 				if (!PathUtils.isKeyContained(pathCond))
-					return StencilUtils.< StclContext, PStcl> iter();
+					return StencilUtils.< StclContext, PStcl> iterator();
 
 				// gets default templates
 				PStcl dir = self.getContainer();
@@ -201,7 +201,7 @@ public class FolderStcl extends _FileStcl {
 				FtpContextStcl ftpContext = ((FtpContextStcl) pftpContext.getReleasedStencil(stclContext));
 				Result result = ftpContext.connect(stclContext, pftpContext);
 				if (result.isNotSuccess())
-					return StencilUtils.< StclContext, PStcl> iter(result);
+					return StencilUtils.< StclContext, PStcl> iterator(result);
 
 				// get folder and file name and change directory if needed
 				String path = PathUtils.getKeyContained(pathCond);
@@ -215,7 +215,7 @@ public class FolderStcl extends _FileStcl {
 				// get FTP files list
 				result = ftpContext.ls(stclContext, name, false, pftpContext);
 				if (result.isNotSuccess())
-					return StencilUtils.< StclContext, PStcl> iter(result);
+					return StencilUtils.< StclContext, PStcl> iterator(result);
 				FTPFile[] files = (FTPFile[]) result.getSuccessValue(FtpContextStcl.PREFIX);
 
 				// creates files list
@@ -244,12 +244,12 @@ public class FolderStcl extends _FileStcl {
 				// closes connection
 				result = ftpContext.close(stclContext, pftpContext);
 				if (result.isNotSuccess())
-					return StencilUtils.< StclContext, PStcl> iter(result);
+					return StencilUtils.< StclContext, PStcl> iterator(result);
 
 				return cleanList(stclContext, null, self);
 			} catch (Exception e) {
 				String msg = logWarn(stclContext, "Cannot get files list", e);
-				return StencilUtils.< StclContext, PStcl> iter(Result.error(msg));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
 			}
 		}
 	}

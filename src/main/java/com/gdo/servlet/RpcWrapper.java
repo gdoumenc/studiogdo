@@ -1315,7 +1315,7 @@ public class RpcWrapper {
     private StencilIterator<StclContext, PStcl> getStencilsFromArgPath(StclContext stclContext, RpcArgs args) {
         PStcl stcl = stclContext.getServletStcl();
         if (StringUtils.isBlank(args.getPath())) {
-            return StencilUtils.< StclContext, PStcl> iter(stclContext, stcl, stcl.getContainingSlot());
+            return StencilUtils.< StclContext, PStcl> iterator(stclContext, stcl, stcl.getContainingSlot());
         }
         return stcl.getStencils(stclContext, args.getPath());
     }

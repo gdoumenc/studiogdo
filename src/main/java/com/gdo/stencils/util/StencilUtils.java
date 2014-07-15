@@ -157,7 +157,7 @@ public class StencilUtils {
      *          the reason why this iterator is empty.
      * @return an empty stencil iterator.
      */
-    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iter(Result result) {
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(Result result) {
         return new EmptyIterator<C, S>(result);
     }
 
@@ -166,8 +166,8 @@ public class StencilUtils {
 	 * 
 	 * @return an empty stencil iterator.
 	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iter() {
-		return StencilUtils.<C, S> iter(Result.success());
+	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator() {
+		return StencilUtils.<C, S> iterator(Result.success());
 	}
 
 	/**
@@ -182,11 +182,11 @@ public class StencilUtils {
 	 *          the slot of iteration.
 	 * @return
 	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iter(C stclContext, S stencil, PSlot<C, S> slot) {
+	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(C stclContext, S stencil, PSlot<C, S> slot) {
 
 		// null stencil case
 		if (StencilUtils.isNull(stencil)) {
-			return StencilUtils.<C, S> iter(Result.error(StencilUtils.getNullReason(stencil)));
+			return StencilUtils.<C, S> iterator(Result.error(StencilUtils.getNullReason(stencil)));
 		}
 
 		// single iterator on stencil if same containing slot
@@ -234,11 +234,11 @@ public class StencilUtils {
 	 */
 	// /// DEPRECATD
 	@SuppressWarnings("unchecked")
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iter(C stclContext, Iterator<S> list, StencilCondition<C, S> cond, PSlot<C, S> slot) {
+	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(C stclContext, Iterator<S> list, StencilCondition<C, S> cond, PSlot<C, S> slot) {
 
 		// does nothing on empty iteration
 		if (!list.hasNext()) {
-			return StencilUtils.<C, S> iter();
+			return StencilUtils.<C, S> iterator();
 		}
 
 		// creates the new plugged stencil iterator (follow link if needed)
@@ -304,11 +304,11 @@ public class StencilUtils {
 	 *         return an iterator on list.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iter(C stclContext, Collection<S> list, StencilCondition<C, S> cond, PSlot<C, S> slot) {
+	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(C stclContext, Collection<S> list, StencilCondition<C, S> cond, PSlot<C, S> slot) {
 
 		// does nothing on empty iteration
 		if (list.size() == 0) {
-			return StencilUtils.<C, S> iter();
+			return StencilUtils.<C, S> iterator();
 		}
 
 		// creates the new plugged stencil iterator (follow link if needed)

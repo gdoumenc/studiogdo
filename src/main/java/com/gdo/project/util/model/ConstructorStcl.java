@@ -48,7 +48,7 @@ public class ConstructorStcl extends Stcl {
 			// gets template name
 			String template = container.getString(stclContext, Slot.TEMPLATE_NAME, null);
 			if (StringUtils.isEmpty(template)) {
-				return StencilUtils.< StclContext, PStcl> iter(Result.error("tempalte name cannot be empty in ConstructorStcl"));
+				return StencilUtils.< StclContext, PStcl> iterator(Result.error("tempalte name cannot be empty in ConstructorStcl"));
 			}
 
 			StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
