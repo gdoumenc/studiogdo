@@ -402,7 +402,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * @return the specific SQL clause.
      */
     public String getKeysCondition(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-        return String.format("%s >= 0", getKeysIdField(stclContext, self));
+        String c = String.format("%s >= 0", getKeysIdField(stclContext, self));
+        return addFilter(stclContext, c, self);
     }
 
     public String getKeysOrder(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -992,7 +993,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // without
         // any condition
         if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
-            return StencilUtils.< StclContext, PStcl> iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
         }
 
         SQLCursor cursor = getCursor(stclContext, self);
@@ -1000,7 +1001,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // should be initialized before used
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
-            return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
+            return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
         }
 
         // creates the stencil list
@@ -1062,7 +1063,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
                             cursor.setPropertiesValues(stclContext, self, new Key<String>(key), attributes);
                             keys.add(key);
                         } catch (Exception e) {
-                            // don't add key in list if cannot set property values
+                            // don't add key in list if cannot set property
+                            // values
                             logError(stclContext, e.toString());
                         }
                     } else {
