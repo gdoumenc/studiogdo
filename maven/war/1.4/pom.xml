@@ -70,8 +70,8 @@
 							<includes>
 								<include>log4j.xml</include>
 							</includes>
-            </resource>
-            <resource>
+						</resource>
+						<resource>
 							<directory>src/main/webapp/META-INF</directory>
 							<filtering>true</filtering>
 							<targetPath>META-INF</targetPath>
