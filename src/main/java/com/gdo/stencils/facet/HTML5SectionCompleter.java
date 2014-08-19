@@ -101,7 +101,6 @@ public class HTML5SectionCompleter {
     protected static final String DATA_TEXT_CSS = "data-text-css-";
     protected static final String DATA_CSS = "data-css-";
 
-    private static Base64 BASE = new Base64();
     private HashMap<String, String> _values = new HashMap<String, String>();
     protected PStcl prop = null;
     protected PStcl prop_stcl = null;
@@ -1734,8 +1733,9 @@ public class HTML5SectionCompleter {
     }
 
     protected String encode(String path) {
+        Base64 base = new Base64();
         try {
-            String encoded = new String(BASE.encode(path.getBytes()));
+            String encoded = new String(base.encode(path.getBytes()));
             return encoded.replaceAll("\\r\\n|\\r|\\n", "");
         } catch (Exception e) {
             return "";
@@ -1743,7 +1743,8 @@ public class HTML5SectionCompleter {
     }
 
     protected String decode(String path) {
-        return new String(BASE.decode(path.getBytes()));
+        Base64 base = new Base64();
+        return new String(base.decode(path.getBytes()));
     }
 
     private boolean tdFromHeader(Element th) {
