@@ -267,7 +267,6 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
 	//
 	// --------------------------------------------------------------------------
 
-	@Override
 	public String logTrace(StclContext stclContext, String format, Object... params) {
 		if (stclContext != null && stclContext.getRequest() != null && stclContext.getRequest().getSession() != null) {
 			String session_id = stclContext.getRequest().getSession().getId();
@@ -276,7 +275,6 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
 		return super.logTrace(stclContext, format, params);
 	}
 
-	@Override
 	public String logWarn(StclContext stclContext, String format, Object... params) {
 		if (stclContext != null && stclContext.getRequest() != null && stclContext.getRequest().getSession() != null) {
 			String session_id = stclContext.getRequest().getSession().getId();
@@ -285,7 +283,6 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
 		return super.logWarn(stclContext, format, params);
 	}
 
-	@Override
 	public String logError(StclContext stclContext, String format, Object... params) {
 		if (stclContext != null && stclContext.getRequest() != null && stclContext.getRequest().getSession() != null) {
 			String session_id = stclContext.getRequest().getSession().getId();

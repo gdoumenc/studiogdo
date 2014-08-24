@@ -1761,15 +1761,15 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 		return _LOG;
 	}
 
-	public String logTrace(C stclContext, String format, Object... params) {
+	public String logTrace(_StencilContext stclContext, String format, Object... params) {
 		return getLog().logTrace(stclContext, format, params);
 	}
 
-	public String logWarn(C stclContext, String format, Object... params) {
+	public String logWarn(_StencilContext stclContext, String format, Object... params) {
 		return getLog().logWarn(stclContext, format, params);
 	}
 
-	public String logError(C stclContext, String format, Object... params) {
+	public String logError(_StencilContext stclContext, String format, Object... params) {
 		return getLog().logError(stclContext, format, params);
 	}
 

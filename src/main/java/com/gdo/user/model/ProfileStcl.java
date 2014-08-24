@@ -11,7 +11,6 @@ public class ProfileStcl extends NamedStcl {
 
 	public interface Slot extends NamedStcl.Slot {
 		String ID = "Id";
-
 		String USERS = "Users";
 	}
 

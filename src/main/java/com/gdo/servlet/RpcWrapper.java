@@ -34,7 +34,6 @@ import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
-import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
@@ -1390,19 +1389,19 @@ public class RpcWrapper {
         return _Stencil._LOG;
     }
 
-    public static <C extends _StencilContext> String logTrace(C stclContext, String format, Object... params) {
+    public static String logTrace(StclContext stclContext, String format, Object... params) {
         return getLog().logTrace(stclContext, format, params);
     }
 
-    public static <C extends _StencilContext> String logInfo(C stclContext, String format, Object... params) {
+    public static String logInfo(StclContext stclContext, String format, Object... params) {
         return getLog().logInfo(stclContext, format, params);
     }
 
-    public static <C extends _StencilContext> String logWarn(C stclContext, String format, Object... params) {
+    public static String logWarn(StclContext stclContext, String format, Object... params) {
         return getLog().logWarn(stclContext, format, params);
     }
 
-    public static <C extends _StencilContext> String logError(C stclContext, String format, Object... params) {
+    public static String logError(StclContext stclContext, String format, Object... params) {
         return getLog().logError(stclContext, format, params);
     }
 
