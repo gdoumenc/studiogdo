@@ -6,6 +6,7 @@ package com.gdo.stencils.faces;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,7 +17,6 @@ import com.gdo.stencils.faces.echo.GdoEcho;
 import com.gdo.stencils.faces.root.GdoRootLabel;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.util.ArrayMap;
 import com.gdo.util.XmlStringWriter;
 
 /**
@@ -266,7 +266,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 		// blank separated parameters
 		String[] elts = attributes.toString().replaceAll(BLANK, "").split("(\\s)+");
-		Map<String, String> map = new ArrayMap<String, String>(elts.length);
+		Map<String, String> map = new ConcurrentHashMap<String, String>(elts.length);
 		for (int i = 0; i < elts.length; i++) {
 			// search (param=value) pairs
 			String elt = elts[i];

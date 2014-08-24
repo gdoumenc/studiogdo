@@ -16,11 +16,10 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.gdo.util.ArrayMap;
 
 /**
  * <p>
@@ -52,7 +51,7 @@ public class StringHelper {
 	public static InputStream EMPTY_STRING_INPUT_STREAM = new ByteArrayInputStream(EMPTY_STRING.getBytes());
 	public static String[] EMPTY_STRINGS = new String[0];
 	public static List<String> EMPTY_STRINGS_LIST = new ArrayList<String>();
-	public static Map<String, String> EMPTY_STRINGS_MAP = new ArrayMap<String, String>();
+	public static Map<String, String> EMPTY_STRINGS_MAP = new ConcurrentHashMap<String, String>();
 
 	public static char NEW_LINE = '\n';
 	public static char DOT = '.';

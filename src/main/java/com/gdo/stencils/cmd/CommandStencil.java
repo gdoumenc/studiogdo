@@ -4,6 +4,7 @@
 package com.gdo.stencils.cmd;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.gdo.helper.ConverterHelper;
 import com.gdo.stencils.Keywords;
@@ -18,7 +19,6 @@ import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
 import com.gdo.stencils.util.StencilUtils;
-import com.gdo.util.ArrayMap;
 
 /**
  * <p>
@@ -55,7 +55,7 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 	}
 
 	// default parameters if not defined in context
-	public Map<String, Object> _defParams = new ArrayMap<String, Object>();
+	public Map<String, Object> _defParams = new ConcurrentHashMap<String, Object>();
 
 	// default context used when methods (except call method) are called not in
 	// one call (thread)

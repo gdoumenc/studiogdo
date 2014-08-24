@@ -8,11 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.StringHelper;
-import com.gdo.util.ArrayMap;
 import com.google.gson.Gson;
 
 /**
@@ -210,7 +210,7 @@ public class Result {
 
 		// gets the map
 		if (this._other == null) {
-			map = new ArrayMap<Byte, List<ResultInfo>>();
+			map = new ConcurrentHashMap<Byte, List<ResultInfo>>();
 		} else {
 			map = this._other.getInfos();
 		}

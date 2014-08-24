@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,6 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.PathUtils;
-import com.gdo.util.ArrayMap;
 
 /**
  * <p>
@@ -69,7 +69,7 @@ public class SessionStcl extends Stcl implements HttpSessionBindingListener {
 	public static Map<String, Stcl> SESSION_STENCILS = new HashMap<String, Stcl>();
 
 	// list of all sessions defined for all projects (key is session id)
-	public static Map<String, HttpSession> HTTP_SESSIONS = new ArrayMap<String, HttpSession>();
+	public static Map<String, HttpSession> HTTP_SESSIONS = new ConcurrentHashMap<String, HttpSession>();
 
 	// number of session stencils currently active
 	private static int NUMBER = 0;

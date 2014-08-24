@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +55,6 @@ import com.gdo.stencils.util.ClassUtils;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
-import com.gdo.util.ArrayMap;
 import com.gdo.util.XmlStringWriter;
 import com.gdo.util.XmlWriter;
 
@@ -1734,7 +1734,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 		}
 
 		Map<String, Object> getDefaultParams() {
-			Map<String, Object> map = new ArrayMap<String, Object>();
+			Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 			int index = 0;
 			for (Object param : _params) {
 				String key = CommandStencil.PARAM_PREFIX + ++index;

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,7 +28,6 @@ import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.ClassUtils;
 import com.gdo.stencils.util.PathUtils;
-import com.gdo.util.ArrayMap;
 import com.gdo.util.XmlWriter;
 
 /**
@@ -305,7 +305,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 	public void addSlotDescriptor(SlotDescriptor<C, S> slotDesc) {
 		if (this._slots == null) {
-			this._slots = new ArrayMap<String, SlotDescriptor<C, S>>();
+			this._slots = new ConcurrentHashMap<String, SlotDescriptor<C, S>>();
 		}
 		this._slots.put(slotDesc.getName(), slotDesc);
 	}
@@ -348,7 +348,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 	public void addInstDescriptor(InstDescriptor<C, S> inst) {
 		if (this._insts == null) {
-			this._insts = new ArrayMap<String, InstDescriptor<C, S>>();
+			this._insts = new ConcurrentHashMap<String, InstDescriptor<C, S>>();
 		}
 		this._insts.put(inst.getId(), inst);
 	}
@@ -403,7 +403,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 	public final void addPropDescriptor(PropDescriptor<C, S> prop) {
 		if (this._props == null) {
-			this._props = new ArrayMap<String, PropDescriptor<C, S>>();
+			this._props = new ConcurrentHashMap<String, PropDescriptor<C, S>>();
 		}
 		this._props.put(prop.getName(), prop);
 	}
