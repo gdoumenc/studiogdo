@@ -67,8 +67,8 @@ public class StringHelper {
 	}
 
 	public static String escapeSql(String str) {
-		if (str == null) {
-			return null;
+		if (StringUtils.isBlank(str)) {
+			return "";
 		}
 		return StringUtils.replace(str, "'", "''");
 	}

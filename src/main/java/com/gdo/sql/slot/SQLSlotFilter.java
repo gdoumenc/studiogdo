@@ -6,7 +6,15 @@ import com.gdo.stencils.plug.PStcl;
 
 public interface SQLSlotFilter {
 
-    default public String addFilter(StclContext stclContext, String c, PSlot<StclContext, PStcl> self) {
-        return c;
+    /**
+     * Add filter on condition. Default : does nothing on condition.
+     * 
+     * @param stclContext : The stencil context.
+     * @param cond : The initial condition.
+     * @param self : The slot as plugged slot.
+     * @return The new filtered condition.
+     */
+    default public String addFilter(StclContext stclContext, String cond, PSlot<StclContext, PStcl> self) {
+        return cond;
     }
 }

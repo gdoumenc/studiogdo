@@ -990,8 +990,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
         // if the list was already created for the same stencil context and
-        // without
-        // any condition
+        // without any condition
         if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
             return StencilUtils.<StclContext, PStcl> iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
         }
