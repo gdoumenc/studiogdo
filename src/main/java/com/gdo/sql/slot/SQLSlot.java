@@ -696,11 +696,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     public String getStencilQuery(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
         String select = getStencilSelect(stclContext, self);
         String from = getStencilFrom(stclContext, self);
+        String where = getKeysCondition(stclContext, null, self);
         String group = getStencilGroup(stclContext, self);
         String id = getStencilIdField(stclContext, self);
 
         // creates query
-        String query = String.format("SELECT %s FROM %s WHERE %s='%s'", select, from, id, key);
+        String query = String.format("SELECT %s FROM %s WHERE %s='%s' AND %s", select, from, id, key, where);
 
         // adds group, having, order and limit
         if (StringUtils.isNotBlank(group)) {
