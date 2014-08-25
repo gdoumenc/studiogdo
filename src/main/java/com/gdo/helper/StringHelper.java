@@ -69,6 +69,7 @@ public class StringHelper {
 		if (StringUtils.isBlank(str)) {
 			return "";
 		}
+        str =  StringUtils.replace(str, "\\", "\\\\");
 		return StringUtils.replace(str, "'", "''");
 	}
 
