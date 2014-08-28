@@ -801,27 +801,13 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             stencil.setString(stclContext, SQLStcl.Slot.ID, id);
         }
 
-        // gets the plugged stencil with new key or same if negative id
-        // (temporary
-        // stencil are already plugged)
-        /*
-         * PStcl plugged; if ("-".equals(id.substring(0, 1))) { plugged = stencil; }
-         * else { PathCondition<StclContext, PStcl> cond =
-         * PathCondition.<StclContext, PStcl> newKeyCondition(new Key<String>(id));
-         * plugged = getStencil(stclContext, cond, self); }
-         */
-        // gets the stencil from a request to update all fields (some fields are
-        // created by SQL select formula)
-        PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(id), self.getContainer());
-        PStcl plugged = getStencil(stclContext, cond, self);
-        if (plugged.isNull()) {
-            logError(stclContext, "Cannot retrieve created SQL stencil from %s at key %s", self, id);
-        }
+        // creates plugged stencil and plugs the SQL context in it
+        //SQLCursor cursor = getCursor(stclContext, self);
+        //PStcl plugged = new PStcl(stclContext, self, new Key<String>(id), cursor);
+        //plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
+        stencil.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
 
-        // plugs the SQL context in it
-        plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-
-        return Result.success(PLUGGED_PREFIX, plugged);
+        return Result.success(PLUGGED_PREFIX, stencil);
     }
 
     /**
