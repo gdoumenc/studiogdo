@@ -18,6 +18,7 @@ import com.gdo.project.cmd.Trace;
 import com.gdo.project.cmd.Unplug;
 import com.gdo.project.model.ComposedActionStcl;
 import com.gdo.project.model.ProjectStcl;
+import com.gdo.project.model.ProjectStcl.Resource;
 import com.gdo.project.slot.RootSlot;
 import com.gdo.reflect.CommandsSlot;
 import com.gdo.reflect.PwdSlot;
@@ -74,6 +75,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         String $WHERE = "$Where";
 
         String $IS_LOCKED = "$IsLocked";
+        String $IS_LOCKED_BY_ME = "$IsLockedByMe";
         String $LOCKED_BY = "$LockedBy";
 
         String GENERATOR = "Generator";
@@ -124,6 +126,13 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
                 return new IsLockedSlot(stclContext, name, self);
             }
         });
+        addDescriptor(Slot.$IS_LOCKED_BY_ME, new _SlotDescriptor<StclContext, PStcl>() {
+            @Override
+            public _Slot<StclContext, PStcl> add(StclContext stclContext, String name, PStcl self) {
+                return new IsLockedByMeSlot(stclContext, name, self);
+            }
+        });
+        
         singleSlot(Slot.$LOCKED_BY, PSlot.NONE_OR_ONE, false, null);
 
         // COMMAND PART
@@ -242,6 +251,21 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         @Override
         public boolean getBooleanValue(StclContext stclContext, PStcl self) {
             return self.getContainer(stclContext).getStencil(stclContext, Slot.$LOCKED_BY).isNotNull();
+        }
+
+    }
+    
+    public class IsLockedByMeSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
+
+        public IsLockedByMeSlot(StclContext stclContext, String name, PStcl self) {
+            super(stclContext, Stcl.this, name);
+        }
+
+        @Override
+        public boolean getBooleanValue(StclContext stclContext, PStcl self) {
+            PStcl user = self.getStencil(stclContext, Resource.USER_CONNECTED);
+            PStcl locked_by = self.getContainer(stclContext).getStencil(stclContext, Slot.$LOCKED_BY);
+            return locked_by.isNotNull() && locked_by.equals(user);
         }
 
     }
