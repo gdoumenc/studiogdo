@@ -16,7 +16,7 @@ public class Unlock extends AtomicActionStcl {
         StclContext stclContext = cmdContext.getStencilContext();
         PStcl target = cmdContext.getTarget();
         
-        target.clearSlot(stclContext, Stcl.Slot.$LOCKED);
+        target.clearSlot(stclContext, Stcl.Slot.$LOCKED_BY);
         
         return success(cmdContext, self);
     }

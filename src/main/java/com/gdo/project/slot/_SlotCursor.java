@@ -215,7 +215,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             // add locked stencil if locked
             PStcl locked = this._locked.get(key.toString());
             if (locked != null)
-                stcl.plug(stclContext, locked, Stcl.Slot.$LOCKED);
+                stcl.plug(stclContext, locked, Stcl.Slot.$LOCKED_BY);
 
             return completeCreatedStencil(stclContext, container, slot, key, stcl, list);
         }

@@ -17,9 +17,9 @@ public class Lock extends AtomicActionStcl {
         StclContext stclContext = cmdContext.getStencilContext();
         PStcl target = cmdContext.getTarget();
         
-        target.clearSlot(stclContext, Stcl.Slot.$LOCKED);
+        target.clearSlot(stclContext, Stcl.Slot.$LOCKED_BY);
         PStcl user = self.getStencil(stclContext, Resource.USER_CONNECTED);
-        target.plug(stclContext, user, Stcl.Slot.$LOCKED);
+        target.plug(stclContext, user, Stcl.Slot.$LOCKED_BY);
         
         return success(cmdContext, self);
     }

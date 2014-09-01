@@ -36,6 +36,7 @@ import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.slot.CalculatedBooleanPropertySlot;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.PathUtils;
@@ -70,8 +71,9 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         String $SLOTS = "$Slots";
         String $COMMANDS = "$Commands";
         String $WHERE = "$Where";
-        
-        String $LOCKED = "$Locked";
+
+        String $IS_LOCKED = "$IsLocked";
+        String $LOCKED_BY = "$LockedBy";
 
         String GENERATOR = "Generator";
         String ACTIVE_ACTIONS = "ActiveActions";
@@ -115,7 +117,8 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         createCommandSlot(stclContext);
         createWhereSlot(stclContext);
 
-        singleSlot(Slot.$LOCKED);
+        addDescriptor(Slot.$IS_LOCKED, IsLockedSlot.class);
+        singleSlot(Slot.$LOCKED_BY);
 
         // COMMAND PART
 
@@ -222,6 +225,19 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
 
         // execute the command
         return ((ComposedActionStcl) cmdStcl.getReleasedStencil(stclContext)).launch(newContext, path, cmdStcl);
+    }
+    
+    public class IsLockedSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
+        
+        public IsLockedSlot(StclContext stclContext) {
+            super(stclContext, Stcl.this, Slot.$IS_LOCKED);
+        }
+
+        @Override
+        public boolean getBooleanValue(StclContext stclContext, PStcl self) {
+            return StencilUtils.isNull(self.getContainer(stclContext).getStencil(stclContext, Slot.$LOCKED_BY));
+        }
+        
     }
 
     // --------------------------------------------------------------------------

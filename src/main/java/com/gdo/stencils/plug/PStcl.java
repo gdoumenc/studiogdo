@@ -930,14 +930,14 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
 	@Override
     public PStcl plug(StclContext stclContext, PStcl stencil, String slotPath, IKey key) {
-        if (Stcl.Slot.$LOCKED.equals(slotPath) && isCursorBased()) {
+        if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
             this._cursor.lock(stclContext, stencil, getKey());
         }
         return super.plug(stclContext, stencil, slotPath, key);
     }
     
     public void unplug(StclContext stclContext, PStcl stencil, String slotPath, IKey key) {
-        if (Stcl.Slot.$LOCKED.equals(slotPath) && isCursorBased()) {
+        if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
             this._cursor.unlock(stclContext, key);
         }
         super.unplugOtherStencilFrom(stclContext, slotPath, stencil);
@@ -945,7 +945,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     
     @Override
     public PSlot<StclContext, PStcl> clearSlot(StclContext stclContext, String slotPath) {
-        if (Stcl.Slot.$LOCKED.equals(slotPath) && isCursorBased()) {
+        if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
             this._cursor.unlock(stclContext, getKey());
         }
         return super.clearSlot(stclContext, slotPath);
