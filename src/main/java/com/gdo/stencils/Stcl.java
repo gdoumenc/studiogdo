@@ -24,7 +24,6 @@ import com.gdo.reflect.PwdSlot;
 import com.gdo.reflect.SlotsSlot;
 import com.gdo.reflect.TemplateNameSlot;
 import com.gdo.reflect.WhereSlot;
-import com.gdo.stencils._Stencil.Slot;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cmd.Lock;
