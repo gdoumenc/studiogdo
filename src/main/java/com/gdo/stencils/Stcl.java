@@ -28,6 +28,7 @@ import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cmd.Lock;
 import com.gdo.stencils.cmd.Unlock;
+import com.gdo.stencils.descriptor._SlotDescriptor;
 import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.facet.FacetType;
@@ -117,8 +118,13 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         createCommandSlot(stclContext);
         createWhereSlot(stclContext);
 
-        addDescriptor(Slot.$IS_LOCKED, IsLockedSlot.class);
-        singleSlot(Slot.$LOCKED_BY);
+        addDescriptor(Slot.$IS_LOCKED, new _SlotDescriptor<StclContext, PStcl>() {
+            @Override
+            public _Slot<StclContext, PStcl> add(StclContext stclContext, String name, PStcl self) {
+                return new IsLockedSlot(stclContext, name, self);
+            }
+        });
+        singleSlot(Slot.$LOCKED_BY, PSlot.NONE_OR_ONE, false, null);
 
         // COMMAND PART
 
@@ -226,18 +232,18 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         // execute the command
         return ((ComposedActionStcl) cmdStcl.getReleasedStencil(stclContext)).launch(newContext, path, cmdStcl);
     }
-    
+
     public class IsLockedSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
-        
-        public IsLockedSlot(StclContext stclContext) {
-            super(stclContext, Stcl.this, Slot.$IS_LOCKED);
+
+        public IsLockedSlot(StclContext stclContext, String name, PStcl self) {
+            super(stclContext, Stcl.this, name);
         }
 
         @Override
         public boolean getBooleanValue(StclContext stclContext, PStcl self) {
-            return StencilUtils.isNull(self.getContainer(stclContext).getStencil(stclContext, Slot.$LOCKED_BY));
+            return self.getContainer(stclContext).getStencil(stclContext, Slot.$LOCKED_BY).isNotNull();
         }
-        
+
     }
 
     // --------------------------------------------------------------------------
