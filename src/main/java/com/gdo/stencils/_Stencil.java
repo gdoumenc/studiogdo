@@ -95,7 +95,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
 		String NAME = "Name";
 
-		String $LOCKED = "$Locked";
 		String DESCRIPTION = "$Description";
 	}
 
@@ -103,7 +102,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 	 * Interface to define command names as constants.
 	 */
 	public interface Command {
-		// no command defined
+	    // no command as defined in Stcl
 	}
 
 	// java attributes
@@ -174,8 +173,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         });
 		createParentSlot(stclContext);
 		createRootSlot(stclContext);
-
-		singleSlot(Slot.$LOCKED);
 
 		createNameSlot(stclContext);
 		createDescriptionSlot(stclContext);

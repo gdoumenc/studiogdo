@@ -14,7 +14,6 @@ import java.util.concurrent.Semaphore;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils._Stencil.Slot;
 import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
@@ -216,7 +215,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             // add locked stencil if locked
             PStcl locked = this._locked.get(key.toString());
             if (locked != null)
-                stcl.plug(stclContext, locked, Slot.$LOCKED);
+                stcl.plug(stclContext, locked, Stcl.Slot.$LOCKED);
 
             return completeCreatedStencil(stclContext, container, slot, key, stcl, list);
         }
