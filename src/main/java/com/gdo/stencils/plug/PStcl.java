@@ -161,7 +161,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
 			addThisReferenceToStencil(stclContext);
 		} else {
-			initialize(stclContext, (Stcl) pstencil.getReleasedStencil(stclContext), slot, key);
+			initialize(stclContext, (_Stencil<StclContext, PStcl>) pstencil.getReleasedStencil(stclContext), slot, key);
 		}
 	}
 
