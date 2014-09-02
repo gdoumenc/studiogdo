@@ -52,6 +52,14 @@ import com.gdo.stencils.util.StencilUtils;
  * @author Guillaume Doumenc (<a
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
+/**
+ * @author studiogdo
+ *
+ */
+/**
+ * @author studiogdo
+ *
+ */
 public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotFilter {
 
     // prefix to retrieve the plugged stencil after insertion
@@ -498,7 +506,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (cond != null) {
             try {
                 int k = Integer.parseInt(PathCondition.getKeyCondition(cond));
-                return getStencilQuery(stclContext, new Key<Integer>(k), self, false);
+                return getStencilQuery(stclContext, new Key<Integer>(k), k > 0, self);
             } catch (NumberFormatException e) {
             }
         }
@@ -693,7 +701,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the container stencil.
      * @return the query to fetch the stencil values.
      */
-    public String getStencilQuery(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self, boolean withWhere) {
+    public String getStencilQuery(StclContext stclContext, IKey key, boolean withWhere, PSlot<StclContext, PStcl> self) {
         String select = getStencilSelect(stclContext, self);
         String from = getStencilFrom(stclContext, self);
         String group = getStencilGroup(stclContext, self);
@@ -978,18 +986,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         return sql.selectQuery(stclContext, query, sqlContext);
     }
 
-    /**
-     * @param stclContext
-     *            : The stencil context.
-     * @param id
-     *            : The record id (used as alone condition)
-     * @param self
-     *            : This slot as a plugged slot.
-     */
-    public ResultSet getKeysResultSet(StclContext stclContext, String id, PSlot<StclContext, PStcl> self) {
+    public ResultSet getKeysResultSet(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
 
-        // get stencil query
-        String query = getStencilQuery(stclContext, new Key<String>(id), self, true);
+        // get keys query
+        PathCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, key, self.getContainer());
+        String query = getKeysQuery(stclContext, cond, self);
         if (StringUtils.isBlank(query)) {
             logWarn(stclContext, "Keys query not defined for slot %s for key result set", self);
             return null;
@@ -1058,20 +1059,16 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         ResultSet rs = getKeysResultSet(stclContext, cond, self);
         if (rs != null) {
             try {
-
-                // getArray not supported in SQL lib
-                // List<String> keys = (ArrayList<String>) rs.getArray(1);
                 List<String> keys = new ArrayList<String>();
                 while (rs.next()) {
 
                     // keys are id
                     String key = rs.getString(SQLStcl.Slot.ID);
 
-                    // for some jointure the id may be null (such result
-                    // should not be taken in account)
-                    if (StringUtils.isBlank(key)) {
+                    // for some jointure the id may be null (such result should
+                    // not be taken in account)
+                    if (StringUtils.isBlank(key))
                         continue;
-                    }
 
                     // adds slot value attributes to get string optimization
                     // only if not currently already modified

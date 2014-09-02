@@ -12,6 +12,7 @@ import com.gdo.sql.model.SQLStcl;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
+import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
@@ -44,7 +45,8 @@ public class SQLCursor extends _SlotCursor {
 
 		// get keys query
 		SQLSlot sqlSlot = container.getSlot();
-		String query = sqlSlot.getStencilQuery(stclContext, key, container, true);
+        PathCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, key, container.getContainer());
+		String query = sqlSlot.getKeysQuery(stclContext, cond, container);
 		if (StringUtils.isEmpty(query)) {
 			String msg = logWarn(stclContext, "Stencil query not defined for slot %s for create stencil", slot);
 			return Stcl.nullPStencil(stclContext, Result.error(msg));

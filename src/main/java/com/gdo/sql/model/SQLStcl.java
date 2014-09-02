@@ -143,8 +143,7 @@ public class SQLStcl extends Stcl {
             PStcl plugged = this._sqlSlot.plug(stclContext, self, Key.NO_KEY);
 
             // set new id
-            String newId = plugged.getKey().toString();
-            plugged.setString(stclContext, SQLStcl.Slot.ID, newId);
+            String newId = plugged.getString(stclContext, SQLStcl.Slot.ID);
             SQLSlot sqlSlot = this._sqlSlot.getSlot();
             SQLCursor cursor = sqlSlot.getCursor(stclContext, this._sqlSlot);
             cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(newId));
@@ -415,20 +414,21 @@ public class SQLStcl extends Stcl {
             // the stencil may not be plugged in a sql slot
             if (this._sqlSlot != null) {
                 SQLSlot sqlSlot = this._sqlSlot.getSlot();
-                String id = self.getString(stclContext, SQLStcl.Slot.ID);
+                int id = self.getInt(stclContext, SQLStcl.Slot.ID);
 
                 // does nothing if the id is empty (not already in database)
-                if (StringUtils.isBlank(id)) {
+                if (id == 0) {
                     return Result.success();
                 }
 
-                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, id, this._sqlSlot);
+                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, new Key<Integer>(id), this._sqlSlot);
                 if (rs.next()) {
+                    IKey key = new Key<Integer>(id);
 
                     // sets properties values in cursor
                     SQLCursor cursor = sqlSlot.getCursor(stclContext, this._sqlSlot);
                     Map<String, String> attributes = sqlSlot.getPropertiesValuesFromKeyResults(stclContext, rs, this._sqlSlot);
-                    cursor.setPropertiesValues(stclContext, this._sqlSlot, new Key<String>(id), attributes);
+                    cursor.setPropertiesValues(stclContext, this._sqlSlot, key, attributes);
 
                     // completes stencil
                     Result result = completeCreatedSQLStencil(stclContext, rs, self);
@@ -436,7 +436,7 @@ public class SQLStcl extends Stcl {
                     // sets all values not modified after completion (should be
                     // done after
                     // completeCreatedSQLStencil)
-                    cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(id));
+                    cursor.setPropertiesValuesNotModified(stclContext, key);
 
                     return result;
                 }
