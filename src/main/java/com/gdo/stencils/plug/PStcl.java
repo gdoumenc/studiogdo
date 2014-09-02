@@ -153,15 +153,14 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 	@Override
 	public void initialize(StclContext stclContext, PStcl pstencil, PSlot<StclContext, PStcl> slot, IKey key) {
 		if (pstencil.isCursorBased()) {
-			initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
+			super.initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
 			this._cursor = pstencil._cursor;
 			this._cursor_references = pstencil._cursor_references;
 			this._cursor_container = pstencil._cursor_container;
 			this._cursor_key = pstencil._cursor_key;
-
 			addThisReferenceToStencil(stclContext);
 		} else {
-			initialize(stclContext, (_Stencil<StclContext, PStcl>) pstencil.getReleasedStencil(stclContext), slot, key);
+			super.initialize(stclContext, pstencil, slot, key);
 		}
 	}
 

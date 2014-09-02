@@ -422,8 +422,7 @@ public class SQLStcl extends Stcl {
                     return Result.success();
                 }
 
-                StencilCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, new Key<String>(id), self);
-                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, cond, this._sqlSlot);
+                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, id, this._sqlSlot);
                 if (rs.next()) {
 
                     // sets properties values in cursor

@@ -498,7 +498,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (cond != null) {
             try {
                 int k = Integer.parseInt(PathCondition.getKeyCondition(cond));
-                return getStencilQuery(stclContext, new Key<Integer>(k), self);
+                return getStencilQuery(stclContext, new Key<Integer>(k), self, false);
             } catch (NumberFormatException e) {
             }
         }
@@ -693,15 +693,19 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the container stencil.
      * @return the query to fetch the stencil values.
      */
-    public String getStencilQuery(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
+    public String getStencilQuery(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self, boolean withWhere) {
         String select = getStencilSelect(stclContext, self);
         String from = getStencilFrom(stclContext, self);
-        String where = getKeysCondition(stclContext, null, self);
         String group = getStencilGroup(stclContext, self);
         String id = getStencilIdField(stclContext, self);
 
         // creates query
-        String query = String.format("SELECT %s FROM %s WHERE %s='%s' AND %s", select, from, id, key, where);
+        String query = null;
+        if (withWhere) {
+            String where = getKeysCondition(stclContext, null, self);
+            query = String.format("SELECT %s FROM %s WHERE %s='%s' AND %s", select, from, id, key, where);
+        } else
+            query = String.format("SELECT %s FROM %s WHERE %s='%s'", select, from, id, key);
 
         // adds group, having, order and limit
         if (StringUtils.isNotBlank(group)) {
@@ -802,9 +806,10 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         }
 
         // creates plugged stencil and plugs the SQL context in it
-        //SQLCursor cursor = getCursor(stclContext, self);
-        //PStcl plugged = new PStcl(stclContext, self, new Key<String>(id), cursor);
-        //plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
+        // SQLCursor cursor = getCursor(stclContext, self);
+        // PStcl plugged = new PStcl(stclContext, self, new Key<String>(id),
+        // cursor);
+        // plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         stencil.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
 
         return Result.success(PLUGGED_PREFIX, stencil);
@@ -956,6 +961,35 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // get keys query
         String query = getKeysQuery(stclContext, cond, self);
+        if (StringUtils.isBlank(query)) {
+            logWarn(stclContext, "Keys query not defined for slot %s for key result set", self);
+            return null;
+        }
+
+        // get sql context
+        PStcl sqlContext = getSQLContext(stclContext, self);
+        if (StencilUtils.isNull(sqlContext)) {
+            logWarn(stclContext, "No SQL context defined for slot %s for key result set", self);
+            return null;
+        }
+
+        // creates list
+        SQLContextStcl sql = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
+        return sql.selectQuery(stclContext, query, sqlContext);
+    }
+
+    /**
+     * @param stclContext
+     *            : The stencil context.
+     * @param id
+     *            : The record id (used as alone condition)
+     * @param self
+     *            : This slot as a plugged slot.
+     */
+    public ResultSet getKeysResultSet(StclContext stclContext, String id, PSlot<StclContext, PStcl> self) {
+
+        // get stencil query
+        String query = getStencilQuery(stclContext, new Key<String>(id), self, true);
         if (StringUtils.isBlank(query)) {
             logWarn(stclContext, "Keys query not defined for slot %s for key result set", self);
             return null;

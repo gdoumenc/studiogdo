@@ -44,7 +44,7 @@ public class SQLCursor extends _SlotCursor {
 
 		// get keys query
 		SQLSlot sqlSlot = container.getSlot();
-		String query = sqlSlot.getStencilQuery(stclContext, key, container);
+		String query = sqlSlot.getStencilQuery(stclContext, key, container, true);
 		if (StringUtils.isEmpty(query)) {
 			String msg = logWarn(stclContext, "Stencil query not defined for slot %s for create stencil", slot);
 			return Stcl.nullPStencil(stclContext, Result.error(msg));

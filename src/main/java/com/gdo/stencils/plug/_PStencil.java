@@ -158,10 +158,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the plug key.
      */
     public void initialize(C stclContext, S pstencil, PSlot<C, S> slot, IKey key) {
-        this._stencil = pstencil.getReleasedStencil(stclContext);
-        this._slot = slot;
-        this._key = (key != null) ? key : Key.NO_KEY;
-        this._result = Result.success();
+        initialize(stclContext, (_Stencil<C, S>) pstencil.getReleasedStencil(stclContext), slot, key);
     }
 
     /**
