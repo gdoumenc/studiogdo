@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.gdo.project.util.SqlUtils;
 import com.gdo.project.util.SqlUtils.SqlAssoc;
 import com.gdo.sql.cmd.ReloadSQLStcl;
@@ -156,10 +154,7 @@ public class SQLStcl extends Stcl {
             }
 
             // unplug temporary object
-            if (StringUtils.isNotBlank(oldId) && Integer.parseInt(oldId) < 0) {
-                self.setString(stclContext, SQLStcl.Slot.ID, oldId);
-                this._sqlSlot.unplug(stclContext, self, new Key<String>(oldId));
-            }
+            this._sqlSlot.unplug(stclContext, self, new Key<String>(oldId));
 
             // return plugged stencil
             return plugged;

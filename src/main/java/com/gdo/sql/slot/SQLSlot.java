@@ -804,23 +804,18 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     }
 
     protected Result afterInsertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
+        PStcl plugged = stencil;
 
         // returns key created if was not defined
         String id = stencil.getString(stclContext, SQLStcl.Slot.ID, "");
         if (StringUtils.isBlank(id)) {
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             id = Integer.toString(stcl.queryLastInsertID(stclContext, sqlContext));
-            stencil.setString(stclContext, SQLStcl.Slot.ID, id);
+            plugged = self.getStencil(stclContext, PathCondition.newKeyCondition(stclContext, new Key<String>(id), stencil));
+            plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         }
 
-        // creates plugged stencil and plugs the SQL context in it
-        // SQLCursor cursor = getCursor(stclContext, self);
-        // PStcl plugged = new PStcl(stclContext, self, new Key<String>(id),
-        // cursor);
-        // plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-        stencil.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-
-        return Result.success(PLUGGED_PREFIX, stencil);
+        return Result.success(PLUGGED_PREFIX, plugged);
     }
 
     /**
