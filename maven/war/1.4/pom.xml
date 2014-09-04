@@ -13,6 +13,7 @@
 		<webapp.session.timeout>30</webapp.session.timeout>
 		<war.name>${project.artifactId}</war.name>
 		<deploy.name>pip</deploy.name>
+		<log.directory>/var/log/tomcat/${war.name}</log.directory>
 		<conf.directory>/home/studiogdo/${war.name}/work/conf</conf.directory>
 		<skel.directory>/home/studiogdo/${war.name}/work/skel</skel.directory>
 		<tmp.directory>/home/studiogdo/${war.name}/work/tmp</tmp.directory>
