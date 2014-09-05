@@ -1019,6 +1019,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         // tests in slot if exists
         self.getStencil(stclContext); // to block the slot
         try {
+            
+            if (PathUtils.THIS.equals(path)) {
+                return StencilUtils.<C, S> iterator(stclContext, self, self.getContainingSlot());
+            }
 
             // get local slot
             String slotPath = PathUtils.getSlotPath(path);

@@ -69,7 +69,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 	// modele(2) pluged in tmp (single slot)
 	// ->
 	// cursor_key=2, key=none
-	private IKey _cursor_key;
+	private String _cursor_key;
 
 	// list of plugged references
 	// TODO should be defined in cursor
@@ -110,7 +110,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 		this._cursor = cursor;
 		this._cursor_references = new ArrayList<PStcl>();
 		this._cursor_container = slot;
-		this._cursor_key = key;
+		this._cursor_key = key.toString();
 
 		// adds this new instance as a new reference to the cursor
 		addThisReferenceToStencil(stclContext);
@@ -194,7 +194,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
 		// if a cursor is defined then removes it from cursor
 		if (isCursorBased()) {
-			this._cursor.removeFromCursor(stclContext, this._cursor_key.toString());
+			this._cursor.removeFromCursor(stclContext, this._cursor_key);
 			this._cursor = null;
 			this._cursor_container = null;
 			this._cursor_key = null;
@@ -260,7 +260,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 		this._cursor_container = container;
 		this._cursor = cursor;
 		this._cursor_references = this._stencil.getPluggedReferences(stclContext);
-		this._cursor_key = key;
+		this._cursor_key = key.toString();
 
 		this._stencil = null;
 	}
@@ -1061,7 +1061,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 			if (getKey() != null) {
 				str.append('(').append(getKey().toString()).append(")");
 			} else {
-				str.append('(').append(this._cursor_key.toString()).append(")");
+				str.append('(').append(this._cursor_key).append(")");
 			}
 			str.append("cursor slot ").append(this._cursor.toString());
 			return str.toString();

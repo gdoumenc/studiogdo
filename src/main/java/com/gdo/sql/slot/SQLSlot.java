@@ -60,6 +60,10 @@ import com.gdo.stencils.util.StencilUtils;
  * @author studiogdo
  *
  */
+/**
+ * @author studiogdo
+ *
+ */
 public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotFilter {
 
     // prefix to retrieve the plugged stencil after insertion
@@ -145,7 +149,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     @Override
     public String getProperty(StclContext stclContext, IKey key, String prop, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        String value = cursor.getPropertyValue(stclContext, self, key, prop);
+        String value = cursor.getPropertyValue(stclContext, self, key.toString(), prop);
         if (value != null) {
             return value;
         }
@@ -155,7 +159,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     @Override
     public void setProperty(StclContext stclContext, String value, IKey key, String prop, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        cursor.addPropertyValue(stclContext, self, self, key, prop, value);
+        cursor.addPropertyValue(stclContext, self, self, key.toString(), prop, value);
         super.setProperty(stclContext, value, key, prop, self); // only in
                                                                 // cursor should
                                                                 // be sufficient
@@ -514,6 +518,10 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         return getInternalKeysQuery(stclContext, cond, true, true, self);
     }
 
+    public String getKeysQueryWithoutCondition(StclContext stclContext, String key, PSlot<StclContext, PStcl> self) {
+        return getStencilQuery(stclContext, new Key<String>(key), false, self);
+    }
+
     /**
      * Returns the SQL query constructed for this slot.
      * 
@@ -810,8 +818,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         String id = stencil.getString(stclContext, SQLStcl.Slot.ID, "");
         if (StringUtils.isBlank(id)) {
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
-            id = Integer.toString(stcl.queryLastInsertID(stclContext, sqlContext));
-            plugged = self.getStencil(stclContext, PathCondition.newKeyCondition(stclContext, new Key<String>(id), stencil));
+            int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
+            plugged = getStencil(stclContext, last_inserted_id, self);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         }
 
@@ -981,6 +989,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         return sql.selectQuery(stclContext, query, sqlContext);
     }
 
+    // TO BE REMOVED (getStencil should be used)
     public ResultSet getKeysResultSet(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
 
         // get keys query
@@ -1035,6 +1044,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             this._stencil_context_map = map;
         }
         return map;
+    }
+
+    // not using other condition than ID...
+    protected PStcl getStencil(StclContext stclContext, int key, PSlot<StclContext, PStcl> self) {
+        SQLCursor cursor = getCursor(stclContext, self);
+        return new PStcl(stclContext, self, new Key<Integer>(key), cursor);
     }
 
     /**

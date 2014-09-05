@@ -105,7 +105,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      * @param list
      * @return
      */
-    protected abstract PStcl createStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key, List<Object> list);
+    protected abstract PStcl createStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key, List<Object> list);
 
     /**
      * Abstract method to complete stencil after created.
@@ -136,7 +136,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      * @param key
      *            the stencil key.
      */
-    public synchronized void release(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key) {
+    public synchronized void release(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
         int size = this._stencils.size();
         if (size >= this._size) {
 
@@ -150,7 +150,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
 
                 // not same as key as was the last used and may be reused and
                 // stencil must not be locked
-                if (!k.equals(key.toString()) && this._locked.get(k) != null)
+                if (!k.equals(key) && this._locked.get(k) != null)
                     keys.push(k);
             }
 
@@ -180,12 +180,12 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the stencil plug key.
      * @return the stencil.
      */
-    public PStcl getStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key) {
+    public PStcl getStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
         List<Object> list;
         PStcl stcl;
 
         // if already in cursor returns it
-        PStcl contained = inCursor(stclContext, key.toString());
+        PStcl contained = inCursor(stclContext, key);
         if (StencilUtils.isNotNull(contained))
             return contained;
 
@@ -211,13 +211,13 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             // stores the stencil in cursor
             addInCursor(stclContext, stcl);
             stcl.addThisReferenceToStencil(stclContext);
-            
+
             // add locked stencil if locked
-            PStcl locked = this._locked.get(key.toString());
+            PStcl locked = this._locked.get(key);
             if (locked != null)
                 stcl.plug(stclContext, locked, Stcl.Slot.$LOCKED_BY);
 
-            return completeCreatedStencil(stclContext, container, slot, key, stcl, list);
+            return completeCreatedStencil(stclContext, container, slot, new Key<String>(key), stcl, list);
         }
 
     }
@@ -311,8 +311,8 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the string property path.
      * @return the properties values.
      */
-    public Map<String, String> getPropertiesValues(StclContext stclContext, PSlot<StclContext, PStcl> slot, IKey key) {
-        return this._properties.get(key.toString());
+    public Map<String, String> getPropertiesValues(StclContext stclContext, PSlot<StclContext, PStcl> slot, String key) {
+        return this._properties.get(key);
     }
 
     /**
@@ -338,7 +338,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the string property path.
      * @return the property value (<tt>null</tt> if not set).
      */
-    public String getPropertyValue(StclContext stclContext, PSlot<StclContext, PStcl> slot, IKey key, String path) {
+    public String getPropertyValue(StclContext stclContext, PSlot<StclContext, PStcl> slot, String key, String path) {
         if (PathUtils.isComposed(path)) {
             logWarn(stclContext, "Cannot use a composed path %s for getPropertyValue", path);
             return null;
@@ -365,7 +365,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      * @return the previous value associated with key, or <tt>null</tt> if there
      *         was no mapping for key.
      */
-    public String addPropertyValue(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key, String path, String value) {
+    public String addPropertyValue(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key, String path, String value) {
         if (PathUtils.isComposed(path)) {
             logWarn(stclContext, "Cannot use a composed path %s for addPropertyValue", path);
             return null;
@@ -382,7 +382,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
         }
 
         // sets cursor modified for this stencil
-        this._modified.put(key.toString(), Boolean.TRUE);
+        this._modified.put(key, Boolean.TRUE);
         return attributes.put(path, value);
     }
 
