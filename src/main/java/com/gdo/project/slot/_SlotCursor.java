@@ -25,9 +25,10 @@ import com.gdo.stencils.util.StencilUtils;
 
 /**
  * Abstract class implementing a stencil cursor navigator. Some stencils are
- * stored to be reused without recreation if available memory. Some attributes
- * my be also stored for each stencil to allow getString returns without
- * creating the stencil.
+ * stored to be reused without recreation if available memory.
+ * 
+ * Some attributes my be also stored for each stencil to allow getString returns
+ * without creating the stencil.
  */
 public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
 
@@ -83,7 +84,6 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             this._properties.clear();
         if (this._modified != null)
             this._modified.clear();
-        this._available = null;
     }
 
     // TODO complete by purge before and stencils created only on needs

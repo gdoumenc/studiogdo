@@ -9,11 +9,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
+		<tomcat.version>tomcat7</tomcat.version>
 		<maven.test.skip>true</maven.test.skip>
 		<webapp.session.timeout>30</webapp.session.timeout>
 		<war.name>${project.artifactId}</war.name>
 		<deploy.name>pip</deploy.name>
-		<log.directory>/var/log/tomcat/${war.name}</log.directory>
+		<ssh.home>/home/studiogdo/${war.name}</ssh.home>
+		<log.directory>/var/log/${tomcat.version}/${war.name}</log.directory>
 		<conf.directory>/home/studiogdo/${war.name}/work/conf</conf.directory>
 		<skel.directory>/home/studiogdo/${war.name}/work/skel</skel.directory>
 		<tmp.directory>/home/studiogdo/${war.name}/work/tmp</tmp.directory>
@@ -27,7 +29,6 @@
 		<org.logger>catalina</org.logger>
 		<main.logger>catalina</main.logger>
 		<ssh.username>studiogdo</ssh.username>
-		<ssh.home>/home/studiogdo/${war.name}</ssh.home>
 		<ssh.backup>/var/backups/studiogdo/deploy</ssh.backup>
 	</properties>
 	<build>
