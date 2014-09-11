@@ -219,6 +219,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
                         logError(stclContext, "internal error in cursor slot");
                 }
 
+                // releases now as more place
                 this._available.release();
                 logWarn(stclContext, "release for %s in slot %s in %s", key, slot, container);
             }
@@ -245,11 +246,11 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             Boolean modified = this._modified.get(key);
             if (modified != null) {
                 try {
-                    int id = Integer.parseInt(key);
-                    if (id >= 0) {
+                    //int id = Integer.parseInt(key);
+                    //if (id >= 0) {
                         logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
                         stcl.afterRPCSet(stclContext);
-                    }
+                    //}
                 } catch (NumberFormatException e) {
                     // not an id key
                 }
