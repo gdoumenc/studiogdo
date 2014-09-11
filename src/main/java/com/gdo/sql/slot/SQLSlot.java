@@ -820,6 +820,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
             plugged = getStencil(stclContext, last_inserted_id, self);
+            plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         }
 
@@ -1208,7 +1209,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // remove stencil from cursor (if not in cursor (negative id for ex)
         // then get order stencil)
-        cursor.remove(stclContext, self, self, key);
+        cursor.remove(stclContext, self, self, key.toString());
 
         // does deletion query (if key can be found)
         Result result = deleteStencilQuery(stclContext, key, stencil, sqlContext, self);

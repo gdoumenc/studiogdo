@@ -126,49 +126,9 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
     protected abstract PStcl completeCreatedStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key, PStcl stcl, List<Object> list);
 
     /**
-     * Releases the stencil at a specific key, so the cursor can release the
-     * memory if needed.
+     * Returns the stencil at a specific key.
      * 
-     * @param stclContext
-     *            the stencil context.
-     * @param slot
-     *            the cursor slot.
-     * @param key
-     *            the stencil key.
-     */
-    public synchronized void release(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
-        int size = this._stencils.size();
-        if (size >= this._size) {
-
-            // keys to release
-            Stack<String> keys = new Stack<String>();
-
-            // releases all except the one required
-            Iterator<String> iter = this._stencils.keySet().iterator();
-            while (iter.hasNext()) {
-                String k = iter.next();
-
-                // not same as key as was the last used and may be reused and
-                // stencil must not be locked
-                if (!k.equals(key) && this._locked.get(k) != null)
-                    keys.push(k);
-            }
-
-            // removes them from local structure
-            for (String k : keys) {
-                PStcl stcl = remove(stclContext, container, slot, new Key<String>(k));
-                if (StencilUtils.isNull(stcl))
-                    logError(stclContext, "internal error in cursor slot");
-            }
-
-            logWarn(stclContext, "release for %s in slot %s in %s", key, slot, container);
-            this._available.release();
-        }
-    }
-
-    /**
-     * Returns the stencil at a specific key. Creates it if needed. This stencil
-     * must be released after use.
+     * Creates it if needed. This stencil must be released after use.
      * 
      * @param stclContext
      *            the stencil context.
@@ -181,14 +141,13 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      * @return the stencil.
      */
     public PStcl getStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
-        List<Object> list;
-        PStcl stcl;
 
         // if already in cursor returns it
         PStcl contained = inCursor(stclContext, key);
         if (StencilUtils.isNotNull(contained))
             return contained;
 
+        // creates the stencil in memory
         synchronized (this) {
 
             // blocks if no more place
@@ -203,8 +162,8 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             }
 
             // creates the stencil
-            list = new ArrayList<Object>();
-            stcl = createStencil(stclContext, container, slot, key, list);
+            List<Object> list = new ArrayList<Object>();
+            PStcl stcl = createStencil(stclContext, container, slot, key, list);
             if (StencilUtils.isNull(stcl))
                 return Stcl.nullPStencil(stclContext, Result.error("cannot create cursor stencil from empty stencil"));
 
@@ -212,14 +171,58 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             addInCursor(stclContext, stcl);
             stcl.addThisReferenceToStencil(stclContext);
 
-            // add locked stencil if locked
+            // adds locked stencil if locked
             PStcl locked = this._locked.get(key);
-            if (locked != null)
+            if (StencilUtils.isNotNull(locked))
                 stcl.plug(stclContext, locked, Stcl.Slot.$LOCKED_BY);
 
             return completeCreatedStencil(stclContext, container, slot, new Key<String>(key), stcl, list);
         }
 
+    }
+
+    /**
+     * Releases the stencil at a specific key, so the cursor can release the
+     * memory if needed.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param slot
+     *            the cursor slot.
+     * @param key
+     *            the stencil key.
+     */
+    public void release(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
+        if (this._stencils.size() >= this._size) {
+
+            // needs to release more space in memory
+            synchronized (this) {
+
+                // keys to release
+                Stack<String> keys = new Stack<String>();
+
+                // releases all except the one required
+                Iterator<String> iter = this._stencils.keySet().iterator();
+                while (iter.hasNext()) {
+                    String k = iter.next();
+
+                    // not same as key as was the last used and may be reused
+                    // and stencil must not be locked
+                    if (!k.equals(key) && this._locked.get(k) != null)
+                        keys.push(k);
+                }
+
+                // removes them from local structure
+                for (String k : keys) {
+                    PStcl stcl = remove(stclContext, container, slot, k);
+                    if (StencilUtils.isNull(stcl))
+                        logError(stclContext, "internal error in cursor slot");
+                }
+
+                this._available.release();
+                logWarn(stclContext, "release for %s in slot %s in %s", key, slot, container);
+            }
+        }
     }
 
     /**
@@ -231,19 +234,18 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the plugged key
      * @return the stencil previously plugged.
      */
-    public PStcl remove(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key) {
+    public PStcl remove(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
 
-        // get stencil to be removed
+        // gets the stencil to be removed
         PStcl stcl = inCursor(stclContext, key.toString());
         if (StencilUtils.isNotNull(stcl)) {
-            String k = key.toString();
 
             // checks was not modified before removing
             // (negative id may be released without being saved)
-            Boolean modified = this._modified.get(k);
+            Boolean modified = this._modified.get(key);
             if (modified != null) {
                 try {
-                    int id = Integer.parseInt(k);
+                    int id = Integer.parseInt(key);
                     if (id >= 0) {
                         logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
                         stcl.afterRPCSet(stclContext);
@@ -254,11 +256,11 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             }
 
             // removes it from cursor
-            removeFromCursor(stclContext, k);
+            removeFromCursor(stclContext, key);
 
             // replaces the stencil by cursor
             for (PStcl s : stcl.getStencilOtherPluggedReferences(stclContext))
-                s.release(stclContext, container, this, key);
+                s.release(stclContext, container, this, new Key<String>(key));
         }
         return stcl;
     }

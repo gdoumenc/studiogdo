@@ -802,7 +802,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 	}
 
 	/*
-	 * Very often used setter.
+	 * Very often used getter.
 	 */
 
 	public String getString(StclContext stclContext, String path) {
@@ -862,16 +862,14 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 		// searches if a property was associated at this key in the cursor
 		if (isCursorBased()) {
 			String old = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+			
+            // replaces it if already defined
 			if (old != null) {
-
-				// then replaces it
 				this._cursor.addPropertyValue(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key, path, Integer.toString(value));
-				super.setInt(stclContext, path, value);
-				return;
 			}
 		}
 
-		// search string in slot
+		// in any case set the value
 		super.setInt(stclContext, path, value);
 	}
 
