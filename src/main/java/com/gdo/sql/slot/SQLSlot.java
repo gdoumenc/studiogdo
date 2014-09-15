@@ -1209,7 +1209,10 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // remove stencil from cursor (if not in cursor (negative id for ex)
         // then get order stencil)
-        cursor.remove(stclContext, self, self, key.toString());
+        String k = key.toString();
+        int id = Integer.parseInt(k);
+        if (id >= 0)
+            cursor.remove(stclContext, self, self, k);
 
         // does deletion query (if key can be found)
         Result result = deleteStencilQuery(stclContext, key, stencil, sqlContext, self);
