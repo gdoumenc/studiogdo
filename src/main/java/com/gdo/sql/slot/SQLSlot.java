@@ -1050,6 +1050,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     // not using other condition than ID...
     protected PStcl getStencil(StclContext stclContext, int key, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
+        PStcl p = cursor.getStencil(stclContext, self, self, Integer.toString(key));
         return new PStcl(stclContext, self, new Key<Integer>(key), cursor);
     }
 
