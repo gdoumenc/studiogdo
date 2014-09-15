@@ -821,7 +821,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
-            plugged.call(stclContext, Command.SAVE);
+            plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         }
 
@@ -1051,7 +1051,6 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     // not using other condition than ID...
     protected PStcl getStencil(StclContext stclContext, int key, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        PStcl p = cursor.getStencil(stclContext, self, self, Integer.toString(key));
         return new PStcl(stclContext, self, new Key<Integer>(key), cursor);
     }
 

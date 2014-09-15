@@ -40,7 +40,6 @@ public class SQLStcl extends Stcl {
 
     public interface Command extends Stcl.Command {
         String RELOAD = "Reload"; // reloads stencil from database
-        String UPDATE = "Update"; // updates database from stencil
     }
 
     // SQL container slot.
