@@ -21,6 +21,7 @@ import com.gdo.sql.model.SQLStcl;
 import com.gdo.sql.model.SQLStcl.Slot;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
+import com.gdo.stencils.Stcl.Command;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.cond.StencilCondition;
@@ -819,8 +820,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (StringUtils.isBlank(id)) {
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
-            plugged = getStencil(stclContext, last_inserted_id, self);
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
+            plugged.call(stclContext, Command.SAVE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
         }
 
