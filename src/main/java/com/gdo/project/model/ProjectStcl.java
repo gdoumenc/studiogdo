@@ -14,7 +14,7 @@ public class ProjectStcl extends ServletStcl {
 	public interface Resource extends ServletStcl.Resource {
 		String USER_CONNECTED = "/Session/User(1)";
 		String ROLE_CONNECTED = "/Session/Role(1)";
-	}
+ 	}
 
 	public interface Slot extends ServletStcl.Slot {
 		String LOGO = "Logo";
@@ -25,6 +25,7 @@ public class ProjectStcl extends ServletStcl {
 		String CONTEXTS = "Contexts";
 		String RESOURCES = "Resources";
 		String TMP = "Tmp";
+		String SETTINGS = "Settings";
 	}
 
 	public interface Command extends ServletStcl.Command {
@@ -48,6 +49,7 @@ public class ProjectStcl extends ServletStcl {
 		multiSlot(Slot.CONTEXTS);
 		multiSlot(Slot.RESOURCES);
 		multiSlot(Slot.TMP);
+		singleSlot(Slot.SETTINGS);
 
 		// COMMAND PART
 
