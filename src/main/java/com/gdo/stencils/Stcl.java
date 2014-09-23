@@ -149,6 +149,53 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         command(Command.LOAD, Load.class);
         command(Command.UPDATE, Trace.class);
     }
+    
+    public Stcl(StclContext stclContext, String value) {
+        super(stclContext, value);
+
+        // SLOT PART
+
+        // global slots
+        singleSlot(Slot.GENERATOR);
+        singleSlot(Slot.ACTIVE_ACTIONS);
+
+        // reflexive slots
+        createTemplateNameSlot(stclContext);
+        createPwdSlot(stclContext);
+        createKeySlot(stclContext);
+        createSlotSlot(stclContext);
+        createCommandSlot(stclContext);
+        createWhereSlot(stclContext);
+
+        addDescriptor(Slot.$IS_LOCKED, new _SlotDescriptor<StclContext, PStcl>() {
+            @Override
+            public _Slot<StclContext, PStcl> add(StclContext stclContext, String name, PStcl self) {
+                return new IsLockedSlot(stclContext, name, self);
+            }
+        });
+        addDescriptor(Slot.$IS_LOCKED_BY_ME, new _SlotDescriptor<StclContext, PStcl>() {
+            @Override
+            public _Slot<StclContext, PStcl> add(StclContext stclContext, String name, PStcl self) {
+                return new IsLockedByMeSlot(stclContext, name, self);
+            }
+        });
+        
+        singleSlot(Slot.$LOCKED_BY, PSlot.NONE_OR_ONE, false, null);
+
+        // COMMAND PART
+
+        command(Command.$LOCK, Lock.class);
+        command(Command.$UNLOCK, Unlock.class);
+
+        command(Command.CREATE_ATOMIC, CreateAtomic.class);
+        command(Command.PLUG, Plug.class);
+        command(Command.PLUG_C, Plugc.class);
+        command(Command.UNPLUG, Unplug.class);
+        command(Command.EVAL, Eval.class);
+        command(Command.SAVE, Save.class);
+        command(Command.LOAD, Load.class);
+        command(Command.UPDATE, Trace.class);
+    }
 
     /**
      * Creates a null plugged stencil with the reason why.

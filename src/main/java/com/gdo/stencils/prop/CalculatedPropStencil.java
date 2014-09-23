@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.gdo.helper.IOHelper;
+import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.plug._PStencil;
 
@@ -30,7 +31,7 @@ import com.gdo.stencils.plug._PStencil;
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  * @see com.gdo.stencils.cmd.CommandContext Context
  */
-public class CalculatedPropStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends PropStencil<C, S> {
+public class CalculatedPropStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends _Stencil<C, S> {
 
 	private IPropCalculator<C, S> _calculator; // calculator used to create the
 

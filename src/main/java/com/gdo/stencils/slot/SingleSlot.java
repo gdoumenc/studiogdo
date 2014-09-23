@@ -16,7 +16,6 @@ import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
 
@@ -352,14 +351,14 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 						getLog().error(stclContext, msg);
 					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
-				IPPropStencil<C, S> prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._defaultValue);
+				S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._defaultValue);
 				if (StencilUtils.isNull((S) prop)) {
 					String msg = String.format("cannot create default property value %s in %s", this._defaultValue, self);
 					if (getLog().isErrorEnabled())
 						getLog().error(stclContext, msg);
 					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
-				return (S) prop;
+				return prop;
 			} catch (Exception e) {
 				String msg = logError(stclContext, "exception when creating default value %s in %s", this._defaultValue, self);
 				return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));

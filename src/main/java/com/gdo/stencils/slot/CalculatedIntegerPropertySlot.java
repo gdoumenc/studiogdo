@@ -13,7 +13,6 @@ import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.prop.IPropCalculator;
-import com.gdo.stencils.prop.PropStencil;
 
 /**
  * <p>
@@ -77,7 +76,7 @@ public abstract class CalculatedIntegerPropertySlot<C extends _StencilContext, S
 
 	@Override
 	public InputStream getInputStream(C stclContext, S self) {
-		PropStencil<C, S> prop = getProperty(stclContext);
+	    _Stencil<C, S> prop = getProperty(stclContext);
 		if (prop == null) {
 			return IOHelper.EMPTY_INPUT_STREAM;
 		}
@@ -86,7 +85,7 @@ public abstract class CalculatedIntegerPropertySlot<C extends _StencilContext, S
 
 	@Override
 	public OutputStream getOutputStream(C stclContext, S self) {
-		PropStencil<C, S> prop = getProperty(stclContext);
+	    _Stencil<C, S> prop = getProperty(stclContext);
 		if (prop == null) {
 			return IOHelper.EMPTY_OUTPUT_STREAM;
 		}

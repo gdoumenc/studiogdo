@@ -2,16 +2,11 @@
 
 package com.gdo.project.cmd;
 
-import com.gdo.project.PropStcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.cmd.CommandContext;
-import com.gdo.stencils.cmd.CommandStatus;
-import com.gdo.stencils.key.Key;
-import com.gdo.stencils.plug.PStcl;
 
 public class CreateFilePropertyStencilInOneStep extends CreateInOneStep {
 
-	private String _value; // store the value when replacing simple property to
+	//private String _value; // store the value when replacing simple property to
 
 	// file property
 
@@ -19,6 +14,8 @@ public class CreateFilePropertyStencilInOneStep extends CreateInOneStep {
 		super(stclContext);
 	}
 
+	
+	/***
 	@Override
 	protected CommandStatus<StclContext, PStcl> beforePlug(CommandContext<StclContext, PStcl> cmdContext, PStcl created, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
@@ -36,5 +33,6 @@ public class CreateFilePropertyStencilInOneStep extends CreateInOneStep {
 		created.setValue(stclContext, this._value);
 		return super.beforePlug(cmdContext, created, self);
 	}
+	***/
 
 }

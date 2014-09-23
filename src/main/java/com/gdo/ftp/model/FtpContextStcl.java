@@ -97,11 +97,11 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 		self.plug(stclContext, self, Slot.CONTEXT);
 
 		// puts listeners to close connection if value changes
-		self.plug(stclContext, self, PathUtils.compose(Slot.HOST, IPPropStencil.Slot.LISTENERS));
-		self.plug(stclContext, self, PathUtils.compose(Slot.PORT, IPPropStencil.Slot.LISTENERS));
-		self.plug(stclContext, self, PathUtils.compose(Slot.USER, IPPropStencil.Slot.LISTENERS));
-		self.plug(stclContext, self, PathUtils.compose(Slot.PASSWD, IPPropStencil.Slot.LISTENERS));
-		self.plug(stclContext, self, PathUtils.compose(Slot.DIR, IPPropStencil.Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.HOST, Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.PORT, Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.USER, Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.PASSWD, Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.DIR, Slot.LISTENERS));
 	}
 
 	/**

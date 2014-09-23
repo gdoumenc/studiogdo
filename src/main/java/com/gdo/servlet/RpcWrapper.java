@@ -45,7 +45,6 @@ import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
 import com.gdo.util.XmlStringWriter;
@@ -402,48 +401,8 @@ public class RpcWrapper {
 
     private void prop(StclContext stclContext, RpcArgs args) {
         try {
-
-            // gets stencil
-            /*
-            String path = args.getPath();
-            String parent = PathUtils.getPathName(path);
-            String prop = PathUtils.getLastName(path);
-            args.setPath(parent);
-            */
-
             PStcl stcl = args.getStencilFromPath(stclContext);
-            // stcl = stcl.getContainer(stclContext);
-
-            // gets property type
-            String type = args.getStringParameter(stclContext, TYPE_PARAM);
-            if (StringUtils.isEmpty(type)) {
-                type = TYPE_STRING;
-            }
-
-            // gets value found
-            String value = "";
-            if (StencilUtils.isNull(stcl)) {
-                if (args.acceptNoStencil()) {
-                    value = "";
-                } else {
-                    value = StencilUtils.getNullReason(stcl);
-                }
-            } else {
-                if (TYPE_STRING.equals(type)) {
-                    value = getStringWithOrWithoutExpansion(stclContext, stcl, args);
-                } else if (TYPE_INT.equals(type)) {
-                    value = stcl.getValue(stclContext);
-                } else if (TYPE_BOOLEAN.equals(type)) {
-                    value = stcl.getValue(stclContext);
-                } else {
-                    String msg = String.format("unknown type %s", type);
-                    fault(stclContext, GET_SERVICE, msg, args);
-                }
-                if (value == null)
-                    value = "";
-            }
-
-            // writes result
+            String value = getValue(stclContext, args);
             logTrace(stclContext, "gets property value '%s' from stencil %s", value, stcl);
             StudioGdoServlet.writeHTMLResponse(stclContext.getResponse(), value, args.getCharacterEncoding(stclContext));
         } catch (Exception e) {
@@ -454,46 +413,53 @@ public class RpcWrapper {
 
     private void get(StclContext stclContext, RpcArgs args) {
         try {
-
-            // gets stencil
             PStcl stcl = args.getStencilFromPath(stclContext);
-
-            // gets type
             String type = args.getStringParameter(stclContext, TYPE_PARAM);
-            if (StringUtils.isBlank(type)) {
+            if (StringUtils.isBlank(type))
                 type = TYPE_STRING;
-            }
-
-            // gets value found
-            Result result = Result.success();
-            String value = "";
-            if (StencilUtils.isNull(stcl)) {
-                if (args.acceptNoStencil()) {
-                    value = "";
-                } else {
-                    result = stcl.getResult();
-                    value = StencilUtils.getNullReason(stcl);
-                }
-            } else {
-                if (TYPE_STRING.equals(type)) {
-                    value = getStringWithOrWithoutExpansion(stclContext, stcl, args);
-                } else if (TYPE_INT.equals(type)) {
-                    value = stcl.getValue(stclContext);
-                } else if (TYPE_BOOLEAN.equals(type)) {
-                    value = stcl.getValue(stclContext);
-                } else {
-                    String msg = String.format("unknown type %s", type);
-                    fault(stclContext, GET_SERVICE, msg, args);
-                }
-            }
-
+            String value = getValue(stclContext, args);
+            
             // returns value found
             XmlBuilder builder = new XmlBuilder();
-            String xml = builder.get(stclContext, args, stcl, value, type, result);
+            String xml = builder.get(stclContext, args, stcl, value, type, Result.success());
             StudioGdoServlet.writeXMLResponse(stclContext.getResponse(), xml, args.getCharacterEncoding(stclContext));
         } catch (Exception e) {
             fault(stclContext, GET_SERVICE, e, null);
             return;
+        }
+    }
+
+    private String getValue(StclContext stclContext, RpcArgs args) {
+
+        // gets stencil
+        String path = args.getPath();
+        String parent_path = PathUtils.getPathName(path);
+        String slot_path = PathUtils.getLastName(path);
+        PStcl stcl = stclContext.getServletStcl();
+        if (StringUtils.isNotBlank(parent_path))
+            stcl = stcl.getStencil(stclContext, parent_path);
+
+        // gets property type
+        String type = args.getStringParameter(stclContext, TYPE_PARAM);
+        if (StringUtils.isEmpty(type)) {
+            type = TYPE_STRING;
+        }
+
+        // gets value found
+        if (StencilUtils.isNull(stcl)) {
+            if (args.acceptNoStencil()) {
+                return "";
+            }
+            return StencilUtils.getNullReason(stcl);
+        } else {
+            if (TYPE_STRING.equals(type)) {
+                return stcl.getString(stclContext, slot_path);
+            } else if (TYPE_INT.equals(type)) {
+                return Integer.toString(stcl.getInt(stclContext, slot_path));
+            } else if (TYPE_BOOLEAN.equals(type)) {
+                return Boolean.toString(stcl.getBoolean(stclContext, slot_path));
+            }
+            return String.format("unknown type %s", type);
         }
     }
 
@@ -1211,17 +1177,6 @@ public class RpcWrapper {
         fault(stclContext, entry, content, args);
     }
 
-    private String getStringWithOrWithoutExpansion(StclContext stclContext, IPPropStencil<StclContext, PStcl> prop, RpcArgs args) {
-        String exp = args.getStringParameter(stclContext, EXP_PARAM);
-        if ("1".equals(exp) || "true".equals(exp)) {
-            return prop.getExpandedValue(stclContext);
-        }
-        if ("0".equals(exp) || "false".equals(exp)) {
-            return prop.getNotExpandedValue(stclContext);
-        }
-        return prop.getValue(stclContext);
-    }
-
     private String getValueWithOrWithoutExpansion(StclContext stclContext, PStcl stcl, String value, RpcArgs args) {
         String exp = args.getStringParameter(stclContext, EXP_PARAM);
         if ("1".equals(exp) || "true".equals(exp)) {
@@ -1314,7 +1269,7 @@ public class RpcWrapper {
     private StencilIterator<StclContext, PStcl> getStencilsFromArgPath(StclContext stclContext, RpcArgs args) {
         PStcl stcl = stclContext.getServletStcl();
         if (StringUtils.isBlank(args.getPath())) {
-            return StencilUtils.< StclContext, PStcl> iterator(stclContext, stcl, stcl.getContainingSlot());
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, stcl, stcl.getContainingSlot());
         }
         return stcl.getStencils(stclContext, args.getPath());
     }

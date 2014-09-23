@@ -12,11 +12,9 @@ import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
-import com.gdo.stencils.plug.PPropStencil;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.prop.CalculatedPropStencil;
-import com.gdo.stencils.prop.PropStencil;
 import com.gdo.stencils.util.StencilUtils;
 import com.gdo.util.XmlWriter;
 
@@ -42,21 +40,14 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 
 	// default classes
 	private static final Class<?> DEFAULT_PSTENCIL_CLASS = _PStencil.class;
-	private static final Class<?> DEFAULT_PPROPERTY_STENCIL_CLASS = PPropStencil.class;
 	private static final String STENCIL_DEFAULT_TEMPLATE_NAME = _Stencil.class.getName();
-	private static final String PROPERTY_DEFAULT_TEMPLATE_NAME = PropStencil.class.getName();
+	private static final String PROPERTY_DEFAULT_TEMPLATE_NAME = _Stencil.class.getName();
 	private static final String CALCULATED_PROPERTY_DEFAULT_TEMPLATE_NAME = CalculatedPropStencil.class.getName();
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class<? extends S> getDefaultPStencilClass(C stclContext) {
 		return (Class<? extends S>) DEFAULT_PSTENCIL_CLASS;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Class<? extends S> getDefaultPPropertyStencilClass(C stclContext) {
-		return (Class<? extends S>) DEFAULT_PPROPERTY_STENCIL_CLASS;
 	}
 
 	@Override
@@ -117,12 +108,6 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
 
-		// property stencil case
-		if (stcl instanceof PropStencil<?, ?>) {
-			System.out.println("SHOULD NOT GOES HERE createPStencil (should call createPPropStencil)");
-			return newPPropStencil(stclContext, slot, key, stcl);
-		}
-
 		// returns plugged stencil
 		return newPStencil(stclContext, slot, key, stcl);
 	}
@@ -146,36 +131,24 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 	 * @return the plugged stencil created.
 	 */
 	public S createPStencil(C stclContext, PSlot<C, S> slot, IKey key, S pstencil) {
+        Class<? extends S> pstencilClass = getDefaultPStencilClass(stclContext);
 
 		// checks not a null stencil
 		if (pstencil.isNull()) {
-			Class<? extends S> pstencilClass = getDefaultPStencilClass(stclContext);
 			String msg = String.format("cannot create a stencil from a null stencil (%s)", pstencil.getNullReason());
 			return ClassHelper.newInstance(pstencilClass, msg);
 		}
 
-		// property stencil case
-		if (pstencil.isProp(stclContext)) {
-			Class<? extends S> ppropClass = getDefaultPPropertyStencilClass(stclContext);
-			return ClassHelper.newInstance(ppropClass, stclContext, pstencil.getReleasedStencil(stclContext), slot, key);
-		}
-
 		// returns plugged stencil
-		Class<? extends S> pstencilClass = getDefaultPStencilClass(stclContext);
 		return ClassHelper.newInstance(pstencilClass, stclContext, pstencil, slot, key);
 	}
 
 	/**
 	 * Creates a property from default property class name.
 	 */
-	public S newPPropStencil(C stclContext, PSlot<C, S> slot, IKey key, _Stencil<C, S> stcl) {
-		Class<? extends S> ppropClass = getDefaultPPropertyStencilClass(stclContext);
-		return ClassHelper.newInstance(ppropClass, stclContext, stcl, slot, key);
-	}
-
 	public <V> S createPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, Object... params) {
-		String v = (value != null) ? value.toString() : null;
-		PropStencil<C, S> prop = createPropStencil(stclContext, v, params);
+		String v = (value != null) ? value.toString() : "";
+		_Stencil<C, S> prop = createPropStencil(stclContext, v, params);
 
 		// an error may occur in construction
 		if (prop == null) {
@@ -184,7 +157,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 		}
 
 		// returns plugged property
-		S pprop = newPPropStencil(stclContext, slot, key, prop);
+		S pprop = newPStencil(stclContext, slot, key, prop);
 		prop.complete(stclContext, pprop);
 		return pprop;
 	}
@@ -256,7 +229,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 	 *          initial value of the property.
 	 * @return the property created. <tt>null</tt> if cannot be created.
 	 */
-	public PropStencil<C, S> createPropStencil(C stclContext, String value, Object... params) {
+	public _Stencil<C, S> createPropStencil(C stclContext, String value, Object... params) {
 		Class<? extends _Stencil<C, S>> propClass = ClassHelper.loadClass(getPropertyDefaultTemplateName(stclContext));
 		try {
 			int i = 0;
@@ -266,13 +239,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 				p[i++] = param;
 			}
 			_Stencil<C, S> stencil = createStencil(stclContext, propClass, p);
-			if (stencil == null)
-				return null; // avoid warning trace already generated in create
-			// stencil
-			if (stencil instanceof PropStencil<?, ?>) {
-				return (PropStencil<C, S>) stencil;
-			}
-			logError(stclContext, "The default property class %s doesn't extends the %s interface", propClass, PropStencil.class);
+			return stencil;
 		} catch (Exception e) {
 			logError(stclContext, "Cannot create a default property %s", propClass);
 		}

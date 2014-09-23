@@ -37,13 +37,12 @@ public class SetValue extends AtomicActionStcl {
 			}
 
 			StclContext stclContext = cmdContext.getStencilContext();
-			PStcl prop = target.getStencil(stclContext, path);
 			if (type.equals("string")) {
-				prop.setValue(stclContext, value);
+			    target.setString(stclContext, path, value);
 			} else if (type.equals("int")) {
-				prop.setValue(stclContext, new Integer(value).toString());
+			    target.setInt(stclContext, path, Integer.parseInt(value));
 			} else if (type.equals("boolean")) {
-				prop.setValue(stclContext, new Boolean(value).toString());
+			    target.setBoolean(stclContext, path, Boolean.parseBoolean(value));
 			} else {
 				return error(cmdContext, self, "wrong type for SetValue (param3)");
 			}

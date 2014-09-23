@@ -49,7 +49,6 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.slot.CalculatedBooleanPropertySlot;
 import com.gdo.stencils.util.PathUtils;
 
@@ -107,10 +106,10 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     @Override
     public void afterCompleted(StclContext stclContext, PStcl self) {
         super.afterCompleted(stclContext, self);
-        self.plug(stclContext, self, PathUtils.compose(Slot.URL, IPPropStencil.Slot.LISTENERS));
-        self.plug(stclContext, self, PathUtils.compose(Slot.DATABASE, IPPropStencil.Slot.LISTENERS));
-        self.plug(stclContext, self, PathUtils.compose(Slot.PASSWD, IPPropStencil.Slot.LISTENERS));
-        self.plug(stclContext, self, PathUtils.compose(Slot.USER, IPPropStencil.Slot.LISTENERS));
+        self.plug(stclContext, self, PathUtils.compose(Slot.URL, Slot.LISTENERS));
+        self.plug(stclContext, self, PathUtils.compose(Slot.DATABASE, Slot.LISTENERS));
+        self.plug(stclContext, self, PathUtils.compose(Slot.PASSWD, Slot.LISTENERS));
+        self.plug(stclContext, self, PathUtils.compose(Slot.USER, Slot.LISTENERS));
     }
 
     @Override

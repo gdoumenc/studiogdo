@@ -14,7 +14,6 @@ import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.prop.CalculatedPropStencil;
 import com.gdo.stencils.prop.IPropCalculator;
-import com.gdo.stencils.prop.PropStencil;
 import com.gdo.stencils.util.StencilUtils;
 
 /**
@@ -42,7 +41,7 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 	// property calculator used
 	private IPropCalculator<C, S> _calculator = null;
 	// calculated property (only the PProp is created each time)
-	private PropStencil<C, S> _prop = null;
+	private _Stencil<C, S> _prop = null;
 
 	public SingleCalculatedPropertySlot(C stclContext, _Stencil<C, S> in, String name, IPropCalculator<C, S> calculator) {
 		super(stclContext, in, name, PSlot.ONE);
@@ -77,15 +76,15 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 		}
 
 		// creates the new property (each time as self may not be same)
-		return factory.newPPropStencil(stclContext, self, Key.NO_KEY, getProperty(stclContext));
+		return factory.newPStencil(stclContext, self, Key.NO_KEY, getProperty(stclContext));
 	}
 
-	protected PropStencil<C, S> getProperty(C stclContext) {
+	protected _Stencil<C, S> getProperty(C stclContext) {
 
 		// if the calculated property is not already created
 		if (this._prop == null) {
 			StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-			Class<? extends PropStencil<C, S>> p = ClassHelper.loadClass(factory.getCalculatedPropertyDefaultTemplateName(stclContext));
+			Class<? extends _Stencil<C, S>> p = ClassHelper.loadClass(factory.getCalculatedPropertyDefaultTemplateName(stclContext));
 			this._prop = factory.createStencil(stclContext, p, this._calculator);
 		}
 

@@ -13,6 +13,7 @@ import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.PathUtils;
 
 public class HasValue extends AtomicActionStcl {
 
@@ -32,7 +33,9 @@ public class HasValue extends AtomicActionStcl {
 		}
 
 		// at least a stencil should be defined
-		StencilIterator<StclContext, PStcl> iter = target.getStencils(stclContext, path);
+        String parent_path = PathUtils.getPathName(path);
+        String slot_path = PathUtils.getLastName(path);
+		StencilIterator<StclContext, PStcl> iter = target.getStencils(stclContext, parent_path);
 		if (iter.isNotValid() || iter.size() == 0) {
 			return success(cmdContext, self, false);
 		}
@@ -52,7 +55,7 @@ public class HasValue extends AtomicActionStcl {
 			// one property have a value > 0
 			if (Keywords.INT.equals(type)) {
 				for (PStcl stcl : iter) {
-					int prop = Integer.parseInt(stcl.getValue(stclContext));
+					int prop = stcl.getInt(stclContext, slot_path);
 					if (prop > 0)
 						return success(cmdContext, self, true);
 				}
@@ -62,7 +65,7 @@ public class HasValue extends AtomicActionStcl {
 			// one property have a true value
 			if (Keywords.BOOLEAN.equals(type)) {
 				for (PStcl stcl : iter) {
-					boolean prop = Boolean.parseBoolean(stcl.getValue(stclContext));
+					boolean prop = stcl.getBoolean(stclContext, slot_path);
 					if (prop)
 						return success(cmdContext, self, true);
 				}
@@ -73,7 +76,7 @@ public class HasValue extends AtomicActionStcl {
 		// only one condition is enough
 		String operator = getParameter(cmdContext, 5, "==");
 		for (PStcl stcl : iter) {
-			String prop = stcl.getValue(stclContext);
+			String prop = stcl.getString(stclContext, slot_path);
 			boolean comp = PathCondition.compare(type, prop, value, operator);
 			if (comp)
 				return success(cmdContext, self, true);

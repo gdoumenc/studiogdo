@@ -28,10 +28,6 @@ import com.gdo.stencils.plug._PStencil;
  */
 public interface IPPropStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends IAtom<C, S> {
 
-	interface Slot {
-		String LISTENERS = "Listeners"; // listeners of property value change
-	}
-
 	/**
 	 * Returns the property type used to implement it in java.
 	 * 

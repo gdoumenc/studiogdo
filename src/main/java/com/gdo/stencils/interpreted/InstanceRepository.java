@@ -17,7 +17,6 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.stencils.prop.PropStencil;
 import com.gdo.stencils.slot.Annotation;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -104,12 +103,7 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 		String path = getAbsolutePath(name);
 		S current = this._instances.get(this._pwd.peek());
 		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-		S stored = null;
-		if (inst instanceof PropStencil) {
-			stored = factory.newPPropStencil(stclContext, new InstanceSlot(current), Key.NO_KEY, inst);
-		} else {
-			stored = factory.newPStencil(stclContext, new InstanceSlot(current), Key.NO_KEY, inst);
-		}
+		S stored = factory.newPStencil(stclContext, new InstanceSlot(current), Key.NO_KEY, inst);
 		this._instances.put(path, stored);
 		return stored;
 	}

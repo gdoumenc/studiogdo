@@ -56,7 +56,7 @@ public class FileContextStcl extends FolderStcl implements IPropertyChangeListen
 	@Override
 	public void afterCompleted(StclContext stclContext, PStcl self) {
 		super.afterCompleted(stclContext, self);
-		self.plug(stclContext, self, PathUtils.compose(Slot.DIR, IPPropStencil.Slot.LISTENERS));
+		self.plug(stclContext, self, PathUtils.compose(Slot.DIR, Slot.LISTENERS));
 	}
 
 	/**

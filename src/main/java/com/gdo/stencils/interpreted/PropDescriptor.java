@@ -19,8 +19,6 @@ import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.stencils.prop.IPPropStencil;
-import com.gdo.stencils.prop.PropStencil;
 import com.gdo.util.XmlWriter;
 
 /**
@@ -294,7 +292,7 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 			S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._value);
 
 			// sets the type
-			PropStencil<C, S> p = (PropStencil<C, S>) prop.getReleasedStencil(stclContext);
+			_Stencil<C, S> p = (_Stencil<C, S>) prop.getReleasedStencil(stclContext);
 			p.setType(stclContext, getType(), prop);
 			p.setExpand(stclContext, isExpand(), prop);
 
@@ -352,8 +350,8 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 				value = StringHelper.EMPTY_STRING;
 
 			// create the property
-			IPPropStencil<C, S> prop = factory.createPProperty(stclContext, self, Key.NO_KEY, value);
-			prop.setExpand(stclContext, isExpand());
+			S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, value);
+			((_Stencil<C, S>) prop.getReleasedStencil(stclContext)).setExpand(stclContext, isExpand(), prop);
 			return (S) prop;
 		}
 	}

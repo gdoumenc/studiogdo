@@ -5,6 +5,9 @@ package com.gdo.stencils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.StringHelper;
@@ -32,6 +36,8 @@ import com.gdo.stencils.descriptor.MultiSlotDescriptor;
 import com.gdo.stencils.descriptor.PropSlotDescriptor;
 import com.gdo.stencils.descriptor.SingleSlotDescriptor;
 import com.gdo.stencils.descriptor._SlotDescriptor;
+import com.gdo.stencils.event.IPropertyChangeListener;
+import com.gdo.stencils.event.PropertyChangeEvent;
 import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.factory.InterpretedStencilFactory;
@@ -97,6 +103,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         String NAME = "Name";
 
         String DESCRIPTION = "$Description";
+
+        String LISTENERS = "Listeners";
     }
 
     /**
@@ -158,6 +166,11 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     // when saving (each saving is done in a specific writer)
     protected XmlWriter _writer;
 
+    // property part
+    public String _value;
+    protected String _type = Keywords.STRING;
+    protected boolean _expand;
+
     /**
      * Should be used only internally by digester.
      */
@@ -178,6 +191,14 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
         createNameSlot(stclContext);
         createDescriptionSlot(stclContext);
+    }
+
+    public _Stencil(C stclContext, String value) {
+        this(stclContext);
+
+        this._value = value;
+
+        multiSlot(Slot.LISTENERS, PSlot.ANY, true, null);
     }
 
     @Override
@@ -877,19 +898,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     }
 
     /**
-     * Returns the stencil as a property (default property is Name).
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            the stencil as a plugged stencil.
-     * @return the property interface (default property if not a property).
-     */
-    public IPPropStencil<C, S> asProp(C stclContext, S self) {
-        return getStencil(stclContext, defaultProperty(stclContext, self), self);
-    }
-
-    /**
      * @return <tt>true</tt> if there is a stencil in path. May be redefined for
      *         efficiency reason.
      */
@@ -1019,7 +1027,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         // tests in slot if exists
         self.getStencil(stclContext); // to block the slot
         try {
-            
+
             if (PathUtils.THIS.equals(path)) {
                 return StencilUtils.<C, S> iterator(stclContext, self, self.getContainingSlot());
             }
@@ -1274,28 +1282,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * return (prop != null); }
      */
 
-    public <V> IPPropStencil<C, S> getPropertyStencil(C stclContext, String path, S self) {
-        try {
-            S prop = self.getStencil(stclContext, path);
-            if (StencilUtils.isNotNull(prop))
-                // if (StencilUtils.isNotNull(prop) && prop.isProp(stclContext))
-                // {
-                return (IPPropStencil<C, S>) prop.asProp(stclContext);
-            /*
-             * } String msg =
-             * String.format("the stencil at path %s from %s is not a property", path,
-             * self); StencilFactory<C, S> factory = (StencilFactory<C, S>)
-             * stclContext.<C, S> getStencilFactory(); IPPropStencil<C, S> p =
-             * (IPPropStencil<C, S>) factory.newPProperty(stclContext, null,
-             * Key.NO_KEY, msg); return p;
-             */
-            return (IPPropStencil<C, S>) prop;
-        } catch (WrongPathException e) {
-            S stcl = StencilUtils.<C, S> nullPStencil(stclContext, Result.error(e));
-            return (IPPropStencil<C, S>) stcl;
-        }
-    }
-
     //
     // Wrappers for facet
     //
@@ -1414,6 +1400,22 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * Should be redefined if the stencil needs parameters at creation.
      */
     protected void saveConstructorParameters(C stclContext, XmlWriter writer, S self) {
+        try {
+            if (this._value != null) {
+                writer.startElement("param");
+                writer.writeAttribute("index", 0);
+                writer.writeAttribute("type", getType());
+
+                // never expand when saving
+                String value = getValue(stclContext, self);
+                if (value != null) {
+                    writer.writeCDATA(value); // never expand when saving
+                }
+                writer.endElement("param", false);
+            }
+        } catch (IOException e) {
+            logError(stclContext, "Cannot save constructor parameters : %s", e);
+        }
     }
 
     /**
@@ -1429,9 +1431,14 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            this stencil as a plugged stencil.
      */
     protected void saveSlots(C stclContext, XmlWriter descPart, XmlWriter plugPart, S self) throws IOException {
-        PSlot<C, S> pslot = null;
+
+        // no slot saved in case of property
+        if (this._value != null) {
+            return;
+        }
 
         // saves all slots content
+        PSlot<C, S> pslot = null;
         for (_Slot<C, S> slot : getSlots().values()) {
 
             // the slot as a plugged slot
@@ -1501,6 +1508,13 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     @Override
     public String toString() {
+        if (this._value != null) {
+            StringBuffer str = new StringBuffer();
+            str.append('"').append(this._value.toString()).append('"');
+            str.append('[').append(getType()).append(']');
+            str.append('<').append(getClass()).append('>');
+            return str.toString();
+        }
         StringBuffer name = new StringBuffer(super.toString());
         name.append('-').append(StringUtils.isEmpty(this._name) ? getUId(null) : this._name);
         name.append('[').append(getTemplateName()).append(']');
@@ -1773,6 +1787,147 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             _command_descs = new HashMap<String, CommandDescriptor>();
         }
         _command_descs.put(name, new CommandDescriptor(clazz, params));
+    }
+
+    //
+    // PROPERTY PART
+    //
+
+    public String getType(C stclContext, S self) {
+        return this._type;
+    }
+
+    public void setType(C stclContext, String type, S self) {
+        this._type = type;
+    }
+
+    public boolean isExpand(C stclContext, S self) {
+        return this._expand;
+    }
+
+    public void setExpand(C stclContext, boolean expand, S self) {
+        this._expand = expand;
+    }
+
+    public String getValue(C stclContext, S self) {
+        return this._value;
+    }
+
+    /**
+     * Sets the property value.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param value
+     *            the property value.
+     * @param self
+     *            the stencil as a plugged stencil.
+     * @return the old property value.
+     */
+    public String setValue(C stclContext, String value, S self) {
+
+        // sets in contained value
+        String old = this._value;
+        this._value = value;
+        notifyListeners(stclContext, value, old, self);
+
+        return value;
+    }
+
+    public Reader getReader(C stclContext, S self) {
+        if (this._value == null)
+            return StringHelper.EMPTY_STRING_READER;
+        return new StringReader(this._value.toString());
+    }
+
+    public InputStream getInputStream(C stclContext, S self) {
+        if (this._value != null) {
+            try {
+                return IOUtils.toInputStream(this._value.toString(), _StencilContext.getCharacterEncoding());
+            } catch (IOException e) {
+                logError(stclContext, e.toString());
+            }
+        }
+        return StringHelper.EMPTY_STRING_INPUT_STREAM;
+    }
+
+    public OutputStream getOutputStream(C stclContext, S self) {
+        return null;
+    }
+
+    /**
+     * Notifies all property change listeners that the property value has
+     * changed.
+     * 
+     * @param stclContext
+     *            stencil context.
+     * @param value
+     *            new value.
+     * @param old
+     *            old value.
+     * @param self
+     *            the property as a plugged stencil.
+     */
+    @SuppressWarnings("unchecked")
+    public void notifyListeners(C stclContext, String value, String old, S self) {
+
+        // notify listeners
+        try {
+            PropertyChangeEvent<C, S> event = new PropertyChangeEvent<C, S>(stclContext, self, old, value);
+            for (S listener : getListeners(stclContext, self)) {
+                IPropertyChangeListener<C, S> l = (IPropertyChangeListener<C, S>) (listener).getReleasedStencil(stclContext);
+                Result result = l.propertyChange(event);
+                if (!result.isSuccess()) {
+                    if (getLog().isWarnEnabled()) {
+                        getLog().warn(stclContext, "Property listener action not succeed");
+                    }
+                    this._value = old;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            logWarn(stclContext, "Exception in property listener : %s", e);
+        }
+    }
+
+    // redefined in EnumProp or other specific property as false
+    public boolean shouldBeSavedAsProp(C stclContext, S self) {
+        // TODO to optimize : slots should not be taken in account to test == 1
+        if (self.isPluggedOnce(stclContext)) {
+            return SlotUtils.isSingle(stclContext, self.getContainingSlot(stclContext));
+        }
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void saveAsProp(C stclContext, String name, XmlWriter writer) throws IOException {
+        writer.startElement("prop");
+        writer.writeAttribute("name", name);
+        writer.writeAttribute("type", getType());
+        IPPropStencil<C, S> plugged = (IPPropStencil<C, S>) self();
+        writer.writeAttribute("expand", isExpand(stclContext, (S) plugged));
+        String value = plugged.getNotExpandedValue(stclContext); // never expand
+        // when saving
+        if (value != null) {
+            writer.startElement("data");
+            writer.writeCDATAAndEndElement(value);
+        }
+        writer.endElement("prop");
+    }
+
+    /**
+     * Returns value type of the property. TODO should return class (see also
+     * with PropertyCalculator) May be redefined in subclasses to cover new
+     * basic types.
+     * 
+     * @return the XML code for the type.
+     */
+    protected String getType() {
+        return Keywords.STRING;
+    }
+
+    private StencilIterator<C, S> getListeners(C stclContext, S self) {
+        return getStencils(stclContext, Slot.LISTENERS, self);
     }
 
     //

@@ -11,6 +11,7 @@ import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.PathUtils;
 
 public class IsEmpty extends AtomicActionStcl {
 
@@ -30,14 +31,16 @@ public class IsEmpty extends AtomicActionStcl {
 		}
 
 		// at least a stencil should be defined
-		StencilIterator<StclContext, PStcl> iter = target.getStencils(stclContext, path);
+        String parent_path = PathUtils.getPathName(path);
+        String slot_path = PathUtils.getLastName(path);
+		StencilIterator<StclContext, PStcl> iter = target.getStencils(stclContext, parent_path);
 		if (iter.isNotValid() || iter.size() == 0) {
 			return success(cmdContext, self, false);
 		}
 
 		// all properties should be empty
 		for (PStcl stcl : iter) {
-			String prop = stcl.getValue(stclContext);
+			String prop = stcl.getString(stclContext, slot_path);
 			if (StringUtils.isNotEmpty(prop)) {
 				return success(cmdContext, self, false);
 			}

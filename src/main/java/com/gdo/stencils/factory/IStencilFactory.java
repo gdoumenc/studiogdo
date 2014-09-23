@@ -41,11 +41,6 @@ public interface IStencilFactory<C extends _StencilContext, S extends _PStencil<
 	Class<? extends S> getDefaultPStencilClass(C stclContext);
 
 	/**
-	 * Returns the default class used to create a plugged property.
-	 */
-	Class<? extends S> getDefaultPPropertyStencilClass(C stclContext);
-
-	/**
 	 * Returns the default template name used to create stencil.
 	 */
 	String getStencilDefaultTemplateName(C stclContext);
