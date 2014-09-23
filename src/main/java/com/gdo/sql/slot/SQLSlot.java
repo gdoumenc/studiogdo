@@ -53,19 +53,7 @@ import com.gdo.stencils.util.StencilUtils;
  * @author Guillaume Doumenc (<a
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
-/**
- * @author studiogdo
- *
- */
-/**
- * @author studiogdo
- *
- */
-/**
- * @author studiogdo
- *
- */
-public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotFilter {
+public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotMixin {
 
     // prefix to retrieve the plugged stencil after insertion
     public static final String PLUGGED_PREFIX = "plugged";
@@ -287,31 +275,16 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         return new Object[0];
     }
 
-    /**
-     * Returns the database name.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            this slot as a plugged slot.
-     * @return the database name.
-     */
+    //
+    // SQL BEHAVIOR DEFINED THROUGH MIXIN
+    //
+
     public String getDatabaseName(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "";
+        return databaseName(stclContext, self);
     }
 
-    /**
-     * Returns the database table name. If the table used for query is a
-     * jointure you have to change <tt>getKeysFrom</tt>
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            this slot as a plugged slot.
-     * @return the database table name.
-     */
     public String getTableName(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "table not defined";
+        return tableName(stclContext, self);
     }
 
     /**
@@ -327,21 +300,6 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      */
     public String getTableAliasForProperty(StclContext stclContext, PSlot<StclContext, PStcl> self) {
         return getTableName(stclContext, self);
-    }
-
-    /**
-     * Returns a specific SQL selection clause which must be used to the query
-     * to retrieve the stencil keys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL selection.
-     */
-    public String getKeysSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "*";
     }
 
     /**
@@ -365,75 +323,59 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         return "Id";
     }
 
-    private StringBuffer getKeysFromWithoutAlias(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+    private String getKeysFromWithoutAlias(StclContext stclContext, PSlot<StclContext, PStcl> self) {
         StringBuffer from = new StringBuffer();
         String database = getDatabaseName(stclContext, self);
         if (StringUtils.isNotBlank(database)) {
-            from.append("`").append(database).append("`.");
+            if (database.indexOf("`") < 0)
+                from.append("`").append(database).append("`");
+            else
+                from.append(database);
+            from.append(".");
         }
-        String name = getTableName(stclContext, self);
-        if (name.indexOf("`") < 0)
-            from.append("`").append(name).append("`");
+        String table = getTableName(stclContext, self);
+        if (table.indexOf("`") < 0)
+            from.append("`").append(table).append("`");
         else
-            from.append(name);
-        return from;
-    }
-
-    /**
-     * Returns a specific SQL from clause which must be used to the query to
-     * retrieve the stencil keys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL selection.
-     */
-    public String getKeysFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        StringBuffer from = getKeysFromWithoutAlias(stclContext, self);
-        String alias = getTableAliasForProperty(stclContext, self);
-        if (StringUtils.isNotBlank(alias)) {
-            if (alias.indexOf("`") < 0)
-                alias = "`" + alias + "`";
-            from.append(" ").append(alias);
-        }
+            from.append(table);
         return from.toString();
     }
 
-    /**
-     * Returns a specific SQL condition clause which must be added to the query
-     * to retrieve the stencilkeys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param cond
-     *            the path condition.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL clause.
-     */
+    public String getKeysSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+        return keysSelect(stclContext, self);
+    }
+
+    public String getKeysFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+        String from = getKeysFromWithoutAlias(stclContext, self);
+        String alias = getTableAliasForProperty(stclContext, self);
+        return keysFrom(stclContext, from, alias, self);
+    }
+
     public String getKeysCondition(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-        String c = String.format("%s >= 0", getKeysIdField(stclContext, self));
-        return addFilter(stclContext, c, self);
+        String id_field = getKeysIdField(stclContext, self);
+        return keysCondition(stclContext, cond, id_field, self);
     }
 
     public String getKeysOrder(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return String.format("ORDER BY %s", getKeysIdField(stclContext, self));
+        String id_field = getKeysIdField(stclContext, self);
+        return order(stclContext, id_field, self);
     }
 
     public String getKeysGroup(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return null;
+        return group(stclContext, self);
     }
 
     public String getKeysLimit(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return null;
+        return limit(stclContext, self);
     }
 
     public String getKeysHaving(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
         return (cond == null) ? null : cond.toSQL(stclContext, getTableAliasForProperty(stclContext, self), self.getContainer());
     }
+
+    //
+    // INTERNAL CODE
+    //
 
     private String getInternalKeysOrder(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
