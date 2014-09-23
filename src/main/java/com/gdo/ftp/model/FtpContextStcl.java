@@ -22,7 +22,6 @@ import com.gdo.stencils.StclContext;
 import com.gdo.stencils.event.IPropertyChangeListener;
 import com.gdo.stencils.event.PropertyChangeEvent;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.slot.CalculatedBooleanPropertySlot;
 import com.gdo.stencils.util.PathUtils;
 

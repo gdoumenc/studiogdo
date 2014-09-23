@@ -52,7 +52,6 @@ import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
@@ -482,8 +481,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil constructor parameters.
      * @return a new plugged property.
      */
-    @SuppressWarnings("unchecked")
-    public <V, P extends IPPropStencil<C, S>> P newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, S self, Object... params) {
+    public <V> S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, S self, Object... params) {
 
         // creates the property (without plugging it)
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
@@ -495,9 +493,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
         // plugs it in the slot (if defined)
         if (SlotUtils.isNull(slot)) {
-            return (P) prop;
+            return prop;
         }
-        return (P) self.plug(stclContext, (S) prop, slot, key);
+        return self.plug(stclContext, prop, slot, key);
     }
 
     /**
@@ -1899,14 +1897,12 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     public void saveAsProp(C stclContext, String name, XmlWriter writer) throws IOException {
         writer.startElement("prop");
         writer.writeAttribute("name", name);
         writer.writeAttribute("type", getType());
-        IPPropStencil<C, S> plugged = (IPPropStencil<C, S>) self();
-        writer.writeAttribute("expand", isExpand(stclContext, (S) plugged));
-        String value = plugged.getNotExpandedValue(stclContext); // never expand
+        writer.writeAttribute("expand", isExpand(stclContext, (S) self()));
+        String value = self().getNotExpandedValue(stclContext); // never expand
         // when saving
         if (value != null) {
             writer.startElement("data");

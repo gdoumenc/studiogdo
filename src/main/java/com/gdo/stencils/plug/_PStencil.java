@@ -36,7 +36,6 @@ import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.key.LinkedKey;
 import com.gdo.stencils.log.StencilLog;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -69,7 +68,7 @@ import com.gdo.util.XmlWriter;
  * @author Guillaume Doumenc (<a
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
-public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> implements IPPropStencil<C, S>, Cloneable {
+public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> implements Cloneable {
 
     // maximum level search for root
     private static final int MAX_ROOT_LEVEL = 20;
@@ -1074,7 +1073,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (StencilUtils.isNull(prop)) {
             throw new IllegalStateException(prop.getNullReason());
         }
-        ((IPPropStencil<C, S>) prop).setValue(stclContext, value);
+        prop.setValue(stclContext, value);
     }
 
     public void setInt(C stclContext, String path, int value) {
@@ -1149,16 +1148,16 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     @SuppressWarnings("unchecked")
-    public <V, P extends IPPropStencil<C, S>> P newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, Object... params) {
+    public <V> S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        return (P) stcl.newPProperty(stclContext, slot, key, value, self(), params);
+        return stcl.newPProperty(stclContext, slot, key, value, self(), params);
     }
 
     @SuppressWarnings("unchecked")
-    public <V, P extends IPPropStencil<C, S>> P newPProperty(C stclContext, String slotName, IKey key, V value, Object... params) {
+    public <V> S newPProperty(C stclContext, String slotName, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         PSlot<C, S> slot = getSlot(stclContext, slotName);
-        return (P) stcl.newPProperty(stclContext, slot, key, value, self(), params);
+        return stcl.newPProperty(stclContext, slot, key, value, self(), params);
     }
 
     /*
@@ -1664,49 +1663,41 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return stcl.saveAsInstance(stclContext, "/", out, self());
     }
 
-    @Override
     public String getType(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.getType(stclContext, self());
     }
 
-    @Override
     public String getValue(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.getValue(stclContext, self());
     }
 
-    @Override
     public void setValue(C stclContext, String value) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         stcl.setValue(stclContext, value, self());
     }
 
-    @Override
     public boolean isExpand(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.isExpand(stclContext, self());
     }
 
-    @Override
     public void setExpand(C stclContext, boolean expand) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         stcl.setExpand(stclContext, expand, self());
     }
 
-    @Override
     public InputStream getInputStream(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.getInputStream(stclContext, self());
     }
 
-    @Override
     public String getExpandedValue(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.getValue(stclContext, self());
     }
 
-    @Override
     public String getNotExpandedValue(C stclContext) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.getValue(stclContext, self());

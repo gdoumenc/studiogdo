@@ -20,7 +20,6 @@ import com.gdo.stencils.event.PropertyChangeEvent;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.IPPropStencil;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.util.XmlWriter;
 
