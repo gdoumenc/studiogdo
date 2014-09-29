@@ -80,7 +80,9 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
 	 */
 	public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, _Stencil<C, S> stencil) {
 		Class<? extends S> pstencilClass = getDefaultPStencilClass(stclContext);
-		return ClassHelper.newInstance(pstencilClass, stclContext, stencil, slot, key);
+        S stcl = ClassHelper.newInstance(pstencilClass, stclContext, stencil, slot, key);
+	    (stcl.getReleasedStencil(stclContext)).afterPlugged(stclContext, slot, key, stcl);
+		return stcl;
 	}
 
 	/**

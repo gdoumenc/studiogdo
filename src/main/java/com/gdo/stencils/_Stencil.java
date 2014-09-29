@@ -558,6 +558,22 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         // nothing by default
     }
 
+    /**
+     * Overridable method for actions to be performed on stencil first plug.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param slot
+     *          the containing slot.
+     * @param key
+     *          the key.
+     * @param self
+     *            the stencil as a plugged stencil.
+     */
+    public void afterPlugged(C stclContext, PSlot<C, S> slot, IKey key, S self) {
+        // nothing by default
+    }
+
     // --------------------------------------------------------------------------
     //
     // Modification management.
