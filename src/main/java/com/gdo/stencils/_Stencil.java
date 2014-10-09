@@ -449,7 +449,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
         // creates the stencil (without plugging it)
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-        S stcl = factory.createPStencil(stclContext, null, key, (Class<? extends _Stencil<C, S>>) clazz, params);
+        S stcl = factory.createPStencil(stclContext, slot, key, (Class<? extends _Stencil<C, S>>) clazz, params);
         if (StencilUtils.isNull(stcl)) {
             String reason = stcl.getNullReason();
             logWarn(stclContext, "Cannot create stencil %s (%s)", clazz, reason);
