@@ -26,6 +26,7 @@ import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
+import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.facet.FacetType;
@@ -34,6 +35,7 @@ import com.gdo.stencils.facet.JSONSectionCompleter;
 import com.gdo.stencils.facet.PythonSectionCompleter;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.key.IKey;
+import com.gdo.stencils.key.Key;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
 import com.gdo.util.XmlWriter;
@@ -185,8 +187,23 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return super.isLink(stclContext);
     }
 
-    private boolean isCursorBased() {
+    public boolean isCursorBased() {
         return this._cursor != null;
+    }
+
+    public void addCursor(StclContext stclContext, PSlot<StclContext, PStcl> cursorContainer, _SlotCursor cursor, String cursorKey) {
+        _cursor_container = cursorContainer;
+        _cursor = cursor;
+        _cursor_key = cursorKey;
+    }
+
+    public void updateCursor(StclContext stclContext) {
+        PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<>(_cursor_key), null);
+        this._cursor_container.getStencils(stclContext, cond);
+    }
+    
+    public String getPropertyValue(StclContext stclContext, String path) {
+        return _cursor.getPropertyValue(stclContext, _cursor_container, _cursor_key, path);
     }
 
     @Override
@@ -711,7 +728,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (!PathUtils.isComposed(path) && isCursorBased()) {
-            String value = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String value = _cursor.getPropertyValue(stclContext, _cursor_container, _cursor_key, path);
             if (value != null) {
                 return value;
             }

@@ -288,7 +288,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         // execute the command
         return ((ComposedActionStcl) cmdStcl.getReleasedStencil(stclContext)).launch(newContext, path, cmdStcl);
     }
-
+    
     public class IsLockedSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
 
         public IsLockedSlot(StclContext stclContext, String name, PStcl self) {
