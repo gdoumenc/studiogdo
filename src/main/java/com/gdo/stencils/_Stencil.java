@@ -564,9 +564,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @param stclContext
      *            the stencil context.
      * @param slot
-     *          the containing slot.
+     *            the containing slot.
      * @param key
-     *          the key.
+     *            the key.
      * @param self
      *            the stencil as a plugged stencil.
      */

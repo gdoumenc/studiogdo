@@ -5,6 +5,7 @@ package com.gdo.stencils.slot;
 
 import com.gdo.project.adaptor.ISlotEmulator;
 import com.gdo.stencils.Result;
+import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.cond.StencilCondition;
@@ -15,6 +16,7 @@ import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
+import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -296,15 +298,17 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 	}
 
 	// try to create the stencil plugged by default descriptor
-	@SuppressWarnings("unchecked")
 	protected S getContainedStencilOrCreateDefault(C stclContext, PSlot<C, S> self) {
 
 		// creates it only if doesn't already exist
 		if (StencilUtils.isNotNull(this._containedStcl)) {
-			/*
-			 * if (!SlotUtils.equals(this._containedStcl.getSlot(), self)) {
-			 * getLog().error(stclContext, "Should not goes there : SingleSlot"); }
-			 */
+		    
+		    if (this._containedStcl instanceof PStcl) {
+		        PStcl pstcl = (PStcl) this._containedStcl;
+		        if (pstcl.isCursorBased()) {
+		            pstcl.updateCursor((StclContext) stclContext);
+		        }
+		    }
 
 			// the contained stencil may be created in instance repository so
 			// containing slot may be wrong
