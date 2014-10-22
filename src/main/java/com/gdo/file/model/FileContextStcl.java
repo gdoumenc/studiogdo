@@ -64,7 +64,7 @@ public class FileContextStcl extends FolderStcl implements IPropertyChangeListen
 	// if dir property changes, then remove previous file created
 	@Override
 	public Result propertyChange(PropertyChangeEvent<StclContext, PStcl> evt) {
-		this._dir = null;
+		_dir = null;
 		return Result.success();
 	}
 
@@ -83,27 +83,27 @@ public class FileContextStcl extends FolderStcl implements IPropertyChangeListen
 	public File getFile(StclContext stclContext, PStcl self) {
 
 		// if file root not defined
-		if (this._dir == null) {
+		if (_dir == null) {
 			String dir = self.getString(stclContext, Slot.DIR, StringHelper.EMPTY_STRING);
 			if (StringUtils.isBlank(dir)) {
 				logWarn(stclContext, "initial context dir is empty", dir);
 				return null;
 			}
-			this._dir = new File(dir);
-			if (this._dir == null) {
+			_dir = new File(dir);
+			if (_dir == null) {
 				logWarn(stclContext, "cannot open dir %s", dir);
 				return null;
 			}
 		}
 		
 		// file root must be a directory
-		if (!this._dir.isDirectory()) {
-			logWarn(stclContext, "initial context dir (%s) is not a directory", this._dir.getPath());
-			this._dir = null;
+		if (!_dir.isDirectory()) {
+			logWarn(stclContext, "initial context dir (%s) is not a directory", _dir.getPath());
+			_dir = null;
 		}
 
 		// returns java file root
-		return this._dir;
+		return _dir;
 	}
 
 	@Override

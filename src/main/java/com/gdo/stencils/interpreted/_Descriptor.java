@@ -53,7 +53,7 @@ public abstract class _Descriptor<C extends _StencilContext, S extends _PStencil
 	 */
 	// not final for generics type redefinition
 	public _Descriptor<C, S> getSuperDescriptor(C stclContext) {
-		return this._superDesc;
+		return _superDesc;
 	}
 
 	/**
@@ -61,30 +61,30 @@ public abstract class _Descriptor<C extends _StencilContext, S extends _PStencil
 	 */
 	// not final for generics type redefinition
 	public void setSuperDescriptor(C stclContext, _Descriptor<C, S> superDesc) {
-		this._superDesc = superDesc;
+		_superDesc = superDesc;
 	}
 
 	/**
 	 * @return the list of parameter descriptors.
 	 */
 	public List<ParameterDescriptor<C, S>> getParameterDescriptors() {
-		if (this._params == null) {
+		if (_params == null) {
 			return Collections.emptyList();
 		}
-		return this._params;
+		return _params;
 	}
 
 	/**
 	 * Adds a new parameter descriptor.
 	 */
 	public final void addParamDescriptor(ParameterDescriptor<C, S> param) {
-		if (this._params == null) {
-			this._params = new ArrayList<ParameterDescriptor<C, S>>();
+		if (_params == null) {
+			_params = new ArrayList<ParameterDescriptor<C, S>>();
 		}
 
 		// verify index not already used
 		int index = param.getIndexAsByte();
-		for (ParameterDescriptor<C, S> p : this._params) {
+		for (ParameterDescriptor<C, S> p : _params) {
 			if (index == p.getIndexAsByte()) {
 				if (getLog().isWarnEnabled()) {
 					String msg = String.format("Index %s already used for parameter", Integer.toString(index));
@@ -93,7 +93,7 @@ public abstract class _Descriptor<C extends _StencilContext, S extends _PStencil
 				return;
 			}
 		}
-		this._params.add(param);
+		_params.add(param);
 	}
 
 	/**
@@ -102,8 +102,8 @@ public abstract class _Descriptor<C extends _StencilContext, S extends _PStencil
 	 * @return <tt>null</tt> if no parameter defined.
 	 */
 	public Object getParameter(C stclContext, int index) {
-		if (this._params != null) {
-			for (ParameterDescriptor<C, S> p : this._params) {
+		if (_params != null) {
+			for (ParameterDescriptor<C, S> p : _params) {
 				if (index == p.getIndexAsByte()) {
 					return p.getValue();
 				}

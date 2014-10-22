@@ -28,7 +28,7 @@ public class RecipientStcl extends Stcl implements IRecipient {
 	// defined in constructor parameter for compatibility reason
 	public RecipientStcl(StclContext stclContext, String add) {
 		this(stclContext);
-		this._address = add;
+		_address = add;
 	}
 
 	public RecipientStcl(StclContext stclContext) {
@@ -60,7 +60,7 @@ public class RecipientStcl extends Stcl implements IRecipient {
 			writer.startElement("param");
 			writer.writeAttribute("index", Integer.toString(0));
 			writer.writeAttribute("type", "string");
-			String add = (this._address != null) ? this._address : "";
+			String add = (_address != null) ? _address : "";
 			writer.writeCDATAAndEndElement(add);
 		} catch (Exception e) {
 			logError(stclContext, "Cannot save constructor parameters for %s", getClass().getName());

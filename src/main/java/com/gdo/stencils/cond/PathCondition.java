@@ -29,9 +29,9 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 	public PathCondition(C stclContext, String pathCondition, S stcl) {
 		if (StringUtils.isNotBlank(pathCondition) && pathCondition.startsWith("({")) {
 			String path = pathCondition.substring(2, pathCondition.length() - 2);
-			this._pathCondition = "(" + stcl.getString(stclContext, path, "") + ")";
+			_pathCondition = "(" + stcl.getString(stclContext, path, "") + ")";
 		} else {
-			this._pathCondition = pathCondition;
+			_pathCondition = pathCondition;
 		}
 	}
 
@@ -111,14 +111,14 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 	}
 
 	public String getCondition() {
-		return this._pathCondition;
+		return _pathCondition;
 	}
 
 	@Override
 	public boolean verify(C stclContext, S stencil) {
 
 		// key defined
-		if (PathUtils.isKeyContained(this._pathCondition)) {
+		if (PathUtils.isKeyContained(_pathCondition)) {
 			boolean negation = false;
 
 			// does nothing on empty stencil
@@ -133,7 +133,7 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 				return true;
 
 			// get tested key (if empty, accept all stencils)
-			String exp = PathUtils.getKeyContained(this._pathCondition);
+			String exp = PathUtils.getKeyContained(_pathCondition);
 			if (exp.startsWith(NOT)) {
 				negation = true;
 				exp = exp.substring(1);
@@ -150,8 +150,8 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 		}
 
 		// expression is slot = value
-		if (PathUtils.isExpContained(this._pathCondition)) {
-			String exp = PathUtils.getExpContained(this._pathCondition);
+		if (PathUtils.isExpContained(_pathCondition)) {
+			String exp = PathUtils.getExpContained(_pathCondition);
 			if (exp.startsWith("$")) {
 				return true; // link condition but also all stencils
 			}
@@ -162,7 +162,7 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 			}
 
 			// get the slot tested
-			String slot = PathUtils.getPropContained(this._pathCondition);
+			String slot = PathUtils.getPropContained(_pathCondition);
 
 			// facet value tested
 			int index = slot.indexOf('$');
@@ -184,12 +184,12 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 
 			// compares value
 			String prop = stencil.getString(stclContext, slot, "");
-			String value = PathUtils.getValueContained(this._pathCondition);
+			String value = PathUtils.getValueContained(_pathCondition);
 			String type = stencil.getType(stclContext, slot);
 			if (StringUtils.isNotBlank(value) && value.startsWith("{")) {
 				value = stencil.getString(stclContext, value.substring(1, value.length() - 1), "");
 			}
-			String oper = PathUtils.getOperContained(this._pathCondition);
+			String oper = PathUtils.getOperContained(_pathCondition);
 			return compare(type, prop, value, oper);
 		}
 		return false;
@@ -199,11 +199,11 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 	public String toSQL(C stclContext, String alias, S stencil) {
 
 		// key condition for sql slot
-		if (PathUtils.isKeyContained(this._pathCondition)) {
+		if (PathUtils.isKeyContained(_pathCondition)) {
 			try {
 
 				// if the expression is a number, then this number should be the id
-				String exp = PathUtils.getKeyContained(this._pathCondition);
+				String exp = PathUtils.getKeyContained(_pathCondition);
 
 				// if contains order or limit then no condition
 				if (exp.toLowerCase().indexOf("order") != -1 || exp.toLowerCase().indexOf("limit") != -1) {
@@ -219,17 +219,17 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 			} catch (NumberFormatException e) {
 				return String.format("PathCondition:toSQL %s", e);
 			}
-		} else if (PathUtils.isExpContained(this._pathCondition)) {
+		} else if (PathUtils.isExpContained(_pathCondition)) {
 
 			// get the slot tested
-			String slot = PathUtils.getPropContained(this._pathCondition);
+			String slot = PathUtils.getPropContained(_pathCondition);
 
 			// compares value
-			String value = PathUtils.getValueContained(this._pathCondition);
+			String value = PathUtils.getValueContained(_pathCondition);
 			if (StringUtils.isNotBlank(value) && value.startsWith("{")) {
 				value = stencil.getString(stclContext, value.substring(1, value.length() - 1), "");
 			}
-			String oper = PathUtils.getOperContained(this._pathCondition);
+			String oper = PathUtils.getOperContained(_pathCondition);
 			if (StringUtils.isNotBlank(alias)) {
 				return String.format("`%s`.%s %s '%s'", alias, slot, toSQL(oper), value);
 			}
@@ -240,8 +240,8 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 
 	@Deprecated
 	protected boolean verifyPropertyValue(C stclContext, String prop) {
-		String value = PathUtils.getValueContained(this._pathCondition);
-		String oper = PathUtils.getOperContained(this._pathCondition);
+		String value = PathUtils.getValueContained(_pathCondition);
+		String oper = PathUtils.getOperContained(_pathCondition);
 		if (oper != null) {
 			if (oper.equals(PathUtils.EQUALS_OPER)) {
 				return (prop.equals(value));
@@ -357,7 +357,7 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
 
 	@Override
 	public String toString() {
-		return this._pathCondition;
+		return _pathCondition;
 	}
 
 }

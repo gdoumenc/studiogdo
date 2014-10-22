@@ -34,7 +34,7 @@ public class StencilLog {
 	private final Log _log; // real logger associated
 
 	public StencilLog(Class<?> clazz) {
-		this._log = LogFactory.getLog(clazz);
+		_log = LogFactory.getLog(clazz);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class StencilLog {
 	 * @return true if trace is enabled in the underlying logger.
 	 */
 	public boolean isTraceEnabled() {
-		return this._log.isTraceEnabled();
+		return _log.isTraceEnabled();
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class StencilLog {
 	 * @return true if warn is enabled in the underlying logger.
 	 */
 	public boolean isWarnEnabled() {
-		return this._log.isWarnEnabled();
+		return _log.isWarnEnabled();
 	}
 
 	/**
@@ -76,11 +76,11 @@ public class StencilLog {
 	 * @return true if error is enabled in the underlying logger.
 	 */
 	public boolean isErrorEnabled() {
-		return this._log.isErrorEnabled();
+		return _log.isErrorEnabled();
 	}
 
 	public <C extends _StencilContext> String logTrace(C stclContext, String format, Object... params) {
-		if (this._log.isTraceEnabled()) {
+		if (_log.isTraceEnabled()) {
 			String msg = (params.length == 0) ? format : String.format(format, params);
 			trace(stclContext, msg);
 			return msg;
@@ -107,20 +107,20 @@ public class StencilLog {
 	}
 
 	public <C extends _StencilContext> void trace(C stclContext, Object arg) {
-		this._log.trace(argToString(stclContext, arg));
+		_log.trace(argToString(stclContext, arg));
 	}
 
 	private <C extends _StencilContext> void info(C stclContext, Object arg) {
-		this._log.trace(argToString(stclContext, arg));
+		_log.trace(argToString(stclContext, arg));
 	}
 
 	public <C extends _StencilContext> void warn(C stclContext, Object arg) {
-		this._log.warn(argToString(stclContext, arg));
+		_log.warn(argToString(stclContext, arg));
 	}
 
 	public <C extends _StencilContext> void error(C stclContext, Object arg) {
-		this._log.error(argToString(stclContext, arg));
-		this._log.error(getStackTrace(new Throwable("error trace")));
+		_log.error(argToString(stclContext, arg));
+		_log.error(getStackTrace(new Throwable("error trace")));
 	}
 
 	// should be no more used
@@ -137,15 +137,15 @@ public class StencilLog {
 		}
 
 		if (t != null)
-			this._log.error(msg + SEP + t);
+			_log.error(msg + SEP + t);
 		else
-			this._log.error(msg);
+			_log.error(msg);
 
 		// add trace is not wrong path exception
 		if (t != null) {
 			if (t instanceof WrongPathException)
 				return;
-			this._log.warn(getStackTrace(t));
+			_log.warn(getStackTrace(t));
 		}
 	}
 
@@ -159,7 +159,7 @@ public class StencilLog {
 			if (name != null)
 				msg = name + SEP + msg;
 		}
-		this._log.error(msg);
+		_log.error(msg);
 	}
 
 	@Deprecated
@@ -174,15 +174,15 @@ public class StencilLog {
 		}
 
 		if (t != null)
-			this._log.error(msg + SEP + t);
+			_log.error(msg + SEP + t);
 		else
-			this._log.error(msg);
+			_log.error(msg);
 
 		// add trace is not wrong path exception
 		if (t != null) {
 			if (t instanceof WrongPathException)
 				return;
-			this._log.error(getStackTrace(t));
+			_log.error(getStackTrace(t));
 		}
 	}
 

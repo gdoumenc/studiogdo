@@ -285,8 +285,8 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 				return value;
 			}
 		}
-		if (this._defParams.containsKey(key)) {
-			K value = castParameter(this._defParams.get(key), def);
+		if (_defParams.containsKey(key)) {
+			K value = castParameter(_defParams.get(key), def);
 			if (value != null) {
 				return value;
 			}
@@ -349,7 +349,7 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 		}
 
 		// execute action stacking command context
-		this._cmdContext = cmdContext; // needed to be able to access target
+		_cmdContext = cmdContext; // needed to be able to access target
 		// during the execution
 		CommandStatus<C, S> status = verifyContext(cmdContext, self);
 		if (!status.isSuccess()) {
@@ -365,7 +365,7 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 	 */
 	public final <K> void setParameter(int index, K value) {
 		String key = Keywords.PARAM + Integer.toString(index);
-		this._defParams.put(key, value);
+		_defParams.put(key, value);
 	}
 
 	/**
@@ -390,8 +390,8 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 	}
 
 	private S getTarget() {
-		if (this._cmdContext != null)
-			return this._cmdContext.getTarget();
+		if (_cmdContext != null)
+			return _cmdContext.getTarget();
 		return null;
 	}
 

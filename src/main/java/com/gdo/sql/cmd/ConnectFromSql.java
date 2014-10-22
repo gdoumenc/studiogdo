@@ -69,10 +69,10 @@ public class ConnectFromSql extends Connect {
 				}
 			}
 			String query = String.format(q, table, login, passwd);
-			SQLContextStcl sqlContext = (SQLContextStcl) this._sqlContext.getReleasedStencil(stclContext);
+			SQLContextStcl sqlContext = (SQLContextStcl) _sqlContext.getReleasedStencil(stclContext);
 
 			// does the query
-			ResultSet rs = sqlContext.selectQuery(stclContext, query, this._sqlContext);
+			ResultSet rs = sqlContext.selectQuery(stclContext, query, _sqlContext);
 			if (rs != null && rs.next()) {
 				cmdContext.put(QUERY, rs); // used in completeUser
 				CommandStatus<StclContext, PStcl> status = success(cmdContext, self, Status.INITIAL_PATH, rs.getString(1));
@@ -105,7 +105,7 @@ public class ConnectFromSql extends Connect {
 				getLog().error(stclContext, msg);
 			return error(cmdContext, self, msg);
 		}
-		this._sqlContext = sqlStcl;
+		_sqlContext = sqlStcl;
 		return super.verifyContext(cmdContext, self);
 	}
 

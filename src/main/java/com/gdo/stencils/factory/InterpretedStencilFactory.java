@@ -102,18 +102,18 @@ public class InterpretedStencilFactory<C extends _StencilContext, S extends _PSt
 	public InterpretedStencilFactory() {
 
 		// create digester
-		this._digester = new Digester();
+		_digester = new Digester();
 		URL dtd = ClassHelper.getResource(DTD_FILE);
-		this._digester.register(DTD_TYPE, dtd.toString());
-		this._digester.setValidating(false);
-		this._digester.setUseContextClassLoader(true);
-		this._digester.setErrorHandler(new MyErrorHandler());
+		_digester.register(DTD_TYPE, dtd.toString());
+		_digester.setValidating(false);
+		_digester.setUseContextClassLoader(true);
+		_digester.setErrorHandler(new MyErrorHandler());
 
 		/*
 		 * template part
 		 */
-		this._digester.addObjectCreate(TEMPLATE, TemplateDescriptor.class);
-		this._digester.addSetProperties(TEMPLATE);
+		_digester.addObjectCreate(TEMPLATE, TemplateDescriptor.class);
+		_digester.addSetProperties(TEMPLATE);
 
 		// local definition
 		addParam(TEMPLATE);
@@ -127,8 +127,8 @@ public class InterpretedStencilFactory<C extends _StencilContext, S extends _PSt
 		/*
 		 * stencil part
 		 */
-		this._digester.addObjectCreate(STENCIL, StencilDescriptor.class);
-		this._digester.addSetProperties(STENCIL);
+		_digester.addObjectCreate(STENCIL, StencilDescriptor.class);
+		_digester.addSetProperties(STENCIL);
 
 		// slot and command part
 		addParam(STENCIL);
@@ -306,7 +306,7 @@ public class InterpretedStencilFactory<C extends _StencilContext, S extends _PSt
 	@SuppressWarnings("unchecked")
 	public synchronized _Stencil<C, S> loadStencil(C stclContext, Reader in, String name) {
 		try {
-			Object parsed = this._digester.parse(in);
+			Object parsed = _digester.parse(in);
 			if (parsed instanceof StencilDescriptor) {
 				StencilDescriptor<C, S> descriptor = (StencilDescriptor<C, S>) parsed;
 				String rootId = descriptor.getId();
@@ -391,31 +391,31 @@ public class InterpretedStencilFactory<C extends _StencilContext, S extends _PSt
 
 	private void addParam(String prefix) {
 		String path = prefix + PARAM;
-		this._digester.addObjectCreate(path, ParameterDescriptor.class);
-		this._digester.addSetProperties(path);
-		this._digester.addCallMethod(path, SET_VALUE, 0);
-		this._digester.addSetNext(path, ADD_PARAM_DESC);
+		_digester.addObjectCreate(path, ParameterDescriptor.class);
+		_digester.addSetProperties(path);
+		_digester.addCallMethod(path, SET_VALUE, 0);
+		_digester.addSetNext(path, ADD_PARAM_DESC);
 	}
 
 	private void addProp(String prefix) {
 		String path = prefix + PROP;
-		this._digester.addObjectCreate(path, PropDescriptor.class);
-		this._digester.addSetProperties(path);
-		this._digester.addCallMethod(path + DATA, SET_VALUE, 0);
-		this._digester.addSetNext(path, ADD_PROP_DESC);
+		_digester.addObjectCreate(path, PropDescriptor.class);
+		_digester.addSetProperties(path);
+		_digester.addCallMethod(path + DATA, SET_VALUE, 0);
+		_digester.addSetNext(path, ADD_PROP_DESC);
 	}
 
 	private void addProto(String prefix) {
 		String path = prefix + PROTO;
-		this._digester.addObjectCreate(path, ProtoDescriptor.class);
-		this._digester.addSetProperties(path);
-		this._digester.addSetNext(path, ADD_PROTO_DESC);
+		_digester.addObjectCreate(path, ProtoDescriptor.class);
+		_digester.addSetProperties(path);
+		_digester.addSetNext(path, ADD_PROTO_DESC);
 	}
 
 	private void add(String path, Class<?> clazz, String call) {
-		this._digester.addObjectCreate(path, clazz);
-		this._digester.addSetProperties(path);
-		this._digester.addSetNext(path, call);
+		_digester.addObjectCreate(path, clazz);
+		_digester.addSetProperties(path);
+		_digester.addSetNext(path, call);
 	}
 
 	class MyErrorHandler implements ErrorHandler {

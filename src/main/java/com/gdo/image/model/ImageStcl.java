@@ -23,13 +23,13 @@ public class ImageStcl extends FileResourceStcl {
 
 	public ImageStcl(StclContext stclContext, PStcl file) {
 		super(stclContext);
-		this._file = file;
+		_file = file;
 	}
 
 	@Override
 	public void afterCompleted(StclContext stclContext, PStcl self) {
-		if (StencilUtils.isNotNull(this._file)) {
-			self.plug(stclContext, this._file, Slot.FILE);
+		if (StencilUtils.isNotNull(_file)) {
+			self.plug(stclContext, _file, Slot.FILE);
 		}
 	}
 

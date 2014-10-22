@@ -140,13 +140,13 @@ public class MailContextStcl extends FolderStcl {
 		String _passwd;
 
 		MailAuthenticator(String user, String passwd) {
-			this._user = user;
-			this._passwd = passwd;
+			_user = user;
+			_passwd = passwd;
 		}
 
 		@Override
 		public PasswordAuthentication getPasswordAuthentication() {
-			return new PasswordAuthentication(this._user, this._passwd);
+			return new PasswordAuthentication(_user, _passwd);
 		}
 	}
 

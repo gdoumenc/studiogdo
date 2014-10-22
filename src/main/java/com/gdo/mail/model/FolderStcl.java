@@ -30,7 +30,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
 
     public FolderStcl(StclContext stclContext, Folder folder) {
         super(stclContext);
-        this._folder = folder;
+        _folder = folder;
 
         singleSlot(Slot.CONTEXT);
         singleSlot(Slot.PARENT);
@@ -52,16 +52,16 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
 
     // this method is public to allow commands to access it
     public Folder getFolder(StclContext stclContext, PStcl self) {
-        if (this._folder == null) {
+        if (_folder == null) {
             PStcl parent = self.getStencil(stclContext, Slot.PARENT);
             Folder f = ((FolderStcl) parent.getReleasedStencil(stclContext)).getFolder(stclContext, parent);
             try {
                 String name = getName(stclContext, self);
-                this._folder = f.getFolder(name);
+                _folder = f.getFolder(name);
             } catch (MessagingException e) {
             }
         }
-        return this._folder;
+        return _folder;
     }
 
     private class FilesOnlySlot extends MultiCalculatedSlot<StclContext, PStcl> {

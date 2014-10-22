@@ -31,10 +31,10 @@ public class Move extends AtomicActionStcl {
 		 * StclContext stclContext = cmdContext.getStencilContext(); PStcl target =
 		 * cmdContext.getTarget();
 		 * 
-		 * if (this._mode.equals(UP)) { //target.moveUp(stclContext); } else if
-		 * (this._mode.equals(DOWN)) { //target.moveDown(stclContext); } else if
-		 * (this._mode.equals(FIRST)) { //target.moveFirst(stclContext); } else if
-		 * (this._mode.equals(LAST)) { //target.moveLast(stclContext); }
+		 * if (_mode.equals(UP)) { //target.moveUp(stclContext); } else if
+		 * (_mode.equals(DOWN)) { //target.moveDown(stclContext); } else if
+		 * (_mode.equals(FIRST)) { //target.moveFirst(stclContext); } else if
+		 * (_mode.equals(LAST)) { //target.moveLast(stclContext); }
 		 */
 
 		return success(cmdContext, self);
@@ -50,9 +50,9 @@ public class Move extends AtomicActionStcl {
 		 * !mode.equals(DOWN) && !mode.equals(FIRST) && !mode.equals(LAST) &&
 		 * !mode.equals(RELATIVE)) { String msg = String.format(
 		 * "mode should be up, down, first, last or relative not %s (param1)",
-		 * mode); return error(cmdContext, self, msg); } this._mode = mode;
+		 * mode); return error(cmdContext, self, msg); } _mode = mode;
 		 * 
-		 * // this._key = getParameter(cmdContext, CommandContext.PARAM2, null);
+		 * // _key = getParameter(cmdContext, CommandContext.PARAM2, null);
 		 */
 		return super.verifyContext(cmdContext, self);
 	}

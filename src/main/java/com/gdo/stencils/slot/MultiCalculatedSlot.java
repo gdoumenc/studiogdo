@@ -58,7 +58,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 	 * slot (default). May be set to false for optimization (long list of stencil)
 	 */
 	protected void setDoPlug(boolean plug) {
-		this._doPlug = plug;
+		_doPlug = plug;
 	}
 
 	@Override
@@ -99,11 +99,11 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 	 */
 
 	public S getStencilFromList(C stclContext, IKey key, PSlot<C, S> self) {
-		return this._map.get(key);
+		return _map.get(key);
 	}
 
 	protected void keepStencilInList(C stclContext, IKey key, PSlot<C, S> self) {
-		this._map.keep(key);
+		_map.keep(key);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 		if (StencilUtils.isNull(stcl)) {
 			logWarn(stclContext, "try to add an empty stencil in the multi calculated slot %s", self);
 		} else {
-			this._map.add(stcl);
+			_map.add(stcl);
 		}
 	}
 
@@ -124,7 +124,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 	protected StencilIterator<C, S> cleanList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 
 		// removes old unplugged stencils
-		Collection<S> list = this._map.clean(stclContext, self);
+		Collection<S> list = _map.clean(stclContext, self);
 
 		// normally should not occur...
 		if (!SlotUtils.isMultiple(stclContext, self)) {
@@ -167,23 +167,23 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 					}
 				}
 			}
-			this._oldMap = map;
-			this._keep = null;
+			_oldMap = map;
+			_keep = null;
 			return map.values();
 		}
 
 		private Map<IKey, S> getOldList() {
-			if (this._oldMap == null) {
-				this._oldMap = new HashMap<IKey, S>();
+			if (_oldMap == null) {
+				_oldMap = new HashMap<IKey, S>();
 			}
-			return this._oldMap;
+			return _oldMap;
 		}
 
 		private List<String> getKeep() {
-			if (this._keep == null) {
-				this._keep = new ArrayList<String>();
+			if (_keep == null) {
+				_keep = new ArrayList<String>();
 			}
-			return this._keep;
+			return _keep;
 		}
 	}
 }

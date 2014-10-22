@@ -26,26 +26,26 @@ public class PropertyChangeEvent<C extends _StencilContext, S extends _PStencil<
 	private String _new;
 
 	public PropertyChangeEvent(C stclContext, S prop, String oldValue, String newValue) {
-		this._stclContext = stclContext;
-		this._prop = prop;
-		this._old = oldValue;
-		this._new = newValue;
+		_stclContext = stclContext;
+		_prop = prop;
+		_old = oldValue;
+		_new = newValue;
 	}
 
 	public C getStencilContext() {
-		return this._stclContext;
+		return _stclContext;
 	}
 
 	public S getPluggedProperty() {
-		return this._prop;
+		return _prop;
 	}
 
 	public String getNewValue() {
-		return this._new;
+		return _new;
 	}
 
 	public String getOldValue() {
-		return this._old;
+		return _old;
 	}
 
 }

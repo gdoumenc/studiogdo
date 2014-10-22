@@ -240,7 +240,7 @@ public class DateStcl extends Stcl {
 
 		public CalendarSlot(StclContext stclContext, String name, int field) {
 			super(stclContext, DateStcl.this, name, PSlot.ANY);
-			this._field = field;
+			_field = field;
 		}
 
 		@Override
@@ -263,7 +263,7 @@ public class DateStcl extends Stcl {
 			// gets the month index
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
-			int field = cal.get(this._field);
+			int field = cal.get(_field);
 
 			// creates the property
 			StclFactory factory = (StclFactory) stclContext.getStencilFactory();

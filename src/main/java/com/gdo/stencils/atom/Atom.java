@@ -66,12 +66,12 @@ public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
 	 */
 	@Override
 	public String getId(C stclContext) {
-		if (this._id == null) {
+		if (_id == null) {
 			StringBuffer str = new StringBuffer();
 			str.append('_').append(uniqueInt());
-			this._id = str.toString();
+			_id = str.toString();
 		}
-		return this._id;
+		return _id;
 	}
 
 	/*
@@ -81,10 +81,10 @@ public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
 	 */
 	@Override
 	public String getUId(C stclContext) {
-		if (this._uid == null) {
-			this._uid = getId(stclContext) + time();
+		if (_uid == null) {
+			_uid = getId(stclContext) + time();
 		}
-		return this._uid;
+		return _uid;
 	}
 
 	// return time stamp

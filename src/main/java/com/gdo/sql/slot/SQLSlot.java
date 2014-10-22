@@ -88,7 +88,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      */
     public SQLSlot(StclContext stclContext, Stcl in, String name, int size) {
         super(stclContext, in, name, PSlot.ANY, true, false);
-        this._cursor = new SQLCursor(name, size);
+        _cursor = new SQLCursor(name, size);
     }
 
     // creator for sub slot
@@ -116,7 +116,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * @return the slot cursor.
      */
     public SQLCursor getCursor(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return this._cursor;
+        return _cursor;
     }
 
     /**
@@ -165,7 +165,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * @throws Exception
      */
     protected boolean initialize(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        if (!this._initialized) {
+        if (!_initialized) {
 
             // gets SQL context
             PStcl sqlContext = getSQLContext(stclContext, self);
@@ -178,7 +178,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             String from = getKeysFromWithoutAlias(stclContext, self).toString();
             context.initializeTable(stclContext, from, sqlContext);
-            this._initialized = true;
+            _initialized = true;
         }
         return true;
     }
@@ -223,7 +223,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
     @Override
     public void clear() {
-        this._stencils.clear();
+        _stencils.clear();
         super.clear();
     }
 
@@ -238,11 +238,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * @return the stencil context.
      */
     public PStcl getSQLContext(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        if (this._sql_context == null) {
+        if (_sql_context == null) {
             PStcl container = self.getContainer();
-            this._sql_context = container.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
+            _sql_context = container.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
         }
-        return this._sql_context;
+        return _sql_context;
     }
 
     /**
@@ -962,8 +962,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // if the list was already created for the same stencil context and
         // without any condition
-        if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
-            return StencilUtils.<StclContext, PStcl> iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
+        if (_stencil_context_uid == stclContext.getId() && _stencil_context_map != null) {
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.clone().iterator(), cond, self);
         }
 
         SQLCursor cursor = getCursor(stclContext, self);
@@ -985,8 +985,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // returns the iterator (save for optimization on complete list)
         StencilIterator<StclContext, PStcl> map = new ListIterator<StclContext, PStcl>(stencils);
         if (cond == null) {
-            this._stencil_context_uid = stclContext.getId();
-            this._stencil_context_map = map;
+            _stencil_context_uid = stclContext.getId();
+            _stencil_context_map = map;
         }
         return map;
     }
@@ -1092,7 +1092,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         }
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
 
         // does insert query
         Result result = insertStencilQuery(stclContext, stencil, sqlContext, self);
@@ -1166,7 +1166,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         }
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
     }
 
     @Override
@@ -1199,7 +1199,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         stcl.updateQuery(stclContext, query, sqlContext);
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
     }
 
     @Override
@@ -1251,7 +1251,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         Result result = stcl.updateQuery(stclContext, query, sqlContext);
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
 
         return result;
     }

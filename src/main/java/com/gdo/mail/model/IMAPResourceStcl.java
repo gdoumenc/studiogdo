@@ -25,14 +25,14 @@ public class IMAPResourceStcl extends NamedStcl {
 
 	public IMAPResourceStcl(StclContext stclContext, Writer out) {
 		super(stclContext);
-		this._out = out;
+		_out = out;
 	}
 
 	@Override
 	public FacetResult getFacet(RenderContext<StclContext, PStcl> renderContext) {
 		String type = renderContext.getFacetType();
 		if (FacetType.FILE.equals(type)) {
-			InputStream reader = new ByteArrayInputStream(this._out.toString().getBytes());
+			InputStream reader = new ByteArrayInputStream(_out.toString().getBytes());
 			return new FacetResult(reader, "");
 		}
 		return super.getFacet(renderContext);

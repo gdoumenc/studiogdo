@@ -57,7 +57,7 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 	public _FileStcl(StclContext stclContext, String path) {
 		super(stclContext);
 
-		this._path = path;
+		_path = path;
 
 		// SLOT PART
 
@@ -74,7 +74,7 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 
 	@Override
 	public String getName(StclContext stclContext, PStcl self) {
-		return this._path;
+		return _path;
 	}
 
 	public class PathSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {
@@ -185,9 +185,9 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 			client.setSoTimeout(TIMEOUT);
 			client.setDataTimeout(TIMEOUT);
 
-			// this._client.setKeepAlive(true);
-			// this._client.setControlKeepAliveReplyTimeout(TIMEOUT);
-			// this._client.setControlKeepAliveTimeout(2);
+			// _client.setKeepAlive(true);
+			// _client.setControlKeepAliveReplyTimeout(TIMEOUT);
+			// _client.setControlKeepAliveTimeout(2);
 
 			// sets initial directory
 			String dir = pftpContext.getString(stclContext, FtpContextStcl.Slot.DIR, StringHelper.EMPTY_STRING);
@@ -217,9 +217,9 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 
 	public FTPFile getFile(StclContext stclContext, FTPClient client, PStcl self) {
 		try {
-			FTPFile[] files = client.listFiles(this._path);
+			FTPFile[] files = client.listFiles(_path);
 			if (files == null || files.length != 1) {
-				logWarn(stclContext, "no file %s in FTP context %s", this._path, self);
+				logWarn(stclContext, "no file %s in FTP context %s", _path, self);
 				return null;
 			} else {
 				return files[0];
@@ -251,8 +251,8 @@ public class _FileStcl extends com.gdo.context.model._FileStcl {
 		writer.startElement("param");
 		writer.writeAttribute("index", 0);
 		writer.writeAttribute("type", "string");
-		if (StringUtils.isNotBlank(this._path)) {
-			writer.writeCDATAAndEndElement(this._path);
+		if (StringUtils.isNotBlank(_path)) {
+			writer.writeCDATAAndEndElement(_path);
 		} else {
 			writer.writeCDATAAndEndElement(StringHelper.EMPTY_STRING);
 		}

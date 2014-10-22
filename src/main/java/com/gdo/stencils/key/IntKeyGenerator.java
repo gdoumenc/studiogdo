@@ -42,7 +42,7 @@ public class IntKeyGenerator<C extends _StencilContext, S extends _PStencil<C, S
 
 	@Override
 	protected void generateNextKey() {
-		this._key.changeTo(Integer.toString(this._key.getValue() + 1));
+		_key.changeTo(Integer.toString(_key.getValue() + 1));
 	}
 
 }

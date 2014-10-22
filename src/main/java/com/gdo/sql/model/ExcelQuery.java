@@ -27,11 +27,11 @@ public class ExcelQuery {
 	private String[] _types; // list of column type
 
 	public ExcelQuery(String sheetName, String sqlQuery, boolean titleRow, String[] headers, String[] types) {
-		this._sheetName = sheetName;
-		this._sqlQuery = sqlQuery;
-		this._titleRow = titleRow;
-		this._headers = headers;
-		this._types = types;
+		_sheetName = sheetName;
+		_sqlQuery = sqlQuery;
+		_titleRow = titleRow;
+		_headers = headers;
+		_types = types;
 	}
 
 	public ExcelQuery(String sheetName, String sqlQuery) {
@@ -39,48 +39,48 @@ public class ExcelQuery {
 	}
 
 	public String getSheetName() {
-		return this._sheetName;
+		return _sheetName;
 	}
 
 	public void setSheetName(String name) {
-		this._sheetName = name;
+		_sheetName = name;
 	}
 
 	public String getSqlQuery() {
-		return this._sqlQuery;
+		return _sqlQuery;
 	}
 
 	public void setSqlQuery(String query) {
-		this._sqlQuery = query;
+		_sqlQuery = query;
 	}
 
 	public boolean hasTitleRow() {
-		return this._titleRow;
+		return _titleRow;
 	}
 
 	public void setTitleRow(boolean value) {
-		this._titleRow = value;
+		_titleRow = value;
 	}
 
 	public String[] getHeaders() {
-		return this._headers;
+		return _headers;
 	}
 
 	public void setHeaders(String[] headers) {
-		this._headers = headers;
+		_headers = headers;
 	}
 
 	public String[] getTypes() {
-		return this._types;
+		return _types;
 	}
 
 	public void setTypes(String[] types) {
-		this._types = types;
+		_types = types;
 	}
 
 	@Override
 	public String toString() {
-		return this._sqlQuery;
+		return _sqlQuery;
 	}
 
 }

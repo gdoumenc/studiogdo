@@ -36,26 +36,26 @@ public final class SingleIterator<C extends _StencilContext, S extends _PStencil
 	private boolean _given; // given stencil status
 
 	public SingleIterator(S plugged) {
-		this._plugged = plugged;
-		this._given = false;
+		_plugged = plugged;
+		_given = false;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return !this._given;
+		return !_given;
 	}
 
 	@Override
 	public S next() {
-		if (this._given)
+		if (_given)
 			throw new NoSuchElementException();
-		this._given = true;
-		return this._plugged;
+		_given = true;
+		return _plugged;
 	}
 
 	@Override
 	public StencilIterator<C, S> reset() {
-		this._given = false;
+		_given = false;
 		return this;
 	}
 
@@ -66,9 +66,9 @@ public final class SingleIterator<C extends _StencilContext, S extends _PStencil
 
 	@Override
 	public boolean contains(S stencil) {
-		if (StencilUtils.isNull(this._plugged))
+		if (StencilUtils.isNull(_plugged))
 			return false;
-		return this._plugged.equals(stencil);
+		return _plugged.equals(stencil);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public final class SingleIterator<C extends _StencilContext, S extends _PStencil
 	@Override
 	public S getPlugged(S stcl) {
 		if (contains(stcl))
-			return this._plugged;
+			return _plugged;
 		return null;
 	}
 
@@ -107,7 +107,7 @@ public final class SingleIterator<C extends _StencilContext, S extends _PStencil
 
 	@Override
 	public boolean isValid() {
-		return StencilUtils.isNotNull(this._plugged);
+		return StencilUtils.isNotNull(_plugged);
 	}
 
 	@Override
@@ -117,15 +117,15 @@ public final class SingleIterator<C extends _StencilContext, S extends _PStencil
 
 	@Override
 	public Result getStatus() {
-		if (this._plugged == null)
+		if (_plugged == null)
 			return Result.error("invalid single iterator with empty stencil");
-		return this._plugged.getResult();
+		return _plugged.getResult();
 	}
 
 	@Override
 	public void addStatus(Result status) {
-		if (this._plugged != null)
-			this._plugged.addResult(status);
+		if (_plugged != null)
+			_plugged.addResult(status);
 	}
 
 	@Override

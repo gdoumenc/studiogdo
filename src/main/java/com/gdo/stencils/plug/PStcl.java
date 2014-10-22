@@ -109,10 +109,10 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         super(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
 
         // creates cursor informations
-        this._cursor = cursor;
-        this._cursor_references = new ArrayList<PStcl>();
-        this._cursor_container = slot;
-        this._cursor_key = key.toString();
+        _cursor = cursor;
+        _cursor_references = new ArrayList<PStcl>();
+        _cursor_container = slot;
+        _cursor_key = key.toString();
 
         // adds this new instance as a new reference to the cursor
         addThisReferenceToStencil(stclContext);
@@ -156,10 +156,10 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     public void initialize(StclContext stclContext, PStcl pstencil, PSlot<StclContext, PStcl> slot, IKey key) {
         if (pstencil.isCursorBased()) {
             super.initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
-            this._cursor = pstencil._cursor;
-            this._cursor_references = pstencil._cursor_references;
-            this._cursor_container = pstencil._cursor_container;
-            this._cursor_key = pstencil._cursor_key;
+            _cursor = pstencil._cursor;
+            _cursor_references = pstencil._cursor_references;
+            _cursor_container = pstencil._cursor_container;
+            _cursor_key = pstencil._cursor_key;
             addThisReferenceToStencil(stclContext);
         } else {
             super.initialize(stclContext, pstencil, slot, key);
@@ -188,7 +188,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     }
 
     public boolean isCursorBased() {
-        return this._cursor != null;
+        return _cursor != null;
     }
 
     public void addCursor(StclContext stclContext, PSlot<StclContext, PStcl> cursorContainer, _SlotCursor cursor, String cursorKey) {
@@ -199,7 +199,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     public void updateCursor(StclContext stclContext) {
         PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<>(_cursor_key), null);
-        this._cursor_container.getStencils(stclContext, cond);
+        _cursor_container.getStencils(stclContext, cond);
     }
     
     public String getPropertyValue(StclContext stclContext, String path) {
@@ -211,11 +211,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // if a cursor is defined then removes it from cursor
         if (isCursorBased()) {
-            this._cursor.removeFromCursor(stclContext, this._cursor_key);
-            this._cursor = null;
-            this._cursor_container = null;
-            this._cursor_key = null;
-            this._cursor_references = null;
+            _cursor.removeFromCursor(stclContext, _cursor_key);
+            _cursor = null;
+            _cursor_container = null;
+            _cursor_key = null;
+            _cursor_references = null;
         }
 
         // does classical clear
@@ -228,7 +228,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // if a cursor is defined then get stencil from it
         if (isCursorBased()) {
-            PStcl stcl = this._cursor.getStencil(StclContext.defaultContext(), this._cursor_container, getContainingSlot(), this._cursor_key);
+            PStcl stcl = _cursor.getStencil(StclContext.defaultContext(), _cursor_container, getContainingSlot(), _cursor_key);
             return stcl.getStencil(StclContext.defaultContext());
         }
 
@@ -241,7 +241,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // if a cursor is defined then get stencil from it
         if (isCursorBased()) {
-            PStcl stcl = this._cursor.getStencil(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key);
+            PStcl stcl = _cursor.getStencil(stclContext, _cursor_container, getContainingSlot(), _cursor_key);
             return stcl.getStencil(stclContext);
         }
 
@@ -257,7 +257,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public void release(StclContext stclContext) {
         if (isCursorBased()) {
-            this._cursor.release(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key);
+            _cursor.release(stclContext, _cursor_container, getContainingSlot(), _cursor_key);
         }
         super.release(stclContext);
     }
@@ -274,12 +274,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      *            the key to retrieve the stencil in the cursor.
      */
     public void release(StclContext stclContext, PSlot<StclContext, PStcl> container, _SlotCursor cursor, IKey key) {
-        this._cursor_container = container;
-        this._cursor = cursor;
-        this._cursor_references = this._stencil.getPluggedReferences(stclContext);
-        this._cursor_key = key.toString();
+        _cursor_container = container;
+        _cursor = cursor;
+        _cursor_references = _stencil.getPluggedReferences(stclContext);
+        _cursor_key = key.toString();
 
-        this._stencil = null;
+        _stencil = null;
     }
 
     /*
@@ -290,7 +290,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
-            return this._cursor.getId(stclContext) + this._cursor_key;
+            return _cursor.getId(stclContext) + _cursor_key;
         }
         return super.getId(stclContext);
     }
@@ -303,7 +303,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
-            return this._cursor.getUId(stclContext) + this._cursor_key;
+            return _cursor.getUId(stclContext) + _cursor_key;
         }
         return super.getUId(stclContext);
     }
@@ -327,10 +327,10 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     /*
      * @Override public PStcl clone(StclContext stclContext) throws
-     * CloneNotSupportedException { if (this._cursor != null) { if
+     * CloneNotSupportedException { if (_cursor != null) { if
      * (getLog().isWarnEnabled()) { getLog().warn(stclContext,
      * "PStcl clone not implemented on cursor stencil"); } return new
-     * PStcl(stclContext, getContainingSlot(), getKey(), this._cursor); }
+     * PStcl(stclContext, getContainingSlot(), getKey(), _cursor); }
      * Stencil<StclContext, PStcl> stcl = getReleasedStencil(stclContext);
      * Stencil<StclContext, PStcl> clone = stcl.clone(stclContext, this); return
      * new PStcl(clone, getContainingSlot(), getKey()); }
@@ -643,16 +643,16 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     @Override
     public List<PStcl> getStencilOtherPluggedReferences(StclContext stclContext) {
-        if (this._cursor_references != null) {
-            return this._cursor_references;
+        if (_cursor_references != null) {
+            return _cursor_references;
         }
         return super.getStencilOtherPluggedReferences(stclContext);
     }
 
     @Override
     public void addThisReferenceToStencil(StclContext stclContext) {
-        if (this._cursor_references != null) {
-            this._cursor_references.add(self());
+        if (_cursor_references != null) {
+            _cursor_references.add(self());
         } else {
             super.addThisReferenceToStencil(stclContext);
         }
@@ -660,8 +660,8 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     @Override
     public void removeThisReferenceFromStencil(StclContext stclContext) {
-        if (this._cursor_references != null) {
-            this._cursor_references.remove(self());
+        if (_cursor_references != null) {
+            _cursor_references.remove(self());
         } else {
             super.removeThisReferenceFromStencil(stclContext);
         }
@@ -748,7 +748,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased() && !PathUtils.isComposed(path)) {
-            String value = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String value = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (value != null) {
                 try {
                     return Integer.parseInt(value);
@@ -772,7 +772,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased() && !PathUtils.isComposed(path)) {
-            String value = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String value = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (value != null) {
                 return ConverterHelper.parseBoolean(value);
             }
@@ -792,7 +792,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased() && !PathUtils.isComposed(path)) {
-            String value = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String value = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (value != null) {
                 return Double.parseDouble(value);
             }
@@ -814,7 +814,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // adds this property to the cursor properties
         if (isCursorBased()) {
-            this._cursor.addPropertyValue(stclContext, getContainingSlot(), getContainingSlot(), this._cursor_key, path, value);
+            _cursor.addPropertyValue(stclContext, getContainingSlot(), getContainingSlot(), _cursor_key, path, value);
             return;
         }
 
@@ -857,11 +857,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased() && !PathUtils.isComposed(path)) {
-            String old = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String old = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (old != null) {
 
                 // then replaces it
-                this._cursor.addPropertyValue(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key, path, value);
+                _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, value);
                 super.setString(stclContext, path, value);
                 return;
             }
@@ -882,11 +882,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
-            String old = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String old = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
 
             // replaces it if already defined
             if (old != null) {
-                this._cursor.addPropertyValue(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key, path, Integer.toString(value));
+                _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, Integer.toString(value));
             }
         }
 
@@ -906,11 +906,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
-            String old = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String old = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (old != null) {
 
                 // then replaces it
-                this._cursor.addPropertyValue(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key, path, Boolean.toString(value));
+                _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, Boolean.toString(value));
                 super.setBoolean(stclContext, path, value);
                 return;
             }
@@ -932,11 +932,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
-            String old = this._cursor.getPropertyValue(stclContext, getContainingSlot(), this._cursor_key, path);
+            String old = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (old != null) {
 
                 // then replaces it
-                this._cursor.addPropertyValue(stclContext, this._cursor_container, getContainingSlot(), this._cursor_key, path, Double.toString(value));
+                _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, Double.toString(value));
                 super.setDouble(stclContext, path, value);
                 return;
             }
@@ -949,14 +949,14 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public PStcl plug(StclContext stclContext, PStcl stencil, String slotPath, IKey key) {
         if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
-            this._cursor.lock(stclContext, stencil, getKey());
+            _cursor.lock(stclContext, stencil, getKey());
         }
         return super.plug(stclContext, stencil, slotPath, key);
     }
 
     public void unplug(StclContext stclContext, PStcl stencil, String slotPath, IKey key) {
         if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
-            this._cursor.unlock(stclContext, key);
+            _cursor.unlock(stclContext, key);
         }
         super.unplugOtherStencilFrom(stclContext, slotPath, stencil);
     }
@@ -964,7 +964,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public PSlot<StclContext, PStcl> clearSlot(StclContext stclContext, String slotPath) {
         if (Stcl.Slot.$LOCKED_BY.equals(slotPath) && isCursorBased()) {
-            this._cursor.unlock(stclContext, getKey());
+            _cursor.unlock(stclContext, getKey());
         }
         return super.clearSlot(stclContext, slotPath);
     }
@@ -1024,8 +1024,8 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (isCursorBased()) {
 
             // gets sql path
-            PSlot<StclContext, PStcl> slot = this._cursor_container;
-            String path = PathUtils.createPath(this._cursor_container.pwd(stclContext), this._cursor_key);
+            PSlot<StclContext, PStcl> slot = _cursor_container;
+            String path = PathUtils.createPath(_cursor_container.pwd(stclContext), _cursor_key);
 
             // xreates and saves link
             StclFactory factory = (StclFactory) stclContext.getStencilFactory();
@@ -1052,7 +1052,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
             // cursor cases
             if (isCursorBased()) {
-                return this._cursor.equals(o._cursor) && this._cursor_key.equals(o._cursor_key);
+                return _cursor.equals(o._cursor) && _cursor_key.equals(o._cursor_key);
             }
         }
 
@@ -1075,9 +1075,9 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             if (getKey() != null) {
                 str.append('(').append(getKey().toString()).append(")");
             } else {
-                str.append('(').append(this._cursor_key).append(")");
+                str.append('(').append(_cursor_key).append(")");
             }
-            str.append("cursor slot ").append(this._cursor.toString());
+            str.append("cursor slot ").append(_cursor.toString());
             return str.toString();
         }
         return super.toString();

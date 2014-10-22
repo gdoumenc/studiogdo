@@ -125,7 +125,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      */
     public _PStencil(Result result) {
         initialize(null, (_Stencil<C, S>) null, null, Key.NO_KEY);
-        this._result = (result != null) ? result : Result.error("empty stencil without any reason");
+        _result = (result != null) ? result : Result.error("empty stencil without any reason");
     }
 
     /**
@@ -139,10 +139,10 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the plug key.
      */
     public void initialize(C stclContext, _Stencil<C, S> stencil, PSlot<C, S> slot, IKey key) {
-        this._stencil = stencil;
-        this._slot = slot;
-        this._key = (key != null) ? key : Key.NO_KEY;
-        this._result = Result.success();
+        _stencil = stencil;
+        _slot = slot;
+        _key = (key != null) ? key : Key.NO_KEY;
+        _result = Result.success();
     }
 
     /**
@@ -166,8 +166,8 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the stencil context.
      */
     protected void beforeClear(C stclContext) {
-        if (this._stencil != null) {
-            this._stencil.beforeClear(stclContext, self());
+        if (_stencil != null) {
+            _stencil.beforeClear(stclContext, self());
         }
     }
 
@@ -178,8 +178,8 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the stencil context.
      */
     public void clear(C stclContext) {
-        if (this._stencil != null) {
-            this._stencil.clear(stclContext);
+        if (_stencil != null) {
+            _stencil.clear(stclContext);
         }
     }
 
@@ -192,10 +192,10 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return <tt>true</tt> if the stencil is null, <tt>false</tt> otherwise.
      */
     public boolean isNull() {
-        if (this._stencil != null && this._stencil.isCleared()) {
+        if (_stencil != null && _stencil.isCleared()) {
             return true;
         }
-        return (this._stencil == null);
+        return (_stencil == null);
     }
 
     /**
@@ -217,8 +217,8 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return the <tt>null</tt> reason.
      */
     public final Result getResult() {
-        assert (this._result != null);
-        return this._result;
+        assert (_result != null);
+        return _result;
     }
 
     /**
@@ -230,11 +230,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (result == null) {
             throw new IllegalArgumentException("Illegal null result parameter");
         }
-        if (this._result == null)
-            this._result = result;
+        if (_result == null)
+            _result = result;
         else
-            this._result.addOther(result);
-        return this._result;
+            _result.addOther(result);
+        return _result;
     }
 
     /**
@@ -281,7 +281,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     // must be non final (redefined in Stcl)
     @SuppressWarnings("unchecked")
     public <K extends _Stencil<C, S>> K getStencil(C stclContext) {
-        return (K) this._stencil;
+        return (K) _stencil;
     }
 
     /**
@@ -317,12 +317,12 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return the container slot.
      */
     public final PSlot<C, S> getContainingSlot() {
-        return this._slot;
+        return _slot;
     }
 
     // should be used internaly only.
     public final void setContainingSlot(PSlot<C, S> slot) {
-        this._slot = slot;
+        _slot = slot;
     }
 
     /**
@@ -332,10 +332,10 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return the plug key.
      */
     public IKey getKey() {
-        if (this._key == Key.NO_KEY) {
-            return this._key;
+        if (_key == Key.NO_KEY) {
+            return _key;
         }
-        return new LinkedKey(this._key);
+        return new LinkedKey(_key);
     }
 
     /**
@@ -348,7 +348,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @return the plug key.
      */
     public final IKey getLinkedKey() {
-        return new LinkedKey(this._key);
+        return new LinkedKey(_key);
     }
 
     /**
@@ -361,7 +361,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (key == null) {
             throw new IllegalArgumentException("Illegal null key parameter");
         }
-        this._key = key;
+        _key = key;
     }
 
     /**
@@ -492,12 +492,12 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         }
 
         // calculate pwd only once
-        if (this.__pwd == null) {
+        if (__pwd == null) {
             StringBuffer path = new StringBuffer();
             pwd(stclContext, self(), path, 0);
-            this.__pwd = path.toString();
+            __pwd = path.toString();
         }
-        return this.__pwd;
+        return __pwd;
     }
 
     /**
@@ -1603,9 +1603,9 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
 
     @Override
     public int hashCode() {
-        int result = ((this._key == null) ? 0 : this._key.hashCode());
-        result += ((this._slot == null) ? 0 : this._slot.hashCode());
-        result += ((this._stencil == null) ? 0 : this._stencil.hashCode());
+        int result = ((_key == null) ? 0 : _key.hashCode());
+        result += ((_slot == null) ? 0 : _slot.hashCode());
+        result += ((_stencil == null) ? 0 : _stencil.hashCode());
         return result;
     }
 
@@ -1615,13 +1615,13 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (this == obj)
             return true;
         if (obj == null) {
-            return this._stencil == null;
+            return _stencil == null;
         }
         if (obj instanceof _Stencil) {
-            return this._stencil == (_Stencil<C, ?>) obj;
+            return _stencil == (_Stencil<C, ?>) obj;
         }
         if (obj instanceof _PStencil) {
-            return this._stencil == ((_PStencil<C, ?>) obj)._stencil;
+            return _stencil == ((_PStencil<C, ?>) obj)._stencil;
         }
         if (obj instanceof String) {
             return obj.equals(getKey().toString());
@@ -1638,7 +1638,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (getKey() != null) {
             str.append('(').append(getKey().toString()).append(')');
         }
-        str.append(this._stencil.toString());
+        str.append(_stencil.toString());
         str.append('<').append(getClass()).append('>');
         str.append('[').append(getContainingSlot()).append(']');
         return str.toString();

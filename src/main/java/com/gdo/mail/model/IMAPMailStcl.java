@@ -51,7 +51,7 @@ public class IMAPMailStcl extends MailStcl {
 
 	public IMAPMailStcl(StclContext stclContext, IMAPMessage msg) {
 		super(stclContext);
-		this._msg = msg;
+		_msg = msg;
 		try {
 			// String enc = msg.getEncoding();
 
@@ -112,7 +112,7 @@ public class IMAPMailStcl extends MailStcl {
 					/*
 					 * if (t.indexOf("image/") != -1) { StringWriter w = new
 					 * StringWriter(); IOUtils.copy(body.getInputStream(), w);
-					 * this._list.add(w); continue; }
+					 * _list.add(w); continue; }
 					 */
 				}
 			}
@@ -124,15 +124,15 @@ public class IMAPMailStcl extends MailStcl {
 	@Override
 	public void afterCompleted(StclContext stclContext, PStcl self) {
 		super.afterCompleted(stclContext, self);
-		for (Writer w : this._list) {
+		for (Writer w : _list) {
 			self(stclContext, null).newPStencil(stclContext, Slot.ATTACHMENTS, new Key<Integer>(1), IMAPResourceStcl.class, w);
 		}
 	}
 
 	public void delete() throws MessagingException {
-		Folder folder = this._msg.getFolder();
+		Folder folder = _msg.getFolder();
 		folder.open(Folder.READ_WRITE);
-		int number = this._msg.getMessageNumber();
+		int number = _msg.getMessageNumber();
 		IMAPMessage msg = (IMAPMessage) folder.getMessage(number);
 		msg.setFlag(Flags.Flag.DELETED, true);
 		folder.close(true);
@@ -151,22 +151,22 @@ public class IMAPMailStcl extends MailStcl {
 
 		public FromSlot(StclContext stclContext, Address[] adds) {
 			super(stclContext, IMAPMailStcl.this, Slot.FROM, PSlot.ANY);
-			this._adds = adds;
+			_adds = adds;
 		}
 
 		@Override
 		protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-			if (this._from == null) {
+			if (_from == null) {
 				StclFactory factory = (StclFactory) stclContext.getStencilFactory();
-				this._from = new ArrayList<PStcl>();
-				if (this._adds != null) {
-					for (Address add : this._adds) {
+				_from = new ArrayList<PStcl>();
+				if (_adds != null) {
+					for (Address add : _adds) {
 						PStcl stcl = factory.createPStencil(stclContext, self, Key.NO_KEY, FromRecipientStcl.class, add.toString());
-						this._from.add(stcl);
+						_from.add(stcl);
 					}
 				}
 			}
-			return new ListIterator<StclContext, PStcl>(this._from);
+			return new ListIterator<StclContext, PStcl>(_from);
 		}
 	}
 

@@ -56,7 +56,7 @@ public class KeyStcl extends Stcl {
 
 	public KeyStcl(StclContext stclContext, PStcl stencil) {
 		super(stclContext);
-		this._stencil = stencil;
+		_stencil = stencil;
 
 		propSlot(Slot.TYPE, "key");
 		delegateSlot(Slot.VALUE, "Name");
@@ -81,11 +81,11 @@ public class KeyStcl extends Stcl {
 	}
 
 	public PStcl getStcl() {
-		return this._stencil;
+		return _stencil;
 	}
 
 	public PSlot<StclContext, PStcl> getSlot() {
-		return this._stencil.getContainingSlot();
+		return _stencil.getContainingSlot();
 	}
 
 	/**

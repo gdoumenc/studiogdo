@@ -45,11 +45,11 @@ public class Save extends AtomicActionStcl {
 			PStcl target = cmdContext.getTarget();
 
 			// gets file (creates folder if needed)
-			String dirs = PathUtils.getPathName(this._fileName);
+			String dirs = PathUtils.getPathName(_fileName);
 			if (StringUtils.isNotEmpty(dirs)) {
 				new File(dirs).mkdirs();
 			}
-			File file = new File(this._fileName);
+			File file = new File(_fileName);
 			/*
 			 * if (!file.canWrite()) { String msg =
 			 * String.format("cannot write in file : %s", file.getAbsolutePath());
@@ -77,13 +77,13 @@ public class Save extends AtomicActionStcl {
 
 		// gets file name
 		// (absolute path ore relative to configuration directory)
-		this._fileName = getParameter(cmdContext, 1, null);
-		if (StringUtils.isBlank(this._fileName)) {
+		_fileName = getParameter(cmdContext, 1, null);
+		if (StringUtils.isBlank(_fileName)) {
 			return error(cmdContext, self, Status.NO_FILE_NAME, "wrong empty file name (param1)");
 		}
-		if (!this._fileName.startsWith(PathUtils.ROOT)) {
+		if (!_fileName.startsWith(PathUtils.ROOT)) {
 			String home = stclContext.getConfigParameter(StclContext.PROJECT_CONF_DIR);
-			this._fileName = PathUtils.compose(home, this._fileName);
+			_fileName = PathUtils.compose(home, _fileName);
 		}
 
 		return super.verifyContext(cmdContext, self);

@@ -33,11 +33,11 @@ public class SQLCursor extends _SlotCursor {
      * @return
      */
     public boolean isInitialized() {
-        return this._initialized;
+        return _initialized;
     }
 
     public void setInitialized() {
-        this._initialized = true;
+        _initialized = true;
     }
 
     @Override

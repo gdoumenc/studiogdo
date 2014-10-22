@@ -52,11 +52,11 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 	}
 
 	public boolean acceptPlug() {
-		return this._acceptPlug;
+		return _acceptPlug;
 	}
 
 	public void setAcceptPlug(boolean accept) {
-		this._acceptPlug = accept;
+		_acceptPlug = accept;
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
 	 */
 	@Override
 	public void expunge(C stclContext, PSlot<C, S> self) {
-		this._containedStcl = null;
+		_containedStcl = null;
 	}
 
 }

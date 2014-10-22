@@ -73,7 +73,7 @@ public class AddResource extends ComposedActionStcl {
 			PStcl context = self.getStencil(stclContext, Slot.SELECTED_CONTEXT);
 
 			// creates the associated file
-			if (NEW_MODE.equals(this._creation_mode)) {
+			if (NEW_MODE.equals(_creation_mode)) {
 
 				// defines a random name
 				String fileName = "_" + System.currentTimeMillis();
@@ -85,13 +85,13 @@ public class AddResource extends ComposedActionStcl {
 				CommandStatus<StclContext, PStcl> status = context.call(stclContext, FolderStcl.Command.CREATE_FILE, fileName);
 				if (status.isNotSuccess())
 					return status;
-				this._file = status.getInfo(CommandStatus.SUCCESS, FolderStcl.Command.CREATE_FILE, CreateFile.Status.FILE);
-				if (StencilUtils.isNull(this._file))
+				_file = status.getInfo(CommandStatus.SUCCESS, FolderStcl.Command.CREATE_FILE, CreateFile.Status.FILE);
+				if (StencilUtils.isNull(_file))
 					return error(cmdContext, self, 0, "cannot get created file", status);
 			}
 
 			// in get mode user select the file to be associated to the resource
-			else if (GET_MODE.equals(this._creation_mode)) {
+			else if (GET_MODE.equals(_creation_mode)) {
 			} else {
 			}
 		}
@@ -102,28 +102,28 @@ public class AddResource extends ComposedActionStcl {
 			PStcl container = cmdContext.getTarget();
 
 			// creates the resource
-			this._resource = self.newPStencil(stclContext, Slot.RESOURCE_CREATED, Key.NO_KEY, this._class_name);
-			if (StencilUtils.isNull(this._resource)) {
-				String msg = String.format("cannot create resource %s in container %s", this._class_name, container);
+			_resource = self.newPStencil(stclContext, Slot.RESOURCE_CREATED, Key.NO_KEY, _class_name);
+			if (StencilUtils.isNull(_resource)) {
+				String msg = String.format("cannot create resource %s in container %s", _class_name, container);
 				return error(cmdContext, self, msg);
 			}
 
 			// plugs resource in temporary slot for final modification before
 			// adding it to the resources
-			// PStcl stcl = this._resource.plug(stclContext, context,
+			// PStcl stcl = _resource.plug(stclContext, context,
 			// _ResourceStcl.Slot.CONTEXT);
 			// if (StencilUtils.isNull(stcl)) return error(cmdContext, self,
 			// "cannot plug contel time:!!!xt in created resource");
-			PStcl stcl = this._resource.plug(stclContext, this._file, _ResourceStcl.Slot.FILE);
+			PStcl stcl = _resource.plug(stclContext, _file, _ResourceStcl.Slot.FILE);
 			if (StencilUtils.isNull(stcl))
 				return error(cmdContext, self, "cannot plug created file in resource");
 
 			// replaces container folder and manager
-			this._resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_FOLDER);
-			this._resource.plug(stclContext, container, _ResourceStcl.Slot.CONTAINER_FOLDER);
+			_resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_FOLDER);
+			_resource.plug(stclContext, container, _ResourceStcl.Slot.CONTAINER_FOLDER);
 			PStcl mgr = container.getStencil(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
-			this._resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
-			this._resource.plug(stclContext, mgr, _ResourceStcl.Slot.CONTAINER_MANAGER);
+			_resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
+			_resource.plug(stclContext, mgr, _ResourceStcl.Slot.CONTAINER_MANAGER);
 		}
 
 		// validates the resource creation
@@ -131,9 +131,9 @@ public class AddResource extends ComposedActionStcl {
 			PStcl container = cmdContext.getTarget();
 
 			// plugs the created resource in container
-			PStcl resource = container.plug(stclContext, this._resource, ResourcesMgrStcl.Slot.FILE_RESOURCES);
+			PStcl resource = container.plug(stclContext, _resource, ResourcesMgrStcl.Slot.FILE_RESOURCES);
 			if (StencilUtils.isNull(resource)) {
-				String msg = String.format("cannot plug created resource %s in container %s", this._resource, container);
+				String msg = String.format("cannot plug created resource %s in container %s", _resource, container);
 				return error(cmdContext, self, msg);
 			}
 		}
@@ -145,8 +145,8 @@ public class AddResource extends ComposedActionStcl {
 	public CommandStatus<StclContext, PStcl> cancel(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// remove created file if in creation mode
-		if (NEW_MODE.equals(this._creation_mode)) {
-			if (StencilUtils.isNotNull(this._file)) {
+		if (NEW_MODE.equals(_creation_mode)) {
+			if (StencilUtils.isNotNull(_file)) {
 				// to be done;
 			}
 		}
@@ -161,15 +161,15 @@ public class AddResource extends ComposedActionStcl {
 
 		// checks initial parameters
 		if (activeStep == 1) {
-			this._creation_mode = getParameter(cmdContext, 1, NEW_MODE);
-			if (!NEW_MODE.equals(this._creation_mode) && !GET_MODE.equals(this._creation_mode)) {
-				String msg = String.format("Creation mode %s should be 'new' or 'get' (param1)", this._creation_mode);
+			_creation_mode = getParameter(cmdContext, 1, NEW_MODE);
+			if (!NEW_MODE.equals(_creation_mode) && !GET_MODE.equals(_creation_mode)) {
+				String msg = String.format("Creation mode %s should be 'new' or 'get' (param1)", _creation_mode);
 				return error(cmdContext, self, Status.WRONG_CREATION_MODE, msg);
 			}
-			self.setString(stclContext, Slot.CREATION_MODE, this._creation_mode);
+			self.setString(stclContext, Slot.CREATION_MODE, _creation_mode);
 
-			this._class_name = getParameter(cmdContext, 2, FileResourceStcl.class.getName());
-			this._name_encoding = getParameter(cmdContext, 3, false);
+			_class_name = getParameter(cmdContext, 2, FileResourceStcl.class.getName());
+			_name_encoding = getParameter(cmdContext, 3, false);
 		}
 
 		return super.verifyContext(cmdContext, self);
@@ -203,20 +203,20 @@ public class AddResource extends ComposedActionStcl {
 
 		// we can consider the upload can be done only at step 2
 		if (activeStep == 2) {
-			if (StencilUtils.isNull(this._file)) {
+			if (StencilUtils.isNull(_file)) {
 				if (getLog().isWarnEnabled())
 					getLog().warn(stclContext, "No file found for the resource to upload it");
 				return;
 			}
-			this._file.multipart(stclContext, fileName, item);
+			_file.multipart(stclContext, fileName, item);
 
 			// Rename the file.
 			String newFileName = item.getName();
 			if (StringUtils.isNotEmpty(newFileName)) {
-				if (this._name_encoding) {
+				if (_name_encoding) {
 					encodeUrl(newFileName);
 				}
-				Result status = this._file.call(stclContext, "Rename", newFileName);
+				Result status = _file.call(stclContext, "Rename", newFileName);
 				if (status.isNotSuccess()) {
 					if (getLog().isWarnEnabled()) {
 						String msg = String.format("Cannot rename to %s from multipart", newFileName);

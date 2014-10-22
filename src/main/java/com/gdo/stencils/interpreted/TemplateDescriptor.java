@@ -80,7 +80,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	 * @return the template's name.
 	 */
 	public String getName() {
-		return this._name;
+		return _name;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 			return;
 		}
 
-		this._name = name;
+		_name = name;
 		verifyNameNotEqualsExtends();
 	}
 
@@ -121,31 +121,31 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 	// used when the template is read from digester
 	public String getJava() {
-		return this._java;
+		return _java;
 	}
 
 	public final void setJava(String java) {
-		this._java = java;
+		_java = java;
 	}
 
 	/**
 	 * @return the "extends" string if defined.
 	 */
 	public String getExtends() {
-		return this._extends;
+		return _extends;
 	}
 
 	public void setExtends(String extend) {
-		this._extends = extend;
+		_extends = extend;
 		verifyNameNotEqualsExtends();
 	}
 
 	public String getFacets(C stclContext) {
-		return this._facets;
+		return _facets;
 	}
 
 	public void setFacets(String facets) {
-		this._facets = facets;
+		_facets = facets;
 	}
 
 	/**
@@ -154,35 +154,35 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	public String getExtends(C stclContext) {
 
 		// defined in the descriptor
-		if (this._extends != null) {
-			return this._extends;
+		if (_extends != null) {
+			return _extends;
 		}
 
 		// follow java class hierarchy
 		try {
 			InterpretedStencilFactory<C, S> factory = (InterpretedStencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-			if (this._java == null) {
+			if (_java == null) {
 				return null;
 			}
 
 			// TODO : perhaps this could be changed by a while do (instead of a
 			// do while)
-			if (!this._java.equals(this._name) && factory.getTemplateDescriptor(stclContext, this._java) != null) {
-				this._extends = this._java;
-				return this._extends;
+			if (!_java.equals(_name) && factory.getTemplateDescriptor(stclContext, _java) != null) {
+				_extends = _java;
+				return _extends;
 			}
 
 			// search from java classes hierachy the first template defined
-			Class<?> clazz = com.gdo.stencils.util.ClassUtils.loadClass(this._java);
+			Class<?> clazz = com.gdo.stencils.util.ClassUtils.loadClass(_java);
 			do {
 				Class<?> superClass = clazz.getSuperclass();
 				if (superClass == null || superClass.equals(Atom.class)) {
 					return null;
 				}
-				this._extends = superClass.getName();
+				_extends = superClass.getName();
 				clazz = superClass;
-			} while (factory.getTemplateDescriptor(stclContext, this._extends) == null);
-			return this._extends;
+			} while (factory.getTemplateDescriptor(stclContext, _extends) == null);
+			return _extends;
 		} catch (Exception e) {
 			logWarn(stclContext, "Cannot get extending descriptor for %s", getTemplateName());
 		}
@@ -196,7 +196,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	public Object getParameter(C stclContext, int index) {
 
 		// searches in memorized parameters
-		for (Parameter p : this._parameters) {
+		for (Parameter p : _parameters) {
 			if (p.index == index)
 				return p.value;
 		}
@@ -214,7 +214,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 		// stores in memorized parameters
 		Parameter param = new Parameter(index, value);
-		this._parameters.add(param);
+		_parameters.add(param);
 
 		// returns the parameter found
 		return value;
@@ -274,12 +274,12 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	}
 
 	public SlotDescriptor<C, S> getLocalSlotDescriptor(String name) {
-		return (this._slots != null) ? this._slots.get(name) : null;
+		return (_slots != null) ? _slots.get(name) : null;
 	}
 
 	public Collection<SlotDescriptor<C, S>> getLocalSlotDescriptors() {
-		if (this._slots != null) {
-			return this._slots.values();
+		if (_slots != null) {
+			return _slots.values();
 		}
 		return Collections.emptyList();
 	}
@@ -288,8 +288,8 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	// and remove getLocal descritor;
 	public SlotDescriptor<C, S> getInheritedSlotDescriptor(C stclContext, String name) {
 
-		if (this._slots != null) {
-			SlotDescriptor<C, S> slotDesc = this._slots.get(name);
+		if (_slots != null) {
+			SlotDescriptor<C, S> slotDesc = _slots.get(name);
 			if (slotDesc != null) {
 				return slotDesc;
 			}
@@ -304,15 +304,15 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	}
 
 	public void addSlotDescriptor(SlotDescriptor<C, S> slotDesc) {
-		if (this._slots == null) {
-			this._slots = new ConcurrentHashMap<String, SlotDescriptor<C, S>>();
+		if (_slots == null) {
+			_slots = new ConcurrentHashMap<String, SlotDescriptor<C, S>>();
 		}
-		this._slots.put(slotDesc.getName(), slotDesc);
+		_slots.put(slotDesc.getName(), slotDesc);
 	}
 
 	public final Collection<CommandDescriptor<C, S>> getCommandDescriptors() {
-		if (this._commands != null) {
-			return this._commands.values();
+		if (_commands != null) {
+			return _commands.values();
 		}
 		return Collections.emptyList();
 	}
@@ -321,8 +321,8 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	public final CommandDescriptor<C, S> getCommandDescriptor(C stclContext, String name) {
 
 		// find in local command
-		if (this._commands != null) {
-			CommandDescriptor<C, S> cmdDesc = this._commands.get(name);
+		if (_commands != null) {
+			CommandDescriptor<C, S> cmdDesc = _commands.get(name);
 			if (cmdDesc != null)
 				return cmdDesc;
 		}
@@ -333,52 +333,52 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	}
 
 	public void addCommandDescriptor(CommandDescriptor<C, S> command) {
-		if (this._commands == null) {
-			this._commands = new HashMap<String, CommandDescriptor<C, S>>();
+		if (_commands == null) {
+			_commands = new HashMap<String, CommandDescriptor<C, S>>();
 		}
-		this._commands.put(command.getName(), command);
+		_commands.put(command.getName(), command);
 	}
 
 	protected Collection<InstDescriptor<C, S>> getInstDescriptors() {
-		if (this._insts != null) {
-			return this._insts.values();
+		if (_insts != null) {
+			return _insts.values();
 		}
 		return Collections.emptyList();
 	}
 
 	public void addInstDescriptor(InstDescriptor<C, S> inst) {
-		if (this._insts == null) {
-			this._insts = new ConcurrentHashMap<String, InstDescriptor<C, S>>();
+		if (_insts == null) {
+			_insts = new ConcurrentHashMap<String, InstDescriptor<C, S>>();
 		}
-		this._insts.put(inst.getId(), inst);
+		_insts.put(inst.getId(), inst);
 	}
 
 	public Collection<PlugDescriptor<C, S>> getPlugDescriptors() {
-		if (this._plugs != null) {
-			return this._plugs;
+		if (_plugs != null) {
+			return _plugs;
 		}
 		return Collections.emptyList();
 	}
 
 	public void addPlugDescriptor(PlugDescriptor<C, S> plug) {
-		if (this._plugs == null) {
-			this._plugs = new ArrayList<PlugDescriptor<C, S>>();
+		if (_plugs == null) {
+			_plugs = new ArrayList<PlugDescriptor<C, S>>();
 		}
-		this._plugs.add(plug);
+		_plugs.add(plug);
 	}
 
 	public Collection<UnplugDescriptor<C, S>> getUnplugDescriptors() {
-		if (this._unplugs != null) {
-			return this._unplugs;
+		if (_unplugs != null) {
+			return _unplugs;
 		}
 		return Collections.emptyList();
 	}
 
 	public final void addUnplugDescriptor(UnplugDescriptor<C, S> plug) {
-		if (this._unplugs == null) {
-			this._unplugs = new ArrayList<UnplugDescriptor<C, S>>();
+		if (_unplugs == null) {
+			_unplugs = new ArrayList<UnplugDescriptor<C, S>>();
 		}
-		this._unplugs.add(plug);
+		_unplugs.add(plug);
 	}
 
 	public final void forcePlugsInCreationMode() {
@@ -395,17 +395,17 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	}
 
 	private Collection<PropDescriptor<C, S>> getPropDescriptors() {
-		if (this._props != null) {
-			return this._props.values();
+		if (_props != null) {
+			return _props.values();
 		}
 		return Collections.emptyList();
 	}
 
 	public final void addPropDescriptor(PropDescriptor<C, S> prop) {
-		if (this._props == null) {
-			this._props = new ConcurrentHashMap<String, PropDescriptor<C, S>>();
+		if (_props == null) {
+			_props = new ConcurrentHashMap<String, PropDescriptor<C, S>>();
 		}
-		this._props.put(prop.getName(), prop);
+		_props.put(prop.getName(), prop);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -616,14 +616,14 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
 	 */
 	private void verifyNameNotEqualsExtends() {
 
-		if (StringUtils.isEmpty(this._name))
+		if (StringUtils.isEmpty(_name))
 			return;
-		if (this._name.equals(this._extends)) {
+		if (_name.equals(_extends)) {
 			if (getLog().isWarnEnabled()) {
-				String msg = String.format("Extends is same as template name (should be perhaps java name but never extends) : %s", this._name);
+				String msg = String.format("Extends is same as template name (should be perhaps java name but never extends) : %s", _name);
 				getLog().warn(null, msg);
 			}
-			setJava(this._name);
+			setJava(_name);
 			setExtends(null);
 		}
 	}

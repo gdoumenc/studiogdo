@@ -71,9 +71,9 @@ public class CreateAtomic extends AtomicActionStcl {
 		}
 
 		// creates the stencil
-		PStcl created = createStencil(cmdContext, this._className, self);
+		PStcl created = createStencil(cmdContext, _className, self);
 		if (StencilUtils.isNull(created)) {
-			String msg = String.format("Cannot create stencil %s", this._className);
+			String msg = String.format("Cannot create stencil %s", _className);
 			return error(cmdContext, self, Status.CANNOT_CREATE_STENCIL, msg);
 		}
 
@@ -91,9 +91,9 @@ public class CreateAtomic extends AtomicActionStcl {
 
 		// plugs it
 
-		PStcl plugged = plugCreatedStencil(cmdContext, created, this._slot, this._keyType, this._key, self);
+		PStcl plugged = plugCreatedStencil(cmdContext, created, _slot, _keyType, _key, self);
 		if (StencilUtils.isNull(plugged)) {
-			String msg = String.format("Cannot create stencil %s", this._className);
+			String msg = String.format("Cannot create stencil %s", _className);
 			return error(cmdContext, self, Status.CANNOT_CREATE_STENCIL, msg, plugged.getResult());
 		}
 
@@ -113,28 +113,28 @@ public class CreateAtomic extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// verifies class name
-		this._className = getTemplate(cmdContext, self);
-		if (StringUtils.isEmpty(this._className))
+		_className = getTemplate(cmdContext, self);
+		if (StringUtils.isEmpty(_className))
 			return error(cmdContext, self, Status.NO_CLASS_DEFINED, "No class name defined (param1)");
 
 		// verifies destination slot
-		this._slot = getSlot(cmdContext, self);
-		if (SlotUtils.isNull(this._slot)) {
-			String msg = String.format("No slot in %s to plug the created stencil %s", self, this._className);
+		_slot = getSlot(cmdContext, self);
+		if (SlotUtils.isNull(_slot)) {
+			String msg = String.format("No slot in %s to plug the created stencil %s", self, _className);
 			return error(cmdContext, self, Status.CANNOT_GET_SLOT, msg);
 		}
 
 		// verifies key type
-		this._keyType = getType(cmdContext, self);
-		if (this._keyType == null
-				|| !(this._keyType.equals(Keywords.NONE) || this._keyType.equals(Keywords.FIXED) || this._keyType.equals(Keywords.UNIQUE) || this._keyType.equals(Keywords.STRING) || this._keyType
+		_keyType = getType(cmdContext, self);
+		if (_keyType == null
+				|| !(_keyType.equals(Keywords.NONE) || _keyType.equals(Keywords.FIXED) || _keyType.equals(Keywords.UNIQUE) || _keyType.equals(Keywords.STRING) || _keyType
 						.equals(Keywords.INT))) {
-			String msg = String.format("Wrong key type %s (param3 should be %s, %s, %s, %s or %s)", this._keyType, Keywords.NONE, Keywords.FIXED, Keywords.UNIQUE, Keywords.STRING, Keywords.INT);
+			String msg = String.format("Wrong key type %s (param3 should be %s, %s, %s, %s or %s)", _keyType, Keywords.NONE, Keywords.FIXED, Keywords.UNIQUE, Keywords.STRING, Keywords.INT);
 			return error(cmdContext, self, Status.WRONG_KEY_TYPE, msg);
 		}
 
 		// gets key
-		this._key = getKey(cmdContext, self);
+		_key = getKey(cmdContext, self);
 
 		// return success status
 		return success(cmdContext, self);
@@ -159,9 +159,9 @@ public class CreateAtomic extends AtomicActionStcl {
 		// an initial value can be used to construct the stencil
 		String param = getValueForConstructor(cmdContext, self);
 		if (param != null) {
-			return factory.createPStencil(stclContext, this._slot, Key.NO_KEY, className, param);
+			return factory.createPStencil(stclContext, _slot, Key.NO_KEY, className, param);
 		}
-		return factory.createPStencil(stclContext, this._slot, Key.NO_KEY, className);
+		return factory.createPStencil(stclContext, _slot, Key.NO_KEY, className);
 	}
 
 	/**

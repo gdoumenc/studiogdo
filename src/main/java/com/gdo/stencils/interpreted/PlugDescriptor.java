@@ -56,58 +56,58 @@ public final class PlugDescriptor<C extends _StencilContext, S extends _PStencil
 	// digester)
 
 	public String getRef() {
-		return this._ref;
+		return _ref;
 	}
 
 	// used by digester
 	public void setRef(String ref) {
-		this._ref = ref;
+		_ref = ref;
 	}
 
 	public String getPath() {
-		return this._path;
+		return _path;
 	}
 
 	// used by digester
 	public void setPath(String path) {
-		this._path = path;
+		_path = path;
 	}
 
 	public String getSlot() {
-		return this._slot;
+		return _slot;
 	}
 
 	// used by digester
 	public void setSlot(String slot) {
-		this._slot = slot;
+		_slot = slot;
 	}
 
 	public String getKey() {
-		return this._key;
+		return _key;
 	}
 
 	// used by digester
 	public void setKey(String key) {
-		this._key = key;
+		_key = key;
 	}
 
 	public IStencilFactory.Mode getOnAsMode() {
-		return this._on;
+		return _on;
 	}
 
 	public void setOnAsMode(IStencilFactory.Mode mode) {
-		this._on = mode;
+		_on = mode;
 	}
 
 	// used by digester
 	public void setOn(String on) {
 		if (Keywords.CREATE.equals(on)) { // used by digester
 
-			this._on = Mode.ON_CREATION;
+			_on = Mode.ON_CREATION;
 		} else if (Keywords.LOAD.equals(on)) {
-			this._on = Mode.ON_LOAD;
+			_on = Mode.ON_LOAD;
 		} else if (Keywords.ALWAYS.equals(on)) {
-			this._on = Mode.ON_ALWAYS;
+			_on = Mode.ON_ALWAYS;
 		} else {
 			if (getLog().isWarnEnabled()) {
 				getLog().warn(null, "Unknow plug on mode : " + on);

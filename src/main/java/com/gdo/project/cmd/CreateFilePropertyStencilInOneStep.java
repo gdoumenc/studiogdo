@@ -19,18 +19,18 @@ public class CreateFilePropertyStencilInOneStep extends CreateInOneStep {
 	@Override
 	protected CommandStatus<StclContext, PStcl> beforePlug(CommandContext<StclContext, PStcl> cmdContext, PStcl created, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
-		this._value = this._created.getValue(stclContext);
+		_value = _created.getValue(stclContext);
 
 		// creates the final real file property stencil and replaces old simple
 		// property used to store the value
-		this._created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, PropStcl.class);
+		_created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, PropStcl.class);
 		return super.beforePlug(cmdContext, created, self);
 	}
 
 	@Override
 	protected CommandStatus<StclContext, PStcl> afterPlug(CommandContext<StclContext, PStcl> cmdContext, PStcl created, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
-		created.setValue(stclContext, this._value);
+		created.setValue(stclContext, _value);
 		return super.beforePlug(cmdContext, created, self);
 	}
 	***/

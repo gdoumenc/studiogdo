@@ -120,18 +120,18 @@ public abstract class CreateInSteps extends ComposedActionStcl {
 
 		// creates the stencil
 		String valueForConstructor = getValueForConstructor(cmdContext, self);
-		Class<? extends Stcl> clazz = ClassHelper.loadClass(this._template);
+		Class<? extends Stcl> clazz = ClassHelper.loadClass(_template);
 		if (valueForConstructor != null) {
-			this._created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, clazz, valueForConstructor);
+			_created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, clazz, valueForConstructor);
 		} else {
-			this._created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, clazz);
+			_created = self.newPStencil(stclContext, Slot.STENCIL_HOLDER, Key.NO_KEY, clazz);
 		}
-		if (StencilUtils.isNull(this._created)) {
-			return error(cmdContext, self, this._created.getNullReason());
+		if (StencilUtils.isNull(_created)) {
+			return error(cmdContext, self, _created.getNullReason());
 		}
 
 		// calls after creation
-		CommandStatus<StclContext, PStcl> after = afterCreate(cmdContext, this._created, self);
+		CommandStatus<StclContext, PStcl> after = afterCreate(cmdContext, _created, self);
 		if (after.isNotSuccess()) {
 			return error(cmdContext, self, 0, after);
 		}
@@ -142,26 +142,26 @@ public abstract class CreateInSteps extends ComposedActionStcl {
 	protected CommandStatus<StclContext, PStcl> plugStencil(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// calls before plug
-		CommandStatus<StclContext, PStcl> before = beforePlug(cmdContext, this._created, self);
+		CommandStatus<StclContext, PStcl> before = beforePlug(cmdContext, _created, self);
 		if (before.isNotSuccess()) {
 			return error(cmdContext, self, 0, before);
 		}
 
 		String key = getKey(cmdContext, self);
-		this._plugged = CreateAtomic.plugCreatedStencil(cmdContext, this._created, this._slot, this._type, key, self);
-		if (StencilUtils.isNull(this._plugged)) {
-			String msg = String.format("was not able to plug %s in %s:%s", this._created, this._slot, StencilUtils.getNullReason(this._plugged));
+		_plugged = CreateAtomic.plugCreatedStencil(cmdContext, _created, _slot, _type, key, self);
+		if (StencilUtils.isNull(_plugged)) {
+			String msg = String.format("was not able to plug %s in %s:%s", _created, _slot, StencilUtils.getNullReason(_plugged));
 			return error(cmdContext, self, msg);
 		}
 
 		// calls after plug
-		CommandStatus<StclContext, PStcl> after = afterPlug(cmdContext, this._plugged, self);
+		CommandStatus<StclContext, PStcl> after = afterPlug(cmdContext, _plugged, self);
 		if (after.isNotSuccess()) {
 			return error(cmdContext, self, 0, after);
 		}
 
 		// set reate same as plugged
-		this._created = this._plugged;
+		_created = _plugged;
 
 		// returns the plugged path
 		return success(cmdContext, self);
@@ -258,17 +258,17 @@ public abstract class CreateInSteps extends ComposedActionStcl {
 		if (activeStep == FIRST_STEP) {
 
 			// checks parameters
-			this._template = getTemplate(cmdContext, self);
-			if (StringUtils.isBlank(this._template)) {
+			_template = getTemplate(cmdContext, self);
+			if (StringUtils.isBlank(_template)) {
 				return error(cmdContext, self, "no template defined for create in one step command (param1)");
 			}
-			this._slot = getSlot(cmdContext, self);
-			if (SlotUtils.isNull(this._slot)) {
+			_slot = getSlot(cmdContext, self);
+			if (SlotUtils.isNull(_slot)) {
 				String msg = String.format("cannot get slot in %s for create in one step command (param2)", target);
 				return error(cmdContext, self, msg);
 			}
-			this._type = getType(cmdContext, self);
-			if (StringUtils.isEmpty(this._type)) {
+			_type = getType(cmdContext, self);
+			if (StringUtils.isEmpty(_type)) {
 				return error(cmdContext, self, "no key type defined for create in one step command (param3)");
 			}
 		}

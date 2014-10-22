@@ -30,66 +30,66 @@ public final class FacetDescriptor {
 	private String _profile; // profile expression
 
 	public boolean isDefault() {
-		return this._default;
+		return _default;
 	}
 
 	public void setDefault(boolean def) {
-		this._default = def;
+		_default = def;
 	}
 
 	public boolean asContainer() {
-		return this._container;
+		return _container;
 	}
 
 	public void setContainer(boolean container) {
-		this._container = container;
+		_container = container;
 	}
 
 	public String getMode() {
-		return this._mode;
+		return _mode;
 	}
 
 	public void setMode(String mode) {
-		this._mode = mode;
+		_mode = mode;
 	}
 
 	public String getValue() {
-		return this._value;
+		return _value;
 	}
 
 	public void setValue(String value) {
-		this._value = value;
+		_value = value;
 	}
 
 	public String getFile() {
-		return this._file;
+		return _file;
 	}
 
 	public void setFile(String file) {
-		this._file = file;
+		_file = file;
 	}
 
 	public String getExtends() {
-		return this._extends;
+		return _extends;
 	}
 
 	public void setExtends(String xtends) {
-		this._extends = xtends;
+		_extends = xtends;
 	}
 
 	public String getSame() {
-		return this._same;
+		return _same;
 	}
 
 	public void setSame(String same) {
-		this._same = same;
+		_same = same;
 	}
 
 	public String getProfile() {
-		return this._profile;
+		return _profile;
 	}
 
 	public void setProfile(String profile) {
-		this._profile = profile;
+		_profile = profile;
 	}
 }

@@ -176,7 +176,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public _Stencil(C stclContext) {
 
         // internal slot (used temporary to retrieve command stencil)
-        this._commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true, false);
+        _commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true, false);
 
         // predefined slots
         addDescriptor(Slot.THIS, new _SlotDescriptor<C, S>() {
@@ -195,7 +195,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public _Stencil(C stclContext, String value) {
         this(stclContext);
 
-        this._value = value;
+        _value = value;
 
         multiSlot(Slot.LISTENERS, PSlot.ANY, true, null);
     }
@@ -248,33 +248,33 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         this.cleared = true;
 
         // slots part
-        if (this._slots != null) {
-            for (_Slot<C, S> slot : this._slots.values()) {
+        if (_slots != null) {
+            for (_Slot<C, S> slot : _slots.values()) {
                 slot.clear();
             }
-            this._slots.clear();
-            this._slots = null;
+            _slots.clear();
+            _slots = null;
         }
 
         // TODO : should not be cleared as if the command clears the stencil get
         // error
-        // for (CommandStencil<C, S> cmd : this._commands.values()) {
+        // for (CommandStencil<C, S> cmd : _commands.values()) {
         // cmd.clear(stclContext);
         // }
         // commands part
-        if (this._commandSlot != null) {
-            this._commandSlot.clear();
-            this._commandSlot = null;
+        if (_commandSlot != null) {
+            _commandSlot.clear();
+            _commandSlot = null;
         }
 
         // plugged references part
-        if (this._plugged_references != null) {
-            this._plugged_references.clear();
-            this._plugged_references = null;
+        if (_plugged_references != null) {
+            _plugged_references.clear();
+            _plugged_references = null;
         }
 
-        this._self = null;
-        this._desc = null;
+        _self = null;
+        _desc = null;
     }
 
     /**
@@ -297,7 +297,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return the descriptor which has used to create the stencil.
      */
     public final TemplateDescriptor<C, S> getDescriptor() {
-        return this._desc;
+        return _desc;
     }
 
     /**
@@ -309,8 +309,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the template descriptor.
      */
     public final void setDescriptor(TemplateDescriptor<C, S> desc) {
-        this._desc = desc;
-        this._template_name = desc.getTemplateName();
+        _desc = desc;
+        _template_name = desc.getTemplateName();
     }
 
     /**
@@ -323,7 +323,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return <tt>true</tt> if the stencil is transient (should not be stored).
      */
     public boolean isTransient(C stclContext, S self) {
-        return this._transient;
+        return _transient;
     }
 
     public boolean isLink(C stclContext, S self) {
@@ -341,7 +341,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil as a plugged stencil.
      */
     public void setTransient(C stclContext, boolean value, S self) {
-        this._transient = value;
+        _transient = value;
     }
 
     /**
@@ -354,7 +354,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return the stencil property name (even if empty).
      */
     public String getJavaName(C stclContext, S self) {
-        return this._name;
+        return _name;
     }
 
     /**
@@ -383,7 +383,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return the stencil name set in stencil.
      */
     public String setName(C stclContext, String name, S self) {
-        this._name = name;
+        _name = name;
         return name;
     }
 
@@ -397,7 +397,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return the comment (never empty).
      */
     public String getComment(C stclContext, S self) {
-        return this._comment;
+        return _comment;
     }
 
     /**
@@ -411,7 +411,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil as a plugged stencil.
      */
     public void setComment(C stclContext, String comment, S self) {
-        this._comment = comment;
+        _comment = comment;
     }
 
     /**
@@ -420,8 +420,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return stencil template name (stencil class name if no descriptor).
      */
     public String getTemplateName() {
-        if (StringUtils.isNotBlank(this._template_name)) {
-            return this._template_name;
+        if (StringUtils.isNotBlank(_template_name)) {
+            return _template_name;
         }
         return getClass().getName();
     }
@@ -663,7 +663,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return The slot map (may be empty but never <tt>null</tt>).
      */
     public final Map<String, _Slot<C, S>> getSlots() {
-        return this._slots;
+        return _slots;
     }
 
     /**
@@ -1102,7 +1102,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return the list of plugged references.
      */
     public List<S> getPluggedReferences(C stclContext) {
-        return this._plugged_references;
+        return _plugged_references;
     }
 
     /**
@@ -1178,12 +1178,12 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     //
 
     public final PSlot<C, S> getCommandsSlot(S container) {
-        return new PSlot<C, S>(this._commandSlot, container);
+        return new PSlot<C, S>(_commandSlot, container);
     }
 
     /*
      * public final Map<String, CommandStencil<C, S>> getCommands() { return
-     * this._commands; }
+     * _commands; }
      * 
      * public final void addCommand(C stclContext, String name, CommandStencil<C,
      * S> cmd, S self) { if (cmd == null) { return; }
@@ -1328,10 +1328,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public void saveAsStencil(C stclContext, XmlWriter out, S self) throws IOException {
 
         // if already saved in this document does nothing
-        if (this._writer == stclContext.getSaveWriter()) {
+        if (_writer == stclContext.getSaveWriter()) {
             return;
         }
-        this._writer = stclContext.getSaveWriter();
+        _writer = stclContext.getSaveWriter();
 
         // writer header
         out.writeHeader();
@@ -1340,8 +1340,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         // opens stencil tag
         out.startElement(InterpretedStencilFactory.STENCIL);
         out.writeAttribute("id", getUId(stclContext));
-        if (StringUtils.isNotEmpty(this._name)) {
-            out.writeAttribute("name", this._name);
+        if (StringUtils.isNotEmpty(_name)) {
+            out.writeAttribute("name", _name);
         }
         out.writeAttribute(InterpretedStencilFactory.TEMPLATE, getTemplateName());
         out.closeElement();
@@ -1379,10 +1379,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             String instance = PathUtils.compose(dir, id);
 
             // if already saved in this document does nothing
-            if (this._writer == stclContext.getSaveWriter()) {
+            if (_writer == stclContext.getSaveWriter()) {
                 return instance;
             }
-            this._writer = stclContext.getSaveWriter();
+            _writer = stclContext.getSaveWriter();
 
             // adds other instances declared
             XmlStringWriter declPart = new XmlStringWriter(false, 1, out.getEncoding());
@@ -1394,8 +1394,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             // starts instance tag
             out.startElement(InterpretedStencilFactory.INSTANCE);
             out.writeAttribute("id", id);
-            if (StringUtils.isNotBlank(this._name)) {
-                out.writeAttribute("name", this._name);
+            if (StringUtils.isNotBlank(_name)) {
+                out.writeAttribute("name", _name);
             }
             out.writeAttribute(InterpretedStencilFactory.TEMPLATE, getTemplateName());
             saveConstructorParameters(stclContext, out, self);
@@ -1415,7 +1415,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      */
     protected void saveConstructorParameters(C stclContext, XmlWriter writer, S self) {
         try {
-            if (this._value != null) {
+            if (_value != null) {
                 writer.startElement("param");
                 writer.writeAttribute("index", 0);
                 writer.writeAttribute("type", getType());
@@ -1447,7 +1447,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     protected void saveSlots(C stclContext, XmlWriter descPart, XmlWriter plugPart, S self) throws IOException {
 
         // no slot saved in case of property
-        if (this._value != null) {
+        if (_value != null) {
             return;
         }
 
@@ -1496,11 +1496,11 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         if (StencilUtils.isNull(container)) {
 
             // if not already defined creates it
-            if (StencilUtils.isNull(this._self)) {
+            if (StencilUtils.isNull(_self)) {
                 StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-                this._self = factory.newPStencil(stclContext, (PSlot<C, S>) null, Key.NO_KEY, this);
+                _self = factory.newPStencil(stclContext, (PSlot<C, S>) null, Key.NO_KEY, this);
             }
-            return (S) this._self;
+            return (S) _self;
         }
 
         // creates the plugged stencil structure
@@ -1522,15 +1522,15 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     @Override
     public String toString() {
-        if (this._value != null) {
+        if (_value != null) {
             StringBuffer str = new StringBuffer();
-            str.append('"').append(this._value.toString()).append('"');
+            str.append('"').append(_value.toString()).append('"');
             str.append('[').append(getType()).append(']');
             str.append('<').append(getClass()).append('>');
             return str.toString();
         }
         StringBuffer name = new StringBuffer(super.toString());
-        name.append('-').append(StringUtils.isEmpty(this._name) ? getUId(null) : this._name);
+        name.append('-').append(StringUtils.isEmpty(_name) ? getUId(null) : _name);
         name.append('[').append(getTemplateName()).append(']');
         return name.toString();
     }
@@ -1781,8 +1781,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         Object[] _params;
 
         CommandDescriptor(Class<? extends CommandStencil<C, S>> clazz, Object... params) {
-            this._clazz = clazz;
-            this._params = params;
+            _clazz = clazz;
+            _params = params;
         }
 
         Map<String, Object> getDefaultParams() {
@@ -1808,23 +1808,23 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     //
 
     public String getType(C stclContext, S self) {
-        return this._type;
+        return _type;
     }
 
     public void setType(C stclContext, String type, S self) {
-        this._type = type;
+        _type = type;
     }
 
     public boolean isExpand(C stclContext, S self) {
-        return this._expand;
+        return _expand;
     }
 
     public void setExpand(C stclContext, boolean expand, S self) {
-        this._expand = expand;
+        _expand = expand;
     }
 
     public String getValue(C stclContext, S self) {
-        return this._value;
+        return _value;
     }
 
     /**
@@ -1841,23 +1841,23 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public String setValue(C stclContext, String value, S self) {
 
         // sets in contained value
-        String old = this._value;
-        this._value = value;
+        String old = _value;
+        _value = value;
         notifyListeners(stclContext, value, old, self);
 
         return value;
     }
 
     public Reader getReader(C stclContext, S self) {
-        if (this._value == null)
+        if (_value == null)
             return StringHelper.EMPTY_STRING_READER;
-        return new StringReader(this._value.toString());
+        return new StringReader(_value.toString());
     }
 
     public InputStream getInputStream(C stclContext, S self) {
-        if (this._value != null) {
+        if (_value != null) {
             try {
-                return IOUtils.toInputStream(this._value.toString(), _StencilContext.getCharacterEncoding());
+                return IOUtils.toInputStream(_value.toString(), _StencilContext.getCharacterEncoding());
             } catch (IOException e) {
                 logError(stclContext, e.toString());
             }
@@ -1895,7 +1895,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
                     if (getLog().isWarnEnabled()) {
                         getLog().warn(stclContext, "Property listener action not succeed");
                     }
-                    this._value = old;
+                    _value = old;
                     break;
                 }
             }

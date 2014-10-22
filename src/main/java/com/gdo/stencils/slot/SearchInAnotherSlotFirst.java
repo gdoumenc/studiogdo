@@ -49,14 +49,14 @@ public class SearchInAnotherSlotFirst<C extends _StencilContext, S extends _PSte
 
 		// don't store the stencil if find in another one or not already
 		// created...
-		return this._containedStcl == null;
+		return _containedStcl == null;
 	}
 
 	@Override
 	public boolean contains(C stclContext, StencilCondition<C, S> cond, S searched, PSlot<C, S> self) {
 
 		// if not created search in another slot first
-		if (this._containedStcl == null) {
+		if (_containedStcl == null) {
 			String path = getParameter(stclContext, 0);
 			try {
 				PSlot<C, S> slot = self.getContainer().getSlot(stclContext, path);
@@ -72,7 +72,7 @@ public class SearchInAnotherSlotFirst<C extends _StencilContext, S extends _PSte
 	public boolean hasStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 
 		// if not created search in another slot first
-		if (this._containedStcl == null) {
+		if (_containedStcl == null) {
 			try {
 				String path = getParameter(stclContext, 0);
 				if (self.getContainer().hasStencils(stclContext, path, null))
@@ -87,7 +87,7 @@ public class SearchInAnotherSlotFirst<C extends _StencilContext, S extends _PSte
 	public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 
 		// if not created search in another slot first
-		if (this._containedStcl == null) // only if not created
+		if (_containedStcl == null) // only if not created
 		{
 			try {
 				String path = getParameter(stclContext, 0);

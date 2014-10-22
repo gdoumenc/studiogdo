@@ -64,33 +64,33 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 	private String _root_id; // initial root id
 
 	public InstanceRepository() {
-		this._mode = Mode.ON_CREATION;
-		this._pwd.push(PathUtils.ROOT);
-		this._root_id = ""; // on creation the root refers to /
+		_mode = Mode.ON_CREATION;
+		_pwd.push(PathUtils.ROOT);
+		_root_id = ""; // on creation the root refers to /
 	}
 
 	public InstanceRepository(String rootId) {
-		this._mode = Mode.ON_LOAD;
-		this._pwd.push(PathUtils.ROOT); // on load the root is the stencil id
-		this._root_id = PathUtils.ROOT + rootId; // on load the root refers to
+		_mode = Mode.ON_LOAD;
+		_pwd.push(PathUtils.ROOT); // on load the root is the stencil id
+		_root_id = PathUtils.ROOT + rootId; // on load the root refers to
 		// the stencil id (/stencil_id)
 	}
 
 	public Mode getMode() {
-		return this._mode;
+		return _mode;
 	}
 
 	public void setMode(Mode mode) {
-		this._mode = mode;
+		_mode = mode;
 	}
 
 	/**
 	 * @return <tt>true</tt> is the repository is empty.
 	 */
 	public boolean isEmpty() {
-		if (this._instances != null && this._instances.size() > 0)
+		if (_instances != null && _instances.size() > 0)
 			return false;
-		if (this._descriptors != null && this._descriptors.size() > 0)
+		if (_descriptors != null && _descriptors.size() > 0)
 			return false;
 		return true;
 
@@ -101,10 +101,10 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 	 */
 	public S store(C stclContext, String name, _Stencil<C, S> inst) {
 		String path = getAbsolutePath(name);
-		S current = this._instances.get(this._pwd.peek());
+		S current = _instances.get(_pwd.peek());
 		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
 		S stored = factory.newPStencil(stclContext, new InstanceSlot(current), Key.NO_KEY, inst);
-		this._instances.put(path, stored);
+		_instances.put(path, stored);
 		return stored;
 	}
 
@@ -113,8 +113,8 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 	 */
 	public String store(InstDescriptor<C, S> instDesc) {
 		String path = getAbsolutePath(instDesc.getId());
-		if (!this._descriptors.containsKey(path)) {
-			this._descriptors.put(path, instDesc);
+		if (!_descriptors.containsKey(path)) {
+			_descriptors.put(path, instDesc);
 		} else {
 			if (getLog().isWarnEnabled()) {
 				// TODO getLog().warn(null,
@@ -127,14 +127,14 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 	/*
 	 * public boolean refHasChanged(C stclContext, String name) { String path =
-	 * getAbsolutePath(name); if (this._instances.containsKey(path)) return true;
+	 * getAbsolutePath(name); if (_instances.containsKey(path)) return true;
 	 * String ref = PathUtils.getLastName(path.substring(0, path.length() - 1));
-	 * if (!ref.startsWith("_")) { if (!this._refs.containsKey(path))
-	 * this._refs.put(path, PathUtils.SEP_STR + new PStencil<C, S>(null, null,
+	 * if (!ref.startsWith("_")) { if (!_refs.containsKey(path))
+	 * _refs.put(path, PathUtils.SEP_STR + new PStencil<C, S>(null, null,
 	 * null).getUID()); return true; } return false; } public String getNewRef(C
 	 * stclContext, String name) { String path = getAbsolutePath(name); if
-	 * (this._instances.containsKey(path)) return PathUtils.SEP_STR +
-	 * this._instances.get(path).getUID(); return this._refs.get(path); }
+	 * (_instances.containsKey(path)) return PathUtils.SEP_STR +
+	 * _instances.get(path).getUID(); return _refs.get(path); }
 	 */
 
 	/**
@@ -144,8 +144,8 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 		String path = getAbsolutePath(ref);
 
 		// not already created, creates stencil from descriptor
-		if (!this._instances.containsKey(path)) {
-			InstDescriptor<C, S> instanceDesc = this._descriptors.get(path);
+		if (!_instances.containsKey(path)) {
+			InstDescriptor<C, S> instanceDesc = _descriptors.get(path);
 			if (instanceDesc == null) {
 				if (getLog().isErrorEnabled()) {
 					String msg = String.format("Undefined instance description for ref %s", path);
@@ -163,7 +163,7 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 		}
 
 		// verify the stencil
-		S stcl = this._instances.get(path);
+		S stcl = _instances.get(path);
 		if (StencilUtils.isNull(stcl) && getLog().isErrorEnabled()) {
 			String msg = String.format("Was not able to create instance ref %s", path);
 			getLog().error(stclContext, msg);
@@ -174,29 +174,29 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 	public boolean saveInstance(C stclContext, String name, XmlWriter writer) {
 		/*
 		 * String path = getAbsolutePath(name); // search already created stencil if
-		 * (this._instances.containsKey(path)) { Stencil<C, S> stcl = ((PStencil<C,
-		 * S>) this._instances.get(path)).getStencil();
+		 * (_instances.containsKey(path)) { Stencil<C, S> stcl = ((PStencil<C,
+		 * S>) _instances.get(path)).getStencil();
 		 * stcl.saveAsInstance(stclContext, writer, this); return true; } // save
-		 * instance descriptor if (this._descriptors.containsKey(path)) {
-		 * InstDescriptor<C, S> instanceDesc = this._descriptors.get(path);
+		 * instance descriptor if (_descriptors.containsKey(path)) {
+		 * InstDescriptor<C, S> instanceDesc = _descriptors.get(path);
 		 * instanceDesc.save(stclContext, writer, this); return true; }
 		 */
 		return false;
 	}
 
 	public void push(String name) {
-		this._pwd.push(getAbsolutePath(name));
+		_pwd.push(getAbsolutePath(name));
 	}
 
 	public void pop() {
-		this._pwd.pop();
+		_pwd.pop();
 	}
 
 	/**
 	 * @return the absolute path of the instance.
 	 */
 	public String getAbsolutePath(String path) {
-		return getAbsolutePathFromPwd(this._pwd.peek(), completePath(path));
+		return getAbsolutePathFromPwd(_pwd.peek(), completePath(path));
 	}
 
 	/**
@@ -206,7 +206,7 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 		// dont need current pwd is path is absolute (initial root added only)
 		if (path.startsWith(PathUtils.ROOT)) {
-			String rootId = this._root_id;
+			String rootId = _root_id;
 			return rootId + completePath(path);
 		}
 
@@ -250,7 +250,7 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 		@Override
 		public String getName(C stclContext) {
-			return String.format("[Repository in %s]", this._container);
+			return String.format("[Repository in %s]", _container);
 		}
 
 		@Override
@@ -270,13 +270,13 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 		@Override
 		public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond) {
-			return StencilUtils.<C, S> iterator(stclContext, this._container.self(), this._container.getContainingSlot());
+			return StencilUtils.<C, S> iterator(stclContext, _container.self(), _container.getContainingSlot());
 		}
 
 		@Override
 		public boolean contains(C stclContext, StencilCondition<C, S> cond, S searched) {
 			_Stencil<C, S> stcl = searched.getReleasedStencil(stclContext);
-			return this._container.equals(stcl);
+			return _container.equals(stcl);
 		}
 
 		@Override
@@ -310,8 +310,8 @@ public final class InstanceRepository<C extends _StencilContext, S extends _PSte
 
 		@Override
 		public String toString() {
-			if (this._container != null) {
-				return this._container.toString();
+			if (_container != null) {
+				return _container.toString();
 			}
 			return "";
 		}

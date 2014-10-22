@@ -39,7 +39,7 @@ public class CalculatedPropStencil<C extends _StencilContext, S extends _PStenci
 
 	public CalculatedPropStencil(C stclContext, IPropCalculator<C, S> calculator) {
 		super(stclContext, null); // no value when created
-		this._calculator = calculator;
+		_calculator = calculator;
 	}
 
 	// value is get by property calculator
@@ -47,7 +47,7 @@ public class CalculatedPropStencil<C extends _StencilContext, S extends _PStenci
 	public String getValue(C stclContext, S self) {
 		if (calculatorIsDefined(stclContext, self)) {
 			try {
-				return this._calculator.getValue(stclContext, self);
+				return _calculator.getValue(stclContext, self);
 			} catch (Exception e) {
 				return logWarn(stclContext, "exception in the CalculatedPropStencil %s :%s", this, e);
 			}
@@ -59,7 +59,7 @@ public class CalculatedPropStencil<C extends _StencilContext, S extends _PStenci
 	@Override
 	public String setValue(C stclContext, String value, S self) {
 		if (calculatorIsDefined(stclContext, self)) {
-			String old = this._calculator.setValue(stclContext, value, self);
+			String old = _calculator.setValue(stclContext, value, self);
 			notifyListeners(stclContext, value, old, self);
 			return old;
 		}
@@ -70,7 +70,7 @@ public class CalculatedPropStencil<C extends _StencilContext, S extends _PStenci
 	@Override
 	public InputStream getInputStream(C stclContext, S self) {
 		if (calculatorIsDefined(stclContext, self)) {
-			return this._calculator.getInputStream(stclContext, self);
+			return _calculator.getInputStream(stclContext, self);
 		}
 		return IOHelper.EMPTY_INPUT_STREAM;
 	}
@@ -79,14 +79,14 @@ public class CalculatedPropStencil<C extends _StencilContext, S extends _PStenci
 	@Override
 	public OutputStream getOutputStream(C stclContext, S self) {
 		if (calculatorIsDefined(stclContext, self)) {
-			return this._calculator.getOutputStream(stclContext, self);
+			return _calculator.getOutputStream(stclContext, self);
 		}
 		return IOHelper.EMPTY_OUTPUT_STREAM;
 	}
 
 	// check if the calculator is defined
 	private boolean calculatorIsDefined(C stclContext, S self) {
-		if (this._calculator == null) {
+		if (_calculator == null) {
 			if (getLog().isWarnEnabled()) {
 				String msg = String.format("no calculator defined for the CalculatedPropStencil %s", this);
 				getLog().warn(stclContext, msg);

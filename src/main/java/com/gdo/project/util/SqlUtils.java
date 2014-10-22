@@ -551,10 +551,10 @@ public class SqlUtils {
         protected PStcl _stcl; // the stencil used
 
         public SqlMap(String from, String table, String alias, PStcl stcl) {
-            this._from = from;
-            this._table = table;
-            this._stcl = stcl;
-            this._alias = alias;
+            _from = from;
+            _table = table;
+            _stcl = stcl;
+            _alias = alias;
         }
 
         /**
@@ -596,7 +596,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushAutoIncrement(StclContext stclContext, String label, String slot) {
-            String value = SqlUtils.getSqlAutoIncrementKey(stclContext, this._stcl, slot);
+            String value = SqlUtils.getSqlAutoIncrementKey(stclContext, _stcl, slot);
             put(label, value);
             return value;
         }
@@ -630,7 +630,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushString(StclContext stclContext, String label, String slot) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             push(label, value);
             return value;
         }
@@ -649,7 +649,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushString(StclContext stclContext, String label, String slot, int max) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (value.length() > max) {
                 value = value.substring(0, max - 1);
             }
@@ -670,7 +670,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushStringOrNull(StclContext stclContext, String label, String slot) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, value);
             } else {
@@ -744,7 +744,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public int pushInt(StclContext stclContext, String label, String slot) {
-            int value = this._stcl.getInt(stclContext, slot, 0);
+            int value = _stcl.getInt(stclContext, slot, 0);
             push(label, Integer.toString(value));
             return value;
         }
@@ -777,7 +777,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushEnum(StclContext stclContext, String label, String slot) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, value);
             }
@@ -815,7 +815,7 @@ public class SqlUtils {
         public int pushId(StclContext stclContext, String label, String slot) {
 
             // no stencil plugged, then push NULL as may have been removed
-            PStcl stcl = this._stcl.getStencil(stclContext, slot);
+            PStcl stcl = _stcl.getStencil(stclContext, slot);
             if (stcl.isNull()) {
                 pushNull(label);
                 return 0;
@@ -862,7 +862,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public boolean pushBoolean(StclContext stclContext, String label, String slot, String trueValue, String falseValue) {
-            boolean value = this._stcl.getBoolean(stclContext, slot, false);
+            boolean value = _stcl.getBoolean(stclContext, slot, false);
             push(label, (value ? trueValue : falseValue));
             return value;
         }
@@ -904,7 +904,7 @@ public class SqlUtils {
          * @return the field value.
          */
         public double pushDouble(StclContext stclContext, String label, String slot) {
-            double value = this._stcl.getDouble(stclContext, slot, 0);
+            double value = _stcl.getDouble(stclContext, slot, 0);
             push(label, Double.toString(value));
             return value;
         }
@@ -929,11 +929,11 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushDate(StclContext stclContext, String label, String slot, String formatRead) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isBlank(value)) {
                 DateFormat dateFormat = new SimpleDateFormat(formatRead);
                 value = dateFormat.format(new Date());
-                this._stcl.setString(stclContext, slot, value);
+                _stcl.setString(stclContext, slot, value);
             }
             push(label, ConverterHelper.dateConverter(value, formatRead, "yyyy-MM-dd"));
             return value;
@@ -973,7 +973,7 @@ public class SqlUtils {
          * @return the date value (not converted).
          */
         public String pushDateOrNull(StclContext stclContext, String label, String slot, String format) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, ConverterHelper.dateConverter(value, format, "yyyy-MM-dd"));
             } else {
@@ -995,7 +995,7 @@ public class SqlUtils {
          * @return the date value (not converted).
          */
         public String pushDateTimeOrNull(StclContext stclContext, String label, String slot, String format) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, ConverterHelper.dateConverter(value, format, "yyyy-MM-dd HH:mm:ss"));
             } else {
@@ -1055,7 +1055,7 @@ public class SqlUtils {
             SimpleDateFormat dateFormat = new SimpleDateFormat(format_read);
             Date now = new Date();
             String strDate = dateFormat.format(now);
-            this._stcl.setString(stclContext, slot, strDate);
+            _stcl.setString(stclContext, slot, strDate);
             push(label, ConverterHelper.dateConverter(strDate, format_read, "yyyy-MM-dd"));
             return strDate;
         }
@@ -1079,7 +1079,7 @@ public class SqlUtils {
         }
 
         public String pushDateOrNow(StclContext stclContext, String label, String slot, String format_read) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, ConverterHelper.dateConverter(value, format_read, "yyyy-MM-dd"));
             } else {
@@ -1100,13 +1100,13 @@ public class SqlUtils {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date now = new Date();
             String strDate = dateFormat.format(now);
-            this._stcl.setString(stclContext, slot, strDate);
+            _stcl.setString(stclContext, slot, strDate);
             push(label, strDate);
             return strDate;
         }
 
         public String pushTimeOrNull(StclContext stclContext, String label, String slot) {
-            String value = this._stcl.getString(stclContext, slot, "");
+            String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, value);
             } else {
@@ -1134,7 +1134,7 @@ public class SqlUtils {
             SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
             Date now = new Date();
             String strTime = sdfTime.format(now);
-            this._stcl.setString(stclContext, slot, strTime);
+            _stcl.setString(stclContext, slot, strTime);
             pushString(stclContext, label, slot);
             return strTime;
         }
@@ -1195,7 +1195,7 @@ public class SqlUtils {
                 values.append(value);
             }
 
-            String table = this._table;
+            String table = _table;
             if (table.indexOf("`") < 0)
                 table = "`" + table + "`";
             
@@ -1213,12 +1213,12 @@ public class SqlUtils {
             for (String label : keySet()) {
                 if (set.length() > 0)
                     set.append(',');
-                if (StringUtils.isNotBlank(this._alias) && label.indexOf('.') == -1) {
-                    set.append(this._alias).append('.');
+                if (StringUtils.isNotBlank(_alias) && label.indexOf('.') == -1) {
+                    set.append(_alias).append('.');
                 }
                 set.append(label).append("=").append(get(label));
             }
-            String query = String.format("UPDATE %s SET %s %s", this._from, set, where.getAndWhereQuery());
+            String query = String.format("UPDATE %s SET %s %s", _from, set, where.getAndWhereQuery());
             return query;
         }
     }
@@ -1236,8 +1236,8 @@ public class SqlUtils {
             for (String label : keySet()) {
                 if (where.length() > 0)
                     where.append(" AND ");
-                if (StringUtils.isNotBlank(this._alias) && label.indexOf('.') == -1) {
-                    where.append(this._alias).append('.');
+                if (StringUtils.isNotBlank(_alias) && label.indexOf('.') == -1) {
+                    where.append(_alias).append('.');
                 }
                 where.append(label).append('=').append(get(label));
             }
@@ -1250,8 +1250,8 @@ public class SqlUtils {
                 if (where.length() > 0)
                     where.append(" OR ");
                 where.append(label).append('=').append(get(label));
-                if (StringUtils.isNotBlank(this._alias) && label.indexOf('.') == -1) {
-                    where.append(this._alias).append('.');
+                if (StringUtils.isNotBlank(_alias) && label.indexOf('.') == -1) {
+                    where.append(_alias).append('.');
                 }
             }
             return String.format("WHERE %s", where);
@@ -1263,15 +1263,15 @@ public class SqlUtils {
          * @return the delete query for this SQL association.
          */
         public String getDeleteQuery() {
-            String table = this._table;
+            String table = _table;
             if (table.indexOf("`") < 0)
                 table = "`" + table + "`";
             
-            if (StringUtils.isBlank(this._alias)) {
+            if (StringUtils.isBlank(_alias)) {
                 return String.format("DELETE FROM %s %s LIMIT 1", table, getAndWhereQuery());
             }
-            table = String.format("%s %s", table, this._alias);
-            return String.format("DELETE %s FROM %s %s", this._alias, table, getAndWhereQuery());
+            table = String.format("%s %s", table, _alias);
+            return String.format("DELETE %s FROM %s %s", _alias, table, getAndWhereQuery());
         }
 
     }

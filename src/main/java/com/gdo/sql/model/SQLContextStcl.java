@@ -414,7 +414,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     
     // get table initialization status
     public boolean isTableInitialized(StclContext stclContext, String from, PStcl self) {
-        return this._initialized_table.contains(from);
+        return _initialized_table.contains(from);
     }
 
     // initialize the table
@@ -422,7 +422,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
         if (!isTableInitialized(stclContext, from, self)) {
             String query = String.format("DELETE FROM %s WHERE Id < 0", from);
             updateQuery(stclContext, query, self);
-            this._initialized_table.add(from);
+            _initialized_table.add(from);
         }
     }
 

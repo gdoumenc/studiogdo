@@ -37,37 +37,37 @@ public abstract class FacetsRenderer<C extends _StencilContext, S extends _PSten
 	private boolean _isExpanded = false; // expnasion should be done once
 
 	public FacetsRenderer(RenderContext<C, S> renderCtxt) {
-		this._renderCtxt = renderCtxt;
+		_renderCtxt = renderCtxt;
 	}
 
 	@Override
 	public final RenderContext<C, S> getRenderContext() {
-		return this._renderCtxt;
+		return _renderCtxt;
 	}
 
 	public final void setRenderContext(RenderContext<C, S> renderCtxt) {
-		this._renderCtxt = renderCtxt;
+		_renderCtxt = renderCtxt;
 	}
 
 	@Override
 	public final Map<String, Object> getAttributes() {
-		return this._attributes;
+		return _attributes;
 	}
 
 	public final Object getAttribute(String att) {
-		if (this._attributes == null)
+		if (_attributes == null)
 			return null;
-		return this._attributes.get(att);
+		return _attributes.get(att);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public final void setAttributes(Map<String, ?> parameters) {
-		this._attributes = (Map<String, Object>) parameters;
+		_attributes = (Map<String, Object>) parameters;
 	}
 
 	public final void setParameter(String att, Object o) {
-		this._attributes.put(att, o);
+		_attributes.put(att, o);
 	}
 
 	public final String getUID(C stclContext) {
@@ -80,11 +80,11 @@ public abstract class FacetsRenderer<C extends _StencilContext, S extends _PSten
 
 	@Override
 	public void expand(C stclContext) throws WrongTagSyntax {
-		if (this._isExpanded && getLog().isWarnEnabled()) {
+		if (_isExpanded && getLog().isWarnEnabled()) {
 			String msg = String.format("The faces renderer %s is already expanded", this);
 			getLog().warn(stclContext, msg);
 		}
-		this._isExpanded = true;
+		_isExpanded = true;
 	}
 
 	@Override
@@ -144,8 +144,8 @@ public abstract class FacetsRenderer<C extends _StencilContext, S extends _PSten
 
 	public void putParamsInCommandContext(CommandContext<?, ?> context) {
 		for (String param : CommandContext.PARAMS) {
-			if (this._attributes.containsKey(param)) {
-				context.setRedefinedParameter(param, this._attributes.get(param));
+			if (_attributes.containsKey(param)) {
+				context.setRedefinedParameter(param, _attributes.get(param));
 			}
 		}
 	}

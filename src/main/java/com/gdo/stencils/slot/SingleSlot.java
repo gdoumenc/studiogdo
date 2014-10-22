@@ -180,8 +180,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		}
 
 		// removes previous content
-		if (StencilUtils.isNotNull(this._containedStcl)) {
-			S previous = this._containedStcl;
+		if (StencilUtils.isNotNull(_containedStcl)) {
+			S previous = _containedStcl;
 
 			// does nothing if the stencil is already plugged
 			if (StencilUtils.equals(previous, stencil))
@@ -193,7 +193,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 
 		// creates the new plugged stencil
 		setContainedStencil(stclContext, stencil, self);
-		return this._containedStcl;
+		return _containedStcl;
 	}
 
 	@Override
@@ -202,8 +202,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		if (StencilUtils.isNull(stencil))
 			return Result.warn("SingleSlot.beforeUnplug", "no stencil to unplug");
 
-		if (StencilUtils.isNotNull(this._containedStcl) && !StencilUtils.equals(this._containedStcl, stencil))
-			logWarn(stclContext, "Wrong stencil %s for unplugging in %s (present %s)", stencil, this, this._containedStcl);
+		if (StencilUtils.isNotNull(_containedStcl) && !StencilUtils.equals(_containedStcl, stencil))
+			logWarn(stclContext, "Wrong stencil %s for unplugging in %s (present %s)", stencil, this, _containedStcl);
 
 		return super.beforeUnplug(stclContext, stencil, key, self);
 	}
@@ -212,16 +212,16 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 	protected void doUnplug(C stclContext, S stcl, IKey key, PSlot<C, S> self) {
 
 		// do nothing if no stencil already plugged
-		if (StencilUtils.isNull(this._containedStcl))
+		if (StencilUtils.isNull(_containedStcl))
 			return;
 
 		// unplug the contained stencil
-		this._containedStcl = null;
+		_containedStcl = null;
 	}
 
 	@Override
 	protected void doUnplugAll(C stclContext, PSlot<C, S> self) {
-		doUnplug(stclContext, this._containedStcl, Key.NO_KEY, self);
+		doUnplug(stclContext, _containedStcl, Key.NO_KEY, self);
 	}
 
 	@Override
@@ -294,17 +294,17 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 	 */
 	public void setContainedStencil(C stclContext, S plugged, PSlot<C, S> self) {
 		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-		this._containedStcl = factory.createPStencil(stclContext, self, Key.NO_KEY, plugged);
+		_containedStcl = factory.createPStencil(stclContext, self, Key.NO_KEY, plugged);
 	}
 
 	// try to create the stencil plugged by default descriptor
 	protected S getContainedStencilOrCreateDefault(C stclContext, PSlot<C, S> self) {
 
 		// creates it only if doesn't already exist
-		if (StencilUtils.isNotNull(this._containedStcl)) {
+		if (StencilUtils.isNotNull(_containedStcl)) {
 		    
-		    if (this._containedStcl instanceof PStcl) {
-		        PStcl pstcl = (PStcl) this._containedStcl;
+		    if (_containedStcl instanceof PStcl) {
+		        PStcl pstcl = (PStcl) _containedStcl;
 		        if (pstcl.isCursorBased()) {
 		            pstcl.updateCursor((StclContext) stclContext);
 		        }
@@ -315,8 +315,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 			// TODO when contained stencil is created, should check parent to
 			// see if in repository
 			// then change containing slot once used! (only once)
-			this._containedStcl.setContainingSlot(self);
-			return this._containedStcl;
+			_containedStcl.setContainingSlot(self);
+			return _containedStcl;
 		}
 
 		// creates it only arity is set to one
@@ -346,25 +346,25 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
 		}
 
 		// use default value
-		if (this._defaultValue != null) {
+		if (_defaultValue != null) {
 			try {
 				StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
 				if (factory == null) {
-					String msg = String.format("no default factory to create default property value %s in %s", this._defaultValue, self);
+					String msg = String.format("no default factory to create default property value %s in %s", _defaultValue, self);
 					if (getLog().isErrorEnabled())
 						getLog().error(stclContext, msg);
 					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
-				S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._defaultValue);
+				S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, _defaultValue);
 				if (StencilUtils.isNull((S) prop)) {
-					String msg = String.format("cannot create default property value %s in %s", this._defaultValue, self);
+					String msg = String.format("cannot create default property value %s in %s", _defaultValue, self);
 					if (getLog().isErrorEnabled())
 						getLog().error(stclContext, msg);
 					return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 				}
 				return prop;
 			} catch (Exception e) {
-				String msg = logError(stclContext, "exception when creating default value %s in %s", this._defaultValue, self);
+				String msg = logError(stclContext, "exception when creating default value %s in %s", _defaultValue, self);
 				return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 			}
 		}

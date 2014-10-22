@@ -129,7 +129,7 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 
 		// checks listener implements the IMailSendListener interface
 		if (listener.getReleasedStencil(stclContext) instanceof IMailSendListener) {
-			this._listener = listener;
+			_listener = listener;
 		} else {
 			logWarn(stclContext, "the mail listener %s must implement the IMailSendListener interface for %s", listener, self);
 		}
@@ -145,7 +145,7 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public void setContentFormatter(StclContext stclContext, ContentFormatter formatter, PStcl self) {
-		this._contentFormatter = formatter;
+		_contentFormatter = formatter;
 	}
 
 	/*
@@ -161,10 +161,10 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public Result beforeSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
-		if (StencilUtils.isNotNull(this._listener)) {
+		if (StencilUtils.isNotNull(_listener)) {
 			StclContext stclContext = cmdContext.getStencilContext();
-			IMailSendListener listener = (IMailSendListener) this._listener.getReleasedStencil(stclContext);
-			return listener.beforeSend(cmdContext, self, recipient, this._listener);
+			IMailSendListener listener = (IMailSendListener) _listener.getReleasedStencil(stclContext);
+			return listener.beforeSend(cmdContext, self, recipient, _listener);
 		}
 		return Result.success();
 	}
@@ -178,10 +178,10 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public Result afterSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
-		if (StencilUtils.isNotNull(this._listener)) {
+		if (StencilUtils.isNotNull(_listener)) {
 			StclContext stclContext = cmdContext.getStencilContext();
-			IMailSendListener listener = (IMailSendListener) this._listener.getReleasedStencil(stclContext);
-			return listener.afterSend(cmdContext, self, recipient, this._listener);
+			IMailSendListener listener = (IMailSendListener) _listener.getReleasedStencil(stclContext);
+			return listener.afterSend(cmdContext, self, recipient, _listener);
 		}
 		return Result.success();
 	}
@@ -195,10 +195,10 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public Result afterError(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, String reason, PStcl self) {
-		if (StencilUtils.isNotNull(this._listener)) {
+		if (StencilUtils.isNotNull(_listener)) {
 			StclContext stclContext = cmdContext.getStencilContext();
-			IMailSendListener listener = (IMailSendListener) this._listener.getReleasedStencil(stclContext);
-			return listener.afterError(cmdContext, self, recipient, reason, this._listener);
+			IMailSendListener listener = (IMailSendListener) _listener.getReleasedStencil(stclContext);
+			return listener.afterError(cmdContext, self, recipient, reason, _listener);
 		}
 		return Result.success();
 	}
@@ -212,10 +212,10 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public Result beforeFirst(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
-		if (StencilUtils.isNotNull(this._listener)) {
+		if (StencilUtils.isNotNull(_listener)) {
 			StclContext stclContext = cmdContext.getStencilContext();
-			IMailSendListener listener = (IMailSendListener) this._listener.getReleasedStencil(stclContext);
-			return listener.beforeFirst(cmdContext, self, this._listener);
+			IMailSendListener listener = (IMailSendListener) _listener.getReleasedStencil(stclContext);
+			return listener.beforeFirst(cmdContext, self, _listener);
 		}
 		return Result.success();
 	}
@@ -229,10 +229,10 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 	 */
 	@Override
 	public Result afterLast(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
-		if (StencilUtils.isNotNull(this._listener)) {
+		if (StencilUtils.isNotNull(_listener)) {
 			StclContext stclContext = cmdContext.getStencilContext();
-			IMailSendListener listener = (IMailSendListener) this._listener.getReleasedStencil(stclContext);
-			return listener.afterLast(cmdContext, self, this._listener);
+			IMailSendListener listener = (IMailSendListener) _listener.getReleasedStencil(stclContext);
+			return listener.afterLast(cmdContext, self, _listener);
 		}
 		return Result.success();
 	}
@@ -419,8 +419,8 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 		String content = self.getExpandedString(stclContext, Slot.CONTENT, "");
 
 		// add also content formatter
-		if (this._contentFormatter != null) {
-			content = this._contentFormatter.getContent(stclContext, content, self);
+		if (_contentFormatter != null) {
+			content = _contentFormatter.getContent(stclContext, content, self);
 		}
 
 		return content;
@@ -649,9 +649,9 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 
 		public MultiSendThread(CommandContext<StclContext, PStcl> cmdContext, Session session, Properties props, StencilIterator<StclContext, PStcl> to, PStcl self) {
 			super(cmdContext, self);
-			this._session = session;
-			this._props = props;
-			this._to = to;
+			_session = session;
+			_props = props;
+			_to = to;
 		}
 
 		@Override
@@ -669,8 +669,8 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 				}
 
 				// gets recipients from TO slot
-				while (this._to.hasNext()) {
-					PStcl recipient = this._to.next();
+				while (_to.hasNext()) {
+					PStcl recipient = _to.next();
 
 					// checks recipient address is valid
 					if (StencilUtils.isNull(recipient)) {
@@ -706,14 +706,14 @@ public class MailStcl extends Stcl implements IMail, IMailSendListener {
 						}
 
 						// gets mime message with content
-						MimeMessage mimeMsg = getMimeMessageWithoutTo(stclContext, this._session, this._props, mail);
+						MimeMessage mimeMsg = getMimeMessageWithoutTo(stclContext, _session, _props, mail);
 						if (mimeMsg == null) {
 							logWarn(stclContext, "cannot get mime message for email %s with to address %s", mail, address);
 							continue;
 						}
 
 						// sends message
-						result = sendMessageTo(stclContext, this._session, mimeMsg, internetAddress, mail);
+						result = sendMessageTo(stclContext, _session, mimeMsg, internetAddress, mail);
 
 						// performs after or error sending action
 						if (result.isSuccess()) {

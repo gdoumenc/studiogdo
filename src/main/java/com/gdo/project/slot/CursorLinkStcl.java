@@ -28,7 +28,7 @@ public class CursorLinkStcl extends LinkStcl {
 		}
 
 		// gets the stencil
-		PStcl stcl = self.getStencil(stclContext, this._path);
+		PStcl stcl = self.getStencil(stclContext, _path);
 
 		// changes containing slot and key
 		StclFactory factory = (StclFactory) stclContext.getStencilFactory();

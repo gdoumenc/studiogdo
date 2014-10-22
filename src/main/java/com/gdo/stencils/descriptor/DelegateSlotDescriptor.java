@@ -15,7 +15,7 @@ public class DelegateSlotDescriptor<C extends _StencilContext, S extends _PStenc
 
 	public DelegateSlotDescriptor(String path) {
 		super();
-		this._path = path;
+		_path = path;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -24,7 +24,7 @@ public class DelegateSlotDescriptor<C extends _StencilContext, S extends _PStenc
 
 		// get the link path and add .. as path is relative to link not to
 		// stencil
-		String path = PathUtils.compose(PathUtils.PARENT, this._path);
+		String path = PathUtils.compose(PathUtils.PARENT, _path);
 
 		// adds link stencil
 		MultiSlot<C, S> slot = new MultiSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, PSlot.AT_LEAST_ONE, true, false);

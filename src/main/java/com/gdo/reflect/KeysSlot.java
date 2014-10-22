@@ -33,12 +33,12 @@ public class KeysSlot extends MultiCalculatedSlot<StclContext, PStcl> {
 
 	public KeysSlot(StclContext stclContext, SlotStcl in) {
 		super(stclContext, in, SlotStcl.Slot.KEYS, PSlot.ANY);
-		this._slot = in.getSlot();
+		_slot = in.getSlot();
 	}
 
 	@Override
 	protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-		for (PStcl stencil : this._slot.getStencils(stclContext, cond)) {
+		for (PStcl stencil : _slot.getStencils(stclContext, cond)) {
 
 			// creates the key
 			IKey key = stencil.getKey();

@@ -43,7 +43,7 @@ public class FileUploadDataSourceStcl extends AttachmentStcl implements DataSour
 
 	public FileUploadDataSourceStcl(StclContext stclContext, FileItem item) {
 		super(stclContext);
-		this._fileItem = item;
+		_fileItem = item;
 
 		new ContentTypeSlot(stclContext);
 		new SizeSlot(stclContext);
@@ -51,27 +51,27 @@ public class FileUploadDataSourceStcl extends AttachmentStcl implements DataSour
 
 	@Override
 	public String getName(StclContext stclContext, PStcl self) {
-		return this._fileItem.getName();
+		return _fileItem.getName();
 	}
 
 	@Override
 	public String getContentType() {
-		return this._fileItem.getContentType();
+		return _fileItem.getContentType();
 	}
 
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return this._fileItem.getInputStream();
+		return _fileItem.getInputStream();
 	}
 
 	@Override
 	public String getName() {
-		return this._fileItem.getName();
+		return _fileItem.getName();
 	}
 
 	@Override
 	public OutputStream getOutputStream() throws IOException {
-		return this._fileItem.getOutputStream();
+		return _fileItem.getOutputStream();
 	}
 
 	private class ContentTypeSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {

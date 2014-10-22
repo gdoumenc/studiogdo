@@ -34,56 +34,56 @@ public class Key<K> implements IKey, Comparable<IKey> {
             String msg = logError(null, "creation of a key with null value");
             throw new NullPointerException(msg);
         }
-        this._key = value;
+        _key = value;
     }
 
     @Override
     public String toString() {
-        if (this._key == null)
+        if (_key == null)
             return "";
-        return this._key.toString();
+        return _key.toString();
     }
 
     public K getValue() {
-        return this._key;
+        return _key;
     }
 
     @SuppressWarnings("unchecked")
     public void changeTo(String value) {
-        if (this._key instanceof String) {
-            this._key = (K) value;
-        } else if (this._key instanceof Integer) {
-            this._key = (K) new Integer(value);
+        if (_key instanceof String) {
+            _key = (K) value;
+        } else if (_key instanceof Integer) {
+            _key = (K) new Integer(value);
         }
     }
 
     @Override
     public int hashCode() {
-        return this._key.hashCode();
+        return _key.hashCode();
     }
 
     @Override
     public int compareTo(IKey o) {
-        if (o == null || this._key == null)
+        if (o == null || _key == null)
             return 0;
-        return this._key.toString().compareTo(o.toString());
+        return _key.toString().compareTo(o.toString());
     }
 
     @Override
     public boolean isEmpty() {
-        return this._key == null || StringUtils.isEmpty(this._key.toString());
+        return _key == null || StringUtils.isEmpty(_key.toString());
     }
 
     @Override
     public boolean isNotEmpty() {
-        return this._key != null && StringUtils.isNotEmpty(this._key.toString());
+        return _key != null && StringUtils.isNotEmpty(_key.toString());
     }
 
     @Override
     public boolean equals(Object key) {
-        if (this._key == null || key == null)
+        if (_key == null || key == null)
             return false;
-        return this._key.toString().equals(key.toString());
+        return _key.toString().equals(key.toString());
     }
 
     //

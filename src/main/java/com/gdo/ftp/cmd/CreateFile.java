@@ -64,25 +64,25 @@ public class CreateFile extends AtomicActionStcl {
 			try {
 
 				// in case of creation only, verifies the file doesn't exist
-				if (this._mode == com.gdo.context.model.FolderStcl.CreationMode.CREATE_ONLY) {
-					if (ftpContext.exists(stclContext, this._name, false, pftpContext)) {
-						String msg = String.format("cannot put in file as file %s already exist", this._name);
+				if (_mode == com.gdo.context.model.FolderStcl.CreationMode.CREATE_ONLY) {
+					if (ftpContext.exists(stclContext, _name, false, pftpContext)) {
+						String msg = String.format("cannot put in file as file %s already exist", _name);
 						return error(cmdContext, self, msg);
 					}
 				}
 
 				// in case of creation only if doesn't exist, verifies the file
 				// doesn't already exist
-				if (this._mode == com.gdo.context.model.FolderStcl.CreationMode.ONLY_IF_DOESNT_EXIST) {
-					if (ftpContext.exists(stclContext, this._name, false, pftpContext)) {
-						String msg = String.format("The file %s already exist", this._name);
+				if (_mode == com.gdo.context.model.FolderStcl.CreationMode.ONLY_IF_DOESNT_EXIST) {
+					if (ftpContext.exists(stclContext, _name, false, pftpContext)) {
+						String msg = String.format("The file %s already exist", _name);
 						return success(cmdContext, self, msg);
 					}
 				}
 
 				// does creation
 				InputStream in = new ByteArrayInputStream(new byte[0]);
-				result = ftpContext.put(stclContext, in, this._name, this._folder_creation, null, false, pftpContext);
+				result = ftpContext.put(stclContext, in, _name, _folder_creation, null, false, pftpContext);
 				if (result.isNotSuccess()) {
 					return error(cmdContext, self, result);
 				}
@@ -98,7 +98,7 @@ public class CreateFile extends AtomicActionStcl {
 			// returns file created
 			return success(cmdContext, self);
 		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot create file %s (%s)", this._name, e);
+			String msg = logError(stclContext, "cannot create file %s (%s)", _name, e);
 			return error(cmdContext, self, 0, msg);
 		}
 	}
@@ -107,16 +107,16 @@ public class CreateFile extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// file name should be defined in param1
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isBlank(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isBlank(_name)) {
 			return error(cmdContext, self, "no name defined for create file command (param0)");
 		}
 
 		// if param2 set to true, then accept create intermediate folders
-		this._folder_creation = getParameter(cmdContext, 2, true);
+		_folder_creation = getParameter(cmdContext, 2, true);
 
 		// param3 is creation mode
-		this._mode = getParameter(cmdContext, 3, 0);
+		_mode = getParameter(cmdContext, 3, 0);
 
 		return super.verifyContext(cmdContext, self);
 	}

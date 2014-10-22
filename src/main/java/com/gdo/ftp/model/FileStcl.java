@@ -159,8 +159,8 @@ public class FileStcl extends _FileStcl {
 	public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) {
 
 		// if no name creates one
-		if (StringUtils.isBlank(this._path)) {
-			this._path = Atom.uniqueID() + fileName;
+		if (StringUtils.isBlank(_path)) {
+			_path = Atom.uniqueID() + fileName;
 		}
 
 		// gets the FTP context
@@ -182,17 +182,17 @@ public class FileStcl extends _FileStcl {
 		try {
 
 			// sets folder
-			String folderPath = PathUtils.getPathName(this._path);
+			String folderPath = PathUtils.getPathName(_path);
 			if (StringUtils.isNotBlank(folderPath)) {
 				client.changeWorkingDirectory(folderPath);
 			}
 
 			// backup previous file
-			String path = PathUtils.getLastName(this._path);
+			String path = PathUtils.getLastName(_path);
 			client.rename(path, path.concat(".back"));
 
 			// uploads file
-			OutputStream out = client.storeFileStream(this._path);
+			OutputStream out = client.storeFileStream(_path);
 			InputStream in = item.getInputStream();
 			IOUtils.copy(in, out);
 			in.close();
@@ -218,7 +218,7 @@ public class FileStcl extends _FileStcl {
 				client.completePendingCommand();
 
 				// updates file path (compose new name from path)
-				this._path = PathUtils.compose(folderPath, newPath);
+				_path = PathUtils.compose(folderPath, newPath);
 
 			}
 		} catch (Exception e) {
@@ -234,23 +234,23 @@ public class FileStcl extends _FileStcl {
 		private InputStream _input;
 
 		public FTPFacetInputStream(FTPClient client) {
-			this._client = client;
+			_client = client;
 		}
 
 		@Override
 		public InputStream getInputStream() throws IOException {
-			this._input = this._client.retrieveFileStream(FileStcl.this._path);
-			return this._input;
+			_input = _client.retrieveFileStream(FileStcl.this._path);
+			return _input;
 		}
 
 		@Override
 		public void closeInputStream() throws IOException {
-			// this._client.completePendingCommand();
-			if (this._input != null) {
-				this._input.close();
+			// _client.completePendingCommand();
+			if (_input != null) {
+				_input.close();
 			}
-			this._client.logout();
-			this._client.disconnect();
+			_client.logout();
+			_client.disconnect();
 		}
 	}
 

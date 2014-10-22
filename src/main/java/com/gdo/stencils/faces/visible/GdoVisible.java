@@ -55,23 +55,23 @@ public class GdoVisible<C extends _StencilContext, S extends _PStencil<C, S>> ex
 	}
 
 	public GdoVisible<C, S> getParentTag() {
-		return this._parent;
+		return _parent;
 	}
 
 	public void setParentTag(GdoVisible<C, S> parent) {
-		this._parent = parent;
+		_parent = parent;
 	}
 
 	public String getSubTagLabel() {
-		return this._subTagLabel;
+		return _subTagLabel;
 	}
 
 	public void setSubTag(GdoTag<C, S> tag) {
-		this._subTagLabel = tag.getSubTagLabel();
+		_subTagLabel = tag.getSubTagLabel();
 	}
 
 	public boolean isSubTag() {
-		return this._subTagLabel != null;
+		return _subTagLabel != null;
 	}
 
 	public String getPath() {

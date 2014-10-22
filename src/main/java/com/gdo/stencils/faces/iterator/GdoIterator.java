@@ -72,13 +72,13 @@ public class GdoIterator<C extends _StencilContext, S extends _PStencil<C, S>> e
 	public boolean hasNext(C stclContext) {
 
 		// creates iterator only if needed
-		if (this._iterator == null) {
+		if (_iterator == null) {
 			S parent = getRenderContext().getStencilRendered();
-			this._iterator = parent.getStencils(stclContext, getPath());
+			_iterator = parent.getStencils(stclContext, getPath());
 		}
 
 		// returns iteration test
-		return this._iterator.hasNext();
+		return _iterator.hasNext();
 	}
 
 	/**
@@ -89,12 +89,12 @@ public class GdoIterator<C extends _StencilContext, S extends _PStencil<C, S>> e
 	 * @return the next stencil to be rendered.
 	 */
 	public S next(C stclContext) {
-		this._current = this._iterator.next();
-		return this._current;
+		_current = _iterator.next();
+		return _current;
 	}
 
 	public S getCurrentStencil() {
-		return this._current;
+		return _current;
 	}
 
 	@Override

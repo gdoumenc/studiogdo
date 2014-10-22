@@ -51,7 +51,7 @@ public class CreateFile extends AtomicActionStcl {
                 String msg = String.format("directory not found");
                 return error(cmdContext, self, msg);
             }
-			String path = PathUtils.compose(dir.getAbsolutePath(), this._name);
+			String path = PathUtils.compose(dir.getAbsolutePath(), _name);
 			File file = new File(path);
 			if (!file.createNewFile()) {
 				String msg = String.format("file %s not created", path);
@@ -63,7 +63,7 @@ public class CreateFile extends AtomicActionStcl {
 			CommandStatus<StclContext, PStcl> res = success(cmdContext, self, Status.FILE, fileStcl, null);
 			return success(cmdContext, self, 0, file.hashCode(), res);
 		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot create file %s in %s (%s)", this._name, name, e);
+			String msg = logError(stclContext, "cannot create file %s in %s (%s)", _name, name, e);
 			return error(cmdContext, self, msg);
 		}
 	}
@@ -72,8 +72,8 @@ public class CreateFile extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// get file name
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name)) {
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to create file");
 		}
 

@@ -15,12 +15,12 @@ public class EncapsulateSlot<C extends _StencilContext, S extends _PStencil<C, S
 
 	public EncapsulateSlot(C stclContext, _Stencil<C, S> in, String name, S stencil) {
 		super(stclContext, in, name, PSlot.ONE);
-		this._encapsulated = stencil;
+		_encapsulated = stencil;
 	}
 
 	@Override
 	public S getCalculatedStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return this._encapsulated;
+		return _encapsulated;
 	}
 
 }

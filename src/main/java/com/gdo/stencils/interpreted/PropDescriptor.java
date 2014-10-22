@@ -67,20 +67,20 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 	 * @return property (slot's) name.
 	 */
 	public String getName() {
-		return this._name;
+		return _name;
 	}
 
 	public void setName(String name) {
-		this._name = name;
+		_name = name;
 	}
 
 	/**
 	 * @return property type.
 	 */
 	protected String getType() {
-		if (this._type == Type.BOOLEAN)
+		if (_type == Type.BOOLEAN)
 			return Keywords.BOOLEAN;
-		if (this._type == Type.INT)
+		if (_type == Type.INT)
 			return Keywords.INT;
 		return Keywords.STRING;
 	}
@@ -88,69 +88,69 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 	// property type (string, int, boolean)
 	public void setType(String type) {
 		if (Keywords.STRING.equals(type)) {
-			this._type = Type.STRING;
+			_type = Type.STRING;
 		} else if (Keywords.INT.equals(type)) {
-			this._type = Type.INT;
+			_type = Type.INT;
 		} else if (Keywords.BOOLEAN.equals(type)) {
-			this._type = Type.BOOLEAN;
+			_type = Type.BOOLEAN;
 		} else {
 			if (getLog().isWarnEnabled()) {
 				String msg = String.format("Unknow type %s for parameter", type);
 				getLog().warn(null, msg);
 			}
-			this._type = Type.STRING;
+			_type = Type.STRING;
 		}
 	}
 
 	// property file for locale sensitive value
 	public String getFile() {
-		return this._file;
+		return _file;
 	}
 
 	public void setFile(String file) {
-		this._file = file;
+		_file = file;
 	}
 
 	// property file id for locale sensitive value
 	public String getId() {
-		return this._id;
+		return _id;
 	}
 
 	public void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	// property value in descriptor
 	public String getValue() {
-		return this._value;
+		return _value;
 	}
 
 	public void setValue(String value) {
-		this._value = value.replaceAll("<]>", "]]");
+		_value = value.replaceAll("<]>", "]]");
 	}
 
 	public boolean isTransient() {
-		return this._tranzient;
+		return _tranzient;
 	}
 
 	public void setTransient(boolean value) {
-		this._tranzient = value;
+		_tranzient = value;
 	}
 
 	public boolean isExpand() {
-		return this._expand;
+		return _expand;
 	}
 
 	public void setExpand(boolean value) {
-		this._expand = value;
+		_expand = value;
 	}
 
 	public boolean isCalculated() {
-		return this._calculated;
+		return _calculated;
 	}
 
 	public void setCalculated(boolean value) {
-		this._calculated = value;
+		_calculated = value;
 	}
 
 	/**
@@ -158,28 +158,28 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 	 *         template.
 	 */
 	public boolean isFinal() {
-		return this._final;
+		return _final;
 	}
 
 	/**
 	 * Marks the slot as final and cannot be overriden.
 	 */
 	public void setFinal(boolean value) {
-		this._final = value;
+		_final = value;
 	}
 
 	/**
 	 * @return <tt>true</tt> if this slot declaration override an existing slot.
 	 */
 	public boolean isOverride() {
-		return this._override;
+		return _override;
 	}
 
 	/**
 	 * Marks the slot as overriding an existing slot.
 	 */
 	public void setOverride(boolean override) {
-		this._override = override;
+		_override = override;
 	}
 
 	/**
@@ -191,30 +191,30 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 		String value = getValue();
 
 		try {
-			if (Type.STRING.equals(this._type)) {
+			if (Type.STRING.equals(_type)) {
 				if (StringUtils.isEmpty(value))
 					return StringHelper.EMPTY_STRING;
 				return value;
-			} else if (Type.INT.equals(this._type)) {
+			} else if (Type.INT.equals(_type)) {
 				if (StringUtils.isEmpty(value))
 					return Integer.valueOf(0);
 				return Integer.valueOf(value);
-			} else if (Type.BOOLEAN.equals(this._type)) {
+			} else if (Type.BOOLEAN.equals(_type)) {
 				if (StringUtils.isEmpty(value))
 					return Boolean.FALSE;
 				return Boolean.valueOf(value);
 			} else {
 				if (getLog().isWarnEnabled()) {
-					getLog().warn(stclContext, "Unknown property type " + this._type);
+					getLog().warn(stclContext, "Unknown property type " + _type);
 				}
 				return null;
 			}
 		} catch (Exception e) {
 			logWarn(stclContext, "Cannot get property value in descriptor %s (%s)", this, e);
 		}
-		if (Type.INT.equals(this._type))
+		if (Type.INT.equals(_type))
 			return new Integer(0);
-		if (Type.BOOLEAN.equals(this._type))
+		if (Type.BOOLEAN.equals(_type))
 			return Boolean.FALSE;
 		return StringHelper.EMPTY_STRING;
 	}
@@ -281,7 +281,7 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 		private Object _value; // value read from the property file
 
 		PropertyValueDescriptor(Object value) {
-			this._value = value;
+			_value = value;
 		}
 
 		@Override
@@ -289,7 +289,7 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 
 			// creates the property with initial value
 			StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-			S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, this._value);
+			S prop = factory.createPProperty(stclContext, self, Key.NO_KEY, _value);
 
 			// sets the type
 			_Stencil<C, S> p = (_Stencil<C, S>) prop.getReleasedStencil(stclContext);
@@ -306,7 +306,6 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
 
 	private class PropertyFileDescriptor extends DefaultDescriptor<C, S> {
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public S newInstance(C stclContext, PSlot<C, S> self) {
 			StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();

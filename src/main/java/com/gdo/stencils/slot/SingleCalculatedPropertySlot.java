@@ -45,21 +45,21 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 
 	public SingleCalculatedPropertySlot(C stclContext, _Stencil<C, S> in, String name, IPropCalculator<C, S> calculator) {
 		super(stclContext, in, name, PSlot.ONE);
-		this._calculator = calculator;
+		_calculator = calculator;
 	}
 
 	/**
 	 * @return the property calculator associated to the slot.
 	 */
 	public IPropCalculator<C, S> getCalculator() {
-		return this._calculator;
+		return _calculator;
 	}
 
 	/**
 	 * Sets the property calculator associated to the slot.
 	 */
 	public void setCalculator(IPropCalculator<C, S> calculator) {
-		this._calculator = calculator;
+		_calculator = calculator;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
 
 		// checks the calculator is defined
-		if (this._calculator == null) {
+		if (_calculator == null) {
 			String msg = String.format("no calculator associated to the calculated property %s", self);
 			return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
 		}
@@ -82,14 +82,14 @@ public class SingleCalculatedPropertySlot<C extends _StencilContext, S extends _
 	protected _Stencil<C, S> getProperty(C stclContext) {
 
 		// if the calculated property is not already created
-		if (this._prop == null) {
+		if (_prop == null) {
 			StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
 			Class<? extends _Stencil<C, S>> p = ClassHelper.loadClass(factory.getCalculatedPropertyDefaultTemplateName(stclContext));
-			this._prop = factory.createStencil(stclContext, p, this._calculator);
+			_prop = factory.createStencil(stclContext, p, _calculator);
 		}
 
 		// calculated property defined
-		return this._prop;
+		return _prop;
 	}
 
 }

@@ -38,13 +38,13 @@ public class DirectFolderResourceStcl extends FolderResourceStcl {
 
 	public DirectFolderResourceStcl(StclContext stclContext, PStcl stencil) {
 		this(stclContext);
-		this._stencil = stencil;
+		_stencil = stencil;
 	}
 
 	@Override
 	public void afterCompleted(StclContext stclContext, PStcl self) {
-		if (StencilUtils.isNotNull(this._stencil)) {
-			self.plug(stclContext, this._stencil, Slot.FOLDER_ENCAPSULATED);
+		if (StencilUtils.isNotNull(_stencil)) {
+			self.plug(stclContext, _stencil, Slot.FOLDER_ENCAPSULATED);
 		}
 	}
 

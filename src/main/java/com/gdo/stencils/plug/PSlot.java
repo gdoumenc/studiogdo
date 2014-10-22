@@ -75,8 +75,8 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      *            the container stencil.
      */
     public PSlot(_Slot<C, S> slot, S container) {
-        this._slot = slot;
-        this._container = container;
+        _slot = slot;
+        _container = container;
     }
 
     /**
@@ -86,23 +86,23 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      *            the reason for unavailability.
      */
     public PSlot(Result result) {
-        this._slot = null;
-        this._container = null;
+        _slot = null;
+        _container = null;
 
         // add error status
         if (result != null && result.isSuccess() && getLog().isWarnEnabled()) {
             String msg = "should not create a null slot on success result";
             getLog().warn(StclContext.defaultContext(), msg);
         }
-        this._result = (result != null) ? result : Result.error("empty slot without any reason");
+        _result = (result != null) ? result : Result.error("empty slot without any reason");
     }
 
     /**
      * Clears all internal structures to free memory.
      */
     public void clear() {
-        if (this._slot != null)
-            this._slot.clear();
+        if (_slot != null)
+            _slot.clear();
     }
 
     /**
@@ -111,7 +111,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      * @return <tt>true</tt> if the slot is null, <tt>false</tt> otherwise.
      */
     public boolean isNull() {
-        return this._slot == null;
+        return _slot == null;
     }
 
     /**
@@ -129,7 +129,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      * @return the reason why the slot is null (never empty).
      */
     public final Result getResult() {
-        return this._result;
+        return _result;
     }
 
     /**
@@ -139,20 +139,20 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      */
     public final Result addResult(Result result) {
         if (isNotNull()) {
-            this._slot = null;
-            this._container = null;
+            _slot = null;
+            _container = null;
 
             // add error status
             if (result != null && result.isSuccess() && getLog().isWarnEnabled()) {
                 String msg = "should not add a success reason on slot";
                 getLog().warn(StclContext.defaultContext(), msg);
             }
-            this._result = (result != null) ? result : Result.error("empty slot without any reason");
+            _result = (result != null) ? result : Result.error("empty slot without any reason");
         } else {
             if (result != null)
-                this._result.addOther(result);
+                _result.addOther(result);
         }
-        return this._result;
+        return _result;
     }
 
     /**
@@ -172,7 +172,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      *         methods).
      */
     public <K extends _Slot<C, S>> void setSlot(K slot) {
-        this._slot = slot;
+        _slot = slot;
     }
 
     /**
@@ -183,7 +183,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      */
     @SuppressWarnings("unchecked")
     public <K extends _Slot<C, S>> K getSlot() {
-        return (K) this._slot;
+        return (K) _slot;
     }
 
     /**
@@ -192,80 +192,80 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      * @return the plugged stencil container ot the slot.
      */
     public S getContainer() {
-        return this._container;
+        return _container;
     }
 
     public final S plug(C stclContext, S stencil, IKey key) {
-        if (this._slot != null)
-            return this._slot.plug(stclContext, stencil, key, this);
+        if (_slot != null)
+            return _slot.plug(stclContext, stencil, key, this);
         return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("cannot plug in an empty slot"));
     }
 
     public final void unplug(C stclContext, S stencil, IKey key) {
-        if (this._slot != null)
-            this._slot.unplug(stclContext, stencil, key, this);
+        if (_slot != null)
+            _slot.unplug(stclContext, stencil, key, this);
     }
 
     public final void unplugAll(C stclContext) {
-        if (this._slot != null)
-            this._slot.unplugAll(stclContext, this);
+        if (_slot != null)
+            _slot.unplugAll(stclContext, this);
     }
 
     public String getName(C stclContext) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return getNullReason();
         }
-        return this._slot.getName(stclContext);
+        return _slot.getName(stclContext);
     }
 
     public char getArity(C stclContext) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return PSlot.UNDEFINED;
         }
-        return this._slot.getArity(stclContext, this);
+        return _slot.getArity(stclContext, this);
     }
 
     public boolean isCursorBased(C stclContext) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return false;
         }
-        return this._slot.isCursorBased(stclContext);
+        return _slot.isCursorBased(stclContext);
     }
 
     // gets the property defined in the slot
     public String getProperty(C stclContext, IKey key, String name, PSlot<C, S> self) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return null;
         }
-        return this._slot.getProperty(stclContext, key, name, self);
+        return _slot.getProperty(stclContext, key, name, self);
     }
 
     public int size(C stclContext, StencilCondition<C, S> cond) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return -1;
         }
-        return this._slot.size(stclContext, cond, this);
+        return _slot.size(stclContext, cond, this);
     }
 
     public boolean hasStencils(C stclContext, StencilCondition<C, S> cond) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return false;
         }
-        return this._slot.hasStencils(stclContext, cond, this);
+        return _slot.hasStencils(stclContext, cond, this);
     }
 
     public S getStencil(C stclContext, StencilCondition<C, S> cond) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return StencilUtils.<C, S> nullPStencil(stclContext, getResult());
         }
-        return this._slot.getStencil(stclContext, cond, this);
+        return _slot.getStencil(stclContext, cond, this);
     }
 
     public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return StencilUtils.<C, S> iterator(getResult());
         }
-        return this._slot.getStencils(stclContext, cond, this);
+        return _slot.getStencils(stclContext, cond, this);
     }
 
     /**
@@ -273,10 +273,10 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
      *         the consition.
      */
     public boolean contains(C stclContext, StencilCondition<C, S> cond, S searched) {
-        if (this._slot == null) {
+        if (_slot == null) {
             return false;
         }
-        return this._slot.contains(stclContext, cond, searched, this);
+        return _slot.contains(stclContext, cond, searched, this);
     }
 
     public String pwd(C stclContext) {
@@ -295,27 +295,27 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
     }
 
     public boolean changeKey(C stclContext, S searched, String key) {
-        return this._slot.changeKey(stclContext, searched, key, this);
+        return _slot.changeKey(stclContext, searched, key, this);
     }
 
     public boolean canChangeOrder(C stclContext) {
-        return this._slot.canChangeOrder(stclContext, this);
+        return _slot.canChangeOrder(stclContext, this);
     }
 
     public boolean isFirst(C stclContext, S searched) {
-        return this._slot.isFirst(stclContext, searched, this);
+        return _slot.isFirst(stclContext, searched, this);
     }
 
     public boolean isLast(C stclContext, S searched) {
-        return this._slot.isLast(stclContext, searched, this);
+        return _slot.isLast(stclContext, searched, this);
     }
 
     public Annotation getAnnotation(C stclContext, String type) {
-        return this._slot.getAnnotation(stclContext, type, this);
+        return _slot.getAnnotation(stclContext, type, this);
     }
 
     public void setAnnotation(C stclContext, String type, Annotation annotation) {
-        this._slot.setAnnotation(stclContext, type, annotation, this);
+        _slot.setAnnotation(stclContext, type, annotation, this);
     }
 
     /**

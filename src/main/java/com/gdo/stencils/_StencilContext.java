@@ -67,7 +67,7 @@ public abstract class _StencilContext implements Cloneable {
 	 * verification).
 	 */
 	protected void checkValidity() throws IllegalStateException {
-		if (this._released) {
+		if (_released) {
 			throw new IllegalStateException("StencilContext already released, should not be used");
 		}
 	}
@@ -77,7 +77,7 @@ public abstract class _StencilContext implements Cloneable {
 	 */
 	public void release() {
 		checkValidity();
-		this._released = true;
+		_released = true;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class _StencilContext implements Cloneable {
 	 * @return the locale used.
 	 */
 	public Locale getLocale() {
-		return (this._locale != null) ? this._locale : Locale.getDefault();
+		return (_locale != null) ? _locale : Locale.getDefault();
 	}
 
 	/**
@@ -114,7 +114,7 @@ public abstract class _StencilContext implements Cloneable {
 	 *          the locale used.
 	 */
 	public void setLocale(Locale locale) {
-		this._locale = locale;
+		_locale = locale;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public abstract class _StencilContext implements Cloneable {
 	 * @return the current writer used to save the root stencil.
 	 */
 	public XmlWriter getSaveWriter() {
-		return this._writer;
+		return _writer;
 	}
 
 	/**
@@ -133,7 +133,7 @@ public abstract class _StencilContext implements Cloneable {
 	 *          the XML wrtier used to save the root stencil.
 	 */
 	public void setSaveWriter(XmlWriter writer) {
-		this._writer = writer;
+		_writer = writer;
 	}
 
 	/**

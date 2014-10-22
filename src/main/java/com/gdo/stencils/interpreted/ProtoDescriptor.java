@@ -51,60 +51,60 @@ public final class ProtoDescriptor<C extends _StencilContext, S extends _PStenci
 
 	// classes expected
 	public String[] getClasses() {
-		return StringHelper.splitShortString(this._classes, MULTI);
+		return StringHelper.splitShortString(_classes, MULTI);
 	}
 
 	public void setClasses(String classes) {
-		this._classes = classes;
+		_classes = classes;
 	}
 
 	// slots expected
 	public String getSlots() {
-		return this._slots;
+		return _slots;
 	}
 
 	public void setSlots(String slots) {
-		this._slots = slots;
+		_slots = slots;
 	}
 
 	// properties expected
 	public String getProps() {
-		return this._props;
+		return _props;
 	}
 
 	public void setProps(String props) {
-		this._props = props;
+		_props = props;
 	}
 
 	// commands expected
 	public String getCommands() {
-		return this._commands;
+		return _commands;
 	}
 
 	public void setCommands(String commands) {
-		this._commands = commands;
+		_commands = commands;
 	}
 
 	// template expected
 	public String getTemplates() {
-		return this._templates;
+		return _templates;
 	}
 
 	public void setTemplates(String templates) {
-		this._templates = templates;
+		_templates = templates;
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer str = new StringBuffer("proto(");
-		if (!StringUtils.isEmpty(this._classes))
-			str.append("classes:").append(this._classes);
-		if (!StringUtils.isEmpty(this._slots))
-			str.append(", slots:").append(this._slots);
-		if (!StringUtils.isEmpty(this._props))
-			str.append(", props:").append(this._props);
-		if (!StringUtils.isEmpty(this._commands))
-			str.append(", commands:").append(this._commands);
+		if (!StringUtils.isEmpty(_classes))
+			str.append("classes:").append(_classes);
+		if (!StringUtils.isEmpty(_slots))
+			str.append(", slots:").append(_slots);
+		if (!StringUtils.isEmpty(_props))
+			str.append(", props:").append(_props);
+		if (!StringUtils.isEmpty(_commands))
+			str.append(", commands:").append(_commands);
 		str.append(')');
 		return str.toString();
 	}
@@ -114,20 +114,20 @@ public final class ProtoDescriptor<C extends _StencilContext, S extends _PStenci
 		if (isEmpty())
 			return;
 		instOut.startElement("proto");
-		if (!StringUtils.isEmpty(this._classes))
-			instOut.writeAttribute("classes", this._classes);
-		if (!StringUtils.isEmpty(this._slots))
-			instOut.writeAttribute("slots", this._slots);
-		if (!StringUtils.isEmpty(this._props))
-			instOut.writeAttribute("props", this._props);
-		if (!StringUtils.isEmpty(this._commands))
-			instOut.writeAttribute("commands", this._commands);
+		if (!StringUtils.isEmpty(_classes))
+			instOut.writeAttribute("classes", _classes);
+		if (!StringUtils.isEmpty(_slots))
+			instOut.writeAttribute("slots", _slots);
+		if (!StringUtils.isEmpty(_props))
+			instOut.writeAttribute("props", _props);
+		if (!StringUtils.isEmpty(_commands))
+			instOut.writeAttribute("commands", _commands);
 		instOut.endElement("proto");
 	}
 
 	// return <tt>true</tt> if the proto contains no information
 	private boolean isEmpty() {
-		return (StringUtils.isEmpty(this._classes) && StringUtils.isEmpty(this._slots) && StringUtils.isEmpty(this._props) && StringUtils.isEmpty(this._commands));
+		return (StringUtils.isEmpty(_classes) && StringUtils.isEmpty(_slots) && StringUtils.isEmpty(_props) && StringUtils.isEmpty(_commands));
 	}
 
 }

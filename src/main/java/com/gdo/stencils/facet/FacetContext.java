@@ -32,25 +32,25 @@ public class FacetContext implements Cloneable {
 	 * @return the facet type (label, panel, tree, model, flex, ...)
 	 */
 	public final String getFacetType() {
-		return this._type;
+		return _type;
 	}
 
 	public final void setFacetType(String facet) {
-		this._type = facet;
+		_type = facet;
 	}
 
 	/**
 	 * @return the facet mode.
 	 */
 	public final String getFacetMode() {
-		return this._mode;
+		return _mode;
 	}
 
 	/**
 	 * Sets the facet mode.
 	 */
 	public final void setFacetMode(String mode) {
-		this._mode = mode;
+		_mode = mode;
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class FacetContext implements Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("facet: %s, mode: %s", this._type, this._mode);
+		return String.format("facet: %s, mode: %s", _type, _mode);
 	}
 
 }

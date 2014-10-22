@@ -48,35 +48,35 @@ public final class UnplugDescriptor<C extends _StencilContext, S extends _PStenc
 	// on load)
 
 	public String getSlot() {
-		return this._slot;
+		return _slot;
 	}
 
 	// used by digester
 	public void setSlot(String slot) {
-		this._slot = slot;
+		_slot = slot;
 	}
 
 	public String getKey() {
-		return this._key;
+		return _key;
 	}
 
 	// used by digester
 	public void setKey(String key) {
-		this._key = key;
+		_key = key;
 	}
 
 	public IStencilFactory.Mode getOnAsMode() {
-		return this._on;
+		return _on;
 	}
 
 	// used by digester
 	public void setOn(String on) {
 		if (Keywords.CREATE.equals(on)) {
-			this._on = Mode.ON_CREATION;
+			_on = Mode.ON_CREATION;
 		} else if (Keywords.LOAD.equals(on)) {
-			this._on = Mode.ON_LOAD;
+			_on = Mode.ON_LOAD;
 		} else if (Keywords.ALWAYS.equals(on)) {
-			this._on = Mode.ON_ALWAYS;
+			_on = Mode.ON_ALWAYS;
 		} else {
 			logWarn(null, "Unknow unplug on mode : " + on);
 		}

@@ -21,23 +21,23 @@ public abstract class _CommandThread implements ICommandThread {
 
 	@Override
 	public void setThread(ThreadStcl thread) {
-		this._thread = thread;
+		_thread = thread;
 	}
 
 	protected StclContext getStencilContext() {
-		return this._thread.getStencilContext();
+		return _thread.getStencilContext();
 	}
 
 	protected CommandContext<StclContext, PStcl> getCommandContext() {
-		return this._thread.getCommandContext();
+		return _thread.getCommandContext();
 	}
 
 	protected PStcl getThread() {
-		return this._thread.self();
+		return _thread.self();
 	}
 
 	protected PStcl getReference() {
-		return this._thread.getReference();
+		return _thread.getReference();
 	}
 
 }

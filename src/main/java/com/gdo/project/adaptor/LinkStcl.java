@@ -66,7 +66,7 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 
 	public LinkStcl(StclContext stclContext, String path) {
 		super(stclContext);
-		this._path = path;
+		_path = path;
 
 		// SLOT PART
 
@@ -90,8 +90,8 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 		super.complete(stclContext, self);
 
 		// sets property path
-		if (StringUtils.isNotBlank(this._path)) {
-			self.setString(stclContext, Slot.PATH, this._path);
+		if (StringUtils.isNotBlank(_path)) {
+			self.setString(stclContext, Slot.PATH, _path);
 		}
 	}
 
@@ -253,8 +253,8 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 			writer.writeAttribute("type", "string");
 
 			// never expand path when saving
-			if (StringUtils.isNotBlank(this._path)) {
-				writer.writeCDATAAndEndElement(this._path);
+			if (StringUtils.isNotBlank(_path)) {
+				writer.writeCDATAAndEndElement(_path);
 			} else {
 				writer.writeCDATAAndEndElement(StringHelper.EMPTY_STRING);
 			}
@@ -265,7 +265,7 @@ public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> 
 
 	@Override
 	public String toString() {
-		return String.format("link stencil to %s", this._path);
+		return String.format("link stencil to %s", _path);
 	}
 
 	private class PwdSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {

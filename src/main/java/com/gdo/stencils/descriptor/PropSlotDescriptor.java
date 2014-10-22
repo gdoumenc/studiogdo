@@ -10,13 +10,13 @@ public class PropSlotDescriptor<C extends _StencilContext, S extends _PStencil<C
 
 	public PropSlotDescriptor(K initial) {
 		super();
-		this._initial = initial;
+		_initial = initial;
 	}
 
 	@Override
 	public _Slot<C, S> add(C stclContext, String name, S self) {
-	    _Slot<C, S> slot = new PropSlot<C, S, K>(stclContext, self.getReleasedStencil(stclContext), name, this._initial);
-	    if (this._tranzient)
+	    _Slot<C, S> slot = new PropSlot<C, S, K>(stclContext, self.getReleasedStencil(stclContext), name, _initial);
+	    if (_tranzient)
 	        slot.setTransient();
 	    return slot;
 	}

@@ -105,14 +105,14 @@ public class StclContext extends _StencilContext {
         // }
 
         // sets servlet entries
-        this._request = request;
-        this._response = response;
+        _request = request;
+        _response = response;
 
         // set request arguments
-        this._args = new RpcArgs(this);
+        _args = new RpcArgs(this);
 
         // set stencil context id
-        this._id = Atom.uniqueInt();
+        _id = Atom.uniqueInt();
 
         // loads project if not already loaded (only one load at a time)
         synchronized (getClass()) {
@@ -190,7 +190,7 @@ public class StclContext extends _StencilContext {
      */
     public final HttpServletRequest getRequest() {
         checkValidity();
-        return this._request;
+        return _request;
     }
 
     /**
@@ -199,11 +199,11 @@ public class StclContext extends _StencilContext {
      * @return the servlet response.
      */
     public final HttpServletResponse getResponse() {
-        return this._response;
+        return _response;
     }
 
     public final RpcArgs getRpcArgs() {
-        return this._args;
+        return _args;
     }
 
     /**
@@ -215,7 +215,7 @@ public class StclContext extends _StencilContext {
     public Locale getLocale() {
 
         // if the locale is not set then session one (if defined) may be used
-        if (this._locale == null) {
+        if (_locale == null) {
             HttpSession session = getHttpSession();
             Locale locale = (Locale) session.getAttribute(StudioGdoServlet.LOCALE_ENTRY);
             if (locale != null) {
@@ -233,14 +233,14 @@ public class StclContext extends _StencilContext {
      * @return the servlet session used for this context.
      */
     public final HttpSession getHttpSession() {
-        if (this._session == null) {
+        if (_session == null) {
             HttpServletRequest request = getRequest();
             if (request == null) {
                 return null;
             }
-            this._session = request.getSession();
+            _session = request.getSession();
         }
-        return this._session;
+        return _session;
     }
 
     /**
@@ -249,7 +249,7 @@ public class StclContext extends _StencilContext {
      * @param session
      */
     public final void setHttpSession(HttpSession session) {
-        this._session = session;
+        _session = session;
     }
 
     /**
@@ -286,7 +286,7 @@ public class StclContext extends _StencilContext {
      * @return the request parameters as a decomposed structure.
      */
     public RpcArgs getRequestParameters() {
-        return this._request_parameters;
+        return _request_parameters;
     }
 
     /**
@@ -296,11 +296,11 @@ public class StclContext extends _StencilContext {
      *            the request parameters.
      */
     public void setRequestParameters(RpcArgs params) {
-        this._request_parameters = params;
+        _request_parameters = params;
     }
     
     public int getTransactionId() {
-        int ti = this._args.getTransactionId();
+        int ti = _args.getTransactionId();
         if (ti > 0)
                 return ti;
         return getId();
@@ -375,7 +375,7 @@ public class StclContext extends _StencilContext {
     }
 
     public int getId() {
-        return this._id;
+        return _id;
     }
 
     /**
@@ -384,7 +384,7 @@ public class StclContext extends _StencilContext {
      */
     @Override
     public void release() {
-        this._request.getSession().invalidate();
+        _request.getSession().invalidate();
         super.release();
     }
 
@@ -393,9 +393,9 @@ public class StclContext extends _StencilContext {
 
         // _request or _response may be null
         /*
-         * if (this._request != null && this._request.isRequestedSessionIdValid()) {
+         * if (_request != null && _request.isRequestedSessionIdValid()) {
          * throw new IllegalStateException("Session no more valid"); } if
-         * (this._response != null && this._response.isCommitted()) { throw new
+         * (_response != null && _response.isCommitted()) { throw new
          * IllegalStateException("Response already committed"); }
          */
         super.checkValidity();

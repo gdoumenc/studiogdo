@@ -112,7 +112,7 @@ public abstract class CommandStcl extends CommandStencil<StclContext, PStcl> {
 		StclFactory factory = (StclFactory) stclContext.getStencilFactory();
 		PStcl clone = factory.cloneCommand(stclContext, slot, key, self);
 		CommandStcl cmd = clone.getReleasedStencil(stclContext);
-		cmd._defParams = this._defParams;
+		cmd._defParams = _defParams;
 		return clone;
 	}
 

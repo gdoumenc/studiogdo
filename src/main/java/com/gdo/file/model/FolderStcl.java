@@ -51,7 +51,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
 
     public FolderStcl(StclContext stclContext, File dir) {
         super(stclContext);
-        this._dir = dir;
+        _dir = dir;
 
         propSlot(Slot.FOLDER_TEMPLATE, FolderStcl.class.getName());
         propSlot(Slot.FILE_TEMPLATE, FileStcl.class.getName());
@@ -87,9 +87,9 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
      * @return the java file associated.
      */
     public File getFile(StclContext stclContext, PStcl self) {
-        if (this._dir == null || !this._dir.isDirectory())
+        if (_dir == null || !_dir.isDirectory())
             return null;
-        return this._dir;
+        return _dir;
     }
 
     /**
@@ -344,12 +344,12 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
         private String _path;
 
         public PathFilter(String path) {
-            this._path = path;
+            _path = path;
         }
 
         @Override
         public boolean accept(File pathname) {
-            return this._path.matches(pathname.getName());
+            return _path.matches(pathname.getName());
         }
     }
 }

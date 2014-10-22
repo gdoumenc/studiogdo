@@ -82,19 +82,19 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
 	}
 
 	public String getName() {
-		return this._name;
+		return _name;
 	}
 
 	public void setName(String name) {
-		this._name = name;
+		_name = name;
 	}
 
 	public char getArity() {
-		return this._arity;
+		return _arity;
 	}
 
 	public void setArity(char arity) {
-		this._arity = arity;
+		_arity = arity;
 	}
 
 	/**
@@ -104,76 +104,76 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
 	 *          parent's key.
 	 */
 	public void setParent(String parent) {
-		this._parentKey = parent;
+		_parentKey = parent;
 	}
 
 	public String getParent() {
-		return this._parentKey;
+		return _parentKey;
 	}
 
 	public boolean isTransient() {
-		return (isDelegated() || isCalculated()) ? true : this._tranzient;
+		return (isDelegated() || isCalculated()) ? true : _tranzient;
 	}
 
 	public void setTransient(boolean value) {
-		this._tranzient = value;
+		_tranzient = value;
 	}
 
 	public boolean isCalculated() {
-		return this._calculated;
+		return _calculated;
 	}
 
 	public void setCalculated(boolean value) {
-		this._calculated = value;
+		_calculated = value;
 	}
 
 	public boolean isDelegated() {
-		return !StringUtils.isEmpty(this._delegatePath);
+		return !StringUtils.isEmpty(_delegatePath);
 	}
 
 	public String getDelegate() {
-		return this._delegatePath;
+		return _delegatePath;
 	}
 
 	public void setDelegate(String path) {
-		this._delegatePath = path;
+		_delegatePath = path;
 	}
 
 	public boolean isLocal() {
-		return this._local;
+		return _local;
 	}
 
 	public void setLocal(boolean value) {
-		this._local = value;
+		_local = value;
 	}
 
 	public DefaultDescriptor<C, S> getDefault() {
-		return this._default;
+		return _default;
 	}
 
 	public void setDefault(DefaultDescriptor<C, S> def) {
-		this._default = def;
+		_default = def;
 	}
 
 	/**
 	 * @return the factory that must be used to create the slot.
 	 */
 	public String getFactory() {
-		return this._factory;
+		return _factory;
 	}
 
 	/**
 	 * Sets the factory that must be used to create the slot.
 	 */
 	public void setFactory(String factory) {
-		this._factory = factory;
+		_factory = factory;
 	}
 
 	/**
 	 * @return <tt>true</tt> if the slot is redefined locally.
 	 */
 	public boolean isRedefined() {
-		return this._redefined;
+		return _redefined;
 	}
 
 	/**
@@ -181,7 +181,7 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
 	 * the instance description.
 	 */
 	public void setRedefined(boolean value) {
-		this._redefined = value;
+		_redefined = value;
 		if (value)
 			setOverride(true); // by default a local slot may redefined another
 		// slot
@@ -192,66 +192,66 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
 	 *         template.
 	 */
 	public boolean isFinal() {
-		return this._final;
+		return _final;
 	}
 
 	/**
 	 * Marks the slot as final and cannot be overriden.
 	 */
 	public void setFinal(boolean value) {
-		this._final = value;
+		_final = value;
 	}
 
 	/**
 	 * @return <tt>true</tt> if this slot declaration override an existing slot.
 	 */
 	public boolean isOverride() {
-		return this._override;
+		return _override;
 	}
 
 	/**
 	 * Marks the slot as overriding an existing slot.
 	 */
 	public void setOverride(boolean override) {
-		this._override = override;
+		_override = override;
 	}
 
 	public Collection<LinkDescriptor<C, S>> getLinkDescriptors() {
-		if (this._links != null) {
-			return this._links;
+		if (_links != null) {
+			return _links;
 		}
 		return Collections.emptyList();
 	}
 
 	public void addLinkDescriptor(LinkDescriptor<C, S> link) {
-		if (this._links == null) {
-			this._links = new ArrayList<LinkDescriptor<C, S>>();
+		if (_links == null) {
+			_links = new ArrayList<LinkDescriptor<C, S>>();
 		}
-		this._links.add(link);
+		_links.add(link);
 	}
 
 	public ProtoDescriptor<C, S> getProto() {
-		return this._proto;
+		return _proto;
 	}
 
 	public void addProtoDescriptor(ProtoDescriptor<C, S> proto) {
-		this._proto = proto;
+		_proto = proto;
 	}
 
 	public void setPath(String path) {
-		this._includePath = path;
+		_includePath = path;
 	}
 
 	public boolean isComposite() {
-		return (this._includePath != null);
+		return (_includePath != null);
 	}
 
 	public final PropDescriptor<C, S> expandedFromProp() {
-		return this._propDesc;
+		return _propDesc;
 	}
 
 	public final void expandedFromProp(PropDescriptor<C, S> propDesc) {
-		this._propDesc = propDesc;
+		_propDesc = propDesc;
 	}
 
 	/**

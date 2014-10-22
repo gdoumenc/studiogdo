@@ -24,11 +24,11 @@ public final class EmptyIterator<C extends _StencilContext, S extends _PStencil<
 	private Result _result;
 
 	public EmptyIterator(Result result) {
-		this._result = result;
+		_result = result;
 	}
 
 	public EmptyIterator() {
-		this._result = Result.success();
+		_result = Result.success();
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public final class EmptyIterator<C extends _StencilContext, S extends _PStencil<
 
 	@Override
 	public boolean isValid() {
-		return this._result.isSuccess();
+		return _result.isSuccess();
 	}
 
 	@Override
@@ -98,12 +98,12 @@ public final class EmptyIterator<C extends _StencilContext, S extends _PStencil<
 
 	@Override
 	public Result getStatus() {
-		return this._result;
+		return _result;
 	}
 
 	@Override
 	public void addStatus(Result status) {
-		this._result.addOther(status);
+		_result.addOther(status);
 	}
 
 	@Override

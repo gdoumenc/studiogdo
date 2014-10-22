@@ -29,34 +29,34 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 	private Result _result;
 
 	public ListIterator(Collection<S> stencils) {
-		this._stencils = stencils;
+		_stencils = stencils;
 		reset();
 	}
 
 	@Override
 	public boolean hasNext() {
-		return (this._iterator != null && this._iterator.hasNext());
+		return (_iterator != null && _iterator.hasNext());
 	}
 
 	@Override
 	public S next() {
-		if (this._iterator == null) {
+		if (_iterator == null) {
 			throw new NoSuchElementException();
 		}
-		return this._iterator.next();
+		return _iterator.next();
 	}
 
 	@Override
 	public StencilIterator<C, S> reset() {
-		if (this._stencils != null) {
-			this._iterator = this._stencils.iterator();
+		if (_stencils != null) {
+			_iterator = _stencils.iterator();
 		}
 		return this;
 	}
 
 	@Override
 	public int size() {
-		return (this._stencils == null) ? 0 : this._stencils.size();
+		return (_stencils == null) ? 0 : _stencils.size();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 	@Override
 	public S getPlugged(S stcl) {
 		if (size() > 0) {
-			for (S s : this._stencils) {
+			for (S s : _stencils) {
 				if (s.equals(stcl))
 					return s;
 			}
@@ -83,7 +83,7 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 	@Override
 	public S getPlugged(IKey key) {
 		if (size() > 0) {
-			for (S s : this._stencils) {
+			for (S s : _stencils) {
 				if (s.getKey().equals(key))
 					return s;
 			}
@@ -95,7 +95,7 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 	public int getIndex(S stencil) {
 		int index = 0;
 		if (size() > 0) {
-			for (S s : this._stencils) {
+			for (S s : _stencils) {
 				if (s.equals(stencil))
 					return index;
 				index++;
@@ -116,7 +116,7 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 
 	@Override
 	public boolean isValid() {
-		return (this._result != null) ? this._result.isSuccess() : true;
+		return (_result != null) ? _result.isSuccess() : true;
 	}
 
 	@Override
@@ -126,15 +126,15 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 
 	@Override
 	public Result getStatus() {
-		return this._result;
+		return _result;
 	}
 
 	@Override
 	public void addStatus(Result status) {
-		if (this._result == null) {
-			this._result = status;
+		if (_result == null) {
+			_result = status;
 		} else {
-			this._result.addOther(status);
+			_result.addOther(status);
 		}
 	}
 
@@ -143,7 +143,7 @@ public final class ListIterator<C extends _StencilContext, S extends _PStencil<C
 	public StencilIterator<C, S> clone() {
 		try {
 			ListIterator<C, S> clone = (ListIterator<C, S>) super.clone();
-			clone._iterator = this._stencils.iterator();
+			clone._iterator = _stencils.iterator();
 			return clone;
 		} catch (Exception e) {
 			return this;

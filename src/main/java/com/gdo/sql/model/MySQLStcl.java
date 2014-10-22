@@ -41,7 +41,7 @@ public class MySQLStcl extends NamedStcl {
 
 		/*
 		 * private List _params; // query parameters public List getParams() {
-		 * return _params; } public void setParams(List params) { this._params =
+		 * return _params; } public void setParams(List params) { _params =
 		 * params; }
 		 */
 

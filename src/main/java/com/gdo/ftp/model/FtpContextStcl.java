@@ -129,7 +129,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 	 */
 	private boolean isConnected(StclContext stclContext, PStcl self) {
 		try {
-			return this._client != null && this._client.isConnected();
+			return _client != null && _client.isConnected();
 		} catch (Exception e) {
 			close(stclContext, self);
 			logError(stclContext, "cannot test FTP connection : %s", e);
@@ -143,11 +143,11 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			// resets initial directory if already connected
 			if (isConnected(stclContext, self)) {
 				try {
-					if (!this._client.changeWorkingDirectory(this._pwd)) {
-						String msg = logError(stclContext, "cannot reset initial FTP dir %s", this._pwd);
+					if (!_client.changeWorkingDirectory(_pwd)) {
+						String msg = logError(stclContext, "cannot reset initial FTP dir %s", _pwd);
 						return Result.error(PREFIX, msg);
 					}
-					logWarn(stclContext, "FTP connected to %s", this._pwd);
+					logWarn(stclContext, "FTP connected to %s", _pwd);
 					return Result.success();
 				} catch (Exception e) {
 					close(stclContext, self);
@@ -157,11 +157,11 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// connects to server
-			this._client = newClient(stclContext, self);
-			this._pwd = this._client.printWorkingDirectory();
+			_client = newClient(stclContext, self);
+			_pwd = _client.printWorkingDirectory();
 
 			// sets result
-			String msg = logTrace(stclContext, "FTP connected on %s", this._client.getRemoteAddress().getHostName());
+			String msg = logTrace(stclContext, "FTP connected on %s", _client.getRemoteAddress().getHostName());
 			return Result.success(PREFIX, msg);
 		} catch (Exception e) {
 			logError(stclContext, "error while connecting : %s", e);
@@ -180,9 +180,9 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 	 * @return the closing status.
 	 */
 	public synchronized Result close(StclContext stclContext, PStcl self) {
-		if (this._client != null) {
-			closeClient(stclContext, this._client, self);
-			this._client = null;
+		if (_client != null) {
+			closeClient(stclContext, _client, self);
+			_client = null;
 		}
 		return Result.success();
 	}
@@ -215,7 +215,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// gets files info
-			FTPFile[] files = this._client.listFiles(path);
+			FTPFile[] files = _client.listFiles(path);
 
 			// closes if neeeded
 			if (connect) {
@@ -261,7 +261,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// checks file exist
-			FTPFile[] files = this._client.listFiles(path);
+			FTPFile[] files = _client.listFiles(path);
 			boolean exists = (files != null && files.length > 0);
 
 			// closes if needed
@@ -335,7 +335,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// creates directory
-			boolean created = this._client.makeDirectory(path);
+			boolean created = _client.makeDirectory(path);
 
 			// closes if needed
 			if (connect) {
@@ -402,7 +402,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			// saves old version if exists
 			if (StringUtils.isNotBlank(backupSuffix) && exists(stclContext, fileName, false, self)) {
 				String fileBack = fileName.concat(backupSuffix);
-				boolean done = this._client.rename(fileName, fileBack);
+				boolean done = _client.rename(fileName, fileBack);
 				if (!done) {
 					if (connect)
 						close(stclContext, self);
@@ -412,9 +412,9 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// copies file
-			OutputStream out = this._client.storeFileStream(fileName);
-			if (!FTPReply.isPositivePreliminary(this._client.getReplyCode())) {
-				int code = this._client.getReplyCode();
+			OutputStream out = _client.storeFileStream(fileName);
+			if (!FTPReply.isPositivePreliminary(_client.getReplyCode())) {
+				int code = _client.getReplyCode();
 				in.close();
 				if (out != null) {
 					out.close();
@@ -430,7 +430,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			out.close();
 
 			// must call completePendingCommand() to finish command.
-			if (!this._client.completePendingCommand()) {
+			if (!_client.completePendingCommand()) {
 				String msg = logWarn(stclContext, "Cannot complete pending FTP command");
 				if (connect)
 					close(stclContext, self);
@@ -479,7 +479,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// gets content
-			boolean done = this._client.retrieveFile(path, out);
+			boolean done = _client.retrieveFile(path, out);
 
 			// closes
 			if (connect) {
@@ -513,8 +513,8 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// gets content
-			InputStream is = this._client.retrieveFileStream(path);
-			if (!FTPReply.isPositivePreliminary(this._client.getReplyCode())) {
+			InputStream is = _client.retrieveFileStream(path);
+			if (!FTPReply.isPositivePreliminary(_client.getReplyCode())) {
 				is.close();
 				if (connect)
 					close(stclContext, self);
@@ -522,7 +522,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// must call completePendingCommand() to finish command.
-			if (!this._client.completePendingCommand()) {
+			if (!_client.completePendingCommand()) {
 				logWarn(stclContext, "cannot complete pending FTP command");
 				if (connect)
 					close(stclContext, self);
@@ -567,7 +567,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// deletes file
-			this._client.deleteFile(path);
+			_client.deleteFile(path);
 
 			// closes
 			if (connect) {
@@ -630,7 +630,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 			}
 
 			// renames
-			this._client.rename(old, toName);
+			_client.rename(old, toName);
 
 			// closes
 			if (connect) {
@@ -665,7 +665,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 
 		// if creation not allowed, can go directly
 		if (!allowFolderCreation) {
-			boolean done = this._client.changeWorkingDirectory(path);
+			boolean done = _client.changeWorkingDirectory(path);
 			if (done) {
 				return Result.success();
 			}
@@ -675,7 +675,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 
 		// if absolute name, resets from root
 		if (path.startsWith(PathUtils.ROOT)) {
-			boolean done = this._client.changeWorkingDirectory(PathUtils.ROOT);
+			boolean done = _client.changeWorkingDirectory(PathUtils.ROOT);
 			if (!done) {
 				return Result.error(PREFIX, "cannot FTP cd to root");
 			}
@@ -683,13 +683,13 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
 
 		// changes folder
 		for (String d : StringUtils.split(path, PathUtils.SEP)) {
-			if (!this._client.changeWorkingDirectory(d)) {
-				boolean done = this._client.makeDirectory(d);
+			if (!_client.changeWorkingDirectory(d)) {
+				boolean done = _client.makeDirectory(d);
 				if (!done) {
 					String msg = String.format("cannot create FTPdirectory %s", d);
 					return Result.error(PREFIX, msg);
 				}
-				done = this._client.changeWorkingDirectory(d);
+				done = _client.changeWorkingDirectory(d);
 				if (!done) {
 					String msg = String.format("cannot FTP cd to %s", d);
 					return Result.error(PREFIX, msg);

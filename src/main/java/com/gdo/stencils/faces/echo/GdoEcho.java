@@ -33,7 +33,7 @@ public class GdoEcho<C extends _StencilContext, S extends _PStencil<C, S>> exten
 
 	public GdoEcho(RenderContext<C, S> renderContext, String content) {
 		super(renderContext);
-		this._content = new StringBuffer(content);
+		_content = new StringBuffer(content);
 	}
 
 	public GdoEcho(RenderContext<C, S> renderContext) {
@@ -41,26 +41,26 @@ public class GdoEcho<C extends _StencilContext, S extends _PStencil<C, S>> exten
 	}
 
 	public StringBuffer getContent() {
-		return this._content;
+		return _content;
 	}
 
 	public void setContent(StringBuffer content) {
-		this._content = content;
+		_content = content;
 	}
 
 	public void appendContent(char ch) {
-		this._content.append(ch);
+		_content.append(ch);
 	}
 
 	public void appendContent(String added) {
-		this._content.append(added);
+		_content.append(added);
 	}
 
 	public void appendContent(String text, int pos, int len) {
 		if (len == -1)
-			this._content.append(text.substring(pos));
+			_content.append(text.substring(pos));
 		else
-			this._content.append(text.substring(pos, len));
+			_content.append(text.substring(pos, len));
 	}
 
 	@Override
@@ -69,11 +69,11 @@ public class GdoEcho<C extends _StencilContext, S extends _PStencil<C, S>> exten
 	}
 
 	public boolean isAsText() {
-		return this._asText;
+		return _asText;
 	}
 
 	public void setAsText(boolean asText) {
-		this._asText = asText;
+		_asText = asText;
 	}
 
 	@Override

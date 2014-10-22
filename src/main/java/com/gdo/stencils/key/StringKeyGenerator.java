@@ -42,7 +42,7 @@ public class StringKeyGenerator<C extends _StencilContext, S extends _PStencil<C
 
 	@Override
 	protected void generateNextKey() {
-		this._key.changeTo(this._key.getValue() + "1");
+		_key.changeTo(_key.getValue() + "1");
 	}
 
 }

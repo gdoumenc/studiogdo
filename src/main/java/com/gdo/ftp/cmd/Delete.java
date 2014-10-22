@@ -67,7 +67,7 @@ public class Delete extends AtomicActionStcl {
 				file.closeClient(stclContext, client, target);
 			}
 		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot delete dir %s : %s", this._name, e);
+			String msg = logError(stclContext, "cannot delete dir %s : %s", _name, e);
 			return error(cmdContext, self, msg);
 		}
 	}

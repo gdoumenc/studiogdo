@@ -292,14 +292,14 @@ public class ServletStcl extends Stcl {
             Locale locale = stclContext.getLocale();
             StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
             _Stencil<StclContext, PStcl> prop = factory.createPropStencil(stclContext, locale.getLanguage());
-            this._values.add(factory.newPStencil(stclContext, self, new Key<String>("language"), prop));
+            _values.add(factory.newPStencil(stclContext, self, new Key<String>("language"), prop));
             prop = factory.createPropStencil(stclContext, locale.getCountry());
-            this._values.add(factory.newPStencil(stclContext, self, new Key<String>("country"), prop));
+            _values.add(factory.newPStencil(stclContext, self, new Key<String>("country"), prop));
         }
 
         @Override
         protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-            return StencilUtils.< StclContext, PStcl> iterator(stclContext, this._values.iterator(), cond, self);
+            return StencilUtils.< StclContext, PStcl> iterator(stclContext, _values.iterator(), cond, self);
         }
     }
 

@@ -148,16 +148,16 @@ public class Result {
 
 		// checks other value to avoid circular issue (not complete but at least
 		// one step circular error founded)
-		if (this._other == this) {
+		if (_other == this) {
 			throw new IllegalArgumentException("cannot complete same result in result");
 		}
 
 		// constructs structure
-		this._status = status;
+		_status = status;
 		if (value != null) {
-			this._info = new ResultInfo(prefix, index, value);
+			_info = new ResultInfo(prefix, index, value);
 		}
-		this._other = other;
+		_other = other;
 	}
 
 	/**
@@ -168,13 +168,13 @@ public class Result {
 	 * @return The other result added.
 	 */
 	public final void addOther(Result other) {
-		if (this._other == null) {
-			this._other = other;
+		if (_other == null) {
+			_other = other;
 		} else {
 		    
 		    // avoid loop
 		    if (this != other)
-		        this._other.addOther(other);
+		        _other.addOther(other);
 		}
 	}
 
@@ -186,11 +186,11 @@ public class Result {
 	public final byte getStatus() {
 
 		// gets this level
-		byte status = this._status;
+		byte status = _status;
 
 		// changes by other one if higher
-		if (this._other != null) {
-			byte s = this._other.getStatus();
+		if (_other != null) {
+			byte s = _other.getStatus();
 			if (s > status) {
 				status = s;
 			}
@@ -205,20 +205,20 @@ public class Result {
 	 * @return A map of informations list indexed by status.
 	 */
 	public final Map<Byte, List<ResultInfo>> getInfos() {
-		Byte status = new Byte(this._status);
+		Byte status = new Byte(_status);
 		Map<Byte, List<ResultInfo>> map;
 
 		// gets the map
-		if (this._other == null) {
+		if (_other == null) {
 			map = new ConcurrentHashMap<Byte, List<ResultInfo>>();
 		} else {
-			map = this._other.getInfos();
+			map = _other.getInfos();
 		}
 
 		// adds the info to the list if defined
-		if (this._info != null) {
+		if (_info != null) {
 			List<ResultInfo> list = (map.containsKey(status)) ? map.get(status) : new ArrayList<ResultInfo>();
-			list.add(this._info);
+			list.add(_info);
 			map.put(status, list);
 		}
 
@@ -237,15 +237,15 @@ public class Result {
 		List<ResultInfo> list;
 
 		// gets list of informations for this status
-		if (this._other == null) {
+		if (_other == null) {
 			list = new ArrayList<ResultInfo>();
 		} else {
-			list = this._other.getInfos(status);
+			list = _other.getInfos(status);
 		}
 
 		// adds information if same status
-		if (status == this._status && this._info != null) {
-			list.add(this._info);
+		if (status == _status && _info != null) {
+			list.add(_info);
 		}
 
 		return list;
@@ -359,13 +359,13 @@ public class Result {
 	 * @return <tt>true</tt> if all status are <tt>OK</tt> or <tt>WARNING</tt>.
 	 */
 	public final boolean isSuccess() {
-		if (this._status == ERROR) {
+		if (_status == ERROR) {
 			return false;
 		}
-		if (this._other == null) {
+		if (_other == null) {
 			return true;
 		}
-		return this._other.isSuccess();
+		return _other.isSuccess();
 	}
 
 	/**
@@ -436,17 +436,17 @@ public class Result {
 	private StringBuffer getMessage(StringBuffer buffer) {
 
 		// adds info value on error
-		if (this._info != null) {
-			Object value = this._info.getValue();
+		if (_info != null) {
+			Object value = _info.getValue();
 			if (value != null) {
 				buffer.append(value.toString());
 			}
 		}
 
 		// adds other error info
-		if (this._other != null) {
+		if (_other != null) {
 			buffer.append(" - ");
-			this._other.getMessage(buffer);
+			_other.getMessage(buffer);
 		}
 
 		return buffer;
@@ -484,9 +484,9 @@ public class Result {
 		private Object _value;
 
 		public ResultInfo(String prefix, int index, Object value) {
-			this._prefix = (prefix != null) ? prefix : StringHelper.EMPTY_STRING;
-			this._index = index;
-			this._value = value;
+			_prefix = (prefix != null) ? prefix : StringHelper.EMPTY_STRING;
+			_index = index;
+			_value = value;
 		}
 
 		/**
@@ -495,7 +495,7 @@ public class Result {
 		 * @return the prefix of this result info.
 		 */
 		public String getPrefix() {
-			return this._prefix;
+			return _prefix;
 		}
 
 		/**
@@ -504,7 +504,7 @@ public class Result {
 		 * @return the index of this result info.
 		 */
 		public int getIndex() {
-			return this._index;
+			return _index;
 		}
 
 		/**
@@ -513,11 +513,11 @@ public class Result {
 		 * @return the value of this result info.
 		 */
 		public Object getValue() {
-			return this._value;
+			return _value;
 		}
 
 		public void setValue(Object value) {
-			this._value = value;
+			_value = value;
 		}
 	}
 

@@ -24,14 +24,14 @@ public abstract class _SlotDescriptor<C extends _StencilContext, S extends _PSte
 
 	public _SlotDescriptor(Map<String, String> links) {
 		this();
-		this._links = links;
+		_links = links;
 	}
 
 	public void addLink(String slot, String path) {
-		if (this._links == null) {
-			this._links = new Hashtable<String, String>();
+		if (_links == null) {
+			_links = new Hashtable<String, String>();
 		}
-		this._links.put(slot, path);
+		_links.put(slot, path);
 	}
 
 	public abstract _Slot<C, S> add(C stclContext, String name, S self);

@@ -181,14 +181,14 @@ public abstract class ComposedActionStcl extends CommandStcl {
 	 * @return The current active step.
 	 */
 	public int getActiveStepIndex() {
-		return this._activeStepIndex;
+		return _activeStepIndex;
 	}
 
 	/**
 	 * @return The previous active step.
 	 */
 	public int getPreviousStepIndex() {
-		return this._previousStepIndex;
+		return _previousStepIndex;
 	}
 
 	/**
@@ -199,7 +199,7 @@ public abstract class ComposedActionStcl extends CommandStcl {
 	 */
 	@Override
 	public CommandStatus<StclContext, PStcl> reset(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		this._activeStepIndex = FIRST_STEP;
+		_activeStepIndex = FIRST_STEP;
 		return execute(cmdContext, self);
 	}
 
@@ -229,7 +229,7 @@ public abstract class ComposedActionStcl extends CommandStcl {
 		// the command context must be changed before calling composed action
 		// methods
 		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = this._cmdContext.getTarget();
+		PStcl target = _cmdContext.getTarget();
 		CommandContext<StclContext, PStcl> newCmdContext = new CommandContext<StclContext, PStcl>(stclContext, target);
 
 		// first test if next step is valid
@@ -246,7 +246,7 @@ public abstract class ComposedActionStcl extends CommandStcl {
 			// execute command
 			CommandStatus<StclContext, PStcl> status = execute(newCmdContext, self);
 			if (status.isNotSuccess())
-				this._activeStepIndex -= increment;
+				_activeStepIndex -= increment;
 
 			// once terminated removes it from executable slot
 			if (isTerminated(stclContext, self)) {
@@ -254,7 +254,7 @@ public abstract class ComposedActionStcl extends CommandStcl {
 			}
 			return status;
 		} catch (Exception e) {
-			this._activeStepIndex -= increment;
+			_activeStepIndex -= increment;
 			return error(cmdContext, self, e);
 		}
 	}
@@ -273,8 +273,8 @@ public abstract class ComposedActionStcl extends CommandStcl {
 	 *          incrementation value.
 	 */
 	protected void doIncrement(int increment) {
-		this._previousStepIndex = this._activeStepIndex;
-		this._activeStepIndex += increment;
+		_previousStepIndex = _activeStepIndex;
+		_activeStepIndex += increment;
 	}
 
 	// contains current active step

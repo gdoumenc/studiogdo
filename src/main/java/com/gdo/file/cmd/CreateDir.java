@@ -41,7 +41,7 @@ public class CreateDir extends AtomicActionStcl {
 		try {
 			FolderStcl df = (FolderStcl) target.getReleasedStencil(stclContext);
 			File dir = df.getFile(stclContext, target);
-			String path = PathUtils.compose(dir.getAbsolutePath(), this._name);
+			String path = PathUtils.compose(dir.getAbsolutePath(), _name);
 			File file = new File(path);
 			if (!file.mkdir()) {
 				String msg = String.format("directory %s not created", path);
@@ -49,7 +49,7 @@ public class CreateDir extends AtomicActionStcl {
 			}
 			return success(cmdContext, self, file.hashCode());
 		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot create directory %s in (%s)", this._name, name, e);
+			String msg = logError(stclContext, "cannot create directory %s in (%s)", _name, name, e);
 			return error(cmdContext, self, msg);
 		}
 	}
@@ -58,8 +58,8 @@ public class CreateDir extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// get directory name
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name)) {
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to create directory");
 		}
 

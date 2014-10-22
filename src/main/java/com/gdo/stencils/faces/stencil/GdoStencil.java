@@ -116,7 +116,7 @@ public class GdoStencil<C extends _StencilContext, S extends _PStencil<C, S>> ex
 			// path is always expanded
 			RenderContext<C, S> renderContext = getRenderContext();
 			S rendered = renderContext.getStencilRendered();
-			this._path = rendered.format(stclContext, path);
+			_path = rendered.format(stclContext, path);
 		} catch (Exception e) {
 			if (getLog().isWarnEnabled())
 				getLog().warn(stclContext, e);
@@ -135,7 +135,7 @@ public class GdoStencil<C extends _StencilContext, S extends _PStencil<C, S>> ex
 			if (FacetType.LABEL.equals(facet)) {
 
 				// the stencil rendered is just a property, so we get the value
-				html = rendered.getString(stclContext, this._path, "");
+				html = rendered.getString(stclContext, _path, "");
 
 				// then we format the value (as a string)
 				String mode = getMode();
@@ -149,15 +149,15 @@ public class GdoStencil<C extends _StencilContext, S extends _PStencil<C, S>> ex
 				S stcl = rendered;
 
 				// changes rendered stencil if path composed
-				if (PathUtils.isComposed(this._path)) {
+				if (PathUtils.isComposed(_path)) {
 
 					// gets the stencil rendered
-					stcl = rendered.getStencil(stclContext, this._path);
+					stcl = rendered.getStencil(stclContext, _path);
 
 					// checks the stencil exists
 					if (StencilUtils.isNull(stcl)) {
 						if (getLog().isWarnEnabled()) {
-							String msg = String.format("Cannot render stencil at path %s not defined on %s", this._path, renderContext.getStencilRendered());
+							String msg = String.format("Cannot render stencil at path %s not defined on %s", _path, renderContext.getStencilRendered());
 							getLog().warn(stclContext, msg);
 						}
 					}
@@ -184,7 +184,7 @@ public class GdoStencil<C extends _StencilContext, S extends _PStencil<C, S>> ex
 
 			// the resulting facet may be expanded
 			if (getExpanded() && StencilUtils.containsStencilTag(html)) {
-				S stcl = rendered.getStencil(stclContext, this._path);
+				S stcl = rendered.getStencil(stclContext, _path);
 				html = stcl.format(stclContext, html);
 			}
 
@@ -212,7 +212,7 @@ public class GdoStencil<C extends _StencilContext, S extends _PStencil<C, S>> ex
 			// returns the formated content
 			return value;
 		} catch (Exception e) {
-			String msg = String.format("Cannot render property %s : %s", this._path, e);
+			String msg = String.format("Cannot render property %s : %s", _path, e);
 			if (getLog().isWarnEnabled())
 				getLog().warn(stclContext, msg);
 			return msg;

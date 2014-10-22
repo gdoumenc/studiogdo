@@ -47,8 +47,8 @@ public class ThreadStcl extends Stcl implements Runnable {
 	// declared public only to allow factory to create it
 	public ThreadStcl(StclContext stclContext, CommandContext<StclContext, PStcl> cmdContext, ICommandThread runnable) {
 		super(stclContext);
-		this._context = cmdContext;
-		this._runnable = runnable;
+		_context = cmdContext;
+		_runnable = runnable;
 		runnable.setThread(this);
 
 		singleSlot(Slot.COMMAND);
@@ -74,33 +74,33 @@ public class ThreadStcl extends Stcl implements Runnable {
 	}
 
 	public final CommandContext<StclContext, PStcl> getCommandContext() {
-		return this._context;
+		return _context;
 	}
 
 	public final StclContext getStencilContext() {
-		return this._context.getStencilContext();
+		return _context.getStencilContext();
 	}
 
 	@Override
 	public PStcl self() {
-		return this._self;
+		return _self;
 	}
 
 	public PStcl getReference() {
-		return this._reference;
+		return _reference;
 	}
 
 	@Override
 	public void run() {
 		StclContext stclContext = getStencilContext();
-		logWarn(stclContext, "running thread %s", this._self);
+		logWarn(stclContext, "running thread %s", _self);
 
 		// runs the associated thread
-		this._runnable.run();
+		_runnable.run();
 
 		// removes the thread from the session (TODO should be done when thread
 		// stops)
-		IKey key = this._self.getKey();
+		IKey key = _self.getKey();
 		PStcl session = stclContext.getServletStcl().getStencil(stclContext, ServletStcl.Slot.SESSION);
 		session.unplugOtherStencilFrom(stclContext, PathUtils.createPath(SessionStcl.Slot.THREADS, key));
 	}

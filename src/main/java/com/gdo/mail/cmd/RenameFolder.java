@@ -50,11 +50,11 @@ public class RenameFolder extends AtomicActionStcl {
 
 			// get destination folder
 			Store store = source.getStore();
-			Folder dest = store.getFolder(urlName(source.getURLName(), this._name));
+			Folder dest = store.getFolder(urlName(source.getURLName(), _name));
 			if (!dest.exists()) {
 				dest.create(Folder.HOLDS_MESSAGES);
 			} else {
-				String msg = String.format("destination file %s already exist", this._name);
+				String msg = String.format("destination file %s already exist", _name);
 				return error(cmdContext, self, Status.ALREADY_EXIST, msg);
 			}
 			if (!source.renameTo(dest)) {
@@ -71,8 +71,8 @@ public class RenameFolder extends AtomicActionStcl {
 	@Override
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name))
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name))
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name defined to rename file");
 
 		return super.verifyContext(cmdContext, self);

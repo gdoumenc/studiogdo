@@ -43,7 +43,7 @@ public class SlotStcl extends Stcl {
 
 	public SlotStcl(StclContext stclContext, PSlot<StclContext, PStcl> slot) {
 		super(stclContext);
-		this._slot = slot;
+		_slot = slot;
 
 		// SLOT PART
 
@@ -68,7 +68,7 @@ public class SlotStcl extends Stcl {
 	}
 
 	public PSlot<StclContext, PStcl> getSlot() {
-		return this._slot;
+		return _slot;
 	}
 
 	/**

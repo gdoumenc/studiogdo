@@ -43,7 +43,7 @@ public class CopyFile extends AtomicActionStcl {
 			FileStcl df = (FileStcl) target.getReleasedStencil(stclContext);
 			File source = df.getFile(stclContext, target);
 
-			String path = PathUtils.compose(source.getParent(), this._name);
+			String path = PathUtils.compose(source.getParent(), _name);
 			File dest = new File(path);
 			if (!dest.createNewFile()) {
 				String msg = String.format("cannot create file %s for copy", path);
@@ -64,8 +64,8 @@ public class CopyFile extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// get directory or file name
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name)) {
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to copy file");
 		}
 

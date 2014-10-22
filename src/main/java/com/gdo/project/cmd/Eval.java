@@ -114,7 +114,7 @@ public class Eval extends AtomicActionStcl {
 
 	@Override
 	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		return this._function.doAction(cmdContext, this, self);
+		return _function.doAction(cmdContext, this, self);
 	}
 
 	// verify function name
@@ -127,7 +127,7 @@ public class Eval extends AtomicActionStcl {
 		}
 
 		try {
-			this._function = Function.valueOf(function);
+			_function = Function.valueOf(function);
 		} catch (Exception e) {
 			String msg = String.format("exeption %s in finding function name %s for Eval command", e, function);
 			return error(cmdContext, self, msg);

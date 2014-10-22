@@ -38,7 +38,7 @@ public final class RenderContext<C extends _StencilContext, S extends _PStencil<
 
 	public RenderContext(C stclContext, S stencil, String facet, String mode) {
 		super(facet, mode);
-		this._stclContext = stclContext;
+		_stclContext = stclContext;
 		setStencilRendered(stencil);
 	}
 
@@ -58,26 +58,26 @@ public final class RenderContext<C extends _StencilContext, S extends _PStencil<
 	}
 
 	public final C getStencilContext() {
-		return this._stclContext;
+		return _stclContext;
 	}
 
 	/**
 	 * @return the stencil currently rendered.
 	 */
 	public final S getStencilRendered() {
-		return this._stencil;
+		return _stencil;
 	}
 
 	public final void setStencilRendered(S stencil) {
-		this._stencil = stencil;
+		_stencil = stencil;
 	}
 
 	public boolean isAsText() {
-		return this._asText;
+		return _asText;
 	}
 
 	public void setAsText(boolean asText) {
-		this._asText = asText;
+		_asText = asText;
 	}
 
 	@Override

@@ -23,34 +23,34 @@ public abstract class TreeNode<E extends TreeNode<E>> {
 	protected List<E> _children; // sub components
 
 	public String getId() {
-		return this._id;
+		return _id;
 	}
 
 	public void setId(int id) {
-		this._id = Integer.toString(id);
+		_id = Integer.toString(id);
 	}
 
 	public void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	public E getParent() {
-		return this._parent;
+		return _parent;
 	}
 
 	public boolean hasChildren() {
-		return (this._children != null && this._children.size() > 0);
+		return (_children != null && _children.size() > 0);
 	}
 
 	public List<E> getChildren() {
-		return this._children;
+		return _children;
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addChild(E child) {
-		if (this._children == null)
-			this._children = new ArrayList<E>();
-		this._children.add(child);
+		if (_children == null)
+			_children = new ArrayList<E>();
+		_children.add(child);
 		child._parent = (E) this;
 	}
 

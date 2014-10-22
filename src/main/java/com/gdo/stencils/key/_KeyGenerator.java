@@ -50,7 +50,7 @@ public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStenc
 	 *          first key estimated.
 	 */
 	public _KeyGenerator(C stclContext, Key<K> key, PSlot<C, S> slot) {
-		this._key = key;
+		_key = key;
 
 		// the value may change on multi slot only
 		if (SlotUtils.isMultiple(stclContext, slot)) {
@@ -78,7 +78,7 @@ public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStenc
 	 */
 	@Override
 	public final IKey getKey() {
-		return this._key;
+		return _key;
 	}
 
 	/**

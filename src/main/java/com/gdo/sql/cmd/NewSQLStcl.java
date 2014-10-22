@@ -39,11 +39,11 @@ public class NewSQLStcl extends CreateInOneStep {
     }
 
     public String getOldId() {
-        return this._oldId;
+        return _oldId;
     }
 
     public String getNewId() {
-        return this._newId;
+        return _newId;
     }
 
     @Override
@@ -58,20 +58,20 @@ public class NewSQLStcl extends CreateInOneStep {
 
         // set negative id
         int id = -uniqueInt();
-        this._created.setInt(stclContext, SQLStcl.Slot.ID, id);
-        this._oldId = Integer.toString(id);
+        _created.setInt(stclContext, SQLStcl.Slot.ID, id);
+        _oldId = Integer.toString(id);
 
         // in case the plugged slot is not already set on created stencil
-        PSlot<StclContext, PStcl> slot = ((SQLStcl) this._created.getStencil(stclContext)).getSQLContainerSlot();
+        PSlot<StclContext, PStcl> slot = ((SQLStcl) _created.getStencil(stclContext)).getSQLContainerSlot();
         if (SlotUtils.isNull(slot)) {
-            SQLStcl sql = this._created.getReleasedStencil(stclContext);
-            sql.setSQLContainerSlot(this._slot);
+            SQLStcl sql = _created.getReleasedStencil(stclContext);
+            sql.setSQLContainerSlot(_slot);
         }
 
         // plug it in database
-        beforeSQLCreate(cmdContext, this._created, self);
+        beforeSQLCreate(cmdContext, _created, self);
         result = super.plugStencil(cmdContext, self);
-        afterSQLCreate(cmdContext, this._created, self);
+        afterSQLCreate(cmdContext, _created, self);
         if (result.isNotSuccess()) {
             return error(cmdContext, self, result);
         }
@@ -84,27 +84,27 @@ public class NewSQLStcl extends CreateInOneStep {
             StclContext stclContext = cmdContext.getStencilContext();
 
             // retrieve the created stencil (may be no more in memory)
-            PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(this._oldId), self);
-            this._created = this._slot.getStencil(stclContext, cond);
+            PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(_oldId), self);
+            _created = _slot.getStencil(stclContext, cond);
 
             // sets SQL stencil final
-            CommandStatus<StclContext, PStcl> status = beforeSQLPlug(cmdContext, this._created, self);
+            CommandStatus<StclContext, PStcl> status = beforeSQLPlug(cmdContext, _created, self);
             if (status.isNotSuccess()) {
                 return status;
             }
 
             // sets final id to the plugged stencil
-            SQLStcl sql = this._created.getReleasedStencil(stclContext);
-            this._plugged = sql.setFinal(stclContext, this._created);
-            status = afterSQLPlug(cmdContext, this._plugged, self);
+            SQLStcl sql = _created.getReleasedStencil(stclContext);
+            _plugged = sql.setFinal(stclContext, _created);
+            status = afterSQLPlug(cmdContext, _plugged, self);
             if (status.isNotSuccess()) {
                 return status;
             }
 
             // modifies tables with temporary id
-            this._newId = this._plugged.getString(stclContext, SQLStcl.Slot.ID, "");
+            _newId = _plugged.getString(stclContext, SQLStcl.Slot.ID, "");
             PStcl sqlContext = getSQLContext(stclContext, self);
-            Result result = updateTablesWithTemporaryId(stclContext, sqlContext, this._oldId, this._newId);
+            Result result = updateTablesWithTemporaryId(stclContext, sqlContext, _oldId, _newId);
             if (result.isNotSuccess()) {
                 return error(cmdContext, self, result);
             }
@@ -121,18 +121,18 @@ public class NewSQLStcl extends CreateInOneStep {
         StclContext stclContext = cmdContext.getStencilContext();
 
         // if the stencil was created, removes it from database
-        if (StencilUtils.isNotNull(this._plugged)) {
+        if (StencilUtils.isNotNull(_plugged)) {
 
             // removes tables with temporary id
             PStcl sqlContext = getSQLContext(stclContext, self);
-            Result result = deleteTableWithTemporaryId(stclContext, sqlContext, this._newId);
+            Result result = deleteTableWithTemporaryId(stclContext, sqlContext, _newId);
             if (result.isNotSuccess()) {
                 return error(cmdContext, self, result);
             }
 
             // removes plugged stencil
-            if (StringUtils.isNotBlank(this._newId)) {
-                this._slot.unplug(stclContext, this._plugged, new Key<String>(this._newId));
+            if (StringUtils.isNotBlank(_newId)) {
+                _slot.unplug(stclContext, _plugged, new Key<String>(_newId));
             }
         }
 
@@ -151,16 +151,16 @@ public class NewSQLStcl extends CreateInOneStep {
      * @return The SQL context of the plug slot.
      */
     protected PStcl getSQLContext(StclContext stclContext, PStcl self) {
-        if (SlotUtils.isNull(this._slot)) {
+        if (SlotUtils.isNull(_slot)) {
             String msg = String.format("No target plug slot defined for %s", self.getTemplateName(stclContext));
             return nullPStencil(stclContext, Result.error(msg));
         }
-        if (!(this._slot.getSlot() instanceof SQLSlot)) {
-            String msg = String.format("The target plug slot %s for %s is not a SQLSlot", this._slot.getName(stclContext), self.getTemplateName(stclContext));
+        if (!(_slot.getSlot() instanceof SQLSlot)) {
+            String msg = String.format("The target plug slot %s for %s is not a SQLSlot", _slot.getName(stclContext), self.getTemplateName(stclContext));
             return nullPStencil(stclContext, Result.error(msg));
         }
-        SQLSlot sqlSlot = (SQLSlot) this._slot.getSlot();
-        return sqlSlot.getSQLContext(stclContext, this._slot);
+        SQLSlot sqlSlot = (SQLSlot) _slot.getSlot();
+        return sqlSlot.getSQLContext(stclContext, _slot);
     }
 
     @Override

@@ -91,27 +91,27 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
             logWarn(stclContext, "slot %s is already defined in %s (will be redefined...)", name, container);
 
         // set characteristics
-        this._container = container;
-        this._name = n;
-        this._arity = arity;
-        this._tranzient = tranzient;
+        _container = container;
+        _name = n;
+        _arity = arity;
+        _tranzient = tranzient;
 
         // store structure
-        this._container.addSlot(stclContext, this);
+        _container.addSlot(stclContext, this);
     }
 
     public void setTransient() {
-        this._tranzient = true;
+        _tranzient = true;
     }
 
     /**
      * Clears all internal structures to free memory.
      */
     public void clear() {
-        this._desc = null;
-        this._container = null;
-        this._name = null;
-        this._annoted = null;
+        _desc = null;
+        _container = null;
+        _name = null;
+        _annoted = null;
     }
 
     public void expunge(C stclContext, PSlot<C, S> self) {
@@ -125,28 +125,28 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * @return the slot's name.
      */
     public String getName(C stclContext) {
-        return this._name;
+        return _name;
     }
 
     /**
      * @return the slot's descriptor.
      */
     public SlotDescriptor<C, S> getDescriptor() {
-        return this._desc;
+        return _desc;
     }
 
     /**
      * Sets the slot's descriptor.
      */
     public void setDescriptor(SlotDescriptor<C, S> desc) {
-        this._desc = desc;
+        _desc = desc;
     }
 
     /**
      * @return the slot's arity.
      */
     public char getArity(C stclContext, PSlot<C, S> self) {
-        return this._arity;
+        return _arity;
     }
 
     /**
@@ -154,7 +154,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      *         saved in stencil configuration.
      */
     public boolean isTransient(C stclContext) {
-        return this._tranzient;
+        return _tranzient;
     }
 
     // slot may have parameters to defined them (search in another slot first
@@ -235,11 +235,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * Annotation par (not used for now)
      */
     public final Annotation getAnnotation(C stclContext, String type, PSlot<C, S> self) {
-        return this._annoted;
+        return _annoted;
     }
 
     public final void setAnnotation(C stclContext, String type, Annotation annotation, PSlot<C, S> self) {
-        this._annoted = annotation;
+        _annoted = annotation;
     }
 
     /**
@@ -570,11 +570,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     protected abstract StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self);
 
     public int getCompletionLevel() {
-        return this._completionLevel;
+        return _completionLevel;
     }
 
     public void setCompletionLevel(int completionLevel) {
-        this._completionLevel = completionLevel;
+        _completionLevel = completionLevel;
     }
 
     private void saveAsProp(C stclContext, String value, XmlWriter out) throws IOException {
@@ -589,14 +589,14 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
 
     public void setLinks(Map<String, String> links) {
-        this._links = links;
+        _links = links;
     }
 
     public void addLink(String slot, String to) {
-        if (this._links == null) {
-            this._links = new Links();
+        if (_links == null) {
+            _links = new Links();
         }
-        this._links.put(slot, to);
+        _links.put(slot, to);
     }
 
     // plug the link described by the descriptor when a stencil is plugged in

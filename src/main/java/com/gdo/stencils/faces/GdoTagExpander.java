@@ -54,10 +54,10 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	// stack
 
 	public GdoTagExpander(String html, FacetsRenderer<C, S> parent) {
-		this._html = removeEscapedDoubleQuote(html);
-		this._pos = 0;
-		this._len = this._html.length();
-		this._parent = parent;
+		_html = removeEscapedDoubleQuote(html);
+		_pos = 0;
+		_len = _html.length();
+		_parent = parent;
 	}
 
 	public GdoTagExpander(String html, RenderContext<C, S> renderContext) {
@@ -68,29 +68,29 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 		// on debug, the context may be not defined, so no expansion available
 		if (stclContext == null)
-			return this._html;
+			return _html;
 
 		// optimization (do nothing if <$ is not in the text to be expanded)
 		if (!containsGdoTags())
-			return this._html;
+			return _html;
 
 		// if extension then get context (parent must be defined)
-		if (this._parent == null) {
+		if (_parent == null) {
 			if (getLog().isWarnEnabled()) {
 				getLog().warn(stclContext, "The tag expander was not able to create its root facets renderer");
 			}
-			return this._html;
+			return _html;
 		}
-		RenderContext<C, S> renderContext = this._parent.getRenderContext();
+		RenderContext<C, S> renderContext = _parent.getRenderContext();
 
 		// expand text and render
 		try {
 			expand(stclContext, renderContext);
 			XmlStringWriter writer = new XmlStringWriter(false, 0, _StencilContext.getCharacterEncoding());
-			this._parent.render(stclContext, writer);
+			_parent.render(stclContext, writer);
 			return writer.getString();
 		} catch (Exception e) {
-			String msg = logWarn(stclContext, "cannot expand %s to string in context %s (%s)", this._html, renderContext, e);
+			String msg = logWarn(stclContext, "cannot expand %s to string in context %s (%s)", _html, renderContext, e);
 			return msg;
 		}
 	}
@@ -103,23 +103,23 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	public void expand(C stclContext, RenderContext<C, S> renderContext) throws WrongTagSyntax {
 		while (!atEnd()) {
 			// add text before '<' if exists
-			int start = this._pos;
+			int start = _pos;
 			int skipped = skipUntilLtOrEnd();
 			if (skipped > 0) {
-				addEcho(renderContext, this._html, start, this._pos);
+				addEcho(renderContext, _html, start, _pos);
 			}
 			if (atEnd())
 				break;
 
 			// skip '<'
-			start = this._pos;
+			start = _pos;
 			skipLt();
 
 			// expand if this is a tag
 			if (!atEnd()) {
 				expandTag(stclContext, renderContext, null);
 			} else {
-				addEcho(renderContext, this._html, start, this._len); // echo
+				addEcho(renderContext, _html, start, _len); // echo
 				// '<' or
 				// equivalent
 			}
@@ -130,7 +130,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	public void expandTag(C stclContext, RenderContext<C, S> renderContext, StringBuffer res) throws WrongTagSyntax {
 
 		// not a gdo tag
-		if (this._html.charAt(this._pos) != '$') {
+		if (_html.charAt(_pos) != '$') {
 			// TODO should rewrite LT (not only <)
 			addEcho(renderContext, '<');
 
@@ -139,7 +139,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 			int index = skipComment(renderContext);
 			if (index >= 0) {
 				// script are defined in comment and may contain gdo tags
-				String comment = this._html.substring(index + 3, this._pos - 3);
+				String comment = _html.substring(index + 3, _pos - 3);
 				GdoTagExpander<C, S> exp = new GdoTagExpander<C, S>(comment, renderContext);
 				comment = String.format("!-- %s -->", exp.expand(stclContext));
 				GdoEcho<C, S> echo = createEcho(renderContext);
@@ -151,16 +151,16 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 		}
 
 		// expand tag
-		int start = ++this._pos; // skip $
+		int start = ++_pos; // skip $
 		int skipped = skipUntilSpaceOrGT('>');
 
 		// get gdo tag label and create tag
-		String label = this._html.substring(start, start + skipped);
+		String label = _html.substring(start, start + skipped);
 		GdoTag<C, S> tag = new GdoTag<C, S>(label);
 
 		// find blank before '>' means attributes are defined
 		if (atEnd()) {
-			throw new WrongTagSyntax("Unclosed tag " + this._html.substring(start));
+			throw new WrongTagSyntax("Unclosed tag " + _html.substring(start));
 		}
 		if (isSpace() > 0) {
 			skipSpace();
@@ -172,7 +172,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 		if (tag.isEndTag()) {
 			// pop current parent
 			if (wasPreviouslyOpened(tag)) {
-				this._parent = this._openTagsStack.pop();
+				_parent = _openTagsStack.pop();
 			} else {
 				throw new WrongTagSyntax("The closing tag " + tag + " was not previously opened");
 			}
@@ -197,15 +197,15 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 			// push current tag as opened
 			if (wasPreviouslyOpened(tag)) {
-				this._openTagsStack.push(this._parent);
-				this._parent = component;
+				_openTagsStack.push(_parent);
+				_parent = component;
 			}
 		}
 	}
 
 	private void expandAndAddChildComponent(C stclContext, RenderContext<C, S> renderContext, FacetsRenderer<C, S> component, StringBuffer res) {
 		if (res == null) {
-			this._parent.addChild(component);
+			_parent.addChild(component);
 			try {
 				component.init(stclContext);
 			} catch (Exception e) {
@@ -237,22 +237,22 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 		// set the attributes text (remove ending characters '>' or '<' for
 		// recursive expansion)
 		while (!atEnd()) {
-			int start = this._pos;
+			int start = _pos;
 			boolean found = skipUntilGtOrLt('>', '<');
 			if (!found) {
-				throw new WrongTagSyntax("A quoted attribute is not closed : " + this._html.substring(start));
+				throw new WrongTagSyntax("A quoted attribute is not closed : " + _html.substring(start));
 			}
 			if (isLt() > 0) {
-				StringHelper.append(attributes, this._html, start, this._pos);
-				this._pos++; // skip '<' and recursive call
+				StringHelper.append(attributes, _html, start, _pos);
+				_pos++; // skip '<' and recursive call
 				expandTag(stclContext, renderContext, attributes);
 			} else if (isGt() > 0) {
 				// if closed tag
-				if (this._html.charAt(this._pos - 1) == '/') {
-					StringHelper.append(attributes, this._html, start, this._pos - 1);
+				if (_html.charAt(_pos - 1) == '/') {
+					StringHelper.append(attributes, _html, start, _pos - 1);
 					tag.setClosed();
 				} else {
-					StringHelper.append(attributes, this._html, start, this._pos);
+					StringHelper.append(attributes, _html, start, _pos);
 				}
 				break;
 			} else {
@@ -394,7 +394,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	private GdoEcho<C, S> createEcho(RenderContext<C, S> renderContext) {
 
 		// reuse existing echo tag if exists
-		List<FacetsRenderer<C, S>> children = this._parent.getChildren();
+		List<FacetsRenderer<C, S>> children = _parent.getChildren();
 		if (children != null && children.size() > 0) {
 			int size = children.size();
 			FacetsRenderer<C, S> last = children.get(size - 1);
@@ -405,7 +405,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 		// or create new one
 		GdoEcho<C, S> echo = new GdoEcho<C, S>(renderContext);
-		this._parent.addChild(echo);
+		_parent.addChild(echo);
 		return echo;
 	}
 
@@ -413,11 +413,11 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	 * Searchs the string contents gdo tags
 	 */
 	public boolean containsGdoTags() {
-		if (this._html.indexOf("<$") != -1)
+		if (_html.indexOf("<$") != -1)
 			return true;
-		if (this._html.indexOf(LT1 + "$") != -1)
+		if (_html.indexOf(LT1 + "$") != -1)
 			return true;
-		if (this._html.indexOf(LT2 + "$") != -1)
+		if (_html.indexOf(LT2 + "$") != -1)
 			return true;
 		return false;
 	}
@@ -428,17 +428,17 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
      */
 	private int skipUntilLtOrEnd() {
 		int skipped = 0;
-		while (this._pos < this._len) {
+		while (_pos < _len) {
 			if (isLt() > 0)
 				return skipped;
-			this._pos++;
+			_pos++;
 			skipped++;
 		}
 		return skipped;
 	}
 
 	private void skipSpace() {
-		this._pos += isSpace();
+		_pos += isSpace();
 	}
 
 /**
@@ -446,7 +446,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
      * @return the number of characters before the '<'
      */
 	private void skipLt() {
-		this._pos += isLt();
+		_pos += isLt();
 	}
 
 /**
@@ -454,7 +454,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
      * @return the number of characters before the '<'
      */
 	private void skipGt() {
-		this._pos += isGt();
+		_pos += isGt();
 	}
 
 	/**
@@ -465,12 +465,12 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	 */
 	private int skipUntilSpaceOrGT(char until) {
 		int skipped = 0;
-		while (this._pos < this._len) {
+		while (_pos < _len) {
 			if (isSpace() > 0)
 				return skipped;
 			if (isGt() > 0)
 				return skipped;
-			this._pos++;
+			_pos++;
 			skipped++;
 		}
 		return skipped;
@@ -479,12 +479,12 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	private boolean skipUntilGtOrLt(char until1, char until2) {
 		boolean inSimpleQuote = false;
 		boolean inDoubleQuote = false;
-		while (this._pos < this._len) {
+		while (_pos < _len) {
 			// deals with simple/double quote status
-			if (!inDoubleQuote && this._html.charAt(this._pos) == '\'') {
+			if (!inDoubleQuote && _html.charAt(_pos) == '\'') {
 				inSimpleQuote = !inSimpleQuote;
 			}
-			if (!inSimpleQuote && this._html.charAt(this._pos) == '"' && (this._pos > 1 && this._html.charAt(this._pos - 1) != '\\')) {
+			if (!inSimpleQuote && _html.charAt(_pos) == '"' && (_pos > 1 && _html.charAt(_pos - 1) != '\\')) {
 				inDoubleQuote = !inDoubleQuote;
 			}
 
@@ -493,22 +493,22 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 				if (isLt() > 0 || isGt() > 0)
 					return true;
 			}
-			this._pos++;
+			_pos++;
 		}
 		return false;
 	}
 
 	// returns start position of the comment (-1 if not a comment)
 	private int skipComment(RenderContext<C, S> renderContext) {
-		if (this._html.charAt(this._pos) == '!' && this._html.charAt(this._pos + 1) == '-' && this._html.charAt(this._pos + 2) == '-') {
-			int start = this._pos;
-			this._pos += 2;
-			while (this._pos < this._len) {
-				if (this._html.charAt(this._pos) == '-' && this._html.charAt(this._pos + 1) == '-' && this._html.charAt(this._pos + 2) == '>') {
-					this._pos += 3; // skip "-->"
+		if (_html.charAt(_pos) == '!' && _html.charAt(_pos + 1) == '-' && _html.charAt(_pos + 2) == '-') {
+			int start = _pos;
+			_pos += 2;
+			while (_pos < _len) {
+				if (_html.charAt(_pos) == '-' && _html.charAt(_pos + 1) == '-' && _html.charAt(_pos + 2) == '>') {
+					_pos += 3; // skip "-->"
 					return start;
 				}
-				this._pos++;
+				_pos++;
 			}
 		}
 		return -1;
@@ -518,21 +518,21 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 		String[] tags = compContent.getTags();
 		int[] lengths = compContent.getTagsLength();
 		int count = 0;
-		int start = this._pos;
-		while (this._pos < this._len) {
+		int start = _pos;
+		while (_pos < _len) {
 
 			// search for opening tag
 			if (isLt() > 0) {
 
 				// escaped <
-				if (this._html.charAt(this._pos - 1) == '\\') {
+				if (_html.charAt(_pos - 1) == '\\') {
 					break;
 				}
 
-				int ltPos = this._pos;
+				int ltPos = _pos;
 				skipLt(); // skip <
-				if (this._html.charAt(this._pos) == '$') {
-					this._pos++; // skip '$'
+				if (_html.charAt(_pos) == '$') {
+					_pos++; // skip '$'
 					int index = startsWith(2, tags, lengths);
 					if (index == 1) {
 						count++;
@@ -542,14 +542,14 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 						if (count > 0)
 							count--;
 						else {
-							return this._html.substring(start, ltPos);
+							return _html.substring(start, ltPos);
 						}
 					}
 				}
 			}
-			this._pos++;
+			_pos++;
 		}
-		throw new WrongTagSyntax("Missing closing '>' for tag " + tags[0] + " in " + this._html);
+		throw new WrongTagSyntax("Missing closing '>' for tag " + tags[0] + " in " + _html);
 	}
 
 	private int startsWith(int size, String[] starts, int[] length) {
@@ -557,7 +557,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 		boolean fail[] = new boolean[size];
 		int start = 0;
 		while (number > 0) {
-			final char c = this._html.charAt(this._pos);
+			final char c = _html.charAt(_pos);
 			for (int i = 0; i < size; i++) {
 				if (fail[i])
 					continue;
@@ -565,7 +565,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 					if (c != ':') {
 						// find the tag skip until next >
 						while (isGt() == 0) {
-							this._pos++;
+							_pos++;
 						}
 						skipGt(); // skip '>'
 						return i + 1;
@@ -580,7 +580,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 					}
 				}
 			}
-			this._pos++;
+			_pos++;
 			start++;
 		}
 		return 0;
@@ -624,11 +624,11 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 	// TODO : to be optimized (avoiding doing substring)
 	private int isSpace() {
-		char c = this._html.charAt(this._pos);
+		char c = _html.charAt(_pos);
 		if (Character.isWhitespace(c)) {
 			return 1;
 		} else if (c == '%') {
-			String str = this._html.substring(this._pos, this._pos + BLANK.length());
+			String str = _html.substring(_pos, _pos + BLANK.length());
 			if (BLANK.equals(str))
 				return BLANK.length();
 		}
@@ -637,19 +637,19 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 	// TODO : to be optimized (avoiding doing substring)
 	private int isLt() {
-		char c = this._html.charAt(this._pos);
+		char c = _html.charAt(_pos);
 		if (c == '<') {
 			return 1;
 		} else if (c == '&') {
-			if (this._pos + LT1.length() > this._len)
+			if (_pos + LT1.length() > _len)
 				return 0;
-			String str = this._html.substring(this._pos, this._pos + LT1.length());
+			String str = _html.substring(_pos, _pos + LT1.length());
 			if (LT1.equals(str))
 				return LT1.length();
 		} else if (c == '%') {
-			if (this._pos + LT2.length() > this._len)
+			if (_pos + LT2.length() > _len)
 				return 0;
-			String str = this._html.substring(this._pos, this._pos + LT2.length());
+			String str = _html.substring(_pos, _pos + LT2.length());
 			if (LT2.equals(str))
 				return LT2.length();
 		}
@@ -658,19 +658,19 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 
 	// TODO : to be optimized (avoiding doing substring)
 	private int isGt() {
-		char c = this._html.charAt(this._pos);
+		char c = _html.charAt(_pos);
 		if (c == '>') {
 			return 1;
 		} else if (c == '&') {
-			if (this._pos + GT1.length() > this._len)
+			if (_pos + GT1.length() > _len)
 				return 0;
-			String str = this._html.substring(this._pos, this._pos + GT1.length());
+			String str = _html.substring(_pos, _pos + GT1.length());
 			if (GT1.equals(str))
 				return GT1.length();
 		} else if (c == '%') {
-			if (this._pos + GT2.length() > this._len)
+			if (_pos + GT2.length() > _len)
 				return 0;
-			String str = this._html.substring(this._pos, this._pos + GT2.length());
+			String str = _html.substring(_pos, _pos + GT2.length());
 			if (GT2.equals(str))
 				return GT2.length();
 		}
@@ -682,7 +682,7 @@ public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>
 	 *         expanded.
 	 */
 	private boolean atEnd() {
-		return (this._pos >= this._len);
+		return (_pos >= _len);
 	}
 
 	protected StencilLog getLog() {

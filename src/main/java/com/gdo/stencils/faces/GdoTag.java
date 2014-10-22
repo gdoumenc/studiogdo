@@ -136,23 +136,23 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 		String lbl = label;
 
 		// define tag type
-		this._isEndTag = (lbl.charAt(0) == '/');
-		this._isClosed = (lbl.charAt(len - 1) == '/');
+		_isEndTag = (lbl.charAt(0) == '/');
+		_isClosed = (lbl.charAt(len - 1) == '/');
 
-		if (this._isEndTag && this._isClosed) {
+		if (_isEndTag && _isClosed) {
 			throw new WrongTagSyntax("Wrong tag syntax : " + lbl);
 		}
 
-		if (this._isClosed)
+		if (_isClosed)
 			lbl = lbl.substring(0, len - 1);
-		if (this._isEndTag)
+		if (_isEndTag)
 			lbl = lbl.substring(1);
 
 		// set tag and subtag label
 		int index = lbl.indexOf(':');
 		if (index == -1) {
-			this._label = lbl;
-			this._subTagLabel = null;
+			_label = lbl;
+			_subTagLabel = null;
 		} else {
 			if (index == 0) {
 				throw new WrongTagSyntax("Subtag with not associated tag : " + lbl);
@@ -160,8 +160,8 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 			if (index == len - 1) {
 				throw new WrongTagSyntax("Subtag undefined : " + lbl);
 			}
-			this._label = lbl.substring(0, index);
-			this._subTagLabel = lbl.substring(index + 1);
+			_label = lbl.substring(0, index);
+			_subTagLabel = lbl.substring(index + 1);
 		}
 	}
 
@@ -170,11 +170,11 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 	}
 
 	public final String getLabel() {
-		return this._label;
+		return _label;
 	}
 
 	public final String getSubTagLabel() {
-		return this._subTagLabel;
+		return _subTagLabel;
 	}
 
 	public final String getCompleteTagLabel() {
@@ -184,23 +184,23 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 	}
 
 	public final boolean isEndTag() {
-		return this._isEndTag;
+		return _isEndTag;
 	}
 
 	public final boolean isClosed() {
-		return this._isClosed;
+		return _isClosed;
 	}
 
 	public final void setClosed() {
-		this._isClosed = true;
+		_isClosed = true;
 	}
 
 	public final void setAttributes(Map<String, String> attributes) {
-		this._attributes = attributes;
+		_attributes = attributes;
 	}
 
 	public final boolean isEndTagOf(FacetsRenderer<C, ? extends S> component) {
-		if (this._isEndTag) { // TODO mettre le component dans le tag pour
+		if (_isEndTag) { // TODO mettre le component dans le tag pour
 			// tester les sous tag.. et pas que le tag
 			return true;
 		}
@@ -208,12 +208,12 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 	}
 
 	public final FacetsRenderer<C, S> getComponent(C stclContext, RenderContext<C, S> renderContext) throws WrongTagSyntax {
-		if (this._component != null)
-			return this._component;
+		if (_component != null)
+			return _component;
 
-		this._component = createComponent(stclContext, renderContext);
+		_component = createComponent(stclContext, renderContext);
 		populateParameters();
-		return this._component;
+		return _component;
 	}
 
 	// creates the UI component associated to the tag
@@ -261,21 +261,21 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 	}
 
 	private final void populateParameters() {
-		if (this._component == null)
+		if (_component == null)
 			return;
 
 		// set paramters list
-		if (this._attributes != null) {
-			this._component.setAttributes(this._attributes);
+		if (_attributes != null) {
+			_component.setAttributes(_attributes);
 
 			// set rendering parameters
-			String mode = this._attributes.get(GdoTag.MODE);
+			String mode = _attributes.get(GdoTag.MODE);
 			if (!StringUtils.isEmpty(mode)) {
-				this._component.getRenderContext().setFacetMode(mode);
+				_component.getRenderContext().setFacetMode(mode);
 			}
-			String facet = this._attributes.get(GdoTag.FACET);
+			String facet = _attributes.get(GdoTag.FACET);
 			if (!StringUtils.isEmpty(facet)) {
-				this._component.getRenderContext().setFacetType(facet);
+				_component.getRenderContext().setFacetType(facet);
 			}
 		}
 
@@ -284,9 +284,9 @@ public class GdoTag<C extends _StencilContext, S extends _PStencil<C, S>> {
 	@Override
 	public String toString() {
 		String str = getCompleteTagLabel();
-		if (this._attributes != null) {
-			for (String name : this._attributes.keySet()) {
-				str += " " + name + "=" + this._attributes.get(name);
+		if (_attributes != null) {
+			for (String name : _attributes.keySet()) {
+				str += " " + name + "=" + _attributes.get(name);
 			}
 		}
 		if (isEndTag())

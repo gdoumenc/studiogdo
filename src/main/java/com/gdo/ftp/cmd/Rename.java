@@ -54,13 +54,13 @@ public class Rename extends AtomicActionStcl {
 
 			// opens connection
 			String old = target.getString(stclContext, FileStcl.Slot.PATH);
-			Result result = ftpContext.rename(stclContext, old, this._name, true, pftpContext);
+			Result result = ftpContext.rename(stclContext, old, _name, true, pftpContext);
 			if (result.isSuccess()) {
-				target.setString(stclContext, FileStcl.Slot.PATH, this._name);
+				target.setString(stclContext, FileStcl.Slot.PATH, _name);
 			}
 			return success(cmdContext, self, result);
 		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot create file %s (%s)", this._name, e);
+			String msg = logError(stclContext, "cannot create file %s (%s)", _name, e);
 			return error(cmdContext, self, msg);
 		}
 	}
@@ -68,10 +68,10 @@ public class Rename extends AtomicActionStcl {
 	@Override
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isBlank(this._name))
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isBlank(_name))
 			return error(cmdContext, self, "no name defined to rename file");
-		if (PathUtils.isComposed(this._name))
+		if (PathUtils.isComposed(_name))
 			return error(cmdContext, self, "cannot use composed name to rename a file");
 
 		return super.verifyContext(cmdContext, self);

@@ -33,22 +33,22 @@ public class StringProxySlot extends CalculatedStringPropertySlot<StclContext, P
 
 	public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, Proxy proxy) {
 		super(stclContext, in, name);
-		this._proxy = proxy;
+		_proxy = proxy;
 	}
 
 	public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, String value) {
 		super(stclContext, in, name);
-		this._proxy = new StringProxy(value);
+		_proxy = new StringProxy(value);
 	}
 
 	@Override
 	public String getValue(StclContext stclContext, PStcl self) {
-		return this._proxy.getValue();
+		return _proxy.getValue();
 	}
 
 	@Override
 	public String setValue(StclContext stclContext, String value, PStcl self) {
-		this._proxy.setValue(value);
+		_proxy.setValue(value);
 		return null; // TODO to change return value ofsetValue from Proxy
 	}
 
@@ -56,12 +56,12 @@ public class StringProxySlot extends CalculatedStringPropertySlot<StclContext, P
 		private String _value;
 
 		public StringProxy(String value) {
-			this._value = value;
+			_value = value;
 		}
 
 		@Override
 		public String getValue() {
-			return this._value;
+			return _value;
 		}
 
 		@Override

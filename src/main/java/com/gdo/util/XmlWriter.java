@@ -55,9 +55,9 @@ public class XmlWriter extends Writer {
 		if (StringUtils.isEmpty(encoding)) {
 			throw new NullPointerException("Cannot create a XML writer without charset encoding");
 		}
-		this._writer = writer;
-		this._encoding = encoding;
-		this._indent = indent;
+		_writer = writer;
+		_encoding = encoding;
+		_indent = indent;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class XmlWriter extends Writer {
 	 * @return the underlying writer.
 	 */
 	public Writer getWriter() {
-		return this._writer;
+		return _writer;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class XmlWriter extends Writer {
 	 * @return the character encoding used.
 	 */
 	public String getEncoding() {
-		return this._encoding;
+		return _encoding;
 	}
 
 	/*
@@ -108,7 +108,7 @@ public class XmlWriter extends Writer {
 	 */
 	@Override
 	public void flush() throws IOException {
-		this._writer.flush();
+		_writer.flush();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class XmlWriter extends Writer {
 	 * @throws IOException
 	 */
 	public void writeHeader() throws IOException {
-		writeText(String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", this._encoding));
+		writeText(String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", _encoding));
 	}
 
 	/**
@@ -134,11 +134,11 @@ public class XmlWriter extends Writer {
 
 		closeTagIfNeeded(true);
 		writeIndent();
-		this._writer.write('<');
-		this._writer.write(name);
+		_writer.write('<');
+		_writer.write(name);
 
-		this._tag = name; // now a tag is opened
-		this._indent++;
+		_tag = name; // now a tag is opened
+		_indent++;
 	}
 
 	/**
@@ -162,19 +162,19 @@ public class XmlWriter extends Writer {
 			throw new NullPointerException("XML tag name must not be null");
 		}
 
-		this._indent--;
+		_indent--;
 
 		// tag on a single line
-		if (this._tag != null) {
+		if (_tag != null) {
 
 			// _tag should be equals to name
-			if (!this._tag.equals(name)) {
+			if (!_tag.equals(name)) {
 				throw new InvalidParameterException("Ending a tag which is not opened");
 			}
 
 			// closing directly open tag
-			this._writer.write("/>\n");
-			this._tag = null;
+			_writer.write("/>\n");
+			_tag = null;
 			return;
 		}
 
@@ -182,9 +182,9 @@ public class XmlWriter extends Writer {
 		if (indent) {
 			writeIndent();
 		}
-		this._writer.write("</");
-		this._writer.write(name);
-		this._writer.write(">\n");
+		_writer.write("</");
+		_writer.write(name);
+		_writer.write(">\n");
 	}
 
 	/**
@@ -222,11 +222,11 @@ public class XmlWriter extends Writer {
 			throw new NullPointerException("XML attribute name must not be null");
 		}
 		if (value != null) {
-			this._writer.write(' ');
-			this._writer.write(name);
-			this._writer.write("=\"");
-			this._writer.write(StringEscapeUtils.escapeXml(value.toString()));
-			this._writer.write('"');
+			_writer.write(' ');
+			_writer.write(name);
+			_writer.write("=\"");
+			_writer.write(StringEscapeUtils.escapeXml(value.toString()));
+			_writer.write('"');
 		}
 	}
 
@@ -240,7 +240,7 @@ public class XmlWriter extends Writer {
 		if (StringUtils.isEmpty(txt))
 			return;
 
-		this._writer.write(txt);
+		_writer.write(txt);
 	}
 
 	/**
@@ -256,8 +256,8 @@ public class XmlWriter extends Writer {
 		closeTagIfNeeded(true);
 		for (String line : StringHelper.splitShortString(txt, '\n')) {
 			writeIndent();
-			this._writer.write(line);
-			this._writer.write("\n");
+			_writer.write(line);
+			_writer.write("\n");
 		}
 	}
 
@@ -271,11 +271,11 @@ public class XmlWriter extends Writer {
 			throw new IllegalStateException("CDATA not inside a tag");
 		}
 
-		this._writer.write("<![CDATA[");
+		_writer.write("<![CDATA[");
 		if (!StringUtils.isEmpty(data)) {
-			this._writer.write(data.replaceAll("]]", "<]>"));
+			_writer.write(data.replaceAll("]]", "<]>"));
 		}
-		this._writer.write("]]>");
+		_writer.write("]]>");
 
 		return tag;
 	}
@@ -301,18 +301,18 @@ public class XmlWriter extends Writer {
 	 */
 	public void writeComment(Object value) throws IOException {
 		writeIndent();
-		this._writer.write("<!--");
+		_writer.write("<!--");
 		if (value != null)
-			this._writer.write(value.toString());
-		this._writer.write("-->");
+			_writer.write(value.toString());
+		_writer.write("-->");
 	}
 
 	public int getIndent() {
-		return this._indent;
+		return _indent;
 	}
 
 	public void setIndent(int indent) {
-		this._indent = indent;
+		_indent = indent;
 	}
 
 	/**
@@ -321,20 +321,20 @@ public class XmlWriter extends Writer {
 	 * @return the tag closed.
 	 */
 	public String closeTagIfNeeded(boolean newLine) throws IOException {
-		String tag = this._tag;
+		String tag = _tag;
 		if (!StringUtils.isEmpty(tag)) {
-			this._writer.write('>');
+			_writer.write('>');
 			if (newLine)
-				this._writer.write(StringHelper.NEW_LINE);
+				_writer.write(StringHelper.NEW_LINE);
 		}
-		this._tag = null;
+		_tag = null;
 		return tag;
 	}
 
 	// write blanks for indentation
 	private void writeIndent() throws IOException {
-		for (int i = 0; i < this._indent; i++) {
-			this._writer.write(' ');
+		for (int i = 0; i < _indent; i++) {
+			_writer.write(' ');
 		}
 	}
 
@@ -342,29 +342,29 @@ public class XmlWriter extends Writer {
 
 	@Override
 	public void close() throws IOException {
-		this._writer.close();
+		_writer.close();
 	}
 
 	@Override
 	public void write(char cbuf[], int off, int len) throws IOException {
-		this._writer.write(cbuf, off, len);
+		_writer.write(cbuf, off, len);
 	}
 
 	@Override
 	public void write(int c) throws IOException {
-		this._writer.write(c);
+		_writer.write(c);
 	}
 
 	@Override
 	public void write(char cbuf[]) throws IOException {
-		this._writer.write(cbuf);
+		_writer.write(cbuf);
 	}
 
 	@Override
 	public void write(String str) throws IOException {
 		if (StringUtils.isNotEmpty(str)) {
-			String value = new String(str.getBytes(this._encoding));
-			this._writer.write(value);
+			String value = new String(str.getBytes(_encoding));
+			_writer.write(value);
 		}
 	}
 

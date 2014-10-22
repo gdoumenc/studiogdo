@@ -24,10 +24,10 @@ public class Query {
 			}
 			i++;
 		}
-		this._query = String.format(format, escaped);
+		_query = String.format(format, escaped);
 	}
 
 	public String query() {
-		return this._query;
+		return _query;
 	}
 }

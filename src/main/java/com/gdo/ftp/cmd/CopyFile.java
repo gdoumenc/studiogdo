@@ -91,8 +91,8 @@ public class CopyFile extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// get directory or file name
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name)) {
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to copy file");
 		}
 

@@ -58,33 +58,33 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 	@Override
 	public void clear() {
 		super.clear();
-		if (this._stencils != null) {
-			this._stencils.clear();
+		if (_stencils != null) {
+			_stencils.clear();
 		}
 	}
 
 	public boolean isVerifyUnique() {
-		return this._verify_unique;
+		return _verify_unique;
 	}
 
 	public void setVerifyUnique(boolean verify) {
-		this._verify_unique = verify;
+		_verify_unique = verify;
 	}
 
 	public boolean isForceUnique() {
-		return this._force_unique;
+		return _force_unique;
 	}
 
 	public void setForceUnique(boolean forced) {
-		this._force_unique = forced;
+		_force_unique = forced;
 	}
 
 	@Override
 	protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		if (ClassHelper.isEmpty(this._stencils)) {
+		if (ClassHelper.isEmpty(_stencils)) {
 			return StencilUtils.<C, S> iterator();
 		}
-		return StencilUtils.<C, S> iterator(stclContext, this._stencils, cond, self);
+		return StencilUtils.<C, S> iterator(stclContext, _stencils, cond, self);
 	}
 
 	private synchronized StencilIterator<C, S> getSynchronizedStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
@@ -93,7 +93,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
 	@Override
 	public boolean changeKey(C stclContext, S searched, String key, PSlot<C, S> self) {
-		for (S s : this._stencils) {
+		for (S s : _stencils) {
 			if (s.equals(searched)) {
 				s.setKey(new Key<String>(key));
 				return true;
@@ -185,11 +185,11 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 	}
 
 	synchronized public void addStencilInList(C stclContext, S stcl, PSlot<C, S> self) {
-		if (this._stencils == null) {
-			this._stencils = new StencilList();
+		if (_stencils == null) {
+			_stencils = new StencilList();
 		}
-		this._stencils.add(stcl);
-		// Collections.sort(this._stencils, this);
+		_stencils.add(stcl);
+		// Collections.sort(_stencils, this);
 	}
 
 	@Override
@@ -222,7 +222,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 			List<S> removed = new ArrayList<S>();
 			for (S stcl : initial) {
 				if (stcl.getKey().toString().matches(key.toString())) {
-					this._stencils.remove(stcl.getKey());
+					_stencils.remove(stcl.getKey());
 					removed.add(stcl);
 				}
 			}
@@ -256,7 +256,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 		List<S> removed = new ArrayList<S>();
 		for (S s : initial) {
 			if (s.equals(stencil)) {
-				this._stencils.remove(s);
+				_stencils.remove(s);
 				removed.add(s);
 			}
 		}
@@ -277,7 +277,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 		}
 		// List<S> removed = new ArrayList<S>();
 		for (S stcl : initial) {
-			this._stencils.remove(stcl);
+			_stencils.remove(stcl);
 			// removed.add(stcl);
 		}
 	}

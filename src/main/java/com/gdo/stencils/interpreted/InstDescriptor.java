@@ -52,7 +52,7 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 
 	// the id is used to reference the instance for plug
 	public final String getId() {
-		String id = this._id;
+		String id = _id;
 		if (StringUtils.isBlank(id)) {
 			if (getLog().isWarnEnabled()) {
 				String msg = String.format("Intance declared witout id (use name %s by default)", getName());
@@ -64,7 +64,7 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 	}
 
 	public final void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	@Override
@@ -74,19 +74,19 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 	}
 
 	public final String getFile() {
-		return this._file;
+		return _file;
 	}
 
 	public final void setFile(String file) {
-		this._file = file;
+		_file = file;
 	}
 
 	public final String getEncoding() {
-		return this._encoding;
+		return _encoding;
 	}
 
 	public final void setEncoding(String encoding) {
-		this._encoding = encoding;
+		_encoding = encoding;
 	}
 
 	@Override
@@ -106,19 +106,19 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 	}
 
 	public boolean isOverloadable() {
-		return this._overloadable;
+		return _overloadable;
 	}
 
 	public void setOverloadable(boolean overloadable) {
-		this._overloadable = overloadable;
+		_overloadable = overloadable;
 	}
 
 	public IStencilFactory.Mode getMode() {
-		return this._on;
+		return _on;
 	}
 
 	public void setOn(IStencilFactory.Mode on) {
-		this._on = on;
+		_on = on;
 	}
 
 	// an instance in a load instance is again a load instance (same for create)
@@ -152,9 +152,9 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 
 		// an instance should not be created twice
 		/*
-		 * if (this._created) { if (getLog().isErrorEnabled()) { String msg =
+		 * if (_created) { if (getLog().isErrorEnabled()) { String msg =
 		 * String.format("An instance cannot be created twice : %s", this);
-		 * getLog().error(msg); } } this._created = true;
+		 * getLog().error(msg); } } _created = true;
 		 */
 
 		// instance are always created as stencil in load mode
@@ -228,14 +228,14 @@ public class InstDescriptor<C extends _StencilContext, S extends _PStencil<C, S>
 
 	@Override
 	public void save(C stclContext, XmlWriter declPart, XmlWriter plugPart) throws IOException {
-		logError(stclContext, "should be never called (except for trace) for : %s", this._id);
+		logError(stclContext, "should be never called (except for trace) for : %s", _id);
 		/*
 		 * // checks parameters if (plugPart != null) { throw new
 		 * IllegalArgumentException
 		 * ("plug xml writer should be null for instance descriptor"); }
 		 * 
 		 * // does nothing if the descriptor already saved if
-		 * (declPart.equals(this._doc)) { return; } this._doc = declPart;
+		 * (declPart.equals(_doc)) { return; } _doc = declPart;
 		 * 
 		 * declPart.startElement(getRootTag());
 		 * 

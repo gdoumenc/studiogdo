@@ -35,20 +35,20 @@ public class AddAttachment extends ComposedActionStcl {
 
 		// creates the attachments
 		if (currentStep == 2) {
-			if (this._type == 1) {
+			if (_type == 1) {
 				PStcl target = cmdContext.getTarget();
-				PStcl att = target.newPStencil(stclContext, MailStcl.Slot.ATTACHMENTS, Key.NO_KEY, FileUploadDataSourceStcl.class, this._fileItem);
+				PStcl att = target.newPStencil(stclContext, MailStcl.Slot.ATTACHMENTS, Key.NO_KEY, FileUploadDataSourceStcl.class, _fileItem);
 				if (StencilUtils.isNull(att)) {
 					return error(cmdContext, self, StencilUtils.getNullReason(att));
 				}
-				att.setInt(stclContext, AttachmentStcl.Slot.TYPE, this._type);
-			} else if (this._type == 2) {
+				att.setInt(stclContext, AttachmentStcl.Slot.TYPE, _type);
+			} else if (_type == 2) {
 				PStcl target = cmdContext.getTarget();
-				PStcl att = target.newPStencil(stclContext, MailStcl.Slot.ATTACHMENTS, Key.NO_KEY, FileUploadDataSourceStcl.class, this._fileItem);
+				PStcl att = target.newPStencil(stclContext, MailStcl.Slot.ATTACHMENTS, Key.NO_KEY, FileUploadDataSourceStcl.class, _fileItem);
 				if (StencilUtils.isNull(att)) {
 					return error(cmdContext, self, StencilUtils.getNullReason(att));
 				}
-				att.setInt(stclContext, AttachmentStcl.Slot.TYPE, this._type);
+				att.setInt(stclContext, AttachmentStcl.Slot.TYPE, _type);
 			}
 		}
 
@@ -62,8 +62,8 @@ public class AddAttachment extends ComposedActionStcl {
 
 		// verifies attachment type
 		if (currentStep == 2) {
-			this._type = self.getInt(stclContext, com.gdo.mail.model.AttachmentStcl.Slot.TYPE, 0);
-			if (this._type == 0) {
+			_type = self.getInt(stclContext, com.gdo.mail.model.AttachmentStcl.Slot.TYPE, 0);
+			if (_type == 0) {
 				String msg = "wrong attachment type";
 				if (getLog().isWarnEnabled()) {
 					getLog().warn(stclContext, msg);
@@ -77,7 +77,7 @@ public class AddAttachment extends ComposedActionStcl {
 
 	@Override
 	public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) {
-		this._fileItem = item;
+		_fileItem = item;
 	}
 
 }

@@ -35,16 +35,16 @@ public abstract class FacetsRendererWithContent<C extends _StencilContext, S ext
 	public abstract int[] getTagsLength();
 
 	public String getContent() {
-		return this._content;
+		return _content;
 	}
 
 	public void setContent(String content) {
-		this._content = content;
+		_content = content;
 	}
 
 	@Override
 	public String getHtmlContent(C stclContext) {
-		String content = this._content;
+		String content = _content;
 		if (StringUtils.isEmpty(content)) {
 			if (getLog().isWarnEnabled())
 				getLog().warn(stclContext, "iterator tag with no content...");

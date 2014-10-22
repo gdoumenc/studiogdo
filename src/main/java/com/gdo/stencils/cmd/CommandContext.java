@@ -45,16 +45,16 @@ public class CommandContext<C extends _StencilContext, S extends _PStencil<C, S>
 	// call
 
 	public CommandContext(C stclContext, S target) {
-		this._stclContext = stclContext;
-		this._target = target;
+		_stclContext = stclContext;
+		_target = target;
 	}
 
 	public final S getTarget() {
-		return this._target;
+		return _target;
 	}
 
 	public final void setTarget(S target) {
-		this._target = target;
+		_target = target;
 	}
 
 	/**
@@ -63,11 +63,11 @@ public class CommandContext<C extends _StencilContext, S extends _PStencil<C, S>
 	 * @return the stencil context.
 	 */
 	public final C getStencilContext() {
-		return this._stclContext;
+		return _stclContext;
 	}
 
 	public void setDelegationDefaultParameters(Map<String, Object> def) {
-		this._defParams = def;
+		_defParams = def;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class CommandContext<C extends _StencilContext, S extends _PStencil<C, S>
 		if (super.containsKey(key))
 			return (K) get(key);
 		if (defaultContainsKey(key))
-			return (K) this._defParams.get(key);
+			return (K) _defParams.get(key);
 		return null;
 	}
 
@@ -96,7 +96,7 @@ public class CommandContext<C extends _StencilContext, S extends _PStencil<C, S>
 	}
 
 	public boolean defaultContainsKey(Object key) {
-		return (this._defParams != null && this._defParams.containsKey(key));
+		return (_defParams != null && _defParams.containsKey(key));
 	}
 
 	@SuppressWarnings("unchecked")

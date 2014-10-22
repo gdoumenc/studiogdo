@@ -33,39 +33,39 @@ public final class LinkDescriptor<C extends _StencilContext, S extends _PStencil
 	private String _local; // local link
 
 	public String getSlot() {
-		return this._slot;
+		return _slot;
 	}
 
 	// used by digester
 	public void setSlot(String slot) {
-		this._slot = slot;
+		_slot = slot;
 	}
 
 	public String getKey() {
-		return this._key;
+		return _key;
 	}
 
 	// used by digester
 	public void setKey(String key) {
-		this._key = key;
+		_key = key;
 	}
 
 	public String getPath() {
-		return this._path;
+		return _path;
 	}
 
 	// used by digester
 	public void setPath(String path) {
-		this._path = path;
+		_path = path;
 	}
 
 	public String getLocal() {
-		return this._local;
+		return _local;
 	}
 
 	// used by digester
 	public void setLocal(String local) {
-		this._local = local;
+		_local = local;
 	}
 
 	@Override

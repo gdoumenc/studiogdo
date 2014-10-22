@@ -97,11 +97,11 @@ public class FolderStcl extends _FileStcl {
 						return cleanList(stclContext, cond, self);
 					}
 					FTPFile[] files = null;
-					if (this._filter == null) {
+					if (_filter == null) {
 						files = client.mlistDir();
 					} else {
-						this._filter._cond = cond;
-						files = client.mlistDir(null, this._filter);
+						_filter._cond = cond;
+						files = client.mlistDir(null, _filter);
 					}
 
 					// creates files list
@@ -151,7 +151,7 @@ public class FolderStcl extends _FileStcl {
 
 		public FilesOnlySlot(StclContext stclContext, Stcl in, String name) {
 			super(stclContext, in, name);
-			this._filter = new FileFilter();
+			_filter = new FileFilter();
 		}
 
 	}
@@ -161,7 +161,7 @@ public class FolderStcl extends _FileStcl {
 
 		public FoldersOnlySlot(StclContext stclContext, Stcl in, String name) {
 			super(stclContext, in, name);
-			this._filter = getFilter();
+			_filter = getFilter();
 		}
 	}
 
@@ -264,7 +264,7 @@ public class FolderStcl extends _FileStcl {
 				return false;
 			}
 
-			String key = PathCondition.getKeyCondition(this._cond);
+			String key = PathCondition.getKeyCondition(_cond);
 			if (StringUtils.isBlank(key)) {
 				return true;
 			}

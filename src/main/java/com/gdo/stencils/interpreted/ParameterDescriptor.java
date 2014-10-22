@@ -35,10 +35,10 @@ public final class ParameterDescriptor<C extends _StencilContext, S extends _PSt
 	// if name is simply getIndex then digester won't use setIndex
 	public byte getIndexAsByte() {
 		try {
-			return Byte.parseByte(this._index);
+			return Byte.parseByte(_index);
 		} catch (Exception e) {
 			if (getLog().isWarnEnabled()) {
-				String msg = String.format("Wrong value %s for parameter index", this._index);
+				String msg = String.format("Wrong value %s for parameter index", _index);
 				getLog().warn(null, msg);
 			}
 		}
@@ -47,41 +47,41 @@ public final class ParameterDescriptor<C extends _StencilContext, S extends _PSt
 
 	// used by digester
 	public void setIndex(String index) {
-		this._index = index;
+		_index = index;
 	}
 
 	// used by digester
 	public void setType(String type) {
-		this._type = type;
+		_type = type;
 	}
 
 	// convert from expected types
 	public Object getValue() {
-		if (Keywords.INT.equals(this._type)) {
-			return ConverterHelper.stringToInteger(this._value);
-		} else if (Keywords.BOOLEAN.equals(this._type)) {
-			return ConverterHelper.parseBoolean(this._value);
-		} else if (Keywords.STRING.equals(this._type)) {
-			return this._value;
+		if (Keywords.INT.equals(_type)) {
+			return ConverterHelper.stringToInteger(_value);
+		} else if (Keywords.BOOLEAN.equals(_type)) {
+			return ConverterHelper.parseBoolean(_value);
+		} else if (Keywords.STRING.equals(_type)) {
+			return _value;
 		}
 		if (getLog().isWarnEnabled()) {
-			String msg = String.format("Unknow type %s for parameter", this._type);
+			String msg = String.format("Unknow type %s for parameter", _type);
 			getLog().warn(null, msg);
 		}
-		return this._value;
+		return _value;
 	}
 
 	// used by digester
 	public void setValue(String value) {
-		this._value = value.replaceAll("<]>", "]]");
+		_value = value.replaceAll("<]>", "]]");
 	}
 
 	@Override
 	public void save(C stclContext, XmlWriter instPart, XmlWriter plugPart) throws IOException {
 		instPart.startElement("param");
-		instPart.writeAttribute("index", this._index);
-		instPart.writeAttribute("type", this._type);
-		instPart.writeCDATAAndEndElement(this._value);
+		instPart.writeAttribute("index", _index);
+		instPart.writeAttribute("type", _type);
+		instPart.writeCDATAAndEndElement(_value);
 	}
 
 }

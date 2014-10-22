@@ -23,7 +23,7 @@ public class SlotOrderSlot extends MultiSlot<StclContext, PStcl> {
 
 	public SlotOrderSlot(StclContext stclContext, Stcl in) {
 		super(stclContext, in, Slot.SLOT_ORDER);
-		this._verify_unique = false; // do not remove to avoid recursion on creation
+		_verify_unique = false; // do not remove to avoid recursion on creation
 	}
 
 	@Override
@@ -34,10 +34,10 @@ public class SlotOrderSlot extends MultiSlot<StclContext, PStcl> {
 		if (StringUtils.isNotBlank(key)) {
 
 			// creates property if not exist
-			if (!this._keys.contains(key)) {
+			if (!_keys.contains(key)) {
 				PStcl container = self.getContainer();
 				container.newPProperty(stclContext, Slot.SLOT_ORDER, new Key<String>(key), "");
-				this._keys.add(key);
+				_keys.add(key);
 			}
 		}
 

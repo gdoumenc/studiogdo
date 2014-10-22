@@ -11,51 +11,51 @@ public class LinkedKey implements IKey {
 		if (value == this) {
 			throw new NullPointerException("circular reference");
 		}
-		this._key = value;
+		_key = value;
 	}
 
 	public void changeTo(String value) {
-		if (this._key instanceof LinkedKey) {
-			((LinkedKey) this._key).changeTo(value);
-		} else if (this._key instanceof Key) {
-			((Key<?>) this._key).changeTo(value);
+		if (_key instanceof LinkedKey) {
+			((LinkedKey) _key).changeTo(value);
+		} else if (_key instanceof Key) {
+			((Key<?>) _key).changeTo(value);
 		}
 	}
 
 	@Override
 	public String toString() {
-		if (this._key == this)
+		if (_key == this)
 			return "circular reference";
-		return this._key.toString();
+		return _key.toString();
 	}
 
 	@Override
 	public boolean equals(Object key) {
-		if (this._key == null || key == null)
+		if (_key == null || key == null)
 			return false;
-		return this._key.toString().equals(key.toString());
+		return _key.toString().equals(key.toString());
 	}
 
 	@Override
 	public int hashCode() {
-		return this._key.hashCode();
+		return _key.hashCode();
 	}
 
 	@Override
 	public int compareTo(IKey o) {
-		if (o == null || this._key == null)
+		if (o == null || _key == null)
 			return 0;
-		return this._key.compareTo(o);
+		return _key.compareTo(o);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return this._key == null || this._key.isEmpty();
+		return _key == null || _key.isEmpty();
 	}
 
 	@Override
 	public boolean isNotEmpty() {
-		return this._key != null && this._key.isNotEmpty();
+		return _key != null && _key.isNotEmpty();
 	}
 
 }

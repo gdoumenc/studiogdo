@@ -60,8 +60,8 @@ public class FacetResult extends Result {
 
 	public FacetResult(IFacetInputStream input, String mime) {
 		super(SUCCESS, FacetResult.class.getName(), 0, null, null);
-		this._input = input;
-		this._mime = mime;
+		_input = input;
+		_mime = mime;
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class FacetResult extends Result {
 	 */
 	public FacetResult(InputStream input, String mime) {
 		super(SUCCESS, FacetResult.class.getName(), 0, null, null);
-		this._input = new FacetInputStream(input);
-		this._mime = mime;
+		_input = new FacetInputStream(input);
+		_mime = mime;
 	}
 
 	/**
@@ -99,18 +99,18 @@ public class FacetResult extends Result {
 	 * @throws IOException
 	 */
 	public InputStream getInputStream() throws IOException {
-		if (this._input == null) {
+		if (_input == null) {
 			return StringHelper.EMPTY_STRING_INPUT_STREAM;
 		}
-		return this._input.getInputStream();
+		return _input.getInputStream();
 	}
 
 	/**
 	 * Closes inputStream (must be called after inputStream used).
 	 */
 	public void closeInputStream() throws IOException {
-		if (this._input != null) {
-			this._input.closeInputStream();
+		if (_input != null) {
+			_input.closeInputStream();
 		}
 	}
 
@@ -120,7 +120,7 @@ public class FacetResult extends Result {
 	 * @return the facet mime type (text/plain if not defined)
 	 */
 	public String getMimeType() {
-		return (this._mime != null) ? this._mime : "text/plain";
+		return (_mime != null) ? _mime : "text/plain";
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class FacetResult extends Result {
 	 * @return the facet content length.
 	 */
 	public long getContentLength() {
-		return this._length;
+		return _length;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class FacetResult extends Result {
 	 *          the content length.
 	 */
 	public void setContentLength(long length) {
-		this._length = length;
+		_length = length;
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class FacetResult extends Result {
 	 * @return the map of headers defined.
 	 */
 	public Map<String, String> getHeader() {
-		return this._header;
+		return _header;
 	}
 
 	/**
@@ -160,10 +160,10 @@ public class FacetResult extends Result {
 	 *          the header value.
 	 */
 	public void setHeader(String name, String value) {
-		if (this._header == null) {
-			this._header = new HashMap<String, String>();
+		if (_header == null) {
+			_header = new HashMap<String, String>();
 		}
-		this._header.put(name, value);
+		_header.put(name, value);
 	}
 
 	private class FacetInputStream implements IFacetInputStream {
@@ -171,17 +171,17 @@ public class FacetResult extends Result {
 		private InputStream _input;
 
 		public FacetInputStream(InputStream input) {
-			this._input = input;
+			_input = input;
 		}
 
 		@Override
 		public InputStream getInputStream() {
-			return this._input;
+			return _input;
 		}
 
 		@Override
 		public void closeInputStream() throws IOException {
-			this._input.close();
+			_input.close();
 		}
 
 	}

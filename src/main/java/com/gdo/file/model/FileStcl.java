@@ -55,7 +55,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
     public FileStcl(StclContext stclContext, File file) {
         super(stclContext);
 
-        this._file = file;
+        _file = file;
 
         new PathSlot(stclContext);
         new AbsolutePathSlot(stclContext);
@@ -87,11 +87,11 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
 
     // this method is public to allow commands to access it
     public File getFile(StclContext stclContext, PStcl self) {
-        if (this._file == null) {
+        if (_file == null) {
             String name = getName(stclContext, self);
-            this._file = new File(name);
+            _file = new File(name);
         }
-        return this._file;
+        return _file;
     }
 
     /**

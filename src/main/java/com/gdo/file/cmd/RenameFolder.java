@@ -50,7 +50,7 @@ public class RenameFolder extends AtomicActionStcl {
 		File source = df.getFile(stclContext, target);
 
 		// get destination file
-		String path = PathUtils.compose(source.getParent(), this._name);
+		String path = PathUtils.compose(source.getParent(), _name);
 		File dest = new File(path);
 		if (dest.exists()) {
 			String msg = String.format("destination file %s already exist", path);
@@ -72,8 +72,8 @@ public class RenameFolder extends AtomicActionStcl {
 	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
 		// get directory or file name
-		this._name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(this._name)) {
+		_name = getParameter(cmdContext, 1, null);
+		if (StringUtils.isEmpty(_name)) {
 			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name defined to rename file");
 		}
 
