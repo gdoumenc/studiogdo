@@ -66,19 +66,26 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
     protected StclContext studiogdo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
 
-            // traces
+            // trace
             String path = request.getPathInfo();
             logTrace("Servlet path: " + path);
             logTrace("Servlet query: " + request.getQueryString());
 
-            // checks service entry defined and has gdo extension
+            // get entry
             if (StringUtils.isBlank(path)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty path");
                 return null;
             }
             String service = StringHelper.substringEnd(path.substring(1), GDO_EXT.length());
             if (StringUtils.isBlank(service)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty entry service");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No entry defined");
+                return null;
+            }
+            
+            // ping entry
+            if (RpcWrapper.PING_SERVICE.equals(service)) {
+                InputStream in = new ByteArrayInputStream("ping".getBytes());
+                StudioGdoServlet.writeResponse(response, HttpServletResponse.SC_OK, "text/html", in, null);
                 return null;
             }
 

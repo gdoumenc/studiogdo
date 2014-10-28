@@ -105,6 +105,9 @@ public class RpcWrapper {
     // get property value without status
     public static final String PROP_SERVICE = "prop";
 
+    // ping tomcat servlet
+    public static final String PING_SERVICE = "ping";
+
     // classical post service
     public static final String POST_SERVICE = "post";
 
@@ -522,6 +525,7 @@ public class RpcWrapper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void mset(StclContext stclContext, RpcArgs args) {
         try {
             Result result = Result.success();
@@ -536,7 +540,7 @@ public class RpcWrapper {
             }
 
             // do set service for each value
-            Enumeration<String> e = stclContext.getRequest().getParameterNames();
+            Enumeration<String> e = (Enumeration<String>) stclContext.getRequest().getParameterNames();
             while (e.hasMoreElements()) {
                 String param = e.nextElement();
                 if (param.startsWith("param_")) {
@@ -1053,6 +1057,7 @@ public class RpcWrapper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void doPost(StclContext stclContext, RpcArgs args) {
         try {
 
@@ -1066,7 +1071,7 @@ public class RpcWrapper {
             }
 
             // do set service for each value
-            Enumeration<String> e = stclContext.getRequest().getParameterNames();
+            Enumeration<String> e = (Enumeration<String>) stclContext.getRequest().getParameterNames();
             while (e.hasMoreElements()) {
                 String param = e.nextElement();
                 if (StringUtils.isNotBlank(param) && param.length() > 2) {
