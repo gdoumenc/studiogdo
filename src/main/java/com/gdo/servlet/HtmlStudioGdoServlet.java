@@ -33,6 +33,7 @@ import org.apache.commons.net.util.Base64;
 import com.gdo.helper.ConverterHelper;
 import com.gdo.helper.StringHelper;
 import com.gdo.project.model.ServletStcl;
+import com.gdo.sql.model.SQLContextStcl;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
@@ -160,6 +161,10 @@ public class HtmlStudioGdoServlet extends HttpServlet {
             // call service wrapper
             RpcWrapper wrapper = RpcWrapper.getInstance(stclContext);
             wrapper.service(stclContext, service, args);
+            
+            // closes SQL connection
+            SQLContextStcl.closeConnection(stclContext);
+
             return stclContext;
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.toString());

@@ -54,6 +54,8 @@ import com.gdo.stencils.util.PathUtils;
 
 public class SQLContextStcl extends Stcl implements IPropertyChangeListener<StclContext, PStcl> {
 
+    private static final String CONNECTION = "SQL_CONNECTION";
+
     // if set to true, no SQL call anyway
     private static final boolean NO_CALL = false;
 
@@ -411,7 +413,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
         }
         return null;
     }
-    
+
     // get table initialization status
     public boolean isTableInitialized(StclContext stclContext, String from, PStcl self) {
         return _initialized_table.contains(from);
@@ -599,21 +601,30 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     // connections are stored in the servlet context
     private Connection getConnection(StclContext stclContext, PStcl self) {
         HttpServletRequest request = stclContext.getRequest();
-        return (Connection) request.getAttribute(self.getUId(stclContext));
+        return (Connection) request.getAttribute(CONNECTION);
     }
 
     private void setConnection(StclContext stclContext, Connection connection, PStcl self) {
         HttpServletRequest request = stclContext.getRequest();
-        request.setAttribute(self.getUId(stclContext), connection);
+        request.setAttribute(CONNECTION, connection);
+    }
+
+    public static void closeConnection(StclContext stclContext) {
+        try {
+            HttpServletRequest request = stclContext.getRequest();
+            Connection con = (Connection) request.getAttribute(CONNECTION);
+            if (con != null)
+                con.close();
+        } catch (SQLException e) {
+        }
     }
 
     private void closeStatement(StclContext stclContext, Statement stmt) {
         try {
-            if (stmt != null) {
+            if (stmt != null)
                 stmt.close();
-            }
         } catch (SQLException e) {
-            logWarn(stclContext, e.getMessage());
+            logWarn(stclContext, e.toString());
         }
     }
 
