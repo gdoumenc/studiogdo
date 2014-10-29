@@ -10,13 +10,13 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,6 +51,7 @@ import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.slot.CalculatedBooleanPropertySlot;
 import com.gdo.stencils.util.PathUtils;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class SQLContextStcl extends Stcl implements IPropertyChangeListener<StclContext, PStcl> {
 
@@ -158,21 +159,17 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             // gets connection parameters
             String url = self.getString(stclContext, SQLContextStcl.Slot.URL, "");
             String databaseName = self.getString(stclContext, SQLContextStcl.Slot.DATABASE, "");
-            if (!url.endsWith("/")) {
-                databaseName = "/" + databaseName;
-            }
-            String fullUrl = SQLContextStcl.URL_INITIAL + url + databaseName;
-
             String user = self.getString(stclContext, SQLContextStcl.Slot.USER, "");
             String passwd = self.getString(stclContext, SQLContextStcl.Slot.PASSWD, "");
 
             // tries connection
-            Class.forName(SQLContextStcl.DRIVER).newInstance();
-            Properties props = new Properties();
-            props.put("user", user);
-            props.put("password", passwd);
-            props.put("noDatetimeStringSync", "true");
-            Connection connection = DriverManager.getConnection(fullUrl, props);
+            MysqlDataSource data_source = new MysqlDataSource();
+            data_source.setServerName(url);
+            data_source.setDatabaseName(databaseName);
+            data_source.setUser(user);
+            data_source.setPassword(passwd);
+            data_source.setNoDatetimeStringSync(true);
+            Connection connection = data_source.getConnection();
             if (!connection.isValid(0)) {
                 logError(stclContext, "not valid connection");
             }
@@ -598,23 +595,40 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
         }
     }
 
-    // connections are stored in the servlet context
+    // connections are stored in the request attributes
+    @SuppressWarnings("unchecked")
     private Connection getConnection(StclContext stclContext, PStcl self) {
         HttpServletRequest request = stclContext.getRequest();
-        return (Connection) request.getAttribute(CONNECTION);
+        Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+        if (cons == null)
+            return null;
+        return cons.get(self.getUId(stclContext));
     }
 
+    @SuppressWarnings("unchecked")
     private void setConnection(StclContext stclContext, Connection connection, PStcl self) {
         HttpServletRequest request = stclContext.getRequest();
-        request.setAttribute(CONNECTION, connection);
+        Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+        if (cons == null) {
+            cons = new ConcurrentHashMap<String, Connection>();
+            request.setAttribute(CONNECTION, cons);
+        }
+        if (connection == null)
+            cons.remove(self.getUId(stclContext));
+        else
+            cons.put(self.getUId(stclContext), connection);
     }
 
+    @SuppressWarnings("unchecked")
     public static void closeConnection(StclContext stclContext) {
         try {
             HttpServletRequest request = stclContext.getRequest();
-            Connection con = (Connection) request.getAttribute(CONNECTION);
-            if (con != null)
-                con.close();
+            Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+            if (cons != null) {
+                for (Connection con : cons.values()) {
+                    con.close();
+                }
+            }
         } catch (SQLException e) {
         }
     }
