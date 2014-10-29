@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -598,13 +598,13 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
 
     // connections are stored in the servlet context
     private Connection getConnection(StclContext stclContext, PStcl self) {
-        ServletContext servContext = stclContext.getServletContext();
-        return (Connection) servContext.getAttribute(self.getUId(stclContext));
+        HttpServletRequest request = stclContext.getRequest();
+        return (Connection) request.getAttribute(self.getUId(stclContext));
     }
 
     private void setConnection(StclContext stclContext, Connection connection, PStcl self) {
-        ServletContext servContext = stclContext.getServletContext();
-        servContext.setAttribute(self.getUId(stclContext), connection);
+        HttpServletRequest request = stclContext.getRequest();
+        request.setAttribute(self.getUId(stclContext), connection);
     }
 
     private void closeStatement(StclContext stclContext, Statement stmt) {
