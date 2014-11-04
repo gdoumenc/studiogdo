@@ -629,7 +629,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                     con.close();
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
         }
     }
 
