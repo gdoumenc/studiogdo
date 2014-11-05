@@ -23,10 +23,8 @@ import com.gdo.stencils.iterator.EmptyIterator;
 import com.gdo.stencils.iterator.ListIterator;
 import com.gdo.stencils.iterator.SingleIterator;
 import com.gdo.stencils.iterator.StencilIterator;
-import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
-import com.gdo.stencils.slot.SlotFilter;
 
 /**
  * <p>
@@ -391,130 +389,6 @@ public class StencilUtils {
 		return new ListIterator<C, S>(list);
 	}
 
-	/**
-	 * Combines two stencils lists to create the union of them.
-	 */
-	/*
-	 * public static <C extends StencilContext, S extends PStencil<C, S>>
-	 * StencilIterator<C, S> iterator(StencilIterator<C, S> iter1,
-	 * StencilIterator<C, S> iter2) { // create the concatenated plugged map
-	 * List<S> pluggeds = new ArrayList<S>(iter1.size() + iter2.size()); for (S
-	 * stcl : iter1) { pluggeds.add(stcl); } for (S stcl : iter2) {
-	 * pluggeds.add(stcl); } return new ListIterator<C, S>(pluggeds); }
-	 */
-
-	/**
-	 * @return <tt>true</tt> if at least one key in a list of plugged stencils
-	 *         matches the regular expression (stencils list must not be null)
-	 */
-	/*
-	 * public static <C extends StencilContext, S extends PStencil<C, S>> boolean
-	 * keyMatches(StencilIterator<C, S> stencils, String regexp) { if (stencils ==
-	 * null) { throw new
-	 * NullPointerException("empty stencils iterator in StencilUtils.keyMatches"
-	 * ); } if (StringUtils.isEmpty(regexp)) { throw new
-	 * NullPointerException("empty regular expression in StencilUtils.keyMatches"
-	 * ); } try { for (S stencil : stencils) { if
-	 * (stencil.getKey().toString().matches(regexp)) return true; } return false;
-	 * } finally { stencils.reset(); } }
-	 */
-
-	/**
-	 * @return the stencil defined by a key in a list of plugged stencils
-	 *         (stencils list must not be null)
-	 */
-	/*
-	 * public static <C extends StencilContext, S extends PStencil<C, S>> S
-	 * get(Collection<S> stencils, IKey key) { if (stencils == null) { throw new
-	 * NullPointerException("empty stencils list in StencilUtils.get"); } if (key
-	 * == null) { throw new NullPointerException("empty key in StencilUtils.get");
-	 * } for (S stencil : stencils) { if (stencil.getKey().equals(key)) return
-	 * stencil; } return null; }
-	 */
-
-	/**
-	 * @return the index of the stencil defined by a key in a list of plugged
-	 *         stencils (stencils list must not be null)
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> int getIndex(Collection<S> stencils, IKey key) {
-		if (stencils == null) {
-			throw new NullPointerException("empty stencils list in StencilUtils.getIndex");
-		}
-		int i = 0;
-		for (S stencil : stencils) {
-			if (stencil.getKey().equals(key))
-				return i;
-			i++;
-		}
-		return -1;
-	}
-
-	/**
-	 * @return the key defined for a stencil in a list of plugged stencils.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> IKey getKey(Collection<S> stencils, S stencil) {
-		for (S stcl : stencils) {
-			if (stcl.equals(stencil))
-				return stcl.getKey();
-		}
-		return null;
-	}
-
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> IKey getKey(Collection<S> stencils, _Stencil<C, S> stencil) {
-		for (S stcl : stencils) {
-			if (stcl.equals(stencil))
-				return stcl.getKey();
-		}
-		return null;
-	}
-
-	/**
-	 * Plug several stencils in a slot.
-	 * 
-	 * @param iter
-	 *          stencils to be plugged.
-	 * @param slotPath
-	 *          slot path where the stencil will be plugged.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> void plug(C stclContext, StencilIterator<C, S> iter, String slotPath, S self) {
-
-	}
-
-	/*
-	 * public static <C extends StencilContext> StencilIterator<C, IStencil<C, ?>>
-	 * getStencils(C context, String path) { StencilIterator<C, ?> iter =
-	 * getStencils(context, path, null); return null; }
-	 */
-
-	/**
-	 * Copies all stencils from a source slot to a destination slot.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> void copy(C stclContext, S src, String srcPath, S dest, String destPath) {
-		for (S stcl : src.getStencils(stclContext, srcPath)) {
-			dest.plug(stclContext, stcl, destPath);
-		}
-	}
-
-	/**
-	 * Moves all stencils from a source slot to a destination slot.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> void move(C stclContext, S src, String srcPath, S dest, String destPath) {
-		copy(stclContext, src, srcPath, dest, destPath);
-		src.clearSlot(stclContext, srcPath);
-	}
-
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> List<S> filter(C stclContext, StencilIterator<C, S> iter, SlotFilter<C, S> filter, PSlot<C, S> slot) {
-		List<S> res = new ArrayList<S>();
-		for (S stcl : iter) {
-			if (filter == null || filter.keep(stclContext, stcl)) {
-				stcl.setContainingSlot(slot); // slot may be different when it
-				// was plugged
-				res.add(stcl);
-			}
-		}
-		return res;
-	}
-
 	public static boolean containsStencilTag(String string) {
 		if (string.indexOf("<$stencil") != -1)
 			return true;
@@ -523,56 +397,6 @@ public class StencilUtils {
 		if (string.indexOf("%3C$stencil") != -1)
 			return true;
 		return false;
-	}
-
-	/**
-	 * @return <tt>true</tt> if the stencil is a property.
-	 */
-	/*
-	 * public static <C extends StencilContext> boolean isProperty(PStencil<C, ?>
-	 * stcl) { if (stcl == null) return false; return (stcl instanceof
-	 * IPPropStencil); } /*public static <C extends StencilContext> boolean
-	 * isProperty(Stencil<C, ?> stcl) { return (stcl instanceof PropStencil); }
-	 */
-
-	/**
-	 * @return the stencil as a property (<tt>null</tt> if the stencil is not a
-	 *         property).
-	 */
-	/*
-	 * @SuppressWarnings("unchecked") public static <C extends StencilContext, S
-	 * extends PStencil<C, S>, V> IPPropStencil<C, S, V> asProperty(PStencil<C, S>
-	 * stcl) { if (!isProperty(stcl)) return null; return (IPPropStencil<C, S, V>)
-	 * stcl; } /*@SuppressWarnings("unchecked") public static <C extends
-	 * StencilContext, S extends PStencil<C, S>, V> PropStencil<C, S, V>
-	 * asProperty(Stencil<C, S> stcl) { if (!isProperty(stcl)) return null; return
-	 * (PropStencil<C, S, V>) stcl; }
-	 */
-
-	/**
-	 * @return <tt>true</tt> if the slot is single.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isSingleSlot(C stclContext, S stencil, String slotPath) {
-		PSlot<C, S> slot = stencil.getSlot(stclContext, slotPath);
-		return SlotUtils.isSingle(stclContext, slot);
-	}
-
-	/**
-	 * @return <tt>true</tt> if the slot is multiple.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isMultPSlot(C stclContext, S stencil, String slotPath) {
-		PSlot<C, S> slot = stencil.getSlot(stclContext, slotPath);
-		return SlotUtils.isSingle(stclContext, slot);
-	}
-
-	/*
-	 * public interface StencilReplacer<C extends StencilContext, S extends
-	 * IStencil<C, S>> { StencilIterator<C, S> replace(C stclContext, PStencil<C,
-	 * S> tested, PStencil<C, S> parent); };
-	 */
-
-	public static boolean isXmlRefId(String key) {
-		return key.startsWith("_");
 	}
 
 }

@@ -620,7 +620,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     }
 
     @SuppressWarnings("unchecked")
-    public static void closeConnection(StclContext stclContext) {
+    public static void closeAllConnections(StclContext stclContext) {
         try {
             HttpServletRequest request = stclContext.getRequest();
             Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);

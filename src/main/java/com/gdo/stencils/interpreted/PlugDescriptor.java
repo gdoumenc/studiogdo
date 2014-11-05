@@ -191,7 +191,7 @@ public final class PlugDescriptor<C extends _StencilContext, S extends _PStencil
 		// _)
 		plugPart.writeAttribute("slot", getSlot());
 		String key = getKey();
-		if (!StringUtils.isEmpty(key) && !StencilUtils.isXmlRefId(key)) {
+		if (!StringUtils.isEmpty(key)) {
 			plugPart.writeAttribute("key", key);
 		}
 

@@ -33,6 +33,7 @@ import com.gdo.stencils.util.StencilUtils;
 public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
 
     public static int STRATEGY = 0;
+    private int _transaction_id;
 
     // semaphore to block stencil in buffer
     private Semaphore _available = new Semaphore(1, false);
@@ -46,15 +47,15 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
     // stencils stored in cursor (key -> stencil)
     protected Map<String, PStcl> _stencils;
 
-    // locked stencils (key -> stencil plugged in $locked slot)
-    protected Map<String, PStcl> _locked;
-
     // properties stored in cursor (key => (prop => value))
     protected Map<String, Map<String, String>> _properties;
 
     // set to true if properties list of a stencil was modified since last set
     // of those properties (key -> value)
     public Map<String, Boolean> _modified;
+
+    // locked stencils (key -> stencil plugged in $locked slot)
+    protected Map<String, PStcl> _locked;
 
     /**
      * Slot cursor constructor.
@@ -66,9 +67,9 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
         _name = name;
         _size = size;
         _stencils = new ConcurrentHashMap<String, PStcl>(_size);
-        _locked = new ConcurrentHashMap<String, PStcl>(_size);
         _properties = new ConcurrentHashMap<String, Map<String, String>>();
         _modified = new ConcurrentHashMap<String, Boolean>();
+        _locked = new ConcurrentHashMap<String, PStcl>(_size);
     }
 
     /**
@@ -196,6 +197,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
         if (_stencils.size() >= _size) {
 
             // needs to release more space in memory
+            // (release memory only when full)
             synchronized (this) {
 
                 // keys to release
@@ -214,9 +216,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
 
                 // removes them from local structure
                 for (String k : keys) {
-                    PStcl stcl = remove(stclContext, container, slot, k);
-                    if (StencilUtils.isNull(stcl))
-                        logError(stclContext, "internal error in cursor slot");
+                    remove(stclContext, container, slot, k);
                 }
 
                 // releases now as more place
@@ -235,7 +235,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the plugged key
      * @return the stencil previously plugged.
      */
-    public PStcl remove(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
+    public void remove(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
 
         // gets the stencil to be removed
         PStcl stcl = inCursor(stclContext, key.toString());
@@ -245,15 +245,8 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             // (negative id may be released without being saved)
             Boolean modified = _modified.get(key);
             if (modified != null) {
-                try {
-                    //int id = Integer.parseInt(key);
-                    //if (id >= 0) {
-                        logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
-                        stcl.afterRPCSet(stclContext);
-                    //}
-                } catch (NumberFormatException e) {
-                    // not an id key
-                }
+                logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
+                stcl.afterRPCSet(stclContext);
             }
 
             // removes it from cursor
@@ -263,7 +256,6 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             for (PStcl s : stcl.getStencilOtherPluggedReferences(stclContext))
                 s.release(stclContext, container, this, new Key<String>(key));
         }
-        return stcl;
     }
 
     public void lock(StclContext stclContext, PStcl stencil, IKey key) {
@@ -291,16 +283,17 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the properties values.
      */
     public void setPropertiesValues(StclContext stclContext, PSlot<StclContext, PStcl> slot, IKey key, Map<String, String> values) {
+        String k = key.toString();
 
         // checks the properties were not modified before reset them
-        Boolean modified = _modified.get(key);
+        Boolean modified = _modified.get(k);
         if (modified != null) {
             logError(stclContext, "Property values set in cursor without being updated (in %s at key %s)", slot, key);
-            setPropertiesValuesNotModified(stclContext, key);
         }
 
         // changes properties values and sets properties not modified
-        _properties.put(key.toString(), values);
+        _properties.put(k, values);
+        _modified.remove(k);
     }
 
     /**
@@ -406,21 +399,17 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the stencil key.
      * @return the stencil contained in the cursor (and not recreated);
      */
-    private int tid;
-
     public synchronized PStcl inCursor(StclContext stclContext, String key) {
 
         // in cursor only on same session
-        if (STRATEGY == 1 && this.tid != stclContext.getTransactionId()) {
+        if (STRATEGY == 1 && _transaction_id != stclContext.getTransactionId()) {
             _stencils.clear();
-            this.tid = stclContext.getTransactionId();
+            _transaction_id = stclContext.getTransactionId();
             return null;
         }
 
         // else checks in map
-        if (_stencils.containsKey(key))
-            return _stencils.get(key);
-        return null;
+        return _stencils.get(key);
     }
 
     /**
@@ -450,6 +439,9 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      */
     public synchronized void removeFromCursor(StclContext stclContext, String key) {
         _stencils.remove(key);
+        _properties.remove(key);
+        _modified.remove(key);
+        _locked.remove(key);
     }
 
     @Override

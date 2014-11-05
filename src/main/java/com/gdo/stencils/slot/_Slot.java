@@ -552,7 +552,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         plugPart.writeAttribute("ref", ref);
         plugPart.writeAttribute("slot", getName(stclContext));
         IKey key = plugged.getKey();
-        if (!key.isEmpty() && !StencilUtils.isXmlRefId(key.toString())) {
+        if (!key.isEmpty()) {
             plugPart.writeAttribute("key", key);
         }
         plugPart.endElement("plug");

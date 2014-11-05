@@ -234,6 +234,7 @@ public class GdoVisible<C extends _StencilContext, S extends _PStencil<C, S>> ex
 				if (value == null) {
 					String msg = String.format("The command %s doesn't return a boolean value", cmdStcl.getName(stclContext));
 					getLog().warn(stclContext, msg);
+					return false;
 				}
 				return value.booleanValue();
 			} else {
