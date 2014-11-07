@@ -6,7 +6,6 @@ package com.gdo.project.cmd;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.project.cmd.eval.ClearSlot;
-import com.gdo.project.cmd.eval.Expunge;
 import com.gdo.project.cmd.eval.HasValue;
 import com.gdo.project.cmd.eval.IsEmpty;
 import com.gdo.project.cmd.eval.IsPlugged;
@@ -88,12 +87,6 @@ public class Eval extends AtomicActionStcl {
             @Override
             CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
                 return new SetValue(cmdContext.getStencilContext()).execute(cmdContext, self);
-            }
-        },
-        Expunge {
-            @Override
-            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-                return new Expunge(cmdContext.getStencilContext()).execute(cmdContext, self);
             }
         },
         IsPlugged {

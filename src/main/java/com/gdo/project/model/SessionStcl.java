@@ -3,9 +3,7 @@
  */
 package com.gdo.project.model;
 
-import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -64,7 +62,7 @@ public class SessionStcl extends Stcl {
     public static final String HITS_KEY = "HITS_KEY";
 
     // list of all session stencils for all projects (key is session id)
-    public static Map<String, SessionStcl> SESSION_STENCILS = new HashMap<>();
+    public static Map<String, SessionStcl> SESSION_STENCILS = new ConcurrentHashMap<>();
 
     // list of all sessions defined for all projects (key is session id)
     public static Map<String, HttpSession> HTTP_SESSIONS = new ConcurrentHashMap<>();
@@ -102,15 +100,6 @@ public class SessionStcl extends Stcl {
         } else {
             StclFactory factory = (StclFactory) stclContext.getStencilFactory();
             sessionStcl = factory.createStencil(stclContext, SessionStcl.class);
-        }
-
-        // traces creation
-        Principal userPrincipal = request.getUserPrincipal();
-        if (userPrincipal != null) {
-            String name = userPrincipal.getName();
-            logWarn("Session stencil created by \"%s\" in session %s", name, session.getId());
-        } else {
-            logWarn("Session stencil created in session %s", session.getId());
         }
 
         // bounds it to the session
@@ -197,6 +186,7 @@ public class SessionStcl extends Stcl {
     private void createListener(StclContext stclContext, HttpSession session) {
         SessionListener listener = new SessionListener(stclContext);
         session.setAttribute(SESSION_KEY, listener);
+        listener = (SessionListener) session.getAttribute(SESSION_KEY);
     }
 
     /**
@@ -243,30 +233,6 @@ public class SessionStcl extends Stcl {
 
     }
 
-    //
-    // LOG PART
-    //
-
-    private static final StencilLog LOG = new StencilLog(SessionStcl.class);
-
-    public static String logWarn(String format, Object... params) {
-        if (LOG.isWarnEnabled()) {
-            String msg = (params.length == 0) ? format : String.format(format, params);
-            LOG.warn(StclContext.defaultContext(), msg);
-            return msg;
-        }
-        return "";
-    }
-
-    public static String logError(String format, Object... params) {
-        if (LOG.isErrorEnabled()) {
-            String msg = (params.length == 0) ? format : String.format(format, params);
-            LOG.error(StclContext.defaultContext(), msg);
-            return msg;
-        }
-        return "";
-    }
-
     private class SessionListener implements HttpSessionBindingListener {
         StclContext _context;
 
@@ -290,21 +256,8 @@ public class SessionStcl extends Stcl {
 
             // traces session creation
             HttpSession session = event.getSession();
-
             ServletContext context = session.getServletContext();
-            logWarn(_context, "Session %s created (id:%s)", context.getServletContextName(), session.getId());
-
-            // handler on after session created
-            // Stcl servletStcl = (SessionListener) event.getValue();
-            // ((ServletStcl)
-            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
-            // servletStcl);
-
-            // PStcl servletStcl = (PStcl)
-            // context.getAttribute(ServletStcl.class.getName());
-            // ((ServletStcl)
-            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
-            // servletStcl);
+            logTrace(_context, "Session %s created (id:%s)", context.getServletContextName(), session.getId());
 
             // increments counters
             SESSION_STENCILS.put(session.getId(), SessionStcl.this);
@@ -324,12 +277,7 @@ public class SessionStcl extends Stcl {
             // traces session destruction
             HttpSession session = event.getSession();
             ServletContext context = session.getServletContext();
-            logWarn(_context, "Session %s destroyed (id:%s)", context.getServletContextName(), session.getId());
-
-            // handler on before session deleted
-            // ((ServletStcl)
-            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
-            // servletStcl);
+            logTrace(_context, "Session %s destroyed (id:%s)", context.getServletContextName(), session.getId());
 
             // release memory
             SessionStcl.this.clear(_context, SessionStcl.this.self());
@@ -339,4 +287,25 @@ public class SessionStcl extends Stcl {
             HTTP_SESSIONS.remove(session.getId());
         }
     }
+
+    //
+    // LOG PART
+    //
+
+    private static final StencilLog LOG = new StencilLog(SessionStcl.class);
+
+    @Override
+    public StencilLog getLog() {
+        return LOG;
+    }
+
+    public static String logError(String format, Object... params) {
+        if (LOG.isErrorEnabled()) {
+            String msg = (params.length == 0) ? format : String.format(format, params);
+            LOG.error(StclContext.defaultContext(), msg);
+            return msg;
+        }
+        return "";
+    }
+
 }

@@ -1265,10 +1265,4 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         String alias = getTableAliasForProperty(stclContext, self);
         return SqlUtils.newSqlCondition(from, table, alias, stencil);
     }
-
-    @Override
-    public void expunge(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        SQLCursor cursor = getCursor(stclContext, self);
-        cursor.expunge();
-    }
 }

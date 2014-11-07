@@ -215,7 +215,10 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             _cursor = null;
             _cursor_container = null;
             _cursor_key = null;
-            _cursor_references = null;
+            if (_cursor_references != null) {
+                _cursor_references.clear();
+                _cursor_references = null;
+            }
         }
 
         // does classical clear

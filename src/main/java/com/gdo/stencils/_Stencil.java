@@ -247,8 +247,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             logError(stclContext, "A stencil should not be cleared twice");
         }
         this.cleared = true;
+        _self = null;
+        _desc = null;
 
-        // slots part
+        // slots and commands
         if (_slots != null) {
             for (_Slot<C, S> slot : _slots.values()) {
                 slot.clear();
@@ -256,26 +258,26 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             _slots.clear();
             _slots = null;
         }
-
-        // TODO : should not be cleared as if the command clears the stencil get
-        // error
-        // for (CommandStencil<C, S> cmd : _commands.values()) {
-        // cmd.clear(stclContext);
-        // }
-        // commands part
         if (_commandSlot != null) {
             _commandSlot.clear();
             _commandSlot = null;
         }
 
-        // plugged references part
+        // plugged references
         if (_plugged_references != null) {
             _plugged_references.clear();
             _plugged_references = null;
         }
 
-        _self = null;
-        _desc = null;
+        // descriptors
+        if (_slot_descs != null) {
+            _slot_descs.clear();
+            _slot_descs = null;
+        }
+        if (_command_descs != null) {
+            _command_descs.clear();
+            _command_descs = null;
+        }
     }
 
     /**
@@ -1783,7 +1785,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         }
 
         Map<String, Object> getDefaultParams() {
-            Map<String, Object> map = new ConcurrentHashMap<String, Object>();
+            Map<String, Object> map = new ConcurrentHashMap<>();
             int index = 0;
             for (Object param : _params) {
                 String key = CommandStencil.PARAM_PREFIX + ++index;
@@ -1795,7 +1797,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     public void command(String name, Class<? extends CommandStencil<C, S>> clazz, Object... params) {
         if (_command_descs == null) {
-            _command_descs = new HashMap<String, CommandDescriptor>();
+            _command_descs = new HashMap<>();
         }
         _command_descs.put(name, new CommandDescriptor(clazz, params));
     }

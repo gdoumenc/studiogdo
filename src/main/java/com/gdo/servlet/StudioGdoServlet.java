@@ -338,7 +338,8 @@ public class StudioGdoServlet extends HttpServlet {
     //
 
     /**
-     * Writes the HTTP response from an input stream.
+     * Writes the HTTP response from an input stream. The input stream is closed
+     * by the call.
      * 
      * @param stclContext
      *            the stencil context.
@@ -361,13 +362,13 @@ public class StudioGdoServlet extends HttpServlet {
         response.setDateHeader("Expires", 0);
         if (in != null) {
             IOUtils.copy(in, response.getOutputStream());
+            in.close();
         }
     }
 
     public static void writeHTMLResponse(HttpServletResponse response, String text, String enc) throws IOException {
         InputStream in = IOUtils.toInputStream(text);
         writeResponse(response, HttpServletResponse.SC_OK, "text/html", in, enc);
-        in.close();
     }
 
     public static void writeXMLResponse(HttpServletResponse response, InputStream in, String enc) throws IOException {
@@ -377,7 +378,6 @@ public class StudioGdoServlet extends HttpServlet {
     public static void writeXMLResponse(HttpServletResponse response, String text, String enc) throws IOException {
         InputStream in = IOUtils.toInputStream(text);
         writeXMLResponse(response, in, enc);
-        in.close();
     }
 
     //

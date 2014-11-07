@@ -210,9 +210,6 @@ public class RpcWrapper {
     public static final String TYPE_BOOLEAN = Keywords.BOOLEAN;
     public static final String TYPE_XINHA = Keywords.XINHA; // return value in
 
-    // number of hits from service start
-    public static int HITS = 0;
-
     private RpcWrapper(StclContext stclContext) {
         // singleton pattern
     }
@@ -243,13 +240,6 @@ public class RpcWrapper {
     public void service(StclContext stclContext, String entry, RpcArgs args) {
         boolean disconnect = false;
         try {
-
-            // increments hits
-            if (HITS != -1 && HITS < Integer.MAX_VALUE) {
-                HITS++;
-            } else {
-                HITS = -1;
-            }
 
             // gets arguments
             String trace = args.formatForTrace();
@@ -869,7 +859,6 @@ public class RpcWrapper {
                 String mime = facetResult.getMimeType();
                 InputStream in = facetResult.getInputStream();
                 StudioGdoServlet.writeResponse(stclContext.getResponse(), HttpServletResponse.SC_OK, mime, in, StclContext.getCharacterEncoding());
-                facetResult.closeInputStream();
                 return;
             }
 

@@ -134,13 +134,4 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
         return StencilUtils.<C, S> iterator();
     }
 
-    /**
-     * Expunge the calculated stencil to force reclaculation. Made public to
-     * allow command Expunge to use it.
-     */
-    @Override
-    public void expunge(C stclContext, PSlot<C, S> self) {
-        _containedStcl = null;
-    }
-
 }

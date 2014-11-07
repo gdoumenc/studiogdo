@@ -29,7 +29,7 @@ public abstract class _SlotDescriptor<C extends _StencilContext, S extends _PSte
 
     public void addLink(String slot, String path) {
         if (_links == null) {
-            _links = new Hashtable<String, String>();
+            _links = new Hashtable<>();
         }
         _links.put(slot, path);
     }

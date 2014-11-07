@@ -84,11 +84,6 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             _modified.clear();
     }
 
-    // TODO complete by purge before and stencils created only on needs
-    public void expunge() {
-        clear();
-    }
-
     /**
      * Abstract method to create stencil if not in cursor.
      * 

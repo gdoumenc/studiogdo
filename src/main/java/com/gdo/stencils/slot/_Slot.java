@@ -114,9 +114,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         _annoted = null;
     }
 
-    public void expunge(C stclContext, PSlot<C, S> self) {
-    }
-
     /**
      * Returns the name of the slot.
      * 

@@ -118,7 +118,12 @@ public class StclContext extends _StencilContext {
 
         // creates session if the session was removed
         if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
-            createSession(servletStcl);
+
+            // creates session stencil
+            SessionStcl.createSessionStcl(this);
+
+            // handler on after session created
+            ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
         }
     }
 
@@ -389,16 +394,6 @@ public class StclContext extends _StencilContext {
         setServletStcl(servletStcl);
         logWarn(this, "Project %s loaded", context);
         return servletStcl;
-    }
-
-    private void createSession(PStcl servletStcl) {
-
-        // creates the session
-        SessionStcl.createSessionStcl(this);
-
-        // handler on after session created
-        ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
-
     }
 
     //
