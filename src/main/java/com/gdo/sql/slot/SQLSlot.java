@@ -1036,7 +1036,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
                             cursor.setPropertiesValues(stclContext, self, key, attributes);
                             keys.add(key);
                         } catch (Exception e) {
-                            // don't add key in list if cannot set property values
+                            // don't add key in list if cannot set property
+                            // values
                             logError(stclContext, e.toString());
                         }
                     } else {
