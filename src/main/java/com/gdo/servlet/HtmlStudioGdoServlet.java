@@ -554,13 +554,13 @@ public class HtmlStudioGdoServlet extends HttpServlet {
      * Writes the HTTP response from an input stream.
      * 
      * @param stclContext
-     *          the stencil context.
+     *            the stencil context.
      * @param type
-     *          the mime content type.
+     *            the mime content type.
      * @param in
-     *          the input stream.
+     *            the input stream.
      * @param enc
-     *          the encoding used.
+     *            the encoding used.
      */
     public static void writeResponse(HttpServletResponse response, int status, String type, InputStream in, String charset) throws IOException {
         response.setStatus(status);

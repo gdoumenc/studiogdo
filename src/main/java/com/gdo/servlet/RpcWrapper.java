@@ -309,7 +309,8 @@ public class RpcWrapper {
                 fault(stclContext, entry, msg, args);
             }
 
-            // releases session if required (close all connections before deconnection)
+            // releases session if required (close all connections before
+            // deconnection)
             boolean release = args.getBooleanParameter(stclContext, RELEASE_PARAM, false);
             disconnect = release || disconnect;
             if (release || disconnect) {

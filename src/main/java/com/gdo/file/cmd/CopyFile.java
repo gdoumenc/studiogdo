@@ -24,52 +24,52 @@ import com.gdo.stencils.util.PathUtils;
  */
 public class CopyFile extends AtomicActionStcl {
 
-	public interface Status {
-		int NO_NAME_DEFINED = 1;
-	}
+    public interface Status {
+        int NO_NAME_DEFINED = 1;
+    }
 
-	private String _name; // file name
+    private String _name; // file name
 
-	public CopyFile(StclContext stclContext) {
-		super(stclContext);
-	}
+    public CopyFile(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
-		String name = target.getName(stclContext);
-		try {
-			FileStcl df = (FileStcl) target.getReleasedStencil(stclContext);
-			File source = df.getFile(stclContext, target);
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
+        String name = target.getName(stclContext);
+        try {
+            FileStcl df = (FileStcl) target.getReleasedStencil(stclContext);
+            File source = df.getFile(stclContext, target);
 
-			String path = PathUtils.compose(source.getParent(), _name);
-			File dest = new File(path);
-			if (!dest.createNewFile()) {
-				String msg = String.format("cannot create file %s for copy", path);
-				return error(cmdContext, self, msg);
-			}
-			FileInputStream reader = new FileInputStream(source);
-			FileOutputStream writer = new FileOutputStream(dest);
-			IOUtils.copy(reader, writer);
-			return success(cmdContext, self, dest.hashCode());
-		} catch (Exception e) {
-			String msg = String.format("exception when copying %s", name);
-			logError(stclContext, msg, e.toString());
-			return error(cmdContext, self, msg);
-		}
-	}
+            String path = PathUtils.compose(source.getParent(), _name);
+            File dest = new File(path);
+            if (!dest.createNewFile()) {
+                String msg = String.format("cannot create file %s for copy", path);
+                return error(cmdContext, self, msg);
+            }
+            FileInputStream reader = new FileInputStream(source);
+            FileOutputStream writer = new FileOutputStream(dest);
+            IOUtils.copy(reader, writer);
+            return success(cmdContext, self, dest.hashCode());
+        } catch (Exception e) {
+            String msg = String.format("exception when copying %s", name);
+            logError(stclContext, msg, e.toString());
+            return error(cmdContext, self, msg);
+        }
+    }
 
-	@Override
-	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+    @Override
+    protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		// get directory or file name
-		_name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(_name)) {
-			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to copy file");
-		}
+        // get directory or file name
+        _name = getParameter(cmdContext, 1, null);
+        if (StringUtils.isEmpty(_name)) {
+            return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to copy file");
+        }
 
-		// other verification
-		return super.verifyContext(cmdContext, self);
-	}
+        // other verification
+        return super.verifyContext(cmdContext, self);
+    }
 }

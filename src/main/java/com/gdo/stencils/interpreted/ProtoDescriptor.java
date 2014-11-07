@@ -41,93 +41,93 @@ import com.gdo.util.XmlWriter;
  */
 public final class ProtoDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
 
-	private String _classes; // classes expected (: separated)
-	private String _slots; // slots expected (: separated)
-	private String _props; // props expected (: separated)
-	private String _commands; // commands expected (: separated)
-	private String _templates; // templates expected : slots, props, ... (:
+    private String _classes; // classes expected (: separated)
+    private String _slots; // slots expected (: separated)
+    private String _props; // props expected (: separated)
+    private String _commands; // commands expected (: separated)
+    private String _templates; // templates expected : slots, props, ... (:
 
-	// separated)
+    // separated)
 
-	// classes expected
-	public String[] getClasses() {
-		return StringHelper.splitShortString(_classes, MULTI);
-	}
+    // classes expected
+    public String[] getClasses() {
+        return StringHelper.splitShortString(_classes, MULTI);
+    }
 
-	public void setClasses(String classes) {
-		_classes = classes;
-	}
+    public void setClasses(String classes) {
+        _classes = classes;
+    }
 
-	// slots expected
-	public String getSlots() {
-		return _slots;
-	}
+    // slots expected
+    public String getSlots() {
+        return _slots;
+    }
 
-	public void setSlots(String slots) {
-		_slots = slots;
-	}
+    public void setSlots(String slots) {
+        _slots = slots;
+    }
 
-	// properties expected
-	public String getProps() {
-		return _props;
-	}
+    // properties expected
+    public String getProps() {
+        return _props;
+    }
 
-	public void setProps(String props) {
-		_props = props;
-	}
+    public void setProps(String props) {
+        _props = props;
+    }
 
-	// commands expected
-	public String getCommands() {
-		return _commands;
-	}
+    // commands expected
+    public String getCommands() {
+        return _commands;
+    }
 
-	public void setCommands(String commands) {
-		_commands = commands;
-	}
+    public void setCommands(String commands) {
+        _commands = commands;
+    }
 
-	// template expected
-	public String getTemplates() {
-		return _templates;
-	}
+    // template expected
+    public String getTemplates() {
+        return _templates;
+    }
 
-	public void setTemplates(String templates) {
-		_templates = templates;
-	}
+    public void setTemplates(String templates) {
+        _templates = templates;
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer str = new StringBuffer("proto(");
-		if (!StringUtils.isEmpty(_classes))
-			str.append("classes:").append(_classes);
-		if (!StringUtils.isEmpty(_slots))
-			str.append(", slots:").append(_slots);
-		if (!StringUtils.isEmpty(_props))
-			str.append(", props:").append(_props);
-		if (!StringUtils.isEmpty(_commands))
-			str.append(", commands:").append(_commands);
-		str.append(')');
-		return str.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuffer str = new StringBuffer("proto(");
+        if (!StringUtils.isEmpty(_classes))
+            str.append("classes:").append(_classes);
+        if (!StringUtils.isEmpty(_slots))
+            str.append(", slots:").append(_slots);
+        if (!StringUtils.isEmpty(_props))
+            str.append(", props:").append(_props);
+        if (!StringUtils.isEmpty(_commands))
+            str.append(", commands:").append(_commands);
+        str.append(')');
+        return str.toString();
+    }
 
-	@Override
-	public void save(C stclContext, XmlWriter instOut, XmlWriter plugOut) throws IOException {
-		if (isEmpty())
-			return;
-		instOut.startElement("proto");
-		if (!StringUtils.isEmpty(_classes))
-			instOut.writeAttribute("classes", _classes);
-		if (!StringUtils.isEmpty(_slots))
-			instOut.writeAttribute("slots", _slots);
-		if (!StringUtils.isEmpty(_props))
-			instOut.writeAttribute("props", _props);
-		if (!StringUtils.isEmpty(_commands))
-			instOut.writeAttribute("commands", _commands);
-		instOut.endElement("proto");
-	}
+    @Override
+    public void save(C stclContext, XmlWriter instOut, XmlWriter plugOut) throws IOException {
+        if (isEmpty())
+            return;
+        instOut.startElement("proto");
+        if (!StringUtils.isEmpty(_classes))
+            instOut.writeAttribute("classes", _classes);
+        if (!StringUtils.isEmpty(_slots))
+            instOut.writeAttribute("slots", _slots);
+        if (!StringUtils.isEmpty(_props))
+            instOut.writeAttribute("props", _props);
+        if (!StringUtils.isEmpty(_commands))
+            instOut.writeAttribute("commands", _commands);
+        instOut.endElement("proto");
+    }
 
-	// return <tt>true</tt> if the proto contains no information
-	private boolean isEmpty() {
-		return (StringUtils.isEmpty(_classes) && StringUtils.isEmpty(_slots) && StringUtils.isEmpty(_props) && StringUtils.isEmpty(_commands));
-	}
+    // return <tt>true</tt> if the proto contains no information
+    private boolean isEmpty() {
+        return (StringUtils.isEmpty(_classes) && StringUtils.isEmpty(_slots) && StringUtils.isEmpty(_props) && StringUtils.isEmpty(_commands));
+    }
 
 }

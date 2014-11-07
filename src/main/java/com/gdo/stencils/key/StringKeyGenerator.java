@@ -36,13 +36,13 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class StringKeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>> extends _KeyGenerator<C, S, String> {
 
-	public StringKeyGenerator(C stclContext, String key, PSlot<C, S> slot) {
-		super(stclContext, new Key<String>(key), slot);
-	}
+    public StringKeyGenerator(C stclContext, String key, PSlot<C, S> slot) {
+        super(stclContext, new Key<String>(key), slot);
+    }
 
-	@Override
-	protected void generateNextKey() {
-		_key.changeTo(_key.getValue() + "1");
-	}
+    @Override
+    protected void generateNextKey() {
+        _key.changeTo(_key.getValue() + "1");
+    }
 
 }

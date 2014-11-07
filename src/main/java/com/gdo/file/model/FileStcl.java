@@ -206,7 +206,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
             // gets the associated file
             File file = getFile(stclContext, self.getContainer());
             if (file == null)
-                return StencilUtils.< StclContext, PStcl> iterator();
+                return StencilUtils.<StclContext, PStcl> iterator();
 
             // if key defined, then used as format
             PStcl prop = null;
@@ -228,7 +228,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
                         Key.NO_KEY, date);
             }
 
-            return StencilUtils.< StclContext, PStcl> iterator(stclContext, prop, self);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, prop, self);
         }
     }
 

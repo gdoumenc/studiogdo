@@ -34,32 +34,33 @@ import com.gdo.stencils.util.StencilUtils;
  */
 public class AggregationSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends MultiCalculatedSlot<C, S> {
 
-	private String[] _pathes;
+    private String[] _pathes;
 
-	/**
-	 * @param pathes
-	 *          ':' separated list of slots where the plugged stencils are found.
-	 */
-	public AggregationSlot(C stclContext, _Stencil<C, S> in, String name, String pathes) {
-		super(stclContext, in, name, PSlot.ANY);
-		setPathes(pathes);
-	}
+    /**
+     * @param pathes
+     *            ':' separated list of slots where the plugged stencils are
+     *            found.
+     */
+    public AggregationSlot(C stclContext, _Stencil<C, S> in, String name, String pathes) {
+        super(stclContext, in, name, PSlot.ANY);
+        setPathes(pathes);
+    }
 
-	public void setPathes(String pathes) {
-		_pathes = StringHelper.splitShortStringAndTrim(pathes, PathUtils.MULTI);
-	}
+    public void setPathes(String pathes) {
+        _pathes = StringHelper.splitShortStringAndTrim(pathes, PathUtils.MULTI);
+    }
 
-	@Override
-	protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		if (ClassHelper.isEmpty(_pathes))
-			return StencilUtils.<C, S> iterator();
-		List<S> stencils = new ArrayList<S>();
-		for (String path : _pathes) {
-			StencilIterator<C, S> iter = self.getContainer().getStencils(stclContext, path);
-			for (S stcl : iter) {
-				stencils.add(stcl);
-			}
-		}
-		return StencilUtils.<C, S> iterator(stclContext, stencils, cond, self);
-	}
+    @Override
+    protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
+        if (ClassHelper.isEmpty(_pathes))
+            return StencilUtils.<C, S> iterator();
+        List<S> stencils = new ArrayList<S>();
+        for (String path : _pathes) {
+            StencilIterator<C, S> iter = self.getContainer().getStencils(stclContext, path);
+            for (S stcl : iter) {
+                stencils.add(stcl);
+            }
+        }
+        return StencilUtils.<C, S> iterator(stclContext, stencils, cond, self);
+    }
 }

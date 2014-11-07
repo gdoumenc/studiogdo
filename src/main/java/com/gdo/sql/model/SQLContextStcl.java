@@ -33,7 +33,6 @@ import org.apache.poi.ss.usermodel.DataFormat;
 import com.gdo.context.model.ContextStcl;
 import com.gdo.helper.ConverterHelper;
 import com.gdo.helper.StringHelper;
-import com.gdo.project.util.SqlUtils;
 import com.gdo.sql.cmd.SelectQuery;
 import com.gdo.sql.cmd.TestSqlConnection;
 import com.gdo.sql.cmd.UpdateQuery;
@@ -43,9 +42,7 @@ import com.gdo.stencils.StclContext;
 import com.gdo.stencils.event.IPropertyChangeListener;
 import com.gdo.stencils.event.PropertyChangeEvent;
 import com.gdo.stencils.facet.FacetResult;
-import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.key.IKey;
-import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
@@ -65,9 +62,6 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
 
     // if set to false, call only read-only SQL call
     private static final boolean EXECUTE_UPDATE = true;
-
-    public static final String DRIVER = "com.mysql.jdbc.Driver";
-    public static final String URL_INITIAL = "jdbc:mysql://";
 
     private Set<String> _initialized_table = new HashSet<String>();
 
@@ -90,10 +84,10 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
 
         // SLOT PART
 
-        propSlot(Slot.URL, "");
-        propSlot(Slot.DATABASE, "");
-        propSlot(Slot.USER, "");
-        propSlot(Slot.PASSWD, "");
+        propSlot(Slot.URL);
+        propSlot(Slot.DATABASE);
+        propSlot(Slot.USER);
+        propSlot(Slot.PASSWD);
 
         new ConnectedSlot(stclContext);
 
@@ -118,10 +112,10 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     @Override
     public PStcl clone(StclContext stclContext, PSlot<StclContext, PStcl> slot, IKey key, PStcl self) {
         PStcl clone = super.clone(stclContext, slot, key, self);
-        clone.setString(stclContext, Slot.URL, self.getNotExpandedString(stclContext, Slot.URL, URL_INITIAL));
-        clone.setString(stclContext, Slot.DATABASE, self.getNotExpandedString(stclContext, Slot.DATABASE, ""));
-        clone.setString(stclContext, Slot.PASSWD, self.getNotExpandedString(stclContext, Slot.PASSWD, ""));
-        clone.setString(stclContext, Slot.USER, self.getNotExpandedString(stclContext, Slot.USER, ""));
+        clone.setString(stclContext, Slot.URL, self.getString(stclContext, Slot.URL, ""));
+        clone.setString(stclContext, Slot.DATABASE, self.getString(stclContext, Slot.DATABASE, ""));
+        clone.setString(stclContext, Slot.PASSWD, self.getString(stclContext, Slot.PASSWD, ""));
+        clone.setString(stclContext, Slot.USER, self.getString(stclContext, Slot.USER, ""));
         return clone;
     }
 
@@ -199,47 +193,6 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     }
 
     /**
-     * Close the current connection.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            the SQL context stencil.
-     */
-    private void close(StclContext stclContext, PStcl self) {
-        Connection connection = getConnection(stclContext, self);
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (Exception e) {
-                logWarn(stclContext, "Cannot close connection", e);
-            }
-        }
-        setConnection(stclContext, null, self);
-    }
-
-    /**
-     * Checks connection and returns a new statement.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            the SQL context stencil.
-     * @return the new sql statement.
-     */
-    public Statement getStatement(StclContext stclContext, PStcl self) {
-        try {
-            if (connect(stclContext, self)) {
-                Connection connection = getConnection(stclContext, self);
-                return connection.createStatement();
-            }
-        } catch (Exception e) {
-            logError(stclContext, "Cannot create statement", e);
-        }
-        return null;
-    }
-
-    /**
      * Does an update query.
      * 
      * @param stclContext
@@ -273,40 +226,11 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                 logError(stclContext, "error on update query %s : %s", query, e);
                 return Result.error(e);
             } finally {
-                SqlUtils.closeStatement(stclContext, stmt);
+                closeStatement(stmt);
             }
         }
         String msg = logError(stclContext, "cannot get statement for update query %s", query);
         return Result.error(msg);
-    }
-
-    public Result batchQuery(StclContext stclContext, String query, PStcl self) {
-
-        // if no sql call anyway
-        if (NO_CALL)
-            return Result.success();
-
-        // traces the query
-        if (getLog().isTraceEnabled()) {
-            String msg = "Execute updateQuery : " + query;
-            getLog().trace(stclContext, msg);
-        }
-
-        // perform sql call
-        Statement stmt = getStatement(stclContext, self);
-        if (stmt != null) {
-            try {
-                stmt.addBatch(query);
-                stmt.executeBatch();
-                return Result.success();
-            } catch (Exception e) {
-                logError(stclContext, "query : %s, exception : %s", query, e);
-                return Result.error(e);
-            } finally {
-                SqlUtils.closeStatement(stclContext, stmt);
-            }
-        }
-        return Result.error("cannot create statement");
     }
 
     /**
@@ -338,7 +262,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                 return stmt.executeQuery(query);
             } catch (Exception e) {
                 logError(stclContext, "error on select query %s : %s", query, e);
-                closeStatement(stclContext, stmt);
+                closeStatement(stmt);
             }
         }
         logError(stclContext, "cannot get statement for select query %s", query);
@@ -351,7 +275,9 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             logTrace(stclContext, "Execute queryString : %s", query);
             ResultSet rs = selectQuery(stclContext, query, self);
             if (rs != null && rs.next()) {
-                return rs.getString(1);
+                String value = rs.getString(1);
+                closeResultSet(rs);
+                return value;
             }
             return "";
         } catch (Exception e) {
@@ -367,7 +293,9 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             logTrace(stclContext, "Execute queryInteger : %s", query);
             ResultSet rs = selectQuery(stclContext, query, self);
             if (rs != null && rs.next()) {
-                return rs.getInt(1);
+                int value = rs.getInt(1);
+                closeResultSet(rs);
+                return value;
             }
         } catch (Exception e) {
             logError(stclContext, "query : %s, exception : %s", query, e);
@@ -378,37 +306,6 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     // queries last entered id
     public int queryLastInsertID(StclContext stclContext, PStcl self) {
         return queryInteger(stclContext, "SELECT LAST_INSERT_ID()", self);
-    }
-
-    public PStcl queryStencil(StclContext stclContext, String template, String query, PSlot<StclContext, PStcl> slot, String key, PStcl self) {
-        ResultSet rs = selectQuery(stclContext, query, self);
-        if (rs != null) {
-            try {
-                PStcl stcl = null;
-                while (rs.next()) {
-                    if (stcl == null) {
-                        StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
-                        stcl = factory.createPStencil(stclContext, slot, new Key<String>(key), template);
-                    }
-                    int cols = rs.getMetaData().getColumnCount();
-                    for (int i = 1; i <= cols; i++) {
-                        String path = rs.getMetaData().getColumnName(i);
-                        String value = rs.getString(i);
-                        try {
-                            stcl.setString(stclContext, path, value);
-                        } catch (Exception e) {
-                            logError(stclContext, "query : %s, exception : %s", query, e);
-                        }
-                    }
-                }
-                return stcl;
-            } catch (Exception e) {
-                logError(stclContext, "query : %s, exception : %s", query, e);
-            } finally {
-                SqlUtils.closeResultSet(stclContext, rs);
-            }
-        }
-        return null;
     }
 
     // get table initialization status
@@ -575,7 +472,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             }
 
             // close statement
-            SqlUtils.closeStatement(stclContext, stmt);
+            closeStatement(stmt);
 
             // use temporary file stream
             File file = File.createTempFile("sql", null);
@@ -619,6 +516,18 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             cons.put(self.getUId(stclContext), connection);
     }
 
+    private void close(StclContext stclContext, PStcl self) {
+        Connection connection = getConnection(stclContext, self);
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                logWarn(stclContext, "Cannot close connection", e);
+            }
+        }
+        setConnection(stclContext, null, self);
+    }
+
     @SuppressWarnings("unchecked")
     public static void closeAllConnections(StclContext stclContext) {
         try {
@@ -633,12 +542,33 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
         }
     }
 
-    private void closeStatement(StclContext stclContext, Statement stmt) {
+    private Statement getStatement(StclContext stclContext, PStcl self) {
+        try {
+            if (connect(stclContext, self)) {
+                Connection connection = getConnection(stclContext, self);
+                return connection.createStatement();
+            }
+        } catch (Exception e) {
+            logError(stclContext, "Cannot create statement", e);
+        }
+        return null;
+    }
+
+    private static void closeStatement(Statement stmt) {
         try {
             if (stmt != null)
                 stmt.close();
         } catch (SQLException e) {
-            logWarn(stclContext, e.toString());
+        }
+    }
+
+    public static void closeResultSet(ResultSet rs) {
+        try {
+            if (rs != null) {
+                closeStatement(rs.getStatement());
+                rs.close();
+            }
+        } catch (SQLException se) {
         }
     }
 

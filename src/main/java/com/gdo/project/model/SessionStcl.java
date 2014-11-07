@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSessionBindingListener;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.StringHelper;
-import com.gdo.servlet.RpcWrapper;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
@@ -34,7 +33,6 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.slot.CalculatedIntegerPropertySlot;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
@@ -60,338 +58,285 @@ import com.gdo.stencils.util.PathUtils;
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 
-public class SessionStcl extends Stcl implements HttpSessionBindingListener {
+public class SessionStcl extends Stcl {
 
-	public static final String SESSION_KEY = "SESSION_KEY";
-	public static final String HITS_KEY = "HITS_KEY";
+    public static final String SESSION_KEY = "SESSION_KEY";
+    public static final String HITS_KEY = "HITS_KEY";
 
-	// list of all session stencils for all projects (key is session id)
-	public static Map<String, Stcl> SESSION_STENCILS = new HashMap<String, Stcl>();
+    // list of all session stencils for all projects (key is session id)
+    public static Map<String, SessionStcl> SESSION_STENCILS = new HashMap<>();
 
-	// list of all sessions defined for all projects (key is session id)
-	public static Map<String, HttpSession> HTTP_SESSIONS = new ConcurrentHashMap<String, HttpSession>();
+    // list of all sessions defined for all projects (key is session id)
+    public static Map<String, HttpSession> HTTP_SESSIONS = new ConcurrentHashMap<>();
 
-	// number of session stencils currently active
-	private static int NUMBER = 0;
+    /**
+     * Retrieves the session stencil from HTTP session.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @return the session stencil.
+     */
+    public static Stcl getSessionStcl(StclContext stclContext) {
+        HttpSession session = stclContext.getHttpSession();
+        SessionListener listener = (SessionListener) session.getAttribute(SESSION_KEY);
+        return (listener != null) ? listener.getSessionStcl() : null;
+    }
 
-	// max number of session stencils active in the same time
-	private static int MAX = 0;
+    /**
+     * Creates and store the session stencil in HTTP session.
+     * 
+     * The session is stored as a stencil and not as a plugged stencil as it
+     * implements the HttpSessionBindingListener interface.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     */
+    public static void createSessionStcl(StclContext stclContext) {
+        HttpSession session = stclContext.getHttpSession();
+        HttpServletRequest request = stclContext.getRequest();
 
-	// number of session stencils created during all service life
-	private static int MAX_NUMBER = 0;
+        // checks another one wasn't created before
+        Stcl sessionStcl = getSessionStcl(stclContext);
+        if (sessionStcl != null) {
+            logError("A session stencil (%s) already exists in session %s (ip %s)", sessionStcl, session.getId(), request.getRemoteAddr());
+        } else {
+            StclFactory factory = (StclFactory) stclContext.getStencilFactory();
+            sessionStcl = factory.createStencil(stclContext, SessionStcl.class);
+        }
 
-	/**
-	 * Retrieves the session stencil from HTTP session.
-	 * 
-	 * @param stclContext
-	 *          the stencil context.
-	 * @return the session stencil.
-	 */
-	public static Stcl getSessionStcl(StclContext stclContext) {
-		HttpSession session = stclContext.getHttpSession();
-		return (Stcl) session.getAttribute(SESSION_KEY);
-	}
+        // traces creation
+        Principal userPrincipal = request.getUserPrincipal();
+        if (userPrincipal != null) {
+            String name = userPrincipal.getName();
+            logWarn("Session stencil created by \"%s\" in session %s", name, session.getId());
+        } else {
+            logWarn("Session stencil created in session %s", session.getId());
+        }
 
-	/**
-	 * Creates and store the session stencil in HTTP session.
-	 * 
-	 * The session is stored as a stencil and not as a plugged stencil as it
-	 * implements the HttpSessionBindingListener interface.
-	 * 
-	 * @param stclContext
-	 *          the stencil context.
-	 */
-	public static void createSessionStcl(StclContext stclContext) {
-		HttpSession session = stclContext.getHttpSession();
-		HttpServletRequest request = stclContext.getRequest();
+        // bounds it to the session
+        ((SessionStcl) sessionStcl).createListener(stclContext, session);
+    }
 
-		// checks another one wasn't created before
-		Stcl sessionStcl = getSessionStcl(stclContext);
-		if (sessionStcl != null) {
-			logError("A session stencil (%s) already exists in session %s (ip %s)",sessionStcl, session.getId(), request.getRemoteAddr());
-		} else {
-			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
-			sessionStcl = factory.createStencil(stclContext, SessionStcl.class);
-		}
+    public interface Slot extends Stcl.Slot {
+        String ID = "Id";
 
-		// bounds it to the session
-		Principal userPrincipal = request.getUserPrincipal();
-		if (userPrincipal != null) {
-			String name = userPrincipal.getName();
-			logWarn("Session stencil created by \"%s\" in session %s", name, session.getId());
-		} else {
-			logWarn("Session stencil created in session %s", session.getId());
-		}
-		session.setAttribute(SESSION_KEY, sessionStcl);
-	}
+        String SLOT_ORDER = "SlotOrder";
+        String SLOT_LIMIT = "SlotLimit";
 
-	public interface Slot extends Stcl.Slot {
-		String ID = "Id";
+        String SESSIONS = "Sessions";
 
-		String SLOT_ORDER = "SlotOrder";
-		String SLOT_LIMIT = "SlotLimit";
+        String THREADS = "Threads";
+    }
 
-		String NUMBER = "Number";
-		String MAX = "Max";
-		String MAX_NUMBER = "MaxNumber";
-		String HITS = "Hits";
-		String SESSIONS = "Sessions";
+    public SessionStcl(StclContext stclContext) {
+        super(stclContext);
 
-		String THREADS = "Threads";
-	}
+        new IdSlot(stclContext, this, Slot.ID);
 
-	public SessionStcl(StclContext stclContext) {
-		super(stclContext);
+        new SessionsSlot(stclContext);
+        new SlotOrderSlot(stclContext, this);
+        new SlotLimitSlot(stclContext, this);
 
-		new IdSlot(stclContext, this, Slot.ID);
-		new NumberSlot(stclContext);
-		new MaxSlot(stclContext);
-		new MaxNumberSlot(stclContext);
-		new HitsSlot(stclContext);
+        // TODO new ThreadSlot()
+    }
 
-		new SessionsSlot(stclContext);
-		new SlotOrderSlot(stclContext, this);
-		new SlotLimitSlot(stclContext, this);
+    /**
+     * Accepts all slot name (so user can store any stencil anywhere).
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.gdo.stencils.Stencil#hasLocalSlot(com.gdo.stencils.StencilContext,
+     * java.lang.String)
+     */
+    @Override
+    protected boolean hasLocalSlot(StclContext context, String slotName) {
+        return true;
+    }
 
-		// TODO new ThreadSlot()
-	}
+    /**
+     * Accepts all slot name (so user can store any stencil anywhere).
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.gdo.stencils.Stencil#getLocalSlot(com.gdo.stencils.StencilContext,
+     * java.lang.String, com.gdo.stencils.plug.PStencil)
+     */
+    @Override
+    protected PSlot<StclContext, PStcl> getLocalSlot(StclContext stclContext, String slotName, PStcl self) {
 
-	/**
-	 * Accepts all slot name (so user can store any stencil anywhere).
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gdo.stencils.Stencil#hasLocalSlot(com.gdo.stencils.StencilContext,
-	 * java.lang.String)
-	 */
-	@Override
-	protected boolean hasLocalSlot(StclContext context, String slotName) {
-		return true;
-	}
+        // verifies slot name
+        if (StringUtils.isBlank(slotName)) {
+            throw new WrongPathException("No path defined for local slot in session stencil", this);
+        }
+        if (PathUtils.isComposed(slotName)) {
+            String msg = String.format("Wrong composed slot name %s for local slot in session stencil", slotName);
+            throw new WrongPathException(msg, this);
+        }
 
-	/**
-	 * Accepts all slot name (so user can store any stencil anywhere).
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gdo.stencils.Stencil#getLocalSlot(com.gdo.stencils.StencilContext,
-	 * java.lang.String, com.gdo.stencils.plug.PStencil)
-	 */
-	@Override
-	protected PSlot<StclContext, PStcl> getLocalSlot(StclContext stclContext, String slotName, PStcl self) {
+        // returns the slot if already exists
+        _Slot<StclContext, PStcl> slot = getSlots().get(slotName);
+        if (slot != null) {
+            return new PSlot<StclContext, PStcl>(slot, self);
+        }
 
-		// verifies slot name
-		if (StringUtils.isBlank(slotName)) {
-			throw new WrongPathException("No path defined for local slot in session stencil", this);
-		}
-		if (PathUtils.isComposed(slotName)) {
-			String msg = String.format("Wrong composed slot name %s for local slot in session stencil", slotName);
-			throw new WrongPathException(msg, this);
-		}
+        // normalizes the slot name
+        String name = slotName;
+        if (name.endsWith(PathUtils.SEP_STR)) {
+            name = StringHelper.substringEnd(name, PathUtils.SEP_INT);
+        }
 
-		// returns the slot if already exists
-		_Slot<StclContext, PStcl> slot = getSlots().get(slotName);
-		if (slot != null) {
-			return new PSlot<StclContext, PStcl>(slot, self);
-		}
+        // creates the slot dynamically
+        MultiSlot<StclContext, PStcl> created = new MultiSlot<StclContext, PStcl>(stclContext, this, name);
+        created.setVerifyUnique(true);
+        created.setForceUnique(true);
+        return new PSlot<StclContext, PStcl>(created, self);
+    }
 
-		// normalizes the slot name
-		String name = slotName;
-		if (name.endsWith(PathUtils.SEP_STR)) {
-			name = StringHelper.substringEnd(name, PathUtils.SEP_INT);
-		}
+    private void createListener(StclContext stclContext, HttpSession session) {
+        SessionListener listener = new SessionListener(stclContext);
+        session.setAttribute(SESSION_KEY, listener);
+    }
 
-		// creates the slot dynamically
-		MultiSlot<StclContext, PStcl> created = new MultiSlot<StclContext, PStcl>(stclContext, this, name);
-		created.setVerifyUnique(true);
-		created.setForceUnique(true);
-		return new PSlot<StclContext, PStcl>(created, self);
-	}
+    /**
+     * ID slot
+     */
+    private class IdSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {
+        public IdSlot(StclContext stclContext, Stcl in, String name) {
+            super(stclContext, in, name);
+        }
 
-	/**
-	 * ID slot
-	 */
-	private class IdSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {
-		public IdSlot(StclContext stclContext, Stcl in, String name) {
-			super(stclContext, in, name);
-		}
+        @Override
+        public String getValue(StclContext stclContext, PStcl self) {
+            return stclContext.getHttpSession().getId();
+        }
+    }
 
-		@Override
-		public String getValue(StclContext stclContext, PStcl self) {
-			return stclContext.getHttpSession().getId();
-		}
-	}
+    /**
+     * Sessions slot
+     */
+    private class SessionsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
 
-	/**
-	 * Number slot
-	 */
-	private class NumberSlot extends CalculatedIntegerPropertySlot<StclContext, PStcl> {
-		public NumberSlot(StclContext stclContext) {
-			super(stclContext, SessionStcl.this, Slot.NUMBER);
-		}
+        public SessionsSlot(StclContext stclContext) {
+            super(stclContext, SessionStcl.this, Slot.SESSIONS, PSlot.ANY);
+        }
 
-		@Override
-		public int getIntegerValue(StclContext stclContext, PStcl self) {
-			return NUMBER;
-		}
-	}
+        @Override
+        protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+            List<PStcl> res = new ArrayList<PStcl>();
+            PStcl container = nullPStencil(stclContext, Result.error(""));
 
-	/**
-	 * Max slot
-	 */
-	private class MaxSlot extends CalculatedIntegerPropertySlot<StclContext, PStcl> {
-		public MaxSlot(StclContext stclContext) {
-			super(stclContext, SessionStcl.this, Slot.MAX);
-		}
+            for (Entry<String, ? extends Stcl> entry : SESSION_STENCILS.entrySet()) {
+                Key<String> key = new Key<String>(entry.getKey());
+                Stcl stcl = entry.getValue();
+                StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
+                PStcl pstcl = factory.createPStencil(stclContext, self, key, stcl.self(stclContext, container));
+                if (cond == null || cond.verify(stclContext, pstcl)) {
+                    res.add(pstcl);
+                }
+            }
 
-		@Override
-		public int getIntegerValue(StclContext stclContext, PStcl self) {
-			return MAX;
-		}
-	}
+            // return the new list
+            return new ListIterator<StclContext, PStcl>(res);
+        }
 
-	/**
-	 * Max number slot
-	 */
-	private class MaxNumberSlot extends CalculatedIntegerPropertySlot<StclContext, PStcl> {
-		public MaxNumberSlot(StclContext stclContext) {
-			super(stclContext, SessionStcl.this, Slot.MAX_NUMBER);
-		}
+    }
 
-		@Override
-		public int getIntegerValue(StclContext stclContext, PStcl self) {
-			return MAX_NUMBER;
-		}
-	}
+    //
+    // LOG PART
+    //
 
-	/**
-	 * Hits slot
-	 */
-	private class HitsSlot extends CalculatedIntegerPropertySlot<StclContext, PStcl> {
-		public HitsSlot(StclContext stclContext) {
-			super(stclContext, SessionStcl.this, Slot.HITS);
-		}
+    private static final StencilLog LOG = new StencilLog(SessionStcl.class);
 
-		@Override
-		public int getIntegerValue(StclContext stclContext, PStcl self) {
-			return RpcWrapper.HITS;
-		}
-	}
+    public static String logWarn(String format, Object... params) {
+        if (LOG.isWarnEnabled()) {
+            String msg = (params.length == 0) ? format : String.format(format, params);
+            LOG.warn(StclContext.defaultContext(), msg);
+            return msg;
+        }
+        return "";
+    }
 
-	/**
-	 * Sessions slot
-	 */
-	private class SessionsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
+    public static String logError(String format, Object... params) {
+        if (LOG.isErrorEnabled()) {
+            String msg = (params.length == 0) ? format : String.format(format, params);
+            LOG.error(StclContext.defaultContext(), msg);
+            return msg;
+        }
+        return "";
+    }
 
-		public SessionsSlot(StclContext stclContext) {
-			super(stclContext, SessionStcl.this, Slot.SESSIONS, PSlot.ANY);
-		}
+    private class SessionListener implements HttpSessionBindingListener {
+        StclContext _context;
 
-		@Override
-		protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-			List<PStcl> res = new ArrayList<PStcl>();
-			PStcl container = nullPStencil(stclContext, Result.error(""));
+        public SessionListener(StclContext context) {
+            _context = context;
+        }
 
-			for (Entry<String, Stcl> entry : SESSION_STENCILS.entrySet()) {
-				Key<String> key = new Key<String>(entry.getKey());
-				Stcl stcl = entry.getValue();
-				StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
-				PStcl pstcl = factory.createPStencil(stclContext, self, key, stcl.self(stclContext, container));
-				if (cond == null || cond.verify(stclContext, pstcl)) {
-					res.add(pstcl);
-				}
-			}
+        public SessionStcl getSessionStcl() {
+            return SessionStcl.this;
+        }
 
-			// return the new list
-			return new ListIterator<StclContext, PStcl>(res);
-		}
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * javax.servlet.http.HttpSessionBindingListener#valueBound(javax.servlet.
+         * http.HttpSessionBindingEvent)
+         */
+        @Override
+        public void valueBound(HttpSessionBindingEvent event) {
 
-	}
+            // traces session creation
+            HttpSession session = event.getSession();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.http.HttpSessionBindingListener#valueBound(javax.servlet.
-	 * http.HttpSessionBindingEvent)
-	 */
-	@Override
-	public void valueBound(HttpSessionBindingEvent event) {
+            ServletContext context = session.getServletContext();
+            logWarn(_context, "Session %s created (id:%s)", context.getServletContextName(), session.getId());
 
-		// traces session creation
-		HttpSession session = event.getSession();
+            // handler on after session created
+            // Stcl servletStcl = (SessionListener) event.getValue();
+            // ((ServletStcl)
+            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
+            // servletStcl);
 
-		ServletContext context = session.getServletContext();
-		logWarn(StclContext.defaultContext(), "Session %s created (id:%s)", context.getServletContextName(), session.getId());
+            // PStcl servletStcl = (PStcl)
+            // context.getAttribute(ServletStcl.class.getName());
+            // ((ServletStcl)
+            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
+            // servletStcl);
 
-		// handler on after session created
-		// PStcl servletStcl = (PStcl)
-		// context.getAttribute(ServletStcl.class.getName());
-		// ((ServletStcl)
-		// servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
-		// servletStcl);
+            // increments counters
+            SESSION_STENCILS.put(session.getId(), SessionStcl.this);
+            HTTP_SESSIONS.put(session.getId(), session);
+        }
 
-		// increments counters
-		Stcl stcl = (Stcl) event.getValue();
-		SESSION_STENCILS.put(session.getId(), stcl);
-		HTTP_SESSIONS.put(session.getId(), session);
-		MAX_NUMBER++;
-		NUMBER++;
-		if (NUMBER > MAX) {
-			MAX = NUMBER;
-		}
-	}
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * javax.servlet.http.HttpSessionBindingListener#valueUnbound(javax.servlet
+         * .http.HttpSessionBindingEvent)
+         */
+        @Override
+        public void valueUnbound(HttpSessionBindingEvent event) {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.http.HttpSessionBindingListener#valueUnbound(javax.servlet
-	 * .http.HttpSessionBindingEvent)
-	 */
-	@Override
-	public void valueUnbound(HttpSessionBindingEvent event) {
+            // traces session destruction
+            HttpSession session = event.getSession();
+            ServletContext context = session.getServletContext();
+            logWarn(_context, "Session %s destroyed (id:%s)", context.getServletContextName(), session.getId());
 
-		// traces session destruction
-		HttpSession session = event.getSession();
-		ServletContext context = session.getServletContext();
-		logWarn(StclContext.defaultContext(), "Session %s destroyed (id:%s)", context.getServletContextName(), session.getId());
+            // handler on before session deleted
+            // ((ServletStcl)
+            // servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
+            // servletStcl);
 
-		// handler on before session deleted
-		// ((ServletStcl)
-		// servletStcl.getReleasedStencil(this)).afterSessionCreated(this,
-		// servletStcl);
+            // release memory
+            SessionStcl.this.clear(_context, SessionStcl.this.self());
 
-		// decrements counter
-		SESSION_STENCILS.remove(session.getId());
-		HTTP_SESSIONS.remove(session.getId());
-		NUMBER--;
-	}
-
-	//
-	// LOG PART
-	//
-
-	private static final StencilLog LOG = new StencilLog(SessionStcl.class);
-
-	public static String logWarn(String format, Object... params) {
-		if (LOG.isWarnEnabled()) {
-			String msg = (params.length == 0) ? format : String.format(format, params);
-			LOG.warn(StclContext.defaultContext(), msg);
-			return msg;
-		}
-		return "";
-	}
-
-	public static String logError(String format, Object... params) {
-		if (LOG.isErrorEnabled()) {
-			String msg = (params.length == 0) ? format : String.format(format, params);
-			LOG.error(StclContext.defaultContext(), msg);
-			return msg;
-		}
-		return "";
-	}
-
+            // decrements counter
+            SESSION_STENCILS.remove(session.getId());
+            HTTP_SESSIONS.remove(session.getId());
+        }
+    }
 }

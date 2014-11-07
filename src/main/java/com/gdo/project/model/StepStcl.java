@@ -30,35 +30,35 @@ import com.gdo.stencils.plug.PStcl;
 
 public class StepStcl extends Stcl {
 
-	private final static String PERFORMING = "performing";
+    private final static String PERFORMING = "performing";
 
-	public StepStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public StepStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	// propagates to the container composed action
-	@Override
-	public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) throws Exception {
-		PStcl cmd = self.getContainer(stclContext);
-		cmd.multipart(stclContext, fileName, item);
-	}
+    // propagates to the container composed action
+    @Override
+    public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) throws Exception {
+        PStcl cmd = self.getContainer(stclContext);
+        cmd.multipart(stclContext, fileName, item);
+    }
 
-	// returns the container composed action with step suffix
-	@Override
-	public FacetResult getFacet(RenderContext<StclContext, PStcl> renderContext) {
+    // returns the container composed action with step suffix
+    @Override
+    public FacetResult getFacet(RenderContext<StclContext, PStcl> renderContext) {
 
-		// for flex type, the views are defined from the composed action
-		String type = renderContext.getFacetType();
-		String mode = renderContext.getFacetMode();
-		if (FacetType.FLEX.equals(type) && PERFORMING.equals(mode)) {
-			StclContext stclContext = renderContext.getStencilContext();
-			PStcl self = renderContext.getStencilRendered();
-			PStcl cmd = self.getContainer(stclContext);
-			String m = String.format("step%s", self.getKey());
-			RenderContext<StclContext, PStcl> cmdContext = new RenderContext<StclContext, PStcl>(stclContext, cmd, FacetType.FLEX, m);
-			return cmd.getFacet(cmdContext);
-		}
+        // for flex type, the views are defined from the composed action
+        String type = renderContext.getFacetType();
+        String mode = renderContext.getFacetMode();
+        if (FacetType.FLEX.equals(type) && PERFORMING.equals(mode)) {
+            StclContext stclContext = renderContext.getStencilContext();
+            PStcl self = renderContext.getStencilRendered();
+            PStcl cmd = self.getContainer(stclContext);
+            String m = String.format("step%s", self.getKey());
+            RenderContext<StclContext, PStcl> cmdContext = new RenderContext<StclContext, PStcl>(stclContext, cmd, FacetType.FLEX, m);
+            return cmd.getFacet(cmdContext);
+        }
 
-		return super.getFacet(renderContext);
-	}
+        return super.getFacet(renderContext);
+    }
 }

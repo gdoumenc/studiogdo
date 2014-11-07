@@ -47,92 +47,92 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class Eval extends AtomicActionStcl {
 
-	public enum Function {
-		/*
-		 * Eval {
-		 * 
-		 * @Override CommandStatus<StclContext, PStcl>
-		 * doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl
-		 * self) { try { ContextFactory contextFactory = new ContextFactory();
-		 * Context jsContext = contextFactory.enterContext(); Scriptable scope =
-		 * jsContext.initStandardObjects(); Object res =
-		 * jsContext.evaluateString(scope, "function f(x){return x+1} f(7)",
-		 * "<cmd>", 1, null); System.err.println(Context.toString(res)); return
-		 * eval.success(cmdContext, self); } finally { Context.exit(); } } },
-		 */
-		ClearSlot {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new ClearSlot(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		MultiUnplug {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new MultiUnplug(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		HasValue {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new HasValue(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		IsEmpty {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new IsEmpty(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		SetValue {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new SetValue(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		Expunge {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new Expunge(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		},
-		IsPlugged {
-			@Override
-			CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
-				return new IsPlugged(cmdContext.getStencilContext()).execute(cmdContext, self);
-			}
-		};
+    public enum Function {
+        /*
+         * Eval {
+         * 
+         * @Override CommandStatus<StclContext, PStcl>
+         * doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl
+         * self) { try { ContextFactory contextFactory = new ContextFactory();
+         * Context jsContext = contextFactory.enterContext(); Scriptable scope =
+         * jsContext.initStandardObjects(); Object res =
+         * jsContext.evaluateString(scope, "function f(x){return x+1} f(7)",
+         * "<cmd>", 1, null); System.err.println(Context.toString(res)); return
+         * eval.success(cmdContext, self); } finally { Context.exit(); } } },
+         */
+        ClearSlot {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new ClearSlot(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        MultiUnplug {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new MultiUnplug(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        HasValue {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new HasValue(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        IsEmpty {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new IsEmpty(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        SetValue {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new SetValue(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        Expunge {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new Expunge(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        },
+        IsPlugged {
+            @Override
+            CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self) {
+                return new IsPlugged(cmdContext.getStencilContext()).execute(cmdContext, self);
+            }
+        };
 
-		abstract CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self);
-	}
+        abstract CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, Eval eval, PStcl self);
+    }
 
-	private Function _function;
+    private Function _function;
 
-	public Eval(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Eval(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		return _function.doAction(cmdContext, this, self);
-	}
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        return _function.doAction(cmdContext, this, self);
+    }
 
-	// verify function name
-	@Override
-	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+    // verify function name
+    @Override
+    protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		String function = getParameter(cmdContext, 1, null);
-		if (StringUtils.isBlank(function)) {
-			return error(cmdContext, self, "the function name should be defined for Eval command (param1)");
-		}
+        String function = getParameter(cmdContext, 1, null);
+        if (StringUtils.isBlank(function)) {
+            return error(cmdContext, self, "the function name should be defined for Eval command (param1)");
+        }
 
-		try {
-			_function = Function.valueOf(function);
-		} catch (Exception e) {
-			String msg = String.format("exeption %s in finding function name %s for Eval command", e, function);
-			return error(cmdContext, self, msg);
-		}
+        try {
+            _function = Function.valueOf(function);
+        } catch (Exception e) {
+            String msg = String.format("exeption %s in finding function name %s for Eval command", e, function);
+            return error(cmdContext, self, msg);
+        }
 
-		return success(cmdContext, self);
-	}
+        return success(cmdContext, self);
+    }
 }

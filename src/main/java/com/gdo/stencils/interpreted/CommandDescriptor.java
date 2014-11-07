@@ -28,41 +28,42 @@ import com.gdo.util.XmlWriter;
  */
 public final class CommandDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends InstDescriptor<C, S> {
 
-	@Override
-	public void addInstDescriptor(InstDescriptor<C, S> inst) {
-		super.addInstDescriptor(inst);
-		inst.setOn(Mode.ON_ALWAYS);
-		for (PlugDescriptor<C, S> plug : inst.getPlugDescriptors()) {
-			plug.setOnAsMode(Mode.ON_ALWAYS);
-		}
-	}
+    @Override
+    public void addInstDescriptor(InstDescriptor<C, S> inst) {
+        super.addInstDescriptor(inst);
+        inst.setOn(Mode.ON_ALWAYS);
+        for (PlugDescriptor<C, S> plug : inst.getPlugDescriptors()) {
+            plug.setOnAsMode(Mode.ON_ALWAYS);
+        }
+    }
 
-	/**
-	 * A plug in a command is always performed as the command is always recreated.
-	 */
-	@Override
-	public void addPlugDescriptor(PlugDescriptor<C, S> plug) {
-		super.addPlugDescriptor(plug);
-		plug.setOnAsMode(Mode.ON_ALWAYS); // as a command is never stored
-		// (should be set after super called)
-	}
+    /**
+     * A plug in a command is always performed as the command is always
+     * recreated.
+     */
+    @Override
+    public void addPlugDescriptor(PlugDescriptor<C, S> plug) {
+        super.addPlugDescriptor(plug);
+        plug.setOnAsMode(Mode.ON_ALWAYS); // as a command is never stored
+        // (should be set after super called)
+    }
 
-	@Override
-	public void save(C stclContext, XmlWriter declPart, XmlWriter plugPart) throws IOException {
+    @Override
+    public void save(C stclContext, XmlWriter declPart, XmlWriter plugPart) throws IOException {
 
-		// checks parameters
-		if (plugPart != null) {
-			throw new IllegalArgumentException("plug xml writer should be null for instance descriptor");
-		}
+        // checks parameters
+        if (plugPart != null) {
+            throw new IllegalArgumentException("plug xml writer should be null for instance descriptor");
+        }
 
-		declPart.startElement("command");
-		declPart.writeAttribute("name", getName());
-		declPart.writeAttribute("template", getTemplate());
-		saveParameters(stclContext, declPart);
-		StringWriter body = new StringWriter();
-		saveDescription(stclContext, declPart, new XmlWriter(body, 0));
-		declPart.write(body.getBuffer().toString());
-		declPart.endElement("command");
-	}
+        declPart.startElement("command");
+        declPart.writeAttribute("name", getName());
+        declPart.writeAttribute("template", getTemplate());
+        saveParameters(stclContext, declPart);
+        StringWriter body = new StringWriter();
+        saveDescription(stclContext, declPart, new XmlWriter(body, 0));
+        declPart.write(body.getBuffer().toString());
+        declPart.endElement("command");
+    }
 
 }

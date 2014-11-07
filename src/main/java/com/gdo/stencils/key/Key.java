@@ -25,6 +25,11 @@ public class Key<K> implements IKey, Comparable<IKey> {
         public String toString() {
             return "";
         }
+
+        @Override
+        public int toInt() {
+            return 0;
+        }
     };
 
     private K _key; // the real key
@@ -39,8 +44,6 @@ public class Key<K> implements IKey, Comparable<IKey> {
 
     @Override
     public String toString() {
-        if (_key == null)
-            return "";
         return _key.toString();
     }
 
@@ -49,6 +52,7 @@ public class Key<K> implements IKey, Comparable<IKey> {
     }
 
     @SuppressWarnings("unchecked")
+    @Deprecated
     public void changeTo(String value) {
         if (_key instanceof String) {
             _key = (K) value;
@@ -64,26 +68,32 @@ public class Key<K> implements IKey, Comparable<IKey> {
 
     @Override
     public int compareTo(IKey o) {
-        if (o == null || _key == null)
+        if (o == null)
             return 0;
         return _key.toString().compareTo(o.toString());
     }
 
     @Override
+    public boolean equals(Object key) {
+        if (key == null)
+            return false;
+        return _key.toString().equals(key.toString());
+    }
+
+    @Override
     public boolean isEmpty() {
-        return _key == null || StringUtils.isEmpty(_key.toString());
+        if (_key instanceof String) {
+            return StringUtils.isBlank((String) _key);
+        }
+        return false;
     }
 
     @Override
     public boolean isNotEmpty() {
-        return _key != null && StringUtils.isNotEmpty(_key.toString());
-    }
-
-    @Override
-    public boolean equals(Object key) {
-        if (_key == null || key == null)
-            return false;
-        return _key.toString().equals(key.toString());
+        if (_key instanceof String) {
+            return StringUtils.isNotBlank((String) _key);
+        }
+        return true;
     }
 
     //

@@ -138,7 +138,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     @Override
     public String getProperty(StclContext stclContext, IKey key, String prop, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        String value = cursor.getPropertyValue(stclContext, self, key.toString(), prop);
+        String value = cursor.getPropertyValue(stclContext, self, key, prop);
         if (value != null) {
             return value;
         }
@@ -148,7 +148,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     @Override
     public void setProperty(StclContext stclContext, String value, IKey key, String prop, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        cursor.addPropertyValue(stclContext, self, self, key.toString(), prop, value);
+        cursor.addPropertyValue(stclContext, self, self, key, prop, value);
         super.setProperty(stclContext, value, key, prop, self); // only in
                                                                 // cursor should
                                                                 // be sufficient
@@ -215,7 +215,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             } catch (Exception e) {
                 logError(stclContext, e.toString());
             } finally {
-                SqlUtils.closeResultSet(stclContext, rs);
+                SQLContextStcl.closeResultSet(rs);
             }
         }
         return 0;
@@ -223,7 +223,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
     @Override
     public void clear() {
-        _stencils.clear();
+        _cursor.clear();
         super.clear();
     }
 
@@ -765,7 +765,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-            plugged.addCursor(stclContext, self, _cursor, Integer.toString(last_inserted_id));
+            plugged.addCursor(stclContext, self, _cursor, new Key<Integer>(last_inserted_id));
         }
 
         return Result.success(PLUGGED_PREFIX, plugged);
@@ -975,10 +975,10 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         }
 
         // creates the stencil list
-        String[] keys = getKeys(stclContext, cond, self);
-        List<PStcl> stencils = new Vector<PStcl>(keys.length);
-        for (String key : keys) {
-            PStcl stencil = new PStcl(stclContext, self, new Key<String>(key), cursor);
+        List<IKey> keys = getKeys(stclContext, cond, self);
+        List<PStcl> stencils = new Vector<PStcl>(keys.size());
+        for (IKey key : keys) {
+            PStcl stencil = new PStcl(stclContext, self, key, cursor);
             stencils.add(stencil);
         }
 
@@ -1007,54 +1007,50 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            this slot as a plugged slot.
      * @return
      */
-    protected String[] getKeys(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-        SQLCursor cursor = getCursor(stclContext, self);
+    protected List<IKey> getKeys(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
         // get keys query
         ResultSet rs = getKeysResultSet(stclContext, cond, self);
         if (rs != null) {
             try {
-                List<String> keys = new ArrayList<String>();
+                SQLCursor cursor = getCursor(stclContext, self);
+                List<IKey> keys = new ArrayList<>();
                 while (rs.next()) {
 
                     // keys are id
-                    String key = rs.getString(SQLStcl.Slot.ID);
+                    String id = rs.getString(SQLStcl.Slot.ID);
 
                     // for some jointure the id may be null (such result should
                     // not be taken in account)
-                    if (StringUtils.isBlank(key))
+                    if (StringUtils.isBlank(id))
                         continue;
 
                     // adds slot value attributes to get string optimization
                     // only if not currently already modified
                     // (or properties are more uptodate that from request)
+                    IKey key = new Key<>(id);
                     Boolean modified = cursor._modified.get(key);
                     if (modified == null || !modified) {
                         try {
                             Map<String, String> attributes = getPropertiesValuesFromKeyResults(stclContext, rs, self);
-                            cursor.setPropertiesValues(stclContext, self, new Key<String>(key), attributes);
+                            cursor.setPropertiesValues(stclContext, self, key, attributes);
                             keys.add(key);
                         } catch (Exception e) {
-                            // don't add key in list if cannot set property
-                            // values
+                            // don't add key in list if cannot set property values
                             logError(stclContext, e.toString());
                         }
                     } else {
                         keys.add(key);
                     }
                 }
-
-                // transforms to string array
-                String[] array = new String[keys.size()];
-                keys.toArray(array);
-                return array;
+                return keys;
             } catch (Exception e) {
                 logError(stclContext, e.toString());
             } finally {
-                SqlUtils.closeResultSet(stclContext, rs);
+                SQLContextStcl.closeResultSet(rs);
             }
         }
-        return new String[0];
+        return new ArrayList<IKey>();
     }
 
     @Override
@@ -1153,10 +1149,9 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // remove stencil from cursor (if not in cursor (negative id for ex)
         // then get order stencil)
-        String k = key.toString();
-        int id = Integer.parseInt(k);
+        int id = key.toInt();
         if (id >= 0)
-            cursor.remove(stclContext, self, self, k);
+            cursor.remove(stclContext, self, self, key);
 
         // does deletion query (if key can be found)
         Result result = deleteStencilQuery(stclContext, key, stencil, sqlContext, self);

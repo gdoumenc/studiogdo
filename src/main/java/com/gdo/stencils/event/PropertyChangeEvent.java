@@ -20,32 +20,32 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class PropertyChangeEvent<C extends _StencilContext, S extends _PStencil<C, S>> {
 
-	private C _stclContext;
-	private S _prop;
-	private String _old;
-	private String _new;
+    private C _stclContext;
+    private S _prop;
+    private String _old;
+    private String _new;
 
-	public PropertyChangeEvent(C stclContext, S prop, String oldValue, String newValue) {
-		_stclContext = stclContext;
-		_prop = prop;
-		_old = oldValue;
-		_new = newValue;
-	}
+    public PropertyChangeEvent(C stclContext, S prop, String oldValue, String newValue) {
+        _stclContext = stclContext;
+        _prop = prop;
+        _old = oldValue;
+        _new = newValue;
+    }
 
-	public C getStencilContext() {
-		return _stclContext;
-	}
+    public C getStencilContext() {
+        return _stclContext;
+    }
 
-	public S getPluggedProperty() {
-		return _prop;
-	}
+    public S getPluggedProperty() {
+        return _prop;
+    }
 
-	public String getNewValue() {
-		return _new;
-	}
+    public String getNewValue() {
+        return _new;
+    }
 
-	public String getOldValue() {
-		return _old;
-	}
+    public String getOldValue() {
+        return _old;
+    }
 
 }

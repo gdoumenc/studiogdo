@@ -27,12 +27,12 @@ import com.gdo.stencils.slot.SingleCalculatedSlot;
  */
 public class RootSlot extends SingleCalculatedSlot<StclContext, PStcl> {
 
-	public RootSlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name) {
-		super(stclContext, in, name, PSlot.ONE);
-	}
+    public RootSlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name) {
+        super(stclContext, in, name, PSlot.ONE);
+    }
 
-	@Override
-	public PStcl getCalculatedStencil(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-		return stclContext.getServletStcl();
-	}
+    @Override
+    public PStcl getCalculatedStencil(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+        return stclContext.getServletStcl();
+    }
 }

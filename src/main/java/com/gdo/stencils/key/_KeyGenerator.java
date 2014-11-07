@@ -41,48 +41,48 @@ import com.gdo.stencils.util.SlotUtils;
  */
 public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>, K extends Comparable<K>> implements IKeyGenerator {
 
-	protected Key<K> _key; // actual key used for plugging
+    protected Key<K> _key; // actual key used for plugging
 
-	/**
-	 * From a first key proposal, create a new key generator from a slot.
-	 * 
-	 * @param key
-	 *          first key estimated.
-	 */
-	public _KeyGenerator(C stclContext, Key<K> key, PSlot<C, S> slot) {
-		_key = key;
+    /**
+     * From a first key proposal, create a new key generator from a slot.
+     * 
+     * @param key
+     *            first key estimated.
+     */
+    public _KeyGenerator(C stclContext, Key<K> key, PSlot<C, S> slot) {
+        _key = key;
 
-		// the value may change on multi slot only
-		if (SlotUtils.isMultiple(stclContext, slot)) {
-			MultiSlot<C, S> multi = (MultiSlot<C, S>) slot.getSlot();
+        // the value may change on multi slot only
+        if (SlotUtils.isMultiple(stclContext, slot)) {
+            MultiSlot<C, S> multi = (MultiSlot<C, S>) slot.getSlot();
 
-			// key generator are not available on cursor slot
-			if (!multi.isCursorBased(stclContext)) {
+            // key generator are not available on cursor slot
+            if (!multi.isCursorBased(stclContext)) {
 
-				// search next unique key value in slot
-				IKey[] keys = multi.getKeys(stclContext, slot);
-				Arrays.sort(keys);
+                // search next unique key value in slot
+                IKey[] keys = multi.getKeys(stclContext, slot);
+                Arrays.sort(keys);
 
-				// while the current key exists in slot, generate another one
-				while (Arrays.binarySearch(keys, getKey()) >= 0) {
-					generateNextKey();
-				}
-			}
-		}
-	}
+                // while the current key exists in slot, generate another one
+                while (Arrays.binarySearch(keys, getKey()) >= 0) {
+                    generateNextKey();
+                }
+            }
+        }
+    }
 
-	/**
-	 * Returns the key defined which may has evolved.
-	 * 
-	 * @return the key defined.
-	 */
-	@Override
-	public final IKey getKey() {
-		return _key;
-	}
+    /**
+     * Returns the key defined which may has evolved.
+     * 
+     * @return the key defined.
+     */
+    @Override
+    public final IKey getKey() {
+        return _key;
+    }
 
-	/**
-	 * Must be defined to retrieve a new key from the one existing.
-	 */
-	abstract protected void generateNextKey();
+    /**
+     * Must be defined to retrieve a new key from the one existing.
+     */
+    abstract protected void generateNextKey();
 }

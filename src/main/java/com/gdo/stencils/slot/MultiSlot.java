@@ -323,18 +323,18 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
         private static final long serialVersionUID = 0L;
 
         @Override
-		public boolean remove(Object obj) {
-			if (obj instanceof IKey) {
-			    Iterator<S> iter = iterator();
-			    while (iter.hasNext()) {
-			        S stcl = iter.next();
-			        if (stcl.getKey().equals(obj)) {
-			            return remove(stcl);
-			        }
-			    }
-			    return false;
-			}
-			return super.remove(obj);
-		}
+        public boolean remove(Object obj) {
+            if (obj instanceof IKey) {
+                Iterator<S> iter = iterator();
+                while (iter.hasNext()) {
+                    S stcl = iter.next();
+                    if (stcl.getKey().equals(obj)) {
+                        return remove(stcl);
+                    }
+                }
+                return false;
+            }
+            return super.remove(obj);
+        }
     }
 }

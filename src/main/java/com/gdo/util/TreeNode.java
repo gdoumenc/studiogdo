@@ -15,53 +15,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TreeNode<E extends TreeNode<E>> {
-	private static int ID_COUNTER = 0; // global node counter
+    private static int ID_COUNTER = 0; // global node counter
 
-	protected String _id;
+    protected String _id;
 
-	protected E _parent; // parent component
-	protected List<E> _children; // sub components
+    protected E _parent; // parent component
+    protected List<E> _children; // sub components
 
-	public String getId() {
-		return _id;
-	}
+    public String getId() {
+        return _id;
+    }
 
-	public void setId(int id) {
-		_id = Integer.toString(id);
-	}
+    public void setId(int id) {
+        _id = Integer.toString(id);
+    }
 
-	public void setId(String id) {
-		_id = id;
-	}
+    public void setId(String id) {
+        _id = id;
+    }
 
-	public E getParent() {
-		return _parent;
-	}
+    public E getParent() {
+        return _parent;
+    }
 
-	public boolean hasChildren() {
-		return (_children != null && _children.size() > 0);
-	}
+    public boolean hasChildren() {
+        return (_children != null && _children.size() > 0);
+    }
 
-	public List<E> getChildren() {
-		return _children;
-	}
+    public List<E> getChildren() {
+        return _children;
+    }
 
-	@SuppressWarnings("unchecked")
-	public void addChild(E child) {
-		if (_children == null)
-			_children = new ArrayList<E>();
-		_children.add(child);
-		child._parent = (E) this;
-	}
+    @SuppressWarnings("unchecked")
+    public void addChild(E child) {
+        if (_children == null)
+            _children = new ArrayList<E>();
+        _children.add(child);
+        child._parent = (E) this;
+    }
 
-	public void addNewChild(E child) {
-		child.setId(ID_COUNTER++);
-		addChild(child);
-	}
+    public void addNewChild(E child) {
+        child.setId(ID_COUNTER++);
+        addChild(child);
+    }
 
-	public void addNewChild(E component, E child) {
-		child.setId(ID_COUNTER++);
-		component.addChild(child);
-	}
+    public void addNewChild(E component, E child) {
+        child.setId(ID_COUNTER++);
+        component.addChild(child);
+    }
 
 }

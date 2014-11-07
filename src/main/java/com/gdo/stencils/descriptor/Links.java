@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 public class Links extends HashMap<String, String> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public Links() {
-		super();
-	}
+    public Links() {
+        super();
+    }
 
-	public Links(int size) {
-		super(size);
-	}
+    public Links(int size) {
+        super(size);
+    }
 
 }

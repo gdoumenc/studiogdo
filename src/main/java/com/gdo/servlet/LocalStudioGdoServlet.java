@@ -21,19 +21,20 @@ import com.gdo.stencils.util.StencilUtils;
 @SuppressWarnings("serial")
 public class LocalStudioGdoServlet extends StudioGdoServlet {
 
-	@Override
-	protected boolean isCallValid(StclContext stclContext, String entry, RpcArgs args) {
-		HttpServletRequest request = stclContext.getRequest();
-		HttpSession session = request.getSession();
+    @Override
+    protected boolean isCallValid(StclContext stclContext, String entry, RpcArgs args) {
+        HttpServletRequest request = stclContext.getRequest();
+        HttpSession session = request.getSession();
 
-		// if the session is new accepts only connect command
-		if (session.isNew()) {
-			return true;
-		}
+        // if the session is new accepts only connect command
+        if (session.isNew()) {
+            return true;
+        }
 
-		// else checks the session is not dead internally (tomcat restarted or ..)
-		PStcl servletStcl = stclContext.getServletStcl();
-		PStcl active = servletStcl.getStencil(stclContext, ServletStcl.Slot.SESSION);
-		return StencilUtils.isNotNull(active);
-	}
+        // else checks the session is not dead internally (tomcat restarted or
+        // ..)
+        PStcl servletStcl = stclContext.getServletStcl();
+        PStcl active = servletStcl.getStencil(stclContext, ServletStcl.Slot.SESSION);
+        return StencilUtils.isNotNull(active);
+    }
 }

@@ -20,9 +20,9 @@ package com.gdo.stencils.key;
  */
 public interface IKeyGenerator {
 
-	/**
-	 * @return the unique key obtained.
-	 */
-	IKey getKey();
+    /**
+     * @return the unique key obtained.
+     */
+    IKey getKey();
 
 }

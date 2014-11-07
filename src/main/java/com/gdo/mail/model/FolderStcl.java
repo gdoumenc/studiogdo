@@ -74,7 +74,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
             try {
                 Folder folder = getFolder(stclContext, self.getContainer());
                 if (folder == null)
-                    return StencilUtils.< StclContext, PStcl> iterator(Result.error("cannot connect"));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error("cannot connect"));
 
                 String fileTemplate = self.getContainer().getString(stclContext, Slot.FILE_TEMPLATE, "");
 
@@ -86,7 +86,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                         folder.open(Folder.READ_ONLY);
                     } catch (MessagingException ex) {
                         String msg = logWarn(stclContext, "cannot get mail folder : %s", e);
-                        return StencilUtils.< StclContext, PStcl> iterator(Result.error(msg));
+                        return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                     }
                 }
 
@@ -114,11 +114,11 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 folder.getStore().close();
 
                 if (list == null)
-                    return StencilUtils.< StclContext, PStcl> iterator();
-                return StencilUtils.< StclContext, PStcl> iterator(stclContext, list.iterator(), cond, self);
+                    return StencilUtils.<StclContext, PStcl> iterator();
+                return StencilUtils.<StclContext, PStcl> iterator(stclContext, list.iterator(), cond, self);
             } catch (Exception e) {
                 logError(stclContext, e.toString());
-                return StencilUtils.< StclContext, PStcl> iterator(Result.error(e.getMessage()));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(e.getMessage()));
             }
         }
     }
@@ -133,7 +133,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
             try {
                 Folder folder = getFolder(stclContext, self.getContainer());
                 if (folder == null)
-                    return StencilUtils.< StclContext, PStcl> iterator(Result.error("cannot connect"));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error("cannot connect"));
 
                 String folderTemplate = self.getContainer().getString(stclContext, Slot.FOLDER_TEMPLATE, "");
 
@@ -145,7 +145,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                         folder.open(Folder.READ_ONLY);
                     } catch (MessagingException ex) {
                         logWarn(stclContext, "cannot get mail folder (%s)", e);
-                        return StencilUtils.< StclContext, PStcl> iterator(Result.error("cannot get mail folder"));
+                        return StencilUtils.<StclContext, PStcl> iterator(Result.error("cannot get mail folder"));
                     }
                 }
 
@@ -177,7 +177,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 return cleanList(stclContext, condition, self);
             } catch (Exception e) {
                 logError(stclContext, e.toString());
-                return StencilUtils.< StclContext, PStcl> iterator(Result.error(e.getMessage()));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(e.getMessage()));
             }
         }
     }
@@ -218,7 +218,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
              * StencilCondition.<StclContext, PStcl> NONE(), self); } catch (Exception
              * e) { throw new StencilException("Cannot get files list", e); }
              */
-            return StencilUtils.< StclContext, PStcl> iterator();
+            return StencilUtils.<StclContext, PStcl> iterator();
         }
     }
 }

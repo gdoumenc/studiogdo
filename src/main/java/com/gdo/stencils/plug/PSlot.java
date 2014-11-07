@@ -363,6 +363,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
         return getLog().logTrace(stclContext, format, params);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String toString() {
         S container = getContainer();

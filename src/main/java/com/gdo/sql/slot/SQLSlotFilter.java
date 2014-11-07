@@ -9,9 +9,12 @@ public interface SQLSlotFilter {
     /**
      * Add filter on condition. Default : does nothing on condition.
      * 
-     * @param stclContext : The stencil context.
-     * @param cond : The initial condition.
-     * @param self : The slot as plugged slot.
+     * @param stclContext
+     *            : The stencil context.
+     * @param cond
+     *            : The initial condition.
+     * @param self
+     *            : The slot as plugged slot.
      * @return The new filtered condition.
      */
     default public String addFilter(StclContext stclContext, String cond, PSlot<StclContext, PStcl> self) {

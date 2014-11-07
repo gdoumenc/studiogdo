@@ -22,35 +22,35 @@ import com.gdo.stencils.plug._PStencil;
  */
 public abstract class FacetsRendererWithContent<C extends _StencilContext, S extends _PStencil<C, S>> extends FacetsRenderer<C, S> {
 
-	private String _content; // code under tag with sub tags (iterator, visible,
+    private String _content; // code under tag with sub tags (iterator, visible,
 
-	// ...)
+    // ...)
 
-	protected FacetsRendererWithContent(RenderContext<C, S> renderContext) {
-		super(renderContext);
-	}
+    protected FacetsRendererWithContent(RenderContext<C, S> renderContext) {
+        super(renderContext);
+    }
 
-	public abstract String[] getTags();
+    public abstract String[] getTags();
 
-	public abstract int[] getTagsLength();
+    public abstract int[] getTagsLength();
 
-	public String getContent() {
-		return _content;
-	}
+    public String getContent() {
+        return _content;
+    }
 
-	public void setContent(String content) {
-		_content = content;
-	}
+    public void setContent(String content) {
+        _content = content;
+    }
 
-	@Override
-	public String getHtmlContent(C stclContext) {
-		String content = _content;
-		if (StringUtils.isEmpty(content)) {
-			if (getLog().isWarnEnabled())
-				getLog().warn(stclContext, "iterator tag with no content...");
-			content = ""; // at least not null;
-		}
-		return content;
-	}
+    @Override
+    public String getHtmlContent(C stclContext) {
+        String content = _content;
+        if (StringUtils.isEmpty(content)) {
+            if (getLog().isWarnEnabled())
+                getLog().warn(stclContext, "iterator tag with no content...");
+            content = ""; // at least not null;
+        }
+        return content;
+    }
 
 }

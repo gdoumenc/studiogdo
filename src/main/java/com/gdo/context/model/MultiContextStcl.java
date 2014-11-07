@@ -7,17 +7,17 @@ import com.gdo.stencils.StclContext;
 
 public class MultiContextStcl extends ContextStcl {
 
-	public interface Slot extends ContextStcl.Slot {
-		String CONTEXT = "Context";
-		String SELECTED = "Selected";
-	}
+    public interface Slot extends ContextStcl.Slot {
+        String CONTEXT = "Context";
+        String SELECTED = "Selected";
+    }
 
-	public MultiContextStcl(StclContext stclContext) {
-		super(stclContext);
+    public MultiContextStcl(StclContext stclContext) {
+        super(stclContext);
 
-		// SLOT PART
+        // SLOT PART
 
-		multiSlot(Slot.CONTEXT);
-		singleSlot(Slot.SELECTED);
-	}
+        multiSlot(Slot.CONTEXT);
+        singleSlot(Slot.SELECTED);
+    }
 }

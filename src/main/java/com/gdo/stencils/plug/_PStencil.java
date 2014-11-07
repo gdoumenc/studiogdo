@@ -179,7 +179,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      */
     public void clear(C stclContext) {
         if (_stencil != null) {
-            _stencil.clear(stclContext);
+            _stencil.clear(stclContext, self());
         }
     }
 
@@ -1147,13 +1147,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return newPStencil(stclContext, slot, key, clazz, params);
     }
 
-    @SuppressWarnings("unchecked")
     public <V> S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.newPProperty(stclContext, slot, key, value, self(), params);
     }
 
-    @SuppressWarnings("unchecked")
     public <V> S newPProperty(C stclContext, String slotName, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         PSlot<C, S> slot = getSlot(stclContext, slotName);
@@ -1308,14 +1306,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         RenderContext<C, S> renderContext = new RenderContext<C, S>(stclContext, self(), FacetType.LABEL, StringHelper.EMPTY_STRING);
         GdoTagExpander<C, S> exp = new GdoTagExpander<C, S>(text, renderContext);
         return exp.expand(stclContext);
-    }
-
-    @Deprecated
-    public InputStream getResourceAsStream(C stclContext, String path) {
-        if (StencilUtils.isNull(this))
-            return null;
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        return stcl.getResourceAsStream(stclContext, path, self());
     }
 
     public S plug(C stclContext, S stencil, String slotPath, IKey key) {
@@ -1569,27 +1559,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     public void removeThisReferenceFromStencil(C stclContext) {
         List<S> list = getStencilOtherPluggedReferences(stclContext);
         list.remove(self());
-    }
-
-    /**
-     * Notify stencil is unplugged.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param slot
-     *            the slot from which the stencil was unplugged.
-     */
-    public void afterUnplug(C stclContext, PSlot<C, S> slot) {
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        if (stcl == null) {
-            // was last unplug
-            return;
-        }
-        stcl.afterUnplug(stclContext, slot, getKey(), self());
-        /*
-         * if (isNotPlugged(stclContext)) { stcl.afterLastUnplug(stclContext,
-         * self()); }
-         */
     }
 
     /**

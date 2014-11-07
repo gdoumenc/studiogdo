@@ -18,30 +18,30 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class TestMailConnection extends AtomicActionStcl {
 
-	public TestMailConnection(StclContext stclContext) {
-		super(stclContext);
-	}
+    public TestMailConnection(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	/**
-	 * Method to Test the Connection for the MailContext.
-	 */
-	@Override
-	protected CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		try {
-			PStcl mailContext = cmdContext.getTarget();
+    /**
+     * Method to Test the Connection for the MailContext.
+     */
+    @Override
+    protected CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        try {
+            PStcl mailContext = cmdContext.getTarget();
 
-			// test connection
-			MailContextStcl ctxt = (MailContextStcl) mailContext.getReleasedStencil(stclContext);
-			Session session = ctxt.connectSMTP(stclContext, mailContext);
-			if (session == null) {
-				return error(cmdContext, self, "Cannot connect");
-			}
-			return success(cmdContext, self, "Connexion established");
-		} catch (Exception e) {
-			String msg = logError(stclContext, "Cannot connect to SMTP server : %s", e);
-			return error(cmdContext, self, msg);
-		}
+            // test connection
+            MailContextStcl ctxt = (MailContextStcl) mailContext.getReleasedStencil(stclContext);
+            Session session = ctxt.connectSMTP(stclContext, mailContext);
+            if (session == null) {
+                return error(cmdContext, self, "Cannot connect");
+            }
+            return success(cmdContext, self, "Connexion established");
+        } catch (Exception e) {
+            String msg = logError(stclContext, "Cannot connect to SMTP server : %s", e);
+            return error(cmdContext, self, msg);
+        }
 
-	}
+    }
 }

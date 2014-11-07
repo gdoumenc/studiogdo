@@ -111,8 +111,8 @@ public class SQLStcl extends Stcl {
     public void addInSqlAssoc(StclContext stclContext, SqlAssoc assoc, PStcl self, PStcl container) {
         assoc.pushAutoIncrement(stclContext, SQLStcl.Slot.ID);
         /*
-         * usual code could be what is below assoc.pushString(stclContext,
-         * MetierStcl.Slot.NOM, MetierStcl.Slot.NOM);
+         * usual code could be what is below
+         * assoc.pushString(stclContext, MetierStcl.Slot.NOM, MetierStcl.Slot.NOM);
          */
     }
 
@@ -312,7 +312,7 @@ public class SQLStcl extends Stcl {
         PSlot<StclContext, PStcl> slot = getSQLContainerSlot();
         SQLCursor cursor = ((SQLSlot) slot.getSlot()).getCursor(stclContext, slot);
         String id = self.getString(stclContext, Slot.ID);
-        cursor.removeFromCursor(stclContext, id);
+        cursor.removeFromCursor(stclContext, new Key<String>(id));
     }
 
     // --------------------------------------------------------------------------

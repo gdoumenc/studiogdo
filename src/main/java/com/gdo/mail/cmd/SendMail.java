@@ -21,23 +21,23 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class SendMail extends AtomicActionStcl {
 
-	public SendMail(StclContext stclContext) {
-		super(stclContext);
-	}
+    public SendMail(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
 
-		// checks target is a mail implementation
-		PStcl target = self.getStencil(stclContext, Slot.TARGET);
-		_Stencil<StclContext, PStcl> mail = target.getReleasedStencil(stclContext);
-		if (!(mail instanceof IMail)) {
-			return error(cmdContext, self, "Target not implementing IMail interface");
-		}
+        // checks target is a mail implementation
+        PStcl target = self.getStencil(stclContext, Slot.TARGET);
+        _Stencil<StclContext, PStcl> mail = target.getReleasedStencil(stclContext);
+        if (!(mail instanceof IMail)) {
+            return error(cmdContext, self, "Target not implementing IMail interface");
+        }
 
-		// sends message and returns status
-		Result result = ((IMail) mail).send(cmdContext, cmdContext, target);
-		return success(cmdContext, self, result);
-	}
+        // sends message and returns status
+        Result result = ((IMail) mail).send(cmdContext, cmdContext, target);
+        return success(cmdContext, self, result);
+    }
 }

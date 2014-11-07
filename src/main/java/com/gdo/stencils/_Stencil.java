@@ -57,7 +57,6 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
 import com.gdo.stencils.slot._Slot;
-import com.gdo.stencils.util.ClassUtils;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -239,7 +238,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @param stclContext
      *            the stencil context.
      */
-    public void clear(C stclContext) {
+    public void clear(C stclContext, S self) {
+
+        beforeClear(stclContext, self);
 
         // checks not already cleared
         if (this.cleared) {
@@ -1305,10 +1306,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         String mode = renderContext.getFacetMode();
         String msg = String.format("No facet found for %s for type %s in mode %s", this, facet, mode);
         return new FacetResult(FacetResult.ERROR, msg, null);
-    }
-
-    public InputStream getResourceAsStream(C stclContext, String path, S self) {
-        return ClassUtils.getResourceAsStream(path, stclContext.getLocale());
     }
 
     public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) throws Exception {

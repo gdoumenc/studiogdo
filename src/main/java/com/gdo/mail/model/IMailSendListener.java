@@ -10,13 +10,13 @@ import com.gdo.stencils.plug.PStcl;
 
 public interface IMailSendListener {
 
-	Result beforeSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self);
+    Result beforeSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self);
 
-	Result afterSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self);
+    Result afterSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self);
 
-	Result afterError(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, String reason, PStcl self);
+    Result afterError(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, String reason, PStcl self);
 
-	Result beforeFirst(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self);
+    Result beforeFirst(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self);
 
-	Result afterLast(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self);
+    Result afterLast(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self);
 }

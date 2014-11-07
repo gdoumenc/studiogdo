@@ -21,26 +21,26 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class GdoSelectedIterator<C extends _StencilContext, S extends _PStencil<C, S>> extends GdoIterator<C, S> {
 
-	private static final String[] SELECTED_ITERATORS_TAGS = new String[] { "iterator:selected", "/iterator:selected" };
-	private static final int[] SELECTED_ITERATORS_LENGTHS = new int[] { SELECTED_ITERATORS_TAGS[0].length(), SELECTED_ITERATORS_TAGS[1].length() };
+    private static final String[] SELECTED_ITERATORS_TAGS = new String[] { "iterator:selected", "/iterator:selected" };
+    private static final int[] SELECTED_ITERATORS_LENGTHS = new int[] { SELECTED_ITERATORS_TAGS[0].length(), SELECTED_ITERATORS_TAGS[1].length() };
 
-	public GdoSelectedIterator(RenderContext<C, S> renderContext) {
-		super(renderContext);
-	}
+    public GdoSelectedIterator(RenderContext<C, S> renderContext) {
+        super(renderContext);
+    }
 
-	@Override
-	public String[] getTags() {
-		return SELECTED_ITERATORS_TAGS;
-	}
+    @Override
+    public String[] getTags() {
+        return SELECTED_ITERATORS_TAGS;
+    }
 
-	@Override
-	public int[] getTagsLength() {
-		return SELECTED_ITERATORS_LENGTHS;
-	}
+    @Override
+    public int[] getTagsLength() {
+        return SELECTED_ITERATORS_LENGTHS;
+    }
 
-	@Override
-	public boolean isSubTag() {
-		return true;
-	}
+    @Override
+    public boolean isSubTag() {
+        return true;
+    }
 
 }
