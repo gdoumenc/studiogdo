@@ -23,6 +23,11 @@ public class LinkedKey implements IKey {
     }
 
     @Override
+    public String toString(){
+        return _key.toString();
+    }
+
+    @Override
     public boolean equals(Object key) {
         if (_key == null || key == null)
             return false;
