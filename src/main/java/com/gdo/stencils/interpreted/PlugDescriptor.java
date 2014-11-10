@@ -132,7 +132,7 @@ public final class PlugDescriptor<C extends _StencilContext, S extends _PStencil
 
             // plug in slot only if plug is defined after the slot (no plug in
             // case of redefinition)
-            if (completionLevel <= slot.getSlot().getCompletionLevel()) {
+            if (slot.getSlot() != null && completionLevel <= slot.getSlot().getCompletionLevel()) {
 
                 // get the absolute reference path
                 S toBePlugged = instances.getInstance(stclContext, getRef());
