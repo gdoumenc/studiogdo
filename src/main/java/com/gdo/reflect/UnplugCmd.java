@@ -37,7 +37,7 @@ public class UnplugCmd extends AtomicActionStcl {
             } else {
 
                 // verify key
-                StencilCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, new Key<String>(key), self);
+                StencilCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, new Key(key), self);
                 int size = slot.getStencils(stclContext, cond).size();
                 if (size == 0) {
                     String msg = String.format("Wrong key %s for unplug", key);
@@ -45,7 +45,7 @@ public class UnplugCmd extends AtomicActionStcl {
                 }
 
                 // performs unplug
-                IKey k = new Key<String>(key);
+                IKey k = new Key(key);
                 slot.unplug(stclContext, null, k);
             }
 

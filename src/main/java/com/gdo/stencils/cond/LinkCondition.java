@@ -29,12 +29,12 @@ public abstract class LinkCondition {
 
     // alls tencils but not links
     public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> withoutLinksCondition(C stclContext, S stcl) {
-        return PathCondition.newKeyCondition(stclContext, new Key<String>("$!"), stcl);
+        return PathCondition.newKeyCondition(stclContext, new Key("$!"), stcl);
     }
 
     // validate only links
     public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> onlyLinksCondition(C stclContext, S stcl) {
-        return PathCondition.newKeyCondition(stclContext, new Key<String>("$"), stcl);
+        return PathCondition.newKeyCondition(stclContext, new Key("$"), stcl);
     }
 
     public static boolean isLinkKey(String key) {
@@ -53,7 +53,7 @@ public abstract class LinkCondition {
                     String c = key.substring(1);
                     if (StringUtils.isEmpty(c))
                         return true;
-                    PathCondition<C, S> p = PathCondition.newKeyCondition(stclContext, new Key<String>(c), link);
+                    PathCondition<C, S> p = PathCondition.newKeyCondition(stclContext, new Key(c), link);
                     return p.verify(stclContext, link);
                 }
             } else if (PathUtils.isExpContained(path)) {

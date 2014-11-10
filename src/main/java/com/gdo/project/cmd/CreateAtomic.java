@@ -255,7 +255,7 @@ public class CreateAtomic extends AtomicActionStcl {
             if (StringUtils.isBlank(initialKey)) {
                 initialKey = "a";
             }
-            if (slot.hasStencils(stclContext, PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(initialKey), self))) {
+            if (slot.hasStencils(stclContext, PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key(initialKey), self))) {
                 return nullPStencil(stclContext, Result.error("A stencil is already plugged at this key"));
             }
             return self.plug(stclContext, created, slot, initialKey);

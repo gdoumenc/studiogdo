@@ -25,7 +25,7 @@ public class CreateContext extends AtomicActionStcl {
             // creating new context to Contexts Slot
             String ctxtTemplate = getParameter(cmdContext, 1, "");
             String key = "" + System.currentTimeMillis();
-            target.newPStencil(stclContext, "Contexts", new Key<String>(key), ctxtTemplate);
+            target.newPStencil(stclContext, "Contexts", new Key(key), ctxtTemplate);
 
             // Linking new plugged contexts Files slot to Resources
             // PStcl newContext = target.newPStencil(stclContext, "Contexts",

@@ -43,7 +43,7 @@ public class CreateInOneStep extends CreateInSteps {
     public void complete(StclContext stclContext, PStcl self) {
         super.complete(stclContext, self);
 
-        self.newPStencil(stclContext, Slot.STEPS, new Key<Integer>(1), StepStcl.class);
+        self.newPStencil(stclContext, Slot.STEPS, new Key(1), StepStcl.class);
     }
 
     @Override

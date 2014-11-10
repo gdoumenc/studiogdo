@@ -453,7 +453,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (cond != null) {
             try {
                 int k = Integer.parseInt(PathCondition.getKeyCondition(cond));
-                return getStencilQuery(stclContext, new Key<Integer>(k), k > 0, self);
+                return getStencilQuery(stclContext, new Key(k), k > 0, self);
             } catch (NumberFormatException e) {
             }
         }
@@ -462,7 +462,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     }
 
     public String getKeysQueryWithoutCondition(StclContext stclContext, String key, PSlot<StclContext, PStcl> self) {
-        return getStencilQuery(stclContext, new Key<String>(key), false, self);
+        return getStencilQuery(stclContext, new Key(key), false, self);
     }
 
     /**
@@ -765,7 +765,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-            plugged.addCursor(stclContext, self, _cursor, new Key<Integer>(last_inserted_id));
+            plugged.addCursor(stclContext, self, _cursor, new Key(last_inserted_id));
         }
 
         return Result.success(PLUGGED_PREFIX, plugged);
@@ -893,7 +893,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      */
     public IKey retrieveKeyFromStencil(StclContext stclContext, PStcl stencil, PStcl sqlContext, PStcl container) {
         String id = SqlUtils.getStringFromStencil(stclContext, stencil, SQLStcl.Slot.ID);
-        return new Key<String>(id);
+        return new Key(id);
     }
 
     public SqlAssoc getSqlAssoc(StclContext stclContext, PStcl stencil, PSlot<StclContext, PStcl> self) {
@@ -994,7 +994,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     // not using other condition than ID...
     protected PStcl getStencil(StclContext stclContext, int key, PSlot<StclContext, PStcl> self) {
         SQLCursor cursor = getCursor(stclContext, self);
-        return new PStcl(stclContext, self, new Key<Integer>(key), cursor);
+        return new PStcl(stclContext, self, new Key(key), cursor);
     }
 
     /**
@@ -1028,7 +1028,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
                     // adds slot value attributes to get string optimization
                     // only if not currently already modified
                     // (or properties are more uptodate that from request)
-                    IKey key = new Key<>(id);
+                    IKey key = new Key(id);
                     Boolean modified = cursor._modified.get(key);
                     if (modified == null || !modified) {
                         try {

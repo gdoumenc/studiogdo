@@ -84,7 +84,7 @@ public class NewSQLStcl extends CreateInOneStep {
             StclContext stclContext = cmdContext.getStencilContext();
 
             // retrieve the created stencil (may be no more in memory)
-            PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(_oldId), self);
+            PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key(_oldId), self);
             _created = _slot.getStencil(stclContext, cond);
 
             // sets SQL stencil final
@@ -132,7 +132,7 @@ public class NewSQLStcl extends CreateInOneStep {
 
             // removes plugged stencil
             if (StringUtils.isNotBlank(_newId)) {
-                _slot.unplug(stclContext, _plugged, new Key<String>(_newId));
+                _slot.unplug(stclContext, _plugged, new Key(_newId));
             }
         }
 

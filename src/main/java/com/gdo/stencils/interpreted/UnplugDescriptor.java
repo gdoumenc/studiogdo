@@ -102,7 +102,7 @@ public final class UnplugDescriptor<C extends _StencilContext, S extends _PStenc
             if (completionLevel <= slot.getSlot().getCompletionLevel()) {
                 String key = getKey();
                 if (!StringUtils.isEmpty(key)) {
-                    IKey k = new Key<String>(key);
+                    IKey k = new Key(key);
                     slot.getSlot().unplug(stclContext, null, k, slot);
                 } else {
                     slot.getSlot().unplugAll(stclContext, slot);

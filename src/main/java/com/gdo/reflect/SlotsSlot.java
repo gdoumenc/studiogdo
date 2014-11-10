@@ -80,7 +80,7 @@ public class SlotsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
             }
 
             // if already in list, do nothing
-            IKey key = (StringUtils.isEmpty(name)) ? Key.NO_KEY : new Key<String>(name);
+            IKey key = (StringUtils.isEmpty(name)) ? Key.NO_KEY : new Key(name);
             if (getStencilFromList(stclContext, key, self) != null) {
                 keepStencilInList(stclContext, key, self);
                 continue;

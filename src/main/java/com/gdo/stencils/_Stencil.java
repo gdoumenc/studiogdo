@@ -1024,7 +1024,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
                         // the key may be empty if stencil get from simple slot
                         if (last.getKey().isEmpty()) {
-                            last.setKey(new Key<String>(stcl.getUId(stclContext)));
+                            last.setKey(new Key(stcl.getUId(stclContext)));
                         }
 
                         // adds the stencil to the list
@@ -1129,7 +1129,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * public final S plug(C stclContext, S stcl, String path, S self) { if
      * (PathUtils.isKeyContained(path)) { String slotPath =
      * PathUtils.getSlotPath(path); String key = PathUtils.getKeyContained(path);
-     * return plug(stclContext, stcl, slotPath, new Key<String>(key), self); }
+     * return plug(stclContext, stcl, slotPath, new Key(key), self); }
      * return plug(stclContext, stcl, path, Key.NO_KEY, self); }
      * 
      * public final S plug(C stclContext, S stcl, String slotPath, IKey key, S
@@ -1234,7 +1234,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         CommandDescriptor desc = _command_descs.get(name);
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
         Class<? extends CommandStencil<C, S>> clazz = desc._clazz;
-        S pcmd = factory.createPStencil(stclContext, getCommandsSlot(self), new Key<String>(name), clazz);
+        S pcmd = factory.createPStencil(stclContext, getCommandsSlot(self), new Key(name), clazz);
 
         // adds paramters list
         ((CommandStencil<C, S>) pcmd.getReleasedStencil(stclContext))._defParams = desc.getDefaultParams();
@@ -1748,12 +1748,12 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     }
 
     public _SlotDescriptor<C, S> propSlot(String name, boolean initial) {
-        _SlotDescriptor<C, S> desc = new PropSlotDescriptor<C, S, Boolean>(initial);
+        _SlotDescriptor<C, S> desc = new PropSlotDescriptor<C, S, Boolean>(Boolean.valueOf(initial));
         return addDescriptor(name, desc);
     }
 
     public _SlotDescriptor<C, S> propSlot(String name, int initial) {
-        _SlotDescriptor<C, S> desc = new PropSlotDescriptor<C, S, Integer>(initial);
+        _SlotDescriptor<C, S> desc = new PropSlotDescriptor<C, S, Integer>(Integer.valueOf(initial));
         return addDescriptor(name, desc);
     }
 
@@ -1916,7 +1916,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         writer.startElement("prop");
         writer.writeAttribute("name", name);
         writer.writeAttribute("type", getType());
-        writer.writeAttribute("expand", isExpand(stclContext, (S) self()));
         String value = self().getNotExpandedValue(stclContext); // never expand
         // when saving
         if (value != null) {

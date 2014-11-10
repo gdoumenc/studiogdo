@@ -610,7 +610,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         path = PathUtils.compose(PathUtils.PARENT, path);
 
         // create link stencil in slot
-        IKey key = (linkDesc.getKey() != null) ? new Key<String>(linkDesc.getKey()) : Key.NO_KEY;
+        IKey key = (linkDesc.getKey() != null) ? new Key(linkDesc.getKey()) : Key.NO_KEY;
         S link = stencil.newPStencil(stclContext, slot, key, LinkStcl.class.getName(), path);
         if (ConverterHelper.parseBoolean(linkDesc.getLocal())) {
             link.setBoolean(stclContext, LinkStcl.Slot.LOCAL, true);

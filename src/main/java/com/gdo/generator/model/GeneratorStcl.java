@@ -71,7 +71,7 @@ public class GeneratorStcl extends NamedStcl implements IMaskFacetGenerator {
         }
 
         // mode is the children key used for generation
-        StencilCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(mode), self);
+        StencilCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key(mode), self);
         PStcl sub = self.getStencil(stclContext, Slot.CHILDREN, cond);
         if (StencilUtils.isNull(sub)) {
             String res = String.format("<!--no generator child defined at key %s for %s-->", mode, on);
@@ -136,7 +136,7 @@ public class GeneratorStcl extends NamedStcl implements IMaskFacetGenerator {
                 // content = previous + content;
                 // prop.setValue(stclContext, content, self);
             } else {
-                main.newPProperty(stclContext, Slot.FILES_GENERATED, new Key<String>(url), content);
+                main.newPProperty(stclContext, Slot.FILES_GENERATED, new Key(url), content);
             }
         }
 
@@ -187,7 +187,7 @@ public class GeneratorStcl extends NamedStcl implements IMaskFacetGenerator {
             GeneratorStcl.this._filesGenerated = null;
             InputStream is = getFacet(stclContext, null, on, generator, generator);
             Reader reader = new InputStreamReader(is);
-            generator.newPProperty(stclContext, Slot.FILES_GENERATED, new Key<String>("$content"), StringHelper.read(reader));
+            generator.newPProperty(stclContext, Slot.FILES_GENERATED, new Key("$content"), StringHelper.read(reader));
             return StencilUtils.<StclContext, PStcl> iterator(stclContext, GeneratorStcl.this._filesGenerated.iterator(), cond, self);
         }
 

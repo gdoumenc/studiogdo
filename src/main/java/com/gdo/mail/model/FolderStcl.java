@@ -96,7 +96,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 if (msgs != null) {
                     list = new ArrayList<PStcl>(msgs.length);
                     for (Message msg : msgs) {
-                        IKey key = new Key<Integer>(msg.getMessageNumber());
+                        IKey key = new Key(msg.getMessageNumber());
 
                         // create mail stencil
                         PStcl mail = self.getContainer().newPStencil(stclContext, self, key, fileTemplate, msg);
@@ -152,7 +152,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 // for all sub folder
                 if ((folder.getType() & Folder.HOLDS_FOLDERS) != 0) {
                     for (Folder f : folder.list("%")) {
-                        IKey key = new Key<String>(f.getName());
+                        IKey key = new Key(f.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {

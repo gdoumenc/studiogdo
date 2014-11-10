@@ -96,7 +96,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
     public boolean changeKey(C stclContext, S searched, String key, PSlot<C, S> self) {
         for (S s : _stencils) {
             if (s.equals(searched)) {
-                s.setKey(new Key<String>(key));
+                s.setKey(new Key(key));
                 return true;
             }
         }
@@ -165,7 +165,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
         // get key (define it unique if not defined)
         if (key.isEmpty()) {
-            key = new Key<Integer>(Atom.uniqueInt());
+            key = new Key(Atom.uniqueInt());
         }
 
         // create the plugged stencil

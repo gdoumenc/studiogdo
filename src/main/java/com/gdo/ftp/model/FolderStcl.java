@@ -106,7 +106,7 @@ public class FolderStcl extends _FileStcl {
 
                     // creates files list
                     for (FTPFile file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -222,7 +222,7 @@ public class FolderStcl extends _FileStcl {
                 for (FTPFile file : files) {
 
                     // if already in list, do nothing
-                    IKey key = new Key<String>(file.getName());
+                    IKey key = new Key(file.getName());
                     if (getStencilFromList(stclContext, key, self) != null) {
                         keepStencilInList(stclContext, key, self);
                         continue;

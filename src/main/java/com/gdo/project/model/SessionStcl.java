@@ -218,7 +218,7 @@ public class SessionStcl extends Stcl {
             PStcl container = nullPStencil(stclContext, Result.error(""));
 
             for (Entry<String, ? extends Stcl> entry : SESSION_STENCILS.entrySet()) {
-                Key<String> key = new Key<String>(entry.getKey());
+                Key key = new Key(entry.getKey());
                 Stcl stcl = entry.getValue();
                 StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
                 PStcl pstcl = factory.createPStencil(stclContext, self, key, stcl.self(stclContext, container));

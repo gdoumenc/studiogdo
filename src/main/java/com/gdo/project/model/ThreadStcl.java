@@ -60,7 +60,7 @@ public class ThreadStcl extends Stcl implements Runnable {
 
         // creates the thread stencil in the session threads slots
         PStcl session = stclContext.getServletStcl().getStencil(stclContext, ServletStcl.Slot.SESSION);
-        IKey key = new Key<String>(Atom.uniqueID());
+        IKey key = new Key(Atom.uniqueID());
         PStcl threadStcl = session.newPStencil(stclContext, SessionStcl.Slot.THREADS, key, ThreadStcl.class, cmdContext, runnable);
         if (threadStcl.isNull()) {
             reference.logWarn(stclContext, "Cannot create the thread for command %s", reference);

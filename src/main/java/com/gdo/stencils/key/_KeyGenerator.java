@@ -41,7 +41,7 @@ import com.gdo.stencils.util.SlotUtils;
  */
 public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>, K extends Comparable<K>> implements IKeyGenerator {
 
-    protected Key<K> _key; // actual key used for plugging
+    protected Key _key; // actual key used for plugging
 
     /**
      * From a first key proposal, create a new key generator from a slot.
@@ -49,7 +49,7 @@ public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStenc
      * @param key
      *            first key estimated.
      */
-    public _KeyGenerator(C stclContext, Key<K> key, PSlot<C, S> slot) {
+    public _KeyGenerator(C stclContext, Key key, PSlot<C, S> slot) {
         _key = key;
 
         // the value may change on multi slot only

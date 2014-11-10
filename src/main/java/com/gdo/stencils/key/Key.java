@@ -7,10 +7,10 @@ import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.log.StencilLog;
 
-public class Key<K> implements IKey, Comparable<IKey> {
+public class Key implements IKey {
 
     // const NO_KEY
-    public static final IKey NO_KEY = new Key<String>(StringHelper.EMPTY_STRING) {
+    public static final IKey NO_KEY = new Key(StringHelper.EMPTY_STRING) {
         @Override
         public boolean isEmpty() {
             return true;
@@ -32,9 +32,9 @@ public class Key<K> implements IKey, Comparable<IKey> {
         }
     };
 
-    private K _key; // the real key
+    private String _key; // the real key
 
-    public Key(K value) {
+    public Key(String value) {
         if (value == null) {
             String msg = logError(null, "creation of a key with null value");
             throw new NullPointerException(msg);
@@ -42,23 +42,21 @@ public class Key<K> implements IKey, Comparable<IKey> {
         _key = value;
     }
 
-    @Override
-    public String toString() {
-        return _key.toString();
+    public Key(int value) {
+        this(Integer.toString(value));
     }
 
-    public K getValue() {
+    @Override
+    public String toString() {
         return _key;
     }
 
-    @SuppressWarnings("unchecked")
-    @Deprecated
+    public String getValue() {
+        return _key;
+    }
+
     public void changeTo(String value) {
-        if (_key instanceof String) {
-            _key = (K) value;
-        } else if (_key instanceof Integer) {
-            _key = (K) new Integer(value);
-        }
+        _key = value;
     }
 
     @Override
@@ -67,40 +65,34 @@ public class Key<K> implements IKey, Comparable<IKey> {
     }
 
     @Override
-    public int compareTo(IKey o) {
-        if (o == null)
+    public int compareTo(IKey key) {
+        if (key == null)
             return 0;
-        return _key.toString().compareTo(o.toString());
+        return _key.compareTo(key.toString());
     }
 
     @Override
     public boolean equals(Object key) {
         if (key == null)
             return false;
-        return _key.toString().equals(key.toString());
+        return _key.equals(key.toString());
     }
 
     @Override
     public boolean isEmpty() {
-        if (_key instanceof String) {
-            return StringUtils.isBlank((String) _key);
-        }
-        return false;
+        return StringUtils.isBlank(_key);
     }
 
     @Override
     public boolean isNotEmpty() {
-        if (_key instanceof String) {
-            return StringUtils.isNotBlank((String) _key);
-        }
-        return true;
+        return StringUtils.isNotBlank(_key);
     }
 
     //
     // LOG PART
     //
 
-    protected StencilLog getLog() {
+    private StencilLog getLog() {
         return _Stencil._LOG;
     }
 

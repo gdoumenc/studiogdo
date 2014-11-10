@@ -198,7 +198,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     }
 
     public void updateCursor(StclContext stclContext) {
-        PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<>(_cursor_key), null);
+        PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key(_cursor_key.toString()), null);
         _cursor_container.getStencils(stclContext, cond);
     }
 
@@ -764,7 +764,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (isCursorBased() && !PathUtils.isComposed(path)) {
             String value = _cursor.getPropertyValue(stclContext, getContainingSlot(), _cursor_key, path);
             if (value != null) {
-                return ConverterHelper.parseBoolean(value);
+                return ConverterHelper.parseBoolean(value).booleanValue();
             }
         }
 
@@ -868,7 +868,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      * java.lang.String, int)
      */
     @Override
-    public void setInt(StclContext stclContext, String path, int value) {
+    public int setInt(StclContext stclContext, String path, int value) {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
@@ -881,7 +881,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         }
 
         // in any case set the value
-        super.setInt(stclContext, path, value);
+        return super.setInt(stclContext, path, value);
     }
 
     /*
@@ -892,7 +892,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      * java.lang.String, boolean)
      */
     @Override
-    public void setBoolean(StclContext stclContext, String path, boolean value) {
+    public boolean setBoolean(StclContext stclContext, String path, boolean value) {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
@@ -901,13 +901,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
                 // then replaces it
                 _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, Boolean.toString(value));
-                super.setBoolean(stclContext, path, value);
-                return;
             }
         }
 
         // search string in slot
-        super.setBoolean(stclContext, path, value);
+        return super.setBoolean(stclContext, path, value);
     }
 
     /*
@@ -918,7 +916,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      * java.lang.String, double)
      */
     @Override
-    public void setDouble(StclContext stclContext, String path, double value) {
+    public double setDouble(StclContext stclContext, String path, double value) {
 
         // searches if a property was associated at this key in the cursor
         if (isCursorBased()) {
@@ -927,13 +925,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
                 // then replaces it
                 _cursor.addPropertyValue(stclContext, _cursor_container, getContainingSlot(), _cursor_key, path, Double.toString(value));
-                super.setDouble(stclContext, path, value);
-                return;
             }
         }
 
         // search string in slot
-        super.setDouble(stclContext, path, value);
+        return super.setDouble(stclContext, path, value);
     }
 
     @Override

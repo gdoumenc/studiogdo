@@ -36,7 +36,7 @@ public class SlotLimitSlot extends MultiSlot<StclContext, PStcl> {
             // creates property if not exist
             if (!_keys.contains(key)) {
                 PStcl container = self.getContainer();
-                container.newPProperty(stclContext, Slot.SLOT_LIMIT, new Key<String>(key), "");
+                container.newPProperty(stclContext, Slot.SLOT_LIMIT, new Key(key), "");
                 _keys.add(key);
             }
         }

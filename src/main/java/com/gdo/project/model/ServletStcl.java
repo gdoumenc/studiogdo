@@ -292,9 +292,9 @@ public class ServletStcl extends Stcl {
             Locale locale = stclContext.getLocale();
             StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
             _Stencil<StclContext, PStcl> prop = factory.createPropStencil(stclContext, locale.getLanguage());
-            _values.add(factory.newPStencil(stclContext, self, new Key<String>("language"), prop));
+            _values.add(factory.newPStencil(stclContext, self, new Key("language"), prop));
             prop = factory.createPropStencil(stclContext, locale.getCountry());
-            _values.add(factory.newPStencil(stclContext, self, new Key<String>("country"), prop));
+            _values.add(factory.newPStencil(stclContext, self, new Key("country"), prop));
         }
 
         @Override

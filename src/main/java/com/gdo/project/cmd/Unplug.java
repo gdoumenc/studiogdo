@@ -96,7 +96,7 @@ public class Unplug extends AtomicActionStcl {
                             fromSlot.unplug(stclContext, whichStcl, whichStcl.getKey());
                         } else if ("2".equals(type)) {
                             String key = getParameter(cmdContext, 4, null);
-                            fromSlot.unplug(stclContext, whichStcl, new Key<String>(key));
+                            fromSlot.unplug(stclContext, whichStcl, new Key(key));
                         } else if ("3".equals(type)) {
                             fromSlot.unplug(stclContext, whichStcl, Key.NO_KEY);
                         } else {

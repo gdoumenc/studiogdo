@@ -143,7 +143,7 @@ public class SQLStcl extends Stcl {
             String newId = plugged.getString(stclContext, SQLStcl.Slot.ID);
             SQLSlot sqlSlot = _sqlSlot.getSlot();
             SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);
-            cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(newId));
+            cursor.setPropertiesValuesNotModified(stclContext, new Key(newId));
 
             // modify tables with temporary id
             PStcl sqlContext = plugged.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
@@ -153,7 +153,7 @@ public class SQLStcl extends Stcl {
             }
 
             // unplug temporary object
-            _sqlSlot.unplug(stclContext, self, new Key<String>(oldId));
+            _sqlSlot.unplug(stclContext, self, new Key(oldId));
 
             // return plugged stencil
             return plugged;
@@ -250,7 +250,7 @@ public class SQLStcl extends Stcl {
      *            the stencil as a plugged stencil.
      * @return the plugged stencil.
      */
-    public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, Key<?> key, String slot, boolean checkNotEmpty, PStcl self) {
+    public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, IKey key, String slot, boolean checkNotEmpty, PStcl self) {
 
         // checks id
         if (key == null || key.toString().equals("0")) {
@@ -269,7 +269,7 @@ public class SQLStcl extends Stcl {
     }
 
     public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, int id, String slot, PStcl self) {
-        return plugFromId(stclContext, source, new Key<Integer>(id), slot, false, self);
+        return plugFromId(stclContext, source, new Key(id), slot, false, self);
     }
 
     // --------------------------------------------------------------------------
@@ -312,7 +312,7 @@ public class SQLStcl extends Stcl {
         PSlot<StclContext, PStcl> slot = getSQLContainerSlot();
         SQLCursor cursor = ((SQLSlot) slot.getSlot()).getCursor(stclContext, slot);
         String id = self.getString(stclContext, Slot.ID);
-        cursor.removeFromCursor(stclContext, new Key<String>(id));
+        cursor.removeFromCursor(stclContext, new Key(id));
     }
 
     // --------------------------------------------------------------------------
@@ -386,7 +386,7 @@ public class SQLStcl extends Stcl {
         // witout warning)
         String id = self.getString(stclContext, SQLStcl.Slot.ID);
         SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);
-        cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(id));
+        cursor.setPropertiesValuesNotModified(stclContext, new Key(id));
 
         // needs to reload from database to reload databased calculated
         // properties
@@ -415,9 +415,9 @@ public class SQLStcl extends Stcl {
                     return Result.success();
                 }
 
-                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, new Key<Integer>(id), _sqlSlot);
+                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, new Key(id), _sqlSlot);
                 if (rs.next()) {
-                    IKey key = new Key<Integer>(id);
+                    IKey key = new Key(id);
 
                     // sets properties values in cursor
                     SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);

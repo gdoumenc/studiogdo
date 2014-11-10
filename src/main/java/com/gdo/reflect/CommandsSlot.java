@@ -28,7 +28,7 @@ public class CommandsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
          * self.getContainer().getReleasedStencil(stclContext); for (String cmdName
          * : stcl.getCommands().keySet()) { PStcl cmdStcl =
          * self.getContainer().getCommand(stclContext, cmdName); IKey key = new
-         * Key<String>(cmdName); if (getStencilFromList(stclContext, key, self) !=
+         * Key(cmdName); if (getStencilFromList(stclContext, key, self) !=
          * null) { keepStencilInList(stclContext, key, self); } else { PStcl cmd =
          * self.getContainer().newPStencil(stclContext, self, key,
          * CommandStcl.class.getName(), cmdStcl.getReleasedStencil(stclContext));

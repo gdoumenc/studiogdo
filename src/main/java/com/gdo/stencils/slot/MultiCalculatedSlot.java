@@ -87,11 +87,11 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
 
     /*
      * setDoPlug must be setted?? while() { if (getStencilFromList(stclContext,
-     * new Key<String>(id), self) != null) { keepStencilInList(stclContext, new
-     * Key<String>(id), self); continue; } // create session stencil
+     * new Key(id), self) != null) { keepStencilInList(stclContext, new
+     * Key(id), self); continue; } // create session stencil
      * StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext,
      * PStcl>) stclContext.getStencilFactory(); PStcl session =
-     * factory.createPStencil(stclContext, self, new Key<String>(id),
+     * factory.createPStencil(stclContext, self, new Key(id),
      * SessionStcl.class.getName(), sessions.get(id));
      * session.newPStencil(stclContext, Stcl.Slot.NAME, Key.NO_KEY,
      * LinkStencil.class.getName(), "../Name"); session.setString(stclContext,

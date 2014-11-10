@@ -37,12 +37,12 @@ import com.gdo.stencils.plug._PStencil;
 public class IntKeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>> extends _KeyGenerator<C, S, Integer> {
 
     public IntKeyGenerator(C stclContext, int key, PSlot<C, S> slot) {
-        super(stclContext, new Key<Integer>(key), slot);
+        super(stclContext, new Key(key), slot);
     }
 
     @Override
     protected void generateNextKey() {
-        _key.changeTo(Integer.toString(_key.getValue() + 1));
+        _key.changeTo(Integer.toString(Integer.valueOf(_key.getValue()) + 1));
     }
 
 }

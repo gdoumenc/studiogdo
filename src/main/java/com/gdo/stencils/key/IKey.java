@@ -1,11 +1,9 @@
 package com.gdo.stencils.key;
 
-import com.gdo.stencils.log.StencilLog;
 
 /**
  * <p>
- * The <tt>IKey</tt> interface is used to defined a key for plugging stencil
- * instances.
+ * The <tt>IKey</tt> interface is used to manipulate key for plugged stencil instances.
  * </p>
  * <blockquote>
  * <p>
@@ -16,8 +14,6 @@ import com.gdo.stencils.log.StencilLog;
  * </blockquote>
  */
 public interface IKey extends Comparable<IKey> {
-
-    public static final StencilLog LOG = new StencilLog(Key.class);
 
     /**
      * @return <tt>true</tt> if the key is null

@@ -18,15 +18,8 @@ public class LinkedKey implements IKey {
         if (_key instanceof LinkedKey) {
             ((LinkedKey) _key).changeTo(value);
         } else if (_key instanceof Key) {
-            ((Key<?>) _key).changeTo(value);
+            ((Key) _key).changeTo(value);
         }
-    }
-
-    @Override
-    public String toString() {
-        if (_key == this)
-            return "circular reference";
-        return _key.toString();
     }
 
     @Override
@@ -42,10 +35,10 @@ public class LinkedKey implements IKey {
     }
 
     @Override
-    public int compareTo(IKey o) {
-        if (o == null || _key == null)
+    public int compareTo(IKey key) {
+        if (key == null || _key == null)
             return 0;
-        return _key.compareTo(o);
+        return _key.compareTo(key);
     }
 
     @Override

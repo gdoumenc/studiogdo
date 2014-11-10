@@ -150,7 +150,7 @@ public final class PlugDescriptor<C extends _StencilContext, S extends _PStencil
                 }
 
                 // do the plug right now
-                IKey key = (StringUtils.isEmpty(getKey())) ? Key.NO_KEY : new Key<String>(getKey());
+                IKey key = (StringUtils.isEmpty(getKey())) ? Key.NO_KEY : new Key(getKey());
                 slot.getSlot().plug(stclContext, toBePlugged, key, slot);
             }
         } catch (Exception e) {

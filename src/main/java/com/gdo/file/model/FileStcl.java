@@ -219,7 +219,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
                 Date lastModified = new Date(file.lastModified());
                 String date = dateFormat.format(lastModified);
                 self.getContainer().newPProperty(stclContext, self,
-                        new Key<String>(format), date);
+                        new Key(format), date);
             } else {
 
                 // if no key then returns integer value

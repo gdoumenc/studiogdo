@@ -43,7 +43,7 @@ public class KeysSlot extends MultiCalculatedSlot<StclContext, PStcl> {
             // creates the key
             IKey key = stencil.getKey();
             if (stencil.isLink(stclContext)) {
-                key = new Key<String>("$" + key.toString());
+                key = new Key("$" + key.toString());
             }
 
             // if already in list, does nothing

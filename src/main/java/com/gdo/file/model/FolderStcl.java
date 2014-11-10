@@ -158,7 +158,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -203,7 +203,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -244,7 +244,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {

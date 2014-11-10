@@ -125,7 +125,7 @@ public class IMAPMailStcl extends MailStcl {
     public void afterCompleted(StclContext stclContext, PStcl self) {
         super.afterCompleted(stclContext, self);
         for (Writer w : _list) {
-            self(stclContext, null).newPStencil(stclContext, Slot.ATTACHMENTS, new Key<Integer>(1), IMAPResourceStcl.class, w);
+            self(stclContext, null).newPStencil(stclContext, Slot.ATTACHMENTS, new Key(1), IMAPResourceStcl.class, w);
         }
     }
 

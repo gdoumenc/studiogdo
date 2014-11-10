@@ -1076,16 +1076,19 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         prop.setValue(stclContext, value);
     }
 
-    public void setInt(C stclContext, String path, int value) {
+    public int setInt(C stclContext, String path, int value) {
         setString(stclContext, path, Integer.toString(value));
+        return value;
     }
 
-    public void setBoolean(C stclContext, String path, boolean value) {
+    public boolean setBoolean(C stclContext, String path, boolean value) {
         setString(stclContext, path, Boolean.toString(value));
+        return value;
     }
 
-    public void setDouble(C stclContext, String path, double value) {
+    public double setDouble(C stclContext, String path, double value) {
         setString(stclContext, path, Double.toString(value));
+        return value;
     }
 
     /*
@@ -1343,11 +1346,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     public S plug(C stclContext, S stencil, String slotPath, String key) {
-        return plug(stclContext, stencil, slotPath, new Key<String>(key));
+        return plug(stclContext, stencil, slotPath, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, String slotPath, int key) {
-        return plug(stclContext, stencil, slotPath, new Key<Integer>(key));
+        return plug(stclContext, stencil, slotPath, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, IKey key) {
@@ -1371,11 +1374,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, String key) {
-        return plug(stclContext, stencil, slot, new Key<String>(key));
+        return plug(stclContext, stencil, slot, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, int key) {
-        return plug(stclContext, stencil, slot, new Key<Integer>(key));
+        return plug(stclContext, stencil, slot, new Key(key));
     }
 
     // TODO all following method should return a S value
