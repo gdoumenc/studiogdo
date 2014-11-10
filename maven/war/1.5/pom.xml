@@ -13,7 +13,7 @@
 		<war.name>${project.artifactId}</war.name>
 		<workspace.name>workspace/${war.name}</workspace.name>
 		<deploy.name>pip</deploy.name>
-		<ssh.home>/home/studiogdo/${war.name}</ssh.home>
+		<ssh.home>/home/studiogdo/${workspace.name}</ssh.home>
 		<log.directory>/var/log/${tomcat.version}/${war.name}</log.directory>
 		<conf.directory>/home/studiogdo/${workspace.name}/work/conf</conf.directory>
 		<skel.directory>/home/studiogdo/${workspace.name}/work/skel</skel.directory>
