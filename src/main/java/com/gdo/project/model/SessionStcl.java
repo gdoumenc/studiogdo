@@ -280,8 +280,7 @@ public class SessionStcl extends Stcl {
             logTrace(_context, "Session %s destroyed (id:%s)", context.getServletContextName(), session.getId());
 
             // release memory
-            PStcl servlet = _context.getServletStcl();
-            SessionStcl.this.clear(_context, servlet.getStencil(_context, ServletStcl.Slot.SESSION));
+            SessionStcl.this.clear(_context, null);
 
             // decrements counter
             SESSION_STENCILS.remove(session.getId());
