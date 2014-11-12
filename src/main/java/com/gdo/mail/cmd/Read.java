@@ -27,51 +27,51 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class Read extends AtomicActionStcl {
 
-	public Read(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Read(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
 
-		// clear to slot
-		PSlot<StclContext, PStcl> to = target.getSlot(stclContext, "To");
-		to.getSlot().unplugAll(stclContext, to);
+        // clear to slot
+        PSlot<StclContext, PStcl> to = target.getSlot(stclContext, "To");
+        to.getSlot().unplugAll(stclContext, to);
 
-		String file = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(file))
-			return error(cmdContext, self, 1, "no name defined to rename file");
+        String file = getParameter(cmdContext, 1, null);
+        if (StringUtils.isEmpty(file))
+            return error(cmdContext, self, 1, "no name defined to rename file");
 
-		// read all lines
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(file));
-			String line;
-			int i = 0;
-			while ((line = in.readLine()) != null) {
-				try {
-					i++;
-					String[] adds = line.split("\t");
-					int j = 1;
-					while (j < adds.length && StringUtils.isEmpty(adds[j]))
-						j++;
-					String add = adds[j];
-					InternetAddress a = new InternetAddress(add);
-					target.newPStencil(stclContext, "To", Key.NO_KEY, RecipientStcl.class, a);
-					getLog().error(stclContext, "done " + i);
-				} catch (Exception e) {
-					getLog().error(stclContext, "error on line " + i);
-				}
-			}
-			in.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return success(cmdContext, self);
-	}
+        // read all lines
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(file));
+            String line;
+            int i = 0;
+            while ((line = in.readLine()) != null) {
+                try {
+                    i++;
+                    String[] adds = line.split("\t");
+                    int j = 1;
+                    while (j < adds.length && StringUtils.isEmpty(adds[j]))
+                        j++;
+                    String add = adds[j];
+                    InternetAddress a = new InternetAddress(add);
+                    target.newPStencil(stclContext, "To", Key.NO_KEY, RecipientStcl.class, a);
+                    getLog().error(stclContext, "done " + i);
+                } catch (Exception e) {
+                    getLog().error(stclContext, "error on line " + i);
+                }
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return success(cmdContext, self);
+    }
 }

@@ -24,7 +24,6 @@ import com.gdo.stencils.StclContext;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.util.ClassUtils;
 
 /**
  * <p>
@@ -44,18 +43,9 @@ import com.gdo.stencils.util.ClassUtils;
 public class SqlUtils {
 
     // sql interface
-    public static final String SQL_DRIVER = "com.mysql.jdbc.Driver";
     public static final String DEFAULT_SQL_DATE_FORMAT = "yyyy-MM-dd";
 
     private static final SqlUtils INSTANCE = new SqlUtils();
-
-    static {
-        try {
-            ClassUtils.loadClass(SQL_DRIVER).newInstance();
-        } catch (Exception e) {
-            logError(null, e.toString());
-        }
-    }
 
     private SqlUtils() {
         // utility class, disable instanciation
@@ -82,24 +72,13 @@ public class SqlUtils {
         return false;
     }
 
-    public static void closeStatement(StclContext stclContext, Statement stmt) {
+    private static void closeStatement(StclContext stclContext, Statement stmt) {
         try {
             if (stmt != null) {
                 stmt.close();
             }
         } catch (SQLException e) {
             logWarn(stclContext, e.toString());
-        }
-    }
-
-    public static void closeResultSet(StclContext stclContext, ResultSet rs) {
-        try {
-            if (rs != null) {
-                closeStatement(stclContext, rs.getStatement());
-                rs.close();
-            }
-        } catch (SQLException se) {
-            /**/
         }
     }
 
@@ -250,83 +229,6 @@ public class SqlUtils {
         return DriverManager.getConnection(url, user, passwd);
     }
 
-    /**
-     * Queries last entered id
-     */
-    @Deprecated
-    public static int queryLastInsertID(StclContext stclContext) {
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            con = getConnection(stclContext);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
-            if (!rs.next())
-                return -1;
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            if (getLog().isWarnEnabled())
-                getLog().warn(stclContext, "Cannot get last insert index", e);
-        } finally {
-            if (rs != null)
-                closeResultSet(stclContext, rs);
-            if (stmt != null)
-                closeStatement(stclContext, stmt);
-        }
-        return -1;
-    }
-
-    /**
-     * Queries a select item (1 for first) and returns the value in a good type.
-     */
-    @Deprecated
-    public static int queryInt(StclContext stclContext, Query query, int index) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int value = 0;
-        try {
-            stmt = prepareStatement(stclContext, query.query());
-            rs = preparedSelect(stmt);
-            if (rs == null || !rs.next())
-                return value;
-            value = rs.getInt(index);
-        } catch (SQLException e) {
-            if (getLog().isWarnEnabled())
-                getLog().warn(stclContext, query, e);
-        } finally {
-            if (rs != null)
-                closeResultSet(stclContext, rs);
-            if (stmt != null)
-                closeStatement(stclContext, stmt);
-        }
-        return value;
-    }
-
-    @Deprecated
-    public static String queryString(StclContext stclContext, String query, int index) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        String value = "";
-        try {
-            stmt = prepareStatement(stclContext, query);
-            rs = preparedSelect(stmt);
-            if (rs == null || !rs.next())
-                return value;
-            value = rs.getString(index);
-        } catch (SQLException e) {
-            if (getLog().isWarnEnabled())
-                getLog().warn(stclContext, query, e);
-        } finally {
-            if (rs != null)
-                closeResultSet(stclContext, rs);
-            if (stmt != null)
-                closeStatement(stclContext, stmt);
-        }
-        return value;
-    }
-
-    @Deprecated
     public static void update(StclContext stclContext, Query query) {
         Statement stmt = null;
         try {
@@ -1198,7 +1100,7 @@ public class SqlUtils {
             String table = _table;
             if (table.indexOf("`") < 0)
                 table = "`" + table + "`";
-            
+
             String query = String.format("INSERT INTO %s (%s) VALUES (%s);", table, labels, values);
             return query;
         }
@@ -1266,7 +1168,7 @@ public class SqlUtils {
             String table = _table;
             if (table.indexOf("`") < 0)
                 table = "`" + table + "`";
-            
+
             if (StringUtils.isBlank(_alias)) {
                 return String.format("DELETE FROM %s %s LIMIT 1", table, getAndWhereQuery());
             }

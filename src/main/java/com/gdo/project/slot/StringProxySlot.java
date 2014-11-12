@@ -23,50 +23,50 @@ import com.gdo.stencils.slot.CalculatedStringPropertySlot;
  */
 public class StringProxySlot extends CalculatedStringPropertySlot<StclContext, PStcl> {
 
-	public interface Proxy {
-		String getValue();
+    public interface Proxy {
+        String getValue();
 
-		void setValue(String value);
-	}
+        void setValue(String value);
+    }
 
-	private Proxy _proxy;
+    private Proxy _proxy;
 
-	public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, Proxy proxy) {
-		super(stclContext, in, name);
-		_proxy = proxy;
-	}
+    public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, Proxy proxy) {
+        super(stclContext, in, name);
+        _proxy = proxy;
+    }
 
-	public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, String value) {
-		super(stclContext, in, name);
-		_proxy = new StringProxy(value);
-	}
+    public StringProxySlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name, String value) {
+        super(stclContext, in, name);
+        _proxy = new StringProxy(value);
+    }
 
-	@Override
-	public String getValue(StclContext stclContext, PStcl self) {
-		return _proxy.getValue();
-	}
+    @Override
+    public String getValue(StclContext stclContext, PStcl self) {
+        return _proxy.getValue();
+    }
 
-	@Override
-	public String setValue(StclContext stclContext, String value, PStcl self) {
-		_proxy.setValue(value);
-		return null; // TODO to change return value ofsetValue from Proxy
-	}
+    @Override
+    public String setValue(StclContext stclContext, String value, PStcl self) {
+        _proxy.setValue(value);
+        return null; // TODO to change return value ofsetValue from Proxy
+    }
 
-	private class StringProxy implements Proxy {
-		private String _value;
+    private class StringProxy implements Proxy {
+        private String _value;
 
-		public StringProxy(String value) {
-			_value = value;
-		}
+        public StringProxy(String value) {
+            _value = value;
+        }
 
-		@Override
-		public String getValue() {
-			return _value;
-		}
+        @Override
+        public String getValue() {
+            return _value;
+        }
 
-		@Override
-		public void setValue(String value) {
-			throw new IllegalStateException("proxy to a read only string");
-		}
-	}
+        @Override
+        public void setValue(String value) {
+            throw new IllegalStateException("proxy to a read only string");
+        }
+    }
 }

@@ -42,67 +42,67 @@ import com.gdo.stencils.util.StencilUtils;
  */
 public class SlotsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
 
-	public SlotsSlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name) {
-		super(stclContext, in, name, PSlot.ANY);
-	}
+    public SlotsSlot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name) {
+        super(stclContext, in, name, PSlot.ANY);
+    }
 
-	@Override
-	protected PStcl doPlug(StclContext stclContext, PStcl stencil, IKey key, PSlot<StclContext, PStcl> self) {
-		return stencil;
-	}
+    @Override
+    protected PStcl doPlug(StclContext stclContext, PStcl stencil, IKey key, PSlot<StclContext, PStcl> self) {
+        return stencil;
+    }
 
-	@Override
-	protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+    @Override
+    protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
-		// iterates over slots list
-		String pattern = PathCondition.getKeyCondition(cond);
-		PStcl container = self.getContainer();
-		for (_Slot<StclContext, PStcl> slot : container.getReleasedStencil(stclContext).getSlots().values()) {
-			PSlot<StclContext, PStcl> pslot = new PSlot<StclContext, PStcl>(slot, container);
+        // iterates over slots list
+        String pattern = PathCondition.getKeyCondition(cond);
+        PStcl container = self.getContainer();
+        for (_Slot<StclContext, PStcl> slot : container.getReleasedStencil(stclContext).getSlots().values()) {
+            PSlot<StclContext, PStcl> pslot = new PSlot<StclContext, PStcl>(slot, container);
 
-			// don't put internal slots
-			String slotName = slot.getName(stclContext);
-			if (StringUtils.isBlank(slotName)) {
-				slotName = "$EMPTY$";
-			} else if (slotName.equals(PathUtils.ROOT)) {
-				continue;
-			} else if (slotName.startsWith("$")) {
-				continue;
-			}
-			if (slotName.matches("[.].*")) {
-				continue;
-			}
+            // don't put internal slots
+            String slotName = slot.getName(stclContext);
+            if (StringUtils.isBlank(slotName)) {
+                slotName = "$EMPTY$";
+            } else if (slotName.equals(PathUtils.ROOT)) {
+                continue;
+            } else if (slotName.startsWith("$")) {
+                continue;
+            }
+            if (slotName.matches("[.].*")) {
+                continue;
+            }
 
-			// gets slot's name
-			String name = slot.getName(stclContext);
-			if (StringUtils.isNotBlank(pattern) && !name.matches(pattern)) {
-				continue;
-			}
+            // gets slot's name
+            String name = slot.getName(stclContext);
+            if (StringUtils.isNotBlank(pattern) && !name.matches(pattern)) {
+                continue;
+            }
 
-			// if already in list, do nothing
-			IKey key = (StringUtils.isEmpty(name)) ? Key.NO_KEY : new Key<String>(name);
-			if (getStencilFromList(stclContext, key, self) != null) {
-				keepStencilInList(stclContext, key, self);
-				continue;
-			}
+            // if already in list, do nothing
+            IKey key = (StringUtils.isEmpty(name)) ? Key.NO_KEY : new Key(name);
+            if (getStencilFromList(stclContext, key, self) != null) {
+                keepStencilInList(stclContext, key, self);
+                continue;
+            }
 
-			// creates the slot stencil
-			PStcl slotStcl = container.newPStencil(stclContext, self, key, SlotStcl.class, pslot);
-			slotStcl.plug(stclContext, container, SlotStcl.Slot.CONTAINER);
-			addStencilInList(stclContext, slotStcl, self);
-		}
+            // creates the slot stencil
+            PStcl slotStcl = container.newPStencil(stclContext, self, key, SlotStcl.class, pslot);
+            slotStcl.plug(stclContext, container, SlotStcl.Slot.CONTAINER);
+            addStencilInList(stclContext, slotStcl, self);
+        }
 
-		// orders the list by slot name
-		StencilIterator<StclContext, PStcl> slots = cleanList(stclContext, cond, self);
-		return StencilUtils.sort(stclContext, slots, new SlotComparable());
-	}
+        // orders the list by slot name
+        StencilIterator<StclContext, PStcl> slots = cleanList(stclContext, cond, self);
+        return StencilUtils.sort(stclContext, slots, new SlotComparable());
+    }
 
-	public class SlotComparable implements Comparator<PStcl> {
+    public class SlotComparable implements Comparator<PStcl> {
 
-		@Override
-		public int compare(PStcl o1, PStcl o2) {
-			return o1.getKey().compareTo(o2.getKey());
-		}
+        @Override
+        public int compare(PStcl o1, PStcl o2) {
+            return o1.getKey().compareTo(o2.getKey());
+        }
 
         @Override
         public Comparator<PStcl> reversed() {
@@ -146,5 +146,5 @@ public class SlotsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
             return null;
         }
 
-	}
+    }
 }

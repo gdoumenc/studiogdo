@@ -17,72 +17,72 @@ import com.gdo.stencils.util.PathUtils;
 
 public class Delete extends AtomicActionStcl {
 
-	public Delete(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Delete(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		try {
-			PStcl target = cmdContext.getTarget();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        try {
+            PStcl target = cmdContext.getTarget();
 
-			// gets ftp context
-			FolderStcl file = target.getReleasedStencil(stclContext);
-			FTPClient client = file.newClient(stclContext, target);
+            // gets ftp context
+            FolderStcl file = target.getReleasedStencil(stclContext);
+            FTPClient client = file.newClient(stclContext, target);
 
-			try {
+            try {
 
-				// get file
-				String path = target.getString(stclContext, FolderStcl.Slot.PATH);
+                // get file
+                String path = target.getString(stclContext, FolderStcl.Slot.PATH);
 
-				// changes directory
-				if (PathUtils.isComposed(path)) {
-					String last = PathUtils.getLastName(path);
-					path = PathUtils.getPathName(path);
-					if (!client.changeWorkingDirectory(path)) {
-						String msg = logError(stclContext, "cannot change to dir %s", path);
-						return error(cmdContext, self, msg);
-					}
-					path = last;
-				}
+                // changes directory
+                if (PathUtils.isComposed(path)) {
+                    String last = PathUtils.getLastName(path);
+                    path = PathUtils.getPathName(path);
+                    if (!client.changeWorkingDirectory(path)) {
+                        String msg = logError(stclContext, "cannot change to dir %s", path);
+                        return error(cmdContext, self, msg);
+                    }
+                    path = last;
+                }
 
-				// does deletion
-				FTPFile[] files = client.mlistDir(null, new Filter(path));
-				boolean deleted = false;
-				if (files[0].isDirectory()) {
-					deleted = client.removeDirectory(path);
-				} else {
-					deleted = client.deleteFile(path);
-				}
+                // does deletion
+                FTPFile[] files = client.mlistDir(null, new Filter(path));
+                boolean deleted = false;
+                if (files[0].isDirectory()) {
+                    deleted = client.removeDirectory(path);
+                } else {
+                    deleted = client.deleteFile(path);
+                }
 
-				// succeed
-				if (deleted) {
-					String msg = String.format("%s deleted", path);
-					return success(cmdContext, self, msg);
-				}
-				String msg = String.format("%s not deleted", path);
-				return error(cmdContext, self, msg);
-			} finally {
-				file.closeClient(stclContext, client, target);
-			}
-		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot delete dir %s : %s", _name, e);
-			return error(cmdContext, self, msg);
-		}
-	}
+                // succeed
+                if (deleted) {
+                    String msg = String.format("%s deleted", path);
+                    return success(cmdContext, self, msg);
+                }
+                String msg = String.format("%s not deleted", path);
+                return error(cmdContext, self, msg);
+            } finally {
+                file.closeClient(stclContext, client, target);
+            }
+        } catch (Exception e) {
+            String msg = logError(stclContext, "cannot delete dir %s : %s", _name, e);
+            return error(cmdContext, self, msg);
+        }
+    }
 
-	private class Filter implements FTPFileFilter {
-		String _path;
+    private class Filter implements FTPFileFilter {
+        String _path;
 
-		Filter(String path) {
-			_path = path;
-		}
+        Filter(String path) {
+            _path = path;
+        }
 
-		@Override
-		public boolean accept(FTPFile file) {
-			return file.getName().equals(_path);
-		}
-	}
+        @Override
+        public boolean accept(FTPFile file) {
+            return file.getName().equals(_path);
+        }
+    }
 
 }

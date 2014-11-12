@@ -31,16 +31,16 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class DefaultDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends TemplateDescriptor<C, S> {
 
-	public final void setTemplate(String template) {
-		setName(template);
-		// setExtends(template);
-	}
+    public final void setTemplate(String template) {
+        setName(template);
+        // setExtends(template);
+    }
 
-	// create the stencil with parameters
-	public S newInstance(C stclContext, PSlot<C, S> self) {
-		Object[] params = getParameters(stclContext);
-		StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
-		return factory.createPStencil(stclContext, self, Key.NO_KEY, getName(), params);
-	}
+    // create the stencil with parameters
+    public S newInstance(C stclContext, PSlot<C, S> self) {
+        Object[] params = getParameters(stclContext);
+        StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
+        return factory.createPStencil(stclContext, self, Key.NO_KEY, getName(), params);
+    }
 
 }

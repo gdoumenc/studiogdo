@@ -9,18 +9,18 @@ import java.io.InputStream;
  */
 public interface IFacetInputStream {
 
-	/**
-	 * Retrieve facet input stream.
-	 * 
-	 * @return the facet input stream.
-	 */
-	public InputStream getInputStream() throws IOException;
+    /**
+     * Retrieve facet input stream.
+     * 
+     * @return the facet input stream.
+     */
+    public InputStream getInputStream() throws IOException;
 
-	/**
-	 * Called when the servlet closed connection.
-	 * 
-	 * @throws IOException
-	 */
-	public void closeInputStream() throws IOException;
+    /**
+     * Called when the servlet closed connection.
+     * 
+     * @throws IOException
+     */
+    public void closeInputStream() throws IOException;
 
 }

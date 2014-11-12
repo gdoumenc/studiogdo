@@ -52,6 +52,10 @@ public class RpcArgs {
     private PStcl _stencil; // stencil defined from path
 
     public RpcArgs(StclContext stclContext) throws Exception {
+        parseParameters(stclContext);
+    }
+
+    private void parseParameters(StclContext stclContext) throws Exception {
         Base64 encoder = new Base64();
         setRequestParams(stclContext);
 
@@ -116,7 +120,7 @@ public class RpcArgs {
 
         // may force the locale of the context
         String locale = getStringParameter(stclContext, RpcWrapper.LOCALE_PARAM);
-        if (StringUtils.isNotEmpty(locale)) {
+        if (StringUtils.isNotBlank(locale)) {
             int pos = locale.indexOf('_');
             if (pos != -1) {
                 String language = locale.substring(0, pos);
@@ -146,7 +150,7 @@ public class RpcArgs {
         return _transaction_id;
     }
 
-   /**
+    /**
      * Gets the charset encoding used for this response.
      * 
      * @param stclContext
@@ -244,7 +248,7 @@ public class RpcArgs {
         PStcl stcl = stclContext.getServletStcl();
 
         if (StringUtils.isBlank(_path)) {
-            return StencilUtils.< StclContext, PStcl> iterator(stclContext, stcl, null);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, stcl, null);
         }
         return stcl.getStencils(stclContext, _path);
     }
@@ -421,7 +425,7 @@ public class RpcArgs {
         return Integer.parseInt(value);
     }
 
-   /**
+    /**
      * Returns the boolean parameter defined by name.
      * 
      * @param stclContext

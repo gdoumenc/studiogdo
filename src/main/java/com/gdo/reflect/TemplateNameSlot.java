@@ -13,13 +13,13 @@ import com.gdo.stencils.slot.CalculatedStringPropertySlot;
  */
 public class TemplateNameSlot extends CalculatedStringPropertySlot<StclContext, PStcl> {
 
-	public TemplateNameSlot(StclContext stclContext, _Stencil<StclContext, PStcl> stcl, String name) {
-		super(stclContext, stcl, name);
-	}
+    public TemplateNameSlot(StclContext stclContext, _Stencil<StclContext, PStcl> stcl, String name) {
+        super(stclContext, stcl, name);
+    }
 
-	@Override
-	public String getValue(StclContext stclContext, PStcl self) {
-		PStcl container = self.getContainer(stclContext);
-		return container.getTemplateName(stclContext);
-	}
+    @Override
+    public String getValue(StclContext stclContext, PStcl self) {
+        PStcl container = self.getContainer(stclContext);
+        return container.getTemplateName(stclContext);
+    }
 }

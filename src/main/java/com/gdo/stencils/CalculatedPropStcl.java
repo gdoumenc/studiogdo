@@ -32,43 +32,43 @@ import com.gdo.stencils.util.PathUtils;
  */
 public class CalculatedPropStcl extends CalculatedPropStencil<StclContext, PStcl> {
 
-	public interface Slot extends Stcl.Slot {
-	}
+    public interface Slot extends Stcl.Slot {
+    }
 
-	public CalculatedPropStcl(StclContext stclContext, IPropCalculator<StclContext, PStcl> calculator) {
-		super(stclContext, calculator);
+    public CalculatedPropStcl(StclContext stclContext, IPropCalculator<StclContext, PStcl> calculator) {
+        super(stclContext, calculator);
 
-		// reflexive slots
-		createTemplateNameSlot(stclContext);
-		createPwdSlot(stclContext);
-		createSlotSlot(stclContext);
-		createCommandSlot(stclContext);
-		createWhereSlot(stclContext);
-	}
+        // reflexive slots
+        createTemplateNameSlot(stclContext);
+        createPwdSlot(stclContext);
+        createSlotSlot(stclContext);
+        createCommandSlot(stclContext);
+        createWhereSlot(stclContext);
+    }
 
-	@Override
-	protected _Slot<StclContext, PStcl> createRootSlot(StclContext stclContext) {
-		return new RootSlot(stclContext, this, PathUtils.ROOT);
-	}
+    @Override
+    protected _Slot<StclContext, PStcl> createRootSlot(StclContext stclContext) {
+        return new RootSlot(stclContext, this, PathUtils.ROOT);
+    }
 
-	protected _Slot<StclContext, PStcl> createTemplateNameSlot(StclContext stclContext) {
-		return new TemplateNameSlot(stclContext, this, Slot.$TEMPLATE_NAME);
-	}
+    protected _Slot<StclContext, PStcl> createTemplateNameSlot(StclContext stclContext) {
+        return new TemplateNameSlot(stclContext, this, Slot.$TEMPLATE_NAME);
+    }
 
-	protected _Slot<StclContext, PStcl> createPwdSlot(StclContext stclContext) {
-		return new PwdSlot(stclContext, this, Slot.$PWD);
-	}
+    protected _Slot<StclContext, PStcl> createPwdSlot(StclContext stclContext) {
+        return new PwdSlot(stclContext, this, Slot.$PWD);
+    }
 
-	protected _Slot<StclContext, PStcl> createSlotSlot(StclContext stclContext) {
-		return new SlotsSlot(stclContext, this, Slot.$SLOTS);
-	}
+    protected _Slot<StclContext, PStcl> createSlotSlot(StclContext stclContext) {
+        return new SlotsSlot(stclContext, this, Slot.$SLOTS);
+    }
 
-	protected _Slot<StclContext, PStcl> createCommandSlot(StclContext stclContext) {
-		return new CommandsSlot(stclContext, this, Slot.$COMMANDS);
-	}
+    protected _Slot<StclContext, PStcl> createCommandSlot(StclContext stclContext) {
+        return new CommandsSlot(stclContext, this, Slot.$COMMANDS);
+    }
 
-	protected _Slot<StclContext, PStcl> createWhereSlot(StclContext stclContext) {
-		return new WhereSlot(stclContext, this, Slot.$WHERE);
-	}
+    protected _Slot<StclContext, PStcl> createWhereSlot(StclContext stclContext) {
+        return new WhereSlot(stclContext, this, Slot.$WHERE);
+    }
 
 }

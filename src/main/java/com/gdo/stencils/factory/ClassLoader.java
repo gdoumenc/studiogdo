@@ -23,27 +23,27 @@ import com.gdo.stencils.atom.IAtom;
  */
 public class ClassLoader extends java.lang.ClassLoader {
 
-	private static final ClassLoader INSTANCE = new ClassLoader();
+    private static final ClassLoader INSTANCE = new ClassLoader();
 
-	public static ClassLoader getImplementation() {
-		return INSTANCE;
-	}
+    public static ClassLoader getImplementation() {
+        return INSTANCE;
+    }
 
-	private ClassLoader() {
-		// singleton
-	}
+    private ClassLoader() {
+        // singleton
+    }
 
-	@Override
-	public Package[] getPackages() {
-		return super.getPackages();
-	}
+    @Override
+    public Package[] getPackages() {
+        return super.getPackages();
+    }
 
-	@Override
-	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		try {
-			return Thread.currentThread().getContextClassLoader().loadClass(name);
-		} catch (ClassNotFoundException e) {
-			return super.loadClass(name);
-		}
-	}
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(name);
+        } catch (ClassNotFoundException e) {
+            return super.loadClass(name);
+        }
+    }
 }

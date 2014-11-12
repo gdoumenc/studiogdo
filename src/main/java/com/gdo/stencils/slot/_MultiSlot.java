@@ -16,7 +16,6 @@ import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
-import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -44,36 +43,36 @@ import com.gdo.stencils.util.StencilUtils;
  */
 public abstract class _MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _Slot<C, S> implements Comparator<S> {
 
-	public _MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-		super(stclContext, in, name, arity, tranzient, override);
-		if (!SlotUtils.isMultiple(arity)) {
-			logWarn(stclContext, "Multi slot %s created with strange arity %s in %s", name, Character.toString(arity), in);
-		}
-	}
+    public _MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
+        super(stclContext, in, name, arity, tranzient, override);
+        if (!SlotUtils.isMultiple(arity)) {
+            logWarn(stclContext, "Multi slot %s created with strange arity %s in %s", name, Character.toString(arity), in);
+        }
+    }
 
-	/**
-	 * This methods is called to retrieve the stencils in the slot.
-	 */
-	abstract protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self);
+    /**
+     * This methods is called to retrieve the stencils in the slot.
+     */
+    abstract protected StencilIterator<C, S> getStencilsList(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self);
 
-	@Override
-	protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("cannot plug [_MultiSlot]"));
-	}
+    @Override
+    protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+        return StencilUtils.<C, S> nullPStencil(stclContext, Result.error("cannot plug [_MultiSlot]"));
+    }
 
-	@Override
-	protected void doUnplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-	}
+    @Override
+    protected void doUnplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+    }
 
-	public Result doMultiUnplug(C stclContext, String keys, PSlot<C, S> self) {
-		return Result.error("internal error, multi unplug undefined");
-	}
+    public Result doMultiUnplug(C stclContext, String keys, PSlot<C, S> self) {
+        return Result.error("internal error, multi unplug undefined");
+    }
 
-	@Override
-	public int compare(S arg0, S arg1) {
-		return arg0.getKey().compareTo(arg1.getKey());
-	}
-	
+    @Override
+    public int compare(S arg0, S arg1) {
+        return arg0.getKey().compareTo(arg1.getKey());
+    }
+
     @Override
     public Comparator<S> reversed() {
         // TODO Auto-generated method stub

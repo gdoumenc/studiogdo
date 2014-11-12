@@ -23,7 +23,7 @@ import com.gdo.stencils.plug._PStencil;
  */
 public interface SlotFilter<C extends _StencilContext, S extends _PStencil<C, S>> {
 
-	// funtion to be implemented to keep the stencil from the filter
-	boolean keep(C stclContext, S plugged);
+    // funtion to be implemented to keep the stencil from the filter
+    boolean keep(C stclContext, S plugged);
 
 }

@@ -22,74 +22,74 @@ import com.gdo.stencils.util.PathUtils;
  */
 public abstract class LinkCondition {
 
-	// get all stenicls and links at it (not following them)
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> withLinksCondition(C stclContext, S stcl) {
-		return PathCondition.newExpCondition(stclContext, "$", stcl);
-	}
+    // get all stenicls and links at it (not following them)
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> withLinksCondition(C stclContext, S stcl) {
+        return PathCondition.newExpCondition(stclContext, "$", stcl);
+    }
 
-	// alls tencils but not links
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> withoutLinksCondition(C stclContext, S stcl) {
-		return PathCondition.newKeyCondition(stclContext, new Key<String>("$!"), stcl);
-	}
+    // alls tencils but not links
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> withoutLinksCondition(C stclContext, S stcl) {
+        return PathCondition.newKeyCondition(stclContext, new Key("$!"), stcl);
+    }
 
-	// validate only links
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> onlyLinksCondition(C stclContext, S stcl) {
-		return PathCondition.newKeyCondition(stclContext, new Key<String>("$"), stcl);
-	}
+    // validate only links
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilCondition<C, S> onlyLinksCondition(C stclContext, S stcl) {
+        return PathCondition.newKeyCondition(stclContext, new Key("$"), stcl);
+    }
 
-	public static boolean isLinkKey(String key) {
-		return (StringUtils.isNotEmpty(key) && key.startsWith("$"));
-	}
+    public static boolean isLinkKey(String key) {
+        return (StringUtils.isNotEmpty(key) && key.startsWith("$"));
+    }
 
-	/**
-	 * Tests if a condition is to retrieve the adaptor directly.
-	 */
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isWithLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
-		if (cond instanceof PathCondition) {
-			String path = ((PathCondition<C, S>) cond).getCondition();
-			if (PathUtils.isKeyContained(path)) {
-				String key = PathUtils.getKeyContained(path);
-				if (StringUtils.isNotEmpty(key) && key.startsWith("$")) {
-					String c = key.substring(1);
-					if (StringUtils.isEmpty(c))
-						return true;
-					PathCondition<C, S> p = PathCondition.newKeyCondition(stclContext, new Key<String>(c), link);
-					return p.verify(stclContext, link);
-				}
-			} else if (PathUtils.isExpContained(path)) {
-				String exp = PathUtils.getExpContained(path);
-				if (StringUtils.isNotEmpty(exp) && exp.startsWith("$")) {
-					String c = exp.substring(1);
-					if (StringUtils.isEmpty(c))
-						return true;
-					PathCondition<C, S> p = PathCondition.newExpCondition(stclContext, c, link);
-					return p.verify(stclContext, link);
-				}
-			}
-		}
-		return false;
-	}
+    /**
+     * Tests if a condition is to retrieve the adaptor directly.
+     */
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isWithLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
+        if (cond instanceof PathCondition) {
+            String path = ((PathCondition<C, S>) cond).getCondition();
+            if (PathUtils.isKeyContained(path)) {
+                String key = PathUtils.getKeyContained(path);
+                if (StringUtils.isNotEmpty(key) && key.startsWith("$")) {
+                    String c = key.substring(1);
+                    if (StringUtils.isEmpty(c))
+                        return true;
+                    PathCondition<C, S> p = PathCondition.newKeyCondition(stclContext, new Key(c), link);
+                    return p.verify(stclContext, link);
+                }
+            } else if (PathUtils.isExpContained(path)) {
+                String exp = PathUtils.getExpContained(path);
+                if (StringUtils.isNotEmpty(exp) && exp.startsWith("$")) {
+                    String c = exp.substring(1);
+                    if (StringUtils.isEmpty(c))
+                        return true;
+                    PathCondition<C, S> p = PathCondition.newExpCondition(stclContext, c, link);
+                    return p.verify(stclContext, link);
+                }
+            }
+        }
+        return false;
+    }
 
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isWithoutLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
-		if (cond instanceof PathCondition) {
-			String path = ((PathCondition<C, S>) cond).getCondition();
-			if (PathUtils.isExpContained(path)) {
-				String exp = PathUtils.getExpContained(path);
-				return (StringUtils.isNotEmpty(exp) && exp.equals("$!"));
-			}
-		}
-		return false;
-	}
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isWithoutLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
+        if (cond instanceof PathCondition) {
+            String path = ((PathCondition<C, S>) cond).getCondition();
+            if (PathUtils.isExpContained(path)) {
+                String exp = PathUtils.getExpContained(path);
+                return (StringUtils.isNotEmpty(exp) && exp.equals("$!"));
+            }
+        }
+        return false;
+    }
 
-	public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isOnlyLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
-		if (cond instanceof PathCondition) {
-			String path = ((PathCondition<C, S>) cond).getCondition();
-			if (PathUtils.isKeyContained(path)) {
-				String key = PathUtils.getKeyContained(path);
-				return (StringUtils.isNotEmpty(key) && key.equals("$"));
-			}
-		}
-		return false;
-	}
+    public static <C extends _StencilContext, S extends _PStencil<C, S>> boolean isOnlyLinksCondition(C stclContext, S link, StencilCondition<C, S> cond) {
+        if (cond instanceof PathCondition) {
+            String path = ((PathCondition<C, S>) cond).getCondition();
+            if (PathUtils.isKeyContained(path)) {
+                String key = PathUtils.getKeyContained(path);
+                return (StringUtils.isNotEmpty(key) && key.equals("$"));
+            }
+        }
+        return false;
+    }
 
 }

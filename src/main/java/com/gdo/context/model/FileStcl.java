@@ -8,23 +8,23 @@ import com.gdo.stencils.StclContext;
 
 public abstract class FileStcl extends Stcl {
 
-	public interface Slot extends Stcl.Slot, _FileStcl.Slot {
+    public interface Slot extends Stcl.Slot, _FileStcl.Slot {
 
-		/**
-		 * Property containing the content as text.
-		 */
-		String CONTENT = "Content";
+        /**
+         * Property containing the content as text.
+         */
+        String CONTENT = "Content";
 
-		/**
-		 * Property containing mime type.
-		 */
-		String MIME_TYPE = "MimeType";
-	}
+        /**
+         * Property containing mime type.
+         */
+        String MIME_TYPE = "MimeType";
+    }
 
-	public interface Command extends Stcl.Command, _FileStcl.Command {
-	}
+    public interface Command extends Stcl.Command, _FileStcl.Command {
+    }
 
-	public FileStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public FileStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 }

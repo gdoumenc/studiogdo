@@ -179,7 +179,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      */
     public void clear(C stclContext) {
         if (_stencil != null) {
-            _stencil.clear(stclContext);
+            _stencil.clear(stclContext, self());
         }
     }
 
@@ -1076,16 +1076,19 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         prop.setValue(stclContext, value);
     }
 
-    public void setInt(C stclContext, String path, int value) {
+    public int setInt(C stclContext, String path, int value) {
         setString(stclContext, path, Integer.toString(value));
+        return value;
     }
 
-    public void setBoolean(C stclContext, String path, boolean value) {
+    public boolean setBoolean(C stclContext, String path, boolean value) {
         setString(stclContext, path, Boolean.toString(value));
+        return value;
     }
 
-    public void setDouble(C stclContext, String path, double value) {
+    public double setDouble(C stclContext, String path, double value) {
         setString(stclContext, path, Double.toString(value));
+        return value;
     }
 
     /*
@@ -1147,13 +1150,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return newPStencil(stclContext, slot, key, clazz, params);
     }
 
-    @SuppressWarnings("unchecked")
     public <V> S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.newPProperty(stclContext, slot, key, value, self(), params);
     }
 
-    @SuppressWarnings("unchecked")
     public <V> S newPProperty(C stclContext, String slotName, IKey key, V value, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         PSlot<C, S> slot = getSlot(stclContext, slotName);
@@ -1310,14 +1311,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return exp.expand(stclContext);
     }
 
-    @Deprecated
-    public InputStream getResourceAsStream(C stclContext, String path) {
-        if (StencilUtils.isNull(this))
-            return null;
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        return stcl.getResourceAsStream(stclContext, path, self());
-    }
-
     public S plug(C stclContext, S stencil, String slotPath, IKey key) {
         if (isNull()) {
             return this.self();
@@ -1353,11 +1346,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     public S plug(C stclContext, S stencil, String slotPath, String key) {
-        return plug(stclContext, stencil, slotPath, new Key<String>(key));
+        return plug(stclContext, stencil, slotPath, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, String slotPath, int key) {
-        return plug(stclContext, stencil, slotPath, new Key<Integer>(key));
+        return plug(stclContext, stencil, slotPath, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, IKey key) {
@@ -1381,11 +1374,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, String key) {
-        return plug(stclContext, stencil, slot, new Key<String>(key));
+        return plug(stclContext, stencil, slot, new Key(key));
     }
 
     public S plug(C stclContext, S stencil, PSlot<C, S> slot, int key) {
-        return plug(stclContext, stencil, slot, new Key<Integer>(key));
+        return plug(stclContext, stencil, slot, new Key(key));
     }
 
     // TODO all following method should return a S value
@@ -1569,27 +1562,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     public void removeThisReferenceFromStencil(C stclContext) {
         List<S> list = getStencilOtherPluggedReferences(stclContext);
         list.remove(self());
-    }
-
-    /**
-     * Notify stencil is unplugged.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param slot
-     *            the slot from which the stencil was unplugged.
-     */
-    public void afterUnplug(C stclContext, PSlot<C, S> slot) {
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        if (stcl == null) {
-            // was last unplug
-            return;
-        }
-        stcl.afterUnplug(stclContext, slot, getKey(), self());
-        /*
-         * if (isNotPlugged(stclContext)) { stcl.afterLastUnplug(stclContext,
-         * self()); }
-         */
     }
 
     /**

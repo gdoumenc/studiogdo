@@ -23,13 +23,13 @@ import com.gdo.stencils.StclContext;
  */
 public class PackageStcl extends Stcl {
 
-	public interface Slot extends Stcl.Slot {
-		String PACKAGES = "Packages";
-		String FILES = "Fiels";
-	}
+    public interface Slot extends Stcl.Slot {
+        String PACKAGES = "Packages";
+        String FILES = "Fiels";
+    }
 
-	public PackageStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public PackageStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 
 }

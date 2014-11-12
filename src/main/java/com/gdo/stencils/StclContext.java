@@ -96,83 +96,34 @@ public class StclContext extends _StencilContext {
      */
     public StclContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
-        ServletContext servletContext = session.getServletContext();
-        String context = servletContext.getServletContextName();
 
         // stores last stencil context as default one
-        // if (DEFAULT_CONTEXT == null) {
         DEFAULT_CONTEXT = this;
-        // }
 
         // sets servlet entries
         _request = request;
         _response = response;
 
-        // set request arguments
-        _args = new RpcArgs(this);
-
         // set stencil context id
         _id = Atom.uniqueInt();
 
+        // set request arguments
+        _args = new RpcArgs(this);
+
         // loads project if not already loaded (only one load at a time)
-        synchronized (getClass()) {
-            PStcl servletStcl = getServletStcl();
-            if (StencilUtils.isNull(servletStcl)) {
-                try {
+        PStcl servletStcl = getServletStcl();
+        if (StencilUtils.isNull(servletStcl)) {
+            servletStcl = loadServlet(request);
+        }
 
-                    // set project auto-save
-                    String autosave = getConfigParameter(StclContext.AUTO_SAVE);
-                    if (StringUtils.isNotBlank(autosave))
-                        ServletStcl.AUTO_SAVE = Boolean.parseBoolean(autosave);
+        // creates session if the session was removed
+        if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
 
-                    // set cursor strategy
-                    String strategy = getConfigParameter(StclContext.CURSOR_STRATEGY);
-                    if (StringUtils.isNotBlank(strategy))
-                        _SlotCursor.STRATEGY = Integer.parseInt(strategy);
+            // creates session stencil
+            SessionStcl.createSessionStcl(this);
 
-                    // clean tmp dir
-                    String tmpDir = getConfigParameter(StclContext.PROJECT_TMP_DIR);
-                    if (StringUtils.isNotBlank(tmpDir)) {
-                        File tmp = new File(tmpDir);
-                        if (!tmp.exists()) {
-                            logWarn(this, "cannot get temporary directory : %s", tmpDir);
-                        } else {
-                            String[] files = tmp.list();
-                            if (files == null) {
-                                logWarn(this, "cannot read temporary directory : %s", tmpDir);
-                            } else {
-                                for (String file : files) {
-                                    File f = new File(tmp, file);
-                                    if (!f.delete()) {
-                                        logWarn(this, "cannot delete temporary file : %s", f.getAbsolutePath());
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // load project
-                    logWarn(this, "Loading project %s", context);
-                    servletStcl = ServletStcl.load(this);
-                    setServletStcl(servletStcl);
-                    logWarn(this, "Project %s loaded", context);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-            }
-            
-            // create session if the session was removed
-            if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
-
-                // creates the session
-                SessionStcl.createSessionStcl(this);
-
-                // handler on after session created
-                ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
-            }
+            // handler on after session created
+            ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
         }
     }
 
@@ -298,11 +249,11 @@ public class StclContext extends _StencilContext {
     public void setRequestParameters(RpcArgs params) {
         _request_parameters = params;
     }
-    
+
     public int getTransactionId() {
         int ti = _args.getTransactionId();
         if (ti > 0)
-                return ti;
+            return ti;
         return getId();
     }
 
@@ -399,6 +350,50 @@ public class StclContext extends _StencilContext {
          * IllegalStateException("Response already committed"); }
          */
         super.checkValidity();
+    }
+
+    private synchronized PStcl loadServlet(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        ServletContext servletContext = session.getServletContext();
+        String context = servletContext.getServletContextName();
+
+        // set project auto-save
+        String autosave = getConfigParameter(StclContext.AUTO_SAVE);
+        if (StringUtils.isNotBlank(autosave))
+            ServletStcl.AUTO_SAVE = Boolean.parseBoolean(autosave);
+
+        // set cursor strategy
+        String strategy = getConfigParameter(StclContext.CURSOR_STRATEGY);
+        if (StringUtils.isNotBlank(strategy))
+            _SlotCursor.STRATEGY = Integer.parseInt(strategy);
+
+        // clean tmp dir
+        String tmpDir = getConfigParameter(StclContext.PROJECT_TMP_DIR);
+        if (StringUtils.isNotBlank(tmpDir)) {
+            File tmp = new File(tmpDir);
+            if (!tmp.exists()) {
+                logWarn(this, "cannot get temporary directory : %s", tmpDir);
+            } else {
+                String[] files = tmp.list();
+                if (files == null) {
+                    logWarn(this, "cannot read temporary directory : %s", tmpDir);
+                } else {
+                    for (String file : files) {
+                        File f = new File(tmp, file);
+                        if (!f.delete()) {
+                            logWarn(this, "cannot delete temporary file : %s", f.getAbsolutePath());
+                        }
+                    }
+                }
+            }
+        }
+
+        // loads project
+        logWarn(this, "Loading project %s", context);
+        PStcl servletStcl = ServletStcl.load(this);
+        setServletStcl(servletStcl);
+        logWarn(this, "Project %s loaded", context);
+        return servletStcl;
     }
 
     //

@@ -18,13 +18,13 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class PlugCmd extends com.gdo.project.cmd.Plug {
 
-	public PlugCmd(StclContext stclContext) {
-		super(stclContext);
-	}
+    public PlugCmd(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> reset(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		return success(cmdContext, self);
-	}
+    @Override
+    public CommandStatus<StclContext, PStcl> reset(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        return success(cmdContext, self);
+    }
 
 }

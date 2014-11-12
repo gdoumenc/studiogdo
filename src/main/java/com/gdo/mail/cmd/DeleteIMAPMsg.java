@@ -14,24 +14,24 @@ import com.gdo.stencils.plug.PStcl;
 
 public class DeleteIMAPMsg extends AtomicActionStcl {
 
-	public DeleteIMAPMsg(StclContext stclContext) {
-		super(stclContext);
-	}
+    public DeleteIMAPMsg(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
 
-		try {
-			if (target.getReleasedStencil(stclContext) instanceof IMAPMailStcl) {
-				((IMAPMailStcl) target.getReleasedStencil(stclContext)).delete();
-				return success(cmdContext, self);
-			}
-			return error(cmdContext, self, "deleteIMAP");
-		} catch (MessagingException e) {
-			return error(cmdContext, self, e);
-		}
-	}
+        try {
+            if (target.getReleasedStencil(stclContext) instanceof IMAPMailStcl) {
+                ((IMAPMailStcl) target.getReleasedStencil(stclContext)).delete();
+                return success(cmdContext, self);
+            }
+            return error(cmdContext, self, "deleteIMAP");
+        } catch (MessagingException e) {
+            return error(cmdContext, self, e);
+        }
+    }
 
 }

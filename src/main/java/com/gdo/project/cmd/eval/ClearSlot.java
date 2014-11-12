@@ -23,26 +23,26 @@ import com.gdo.stencils.plug.PStcl;
  */
 public class ClearSlot extends AtomicActionStcl {
 
-	public ClearSlot(StclContext stclContext) {
-		super(stclContext);
-	}
+    public ClearSlot(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
 
-		// first, verifies if slot defined by path contains stencils
-		String path = getParameter(cmdContext, 2, null);
-		if (StringUtils.isBlank(path)) {
-			return error(cmdContext, self, "no slot defined for ClearSlot (param2)");
-		}
-		Base64 base = new Base64();
-		path = new String(base.decode(path.getBytes()));
-		
-		target.clearSlot(stclContext, path);
-		
-		return success(cmdContext, self, false);
-	}
+        // first, verifies if slot defined by path contains stencils
+        String path = getParameter(cmdContext, 2, null);
+        if (StringUtils.isBlank(path)) {
+            return error(cmdContext, self, "no slot defined for ClearSlot (param2)");
+        }
+        Base64 base = new Base64();
+        path = new String(base.decode(path.getBytes()));
+
+        target.clearSlot(stclContext, path);
+
+        return success(cmdContext, self, false);
+    }
 
 }

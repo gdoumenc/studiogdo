@@ -22,217 +22,218 @@ import com.gdo.stencils.util.StencilUtils;
 
 public class AddResource extends ComposedActionStcl {
 
-	public interface Slot extends ComposedActionStcl.Slot {
-		String CONTEXTS = "Contexts";
-		String SELECTED_CONTEXT_PATH = "SelectedContextPath";
-		String SELECTED_CONTEXT = "SelectedContext";
-		String CREATION_MODE = "CreationMode";
-		String FILE_NAME = "FileName";
-		String RESOURCE_CREATED = "ResourceCreated";
-	}
+    public interface Slot extends ComposedActionStcl.Slot {
+        String CONTEXTS = "Contexts";
+        String SELECTED_CONTEXT_PATH = "SelectedContextPath";
+        String SELECTED_CONTEXT = "SelectedContext";
+        String CREATION_MODE = "CreationMode";
+        String FILE_NAME = "FileName";
+        String RESOURCE_CREATED = "ResourceCreated";
+    }
 
-	public interface Status {
-		int NO_RESSOURCE_CLASS_NAME = 1;
-		int NO_CONTEXT_SELECTED = 2;
-		int FILE_NOT_FOUND = 3;
-		int WRONG_CREATION_MODE = 4;
-	}
+    public interface Status {
+        int NO_RESSOURCE_CLASS_NAME = 1;
+        int NO_CONTEXT_SELECTED = 2;
+        int FILE_NOT_FOUND = 3;
+        int WRONG_CREATION_MODE = 4;
+    }
 
-	private static final String NEW_MODE = "new";
-	private static final String GET_MODE = "get";
+    private static final String NEW_MODE = "new";
+    private static final String GET_MODE = "get";
 
-	private String _creation_mode; // values are new, get
-	private String _class_name; // resource template class name
-	private boolean _name_encoding; // the name should be encoded for being read
-	// from http
-	private PStcl _file; // associated file
-	private PStcl _resource; // resource created
+    private String _creation_mode; // values are new, get
+    private String _class_name; // resource template class name
+    private boolean _name_encoding; // the name should be encoded for being read
+    // from http
+    private PStcl _file; // associated file
+    private PStcl _resource; // resource created
 
-	public AddResource(StclContext stclContext) {
-		super(stclContext);
-	}
+    public AddResource(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		int currentStep = getActiveStepIndex();
+    @Override
+    public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        int currentStep = getActiveStepIndex();
 
-		// if we have only one context in command then move to next step or
-		// interface choose one.
-		// TODO should be done in validation to force going to step2...
-		if (currentStep == 1) {
-			int size = self.getStencils(stclContext, Slot.CONTEXTS).size();
-			if (size == 1) {
-				self.setString(stclContext, Slot.SELECTED_CONTEXT_PATH, Slot.CONTEXTS);
-				self.call(stclContext, ComposedActionStcl.Command.NEXT_STEP);
-			}
-		}
+        // if we have only one context in command then move to next step or
+        // interface choose one.
+        // TODO should be done in validation to force going to step2...
+        if (currentStep == 1) {
+            int size = self.getStencils(stclContext, Slot.CONTEXTS).size();
+            if (size == 1) {
+                self.setString(stclContext, Slot.SELECTED_CONTEXT_PATH, Slot.CONTEXTS);
+                self.call(stclContext, ComposedActionStcl.Command.NEXT_STEP);
+            }
+        }
 
-		// creates or gets the associated file
-		else if (currentStep == 2) {
-			PStcl context = self.getStencil(stclContext, Slot.SELECTED_CONTEXT);
+        // creates or gets the associated file
+        else if (currentStep == 2) {
+            PStcl context = self.getStencil(stclContext, Slot.SELECTED_CONTEXT);
 
-			// creates the associated file
-			if (NEW_MODE.equals(_creation_mode)) {
+            // creates the associated file
+            if (NEW_MODE.equals(_creation_mode)) {
 
-				// defines a random name
-				String fileName = "_" + System.currentTimeMillis();
+                // defines a random name
+                String fileName = "_" + System.currentTimeMillis();
 
-				// should add folder case here (create file should be called on
-				// folder)
+                // should add folder case here (create file should be called on
+                // folder)
 
-				// create the file
-				CommandStatus<StclContext, PStcl> status = context.call(stclContext, FolderStcl.Command.CREATE_FILE, fileName);
-				if (status.isNotSuccess())
-					return status;
-				_file = status.getInfo(CommandStatus.SUCCESS, FolderStcl.Command.CREATE_FILE, CreateFile.Status.FILE);
-				if (StencilUtils.isNull(_file))
-					return error(cmdContext, self, 0, "cannot get created file", status);
-			}
+                // create the file
+                CommandStatus<StclContext, PStcl> status = context.call(stclContext, FolderStcl.Command.CREATE_FILE, fileName);
+                if (status.isNotSuccess())
+                    return status;
+                _file = status.getInfo(CommandStatus.SUCCESS, FolderStcl.Command.CREATE_FILE, CreateFile.Status.FILE);
+                if (StencilUtils.isNull(_file))
+                    return error(cmdContext, self, 0, "cannot get created file", status);
+            }
 
-			// in get mode user select the file to be associated to the resource
-			else if (GET_MODE.equals(_creation_mode)) {
-			} else {
-			}
-		}
+            // in get mode user select the file to be associated to the resource
+            else if (GET_MODE.equals(_creation_mode)) {
+            } else {
+            }
+        }
 
-		// creates the resource
-		else if (currentStep == 3) {
-			// PStcl context = self.getStencil(stclContext, Slot.SELECTED_CONTEXT);
-			PStcl container = cmdContext.getTarget();
+        // creates the resource
+        else if (currentStep == 3) {
+            // PStcl context = self.getStencil(stclContext,
+            // Slot.SELECTED_CONTEXT);
+            PStcl container = cmdContext.getTarget();
 
-			// creates the resource
-			_resource = self.newPStencil(stclContext, Slot.RESOURCE_CREATED, Key.NO_KEY, _class_name);
-			if (StencilUtils.isNull(_resource)) {
-				String msg = String.format("cannot create resource %s in container %s", _class_name, container);
-				return error(cmdContext, self, msg);
-			}
+            // creates the resource
+            _resource = self.newPStencil(stclContext, Slot.RESOURCE_CREATED, Key.NO_KEY, _class_name);
+            if (StencilUtils.isNull(_resource)) {
+                String msg = String.format("cannot create resource %s in container %s", _class_name, container);
+                return error(cmdContext, self, msg);
+            }
 
-			// plugs resource in temporary slot for final modification before
-			// adding it to the resources
-			// PStcl stcl = _resource.plug(stclContext, context,
-			// _ResourceStcl.Slot.CONTEXT);
-			// if (StencilUtils.isNull(stcl)) return error(cmdContext, self,
-			// "cannot plug contel time:!!!xt in created resource");
-			PStcl stcl = _resource.plug(stclContext, _file, _ResourceStcl.Slot.FILE);
-			if (StencilUtils.isNull(stcl))
-				return error(cmdContext, self, "cannot plug created file in resource");
+            // plugs resource in temporary slot for final modification before
+            // adding it to the resources
+            // PStcl stcl = _resource.plug(stclContext, context,
+            // _ResourceStcl.Slot.CONTEXT);
+            // if (StencilUtils.isNull(stcl)) return error(cmdContext, self,
+            // "cannot plug contel time:!!!xt in created resource");
+            PStcl stcl = _resource.plug(stclContext, _file, _ResourceStcl.Slot.FILE);
+            if (StencilUtils.isNull(stcl))
+                return error(cmdContext, self, "cannot plug created file in resource");
 
-			// replaces container folder and manager
-			_resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_FOLDER);
-			_resource.plug(stclContext, container, _ResourceStcl.Slot.CONTAINER_FOLDER);
-			PStcl mgr = container.getStencil(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
-			_resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
-			_resource.plug(stclContext, mgr, _ResourceStcl.Slot.CONTAINER_MANAGER);
-		}
+            // replaces container folder and manager
+            _resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_FOLDER);
+            _resource.plug(stclContext, container, _ResourceStcl.Slot.CONTAINER_FOLDER);
+            PStcl mgr = container.getStencil(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
+            _resource.clearSlot(stclContext, _ResourceStcl.Slot.CONTAINER_MANAGER);
+            _resource.plug(stclContext, mgr, _ResourceStcl.Slot.CONTAINER_MANAGER);
+        }
 
-		// validates the resource creation
-		else if (currentStep == 4) {
-			PStcl container = cmdContext.getTarget();
+        // validates the resource creation
+        else if (currentStep == 4) {
+            PStcl container = cmdContext.getTarget();
 
-			// plugs the created resource in container
-			PStcl resource = container.plug(stclContext, _resource, ResourcesMgrStcl.Slot.FILE_RESOURCES);
-			if (StencilUtils.isNull(resource)) {
-				String msg = String.format("cannot plug created resource %s in container %s", _resource, container);
-				return error(cmdContext, self, msg);
-			}
-		}
+            // plugs the created resource in container
+            PStcl resource = container.plug(stclContext, _resource, ResourcesMgrStcl.Slot.FILE_RESOURCES);
+            if (StencilUtils.isNull(resource)) {
+                String msg = String.format("cannot plug created resource %s in container %s", _resource, container);
+                return error(cmdContext, self, msg);
+            }
+        }
 
-		return success(cmdContext, self);
-	}
+        return success(cmdContext, self);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> cancel(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+    @Override
+    public CommandStatus<StclContext, PStcl> cancel(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		// remove created file if in creation mode
-		if (NEW_MODE.equals(_creation_mode)) {
-			if (StencilUtils.isNotNull(_file)) {
-				// to be done;
-			}
-		}
+        // remove created file if in creation mode
+        if (NEW_MODE.equals(_creation_mode)) {
+            if (StencilUtils.isNotNull(_file)) {
+                // to be done;
+            }
+        }
 
-		return super.cancel(cmdContext, self);
-	}
+        return super.cancel(cmdContext, self);
+    }
 
-	@Override
-	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		int activeStep = getActiveStepIndex();
+    @Override
+    protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        int activeStep = getActiveStepIndex();
 
-		// checks initial parameters
-		if (activeStep == 1) {
-			_creation_mode = getParameter(cmdContext, 1, NEW_MODE);
-			if (!NEW_MODE.equals(_creation_mode) && !GET_MODE.equals(_creation_mode)) {
-				String msg = String.format("Creation mode %s should be 'new' or 'get' (param1)", _creation_mode);
-				return error(cmdContext, self, Status.WRONG_CREATION_MODE, msg);
-			}
-			self.setString(stclContext, Slot.CREATION_MODE, _creation_mode);
+        // checks initial parameters
+        if (activeStep == 1) {
+            _creation_mode = getParameter(cmdContext, 1, NEW_MODE);
+            if (!NEW_MODE.equals(_creation_mode) && !GET_MODE.equals(_creation_mode)) {
+                String msg = String.format("Creation mode %s should be 'new' or 'get' (param1)", _creation_mode);
+                return error(cmdContext, self, Status.WRONG_CREATION_MODE, msg);
+            }
+            self.setString(stclContext, Slot.CREATION_MODE, _creation_mode);
 
-			_class_name = getParameter(cmdContext, 2, FileResourceStcl.class.getName());
-			_name_encoding = getParameter(cmdContext, 3, false);
-		}
+            _class_name = getParameter(cmdContext, 2, FileResourceStcl.class.getName());
+            _name_encoding = getParameter(cmdContext, 3, false);
+        }
 
-		return super.verifyContext(cmdContext, self);
-	}
+        return super.verifyContext(cmdContext, self);
+    }
 
-	@Override
-	protected CommandStatus<StclContext, PStcl> beforeIncrementStep(CommandContext<StclContext, PStcl> cmdContext, int increment, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		int activeStep = getActiveStepIndex();
+    @Override
+    protected CommandStatus<StclContext, PStcl> beforeIncrementStep(CommandContext<StclContext, PStcl> cmdContext, int increment, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        int activeStep = getActiveStepIndex();
 
-		// a context must be defined for the resource
-		if (increment != 0 && activeStep == 1) {
+        // a context must be defined for the resource
+        if (increment != 0 && activeStep == 1) {
 
-			// plug the selected context
-			self.clearSlot(stclContext, Slot.SELECTED_CONTEXT);
-			PStcl context = self.getStencil(stclContext, self.getString(stclContext, Slot.SELECTED_CONTEXT_PATH, ""));
-			if (StencilUtils.isNull(context)) {
-				return error(cmdContext, self, Status.NO_CONTEXT_SELECTED, "No context selected for the resource");
-			}
-			PStcl selectCtx = self.plug(stclContext, context, Slot.SELECTED_CONTEXT);
-			if (StencilUtils.isNull(selectCtx))
-				return error(cmdContext, self, "cannot plug Selected context in command");
-		}
+            // plug the selected context
+            self.clearSlot(stclContext, Slot.SELECTED_CONTEXT);
+            PStcl context = self.getStencil(stclContext, self.getString(stclContext, Slot.SELECTED_CONTEXT_PATH, ""));
+            if (StencilUtils.isNull(context)) {
+                return error(cmdContext, self, Status.NO_CONTEXT_SELECTED, "No context selected for the resource");
+            }
+            PStcl selectCtx = self.plug(stclContext, context, Slot.SELECTED_CONTEXT);
+            if (StencilUtils.isNull(selectCtx))
+                return error(cmdContext, self, "cannot plug Selected context in command");
+        }
 
-		return success(cmdContext, self);
-	}
+        return success(cmdContext, self);
+    }
 
-	@Override
-	public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) throws Exception {
-		int activeStep = getActiveStepIndex();
+    @Override
+    public void multipart(StclContext stclContext, String fileName, FileItem item, PStcl self) throws Exception {
+        int activeStep = getActiveStepIndex();
 
-		// we can consider the upload can be done only at step 2
-		if (activeStep == 2) {
-			if (StencilUtils.isNull(_file)) {
-				if (getLog().isWarnEnabled())
-					getLog().warn(stclContext, "No file found for the resource to upload it");
-				return;
-			}
-			_file.multipart(stclContext, fileName, item);
+        // we can consider the upload can be done only at step 2
+        if (activeStep == 2) {
+            if (StencilUtils.isNull(_file)) {
+                if (getLog().isWarnEnabled())
+                    getLog().warn(stclContext, "No file found for the resource to upload it");
+                return;
+            }
+            _file.multipart(stclContext, fileName, item);
 
-			// Rename the file.
-			String newFileName = item.getName();
-			if (StringUtils.isNotEmpty(newFileName)) {
-				if (_name_encoding) {
-					encodeUrl(newFileName);
-				}
-				Result status = _file.call(stclContext, "Rename", newFileName);
-				if (status.isNotSuccess()) {
-					if (getLog().isWarnEnabled()) {
-						String msg = String.format("Cannot rename to %s from multipart", newFileName);
-						getLog().warn(stclContext, msg);
-					}
-				}
-				// Should be done by renamethis._file.setString(stclContext,
-				// FileStcl.Slot.NAME, fName);
-			}
-		}
-	}
+            // Rename the file.
+            String newFileName = item.getName();
+            if (StringUtils.isNotEmpty(newFileName)) {
+                if (_name_encoding) {
+                    encodeUrl(newFileName);
+                }
+                Result status = _file.call(stclContext, "Rename", newFileName);
+                if (status.isNotSuccess()) {
+                    if (getLog().isWarnEnabled()) {
+                        String msg = String.format("Cannot rename to %s from multipart", newFileName);
+                        getLog().warn(stclContext, msg);
+                    }
+                }
+                // Should be done by renamethis._file.setString(stclContext,
+                // FileStcl.Slot.NAME, fName);
+            }
+        }
+    }
 
-	private String encodeUrl(String url) {
-		url = url.replaceAll(" ", "_");
-		url = url.replaceAll("%20", "_");
-		return url;
-	}
+    private String encodeUrl(String url) {
+        url = url.replaceAll(" ", "_");
+        url = url.replaceAll("%20", "_");
+        return url;
+    }
 
 }

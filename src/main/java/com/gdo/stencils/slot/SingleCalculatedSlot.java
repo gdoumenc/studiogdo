@@ -39,108 +39,99 @@ import com.gdo.stencils.util.StencilUtils;
  */
 public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends SingleSlot<C, S> {
 
-	private boolean _acceptPlug = false; // by default cannot plug in a
+    private boolean _acceptPlug = false; // by default cannot plug in a
 
-	// calculated slot
+    // calculated slot
 
-	public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
-		super(stclContext, in, name, arity, true, false);
-	}
+    public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
+        super(stclContext, in, name, arity, true, false);
+    }
 
-	public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name) {
-		this(stclContext, in, name, PSlot.ONE);
-	}
+    public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name) {
+        this(stclContext, in, name, PSlot.ONE);
+    }
 
-	public boolean acceptPlug() {
-		return _acceptPlug;
-	}
+    public boolean acceptPlug() {
+        return _acceptPlug;
+    }
 
-	public void setAcceptPlug(boolean accept) {
-		_acceptPlug = accept;
-	}
+    public void setAcceptPlug(boolean accept) {
+        _acceptPlug = accept;
+    }
 
-	@Override
-	public boolean hasStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		if (self.getArity(stclContext) == PSlot.ONE)
-			return true;
+    @Override
+    public boolean hasStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
+        if (self.getArity(stclContext) == PSlot.ONE)
+            return true;
 
-		if (acceptPlug()) {
-			return super.hasStencils(stclContext, cond, self);
-		}
-		String msg = String.format("Function hasStencils in calculated slot %s not redefined", self);
-		throw new UnsupportedOperationException(msg);
-	}
+        if (acceptPlug()) {
+            return super.hasStencils(stclContext, cond, self);
+        }
+        String msg = String.format("Function hasStencils in calculated slot %s not redefined", self);
+        throw new UnsupportedOperationException(msg);
+    }
 
-	@Override
-	public S getStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		
-		// if accepts plug then returns stencils plugged
-		if (acceptPlug()) {
-			return super.getStencil(stclContext, cond, self);
-		}
-		
-		// returns calculated stencil
-		return getCalculatedStencil(stclContext, cond, self);
-	}
+    @Override
+    public S getStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
 
-	@Override
-	public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
-		return StencilUtils.<C, S> iterator(stclContext, getStencil(stclContext, cond, self), self);
-	}
+        // if accepts plug then returns stencils plugged
+        if (acceptPlug()) {
+            return super.getStencil(stclContext, cond, self);
+        }
 
-	public abstract S getCalculatedStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self);
+        // returns calculated stencil
+        return getCalculatedStencil(stclContext, cond, self);
+    }
 
-	/**
-	 * If a property can be plugged in place of the calculated property, then if
-	 * no stencil plugged used the calculated stencil.
-	 */
-	@Override
-	protected S getContainedStencilOrCreateDefault(C stclContext, PSlot<C, S> self) {
-		if (acceptPlug())
-			return getCalculatedStencil(stclContext, null, self);
-		String msg = String.format("Cannot create default calculated property for %s [sgould not goes here]", self);
-		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
-	}
+    @Override
+    public StencilIterator<C, S> getStencils(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self) {
+        return StencilUtils.<C, S> iterator(stclContext, getStencil(stclContext, cond, self), self);
+    }
 
-	@Override
-	protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-		if (acceptPlug())
-			return super.doPlug(stclContext, stencil, key, self);
-		String msg = String.format("Cannot plug in the calculated slot %s", self);
-		return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
-	}
+    public abstract S getCalculatedStencil(C stclContext, StencilCondition<C, S> cond, PSlot<C, S> self);
 
-	@Override
-	protected void doUnplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-		if (acceptPlug()) {
-			super.doUnplug(stclContext, stencil, key, self);
-		}
-		logWarn(stclContext, "Cannot unplug from the calculated slot %s", self);
-	}
+    /**
+     * If a property can be plugged in place of the calculated property, then if
+     * no stencil plugged used the calculated stencil.
+     */
+    @Override
+    protected S getContainedStencilOrCreateDefault(C stclContext, PSlot<C, S> self) {
+        if (acceptPlug())
+            return getCalculatedStencil(stclContext, null, self);
+        String msg = String.format("Cannot create default calculated property for %s [sgould not goes here]", self);
+        return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
+    }
 
-	@Override
-	protected void doUnplugAll(C stclContext, PSlot<C, S> self) {
-		if (acceptPlug()) {
-			super.doUnplugAll(stclContext, self);
-			return;
-		}
-		logWarn(stclContext, "Cannot unplugall from the calculated slot %s", self);
-	}
+    @Override
+    protected S doPlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+        if (acceptPlug())
+            return super.doPlug(stclContext, stencil, key, self);
+        String msg = String.format("Cannot plug in the calculated slot %s", self);
+        return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
+    }
 
-	@Override
-	public StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self) {
-		if (acceptPlug())
-			return super.getStencilsToSave(stclContext, self);
-		return StencilUtils.<C, S> iterator();
-	}
+    @Override
+    protected void doUnplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+        if (acceptPlug()) {
+            super.doUnplug(stclContext, stencil, key, self);
+        }
+        logWarn(stclContext, "Cannot unplug from the calculated slot %s", self);
+    }
 
-	/**
-	 * Expunge the calculated stencil to force reclaculation. Made public to allow
-	 * command Expunge to use it.
-	 */
-	@Override
-	public void expunge(C stclContext, PSlot<C, S> self) {
-		_containedStcl = null;
-	}
+    @Override
+    protected void doUnplugAll(C stclContext, PSlot<C, S> self) {
+        if (acceptPlug()) {
+            super.doUnplugAll(stclContext, self);
+            return;
+        }
+        logWarn(stclContext, "Cannot unplugall from the calculated slot %s", self);
+    }
+
+    @Override
+    public StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self) {
+        if (acceptPlug())
+            return super.getStencilsToSave(stclContext, self);
+        return StencilUtils.<C, S> iterator();
+    }
 
 }

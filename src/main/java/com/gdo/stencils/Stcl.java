@@ -132,7 +132,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
                 return new IsLockedByMeSlot(stclContext, name, self);
             }
         });
-        
+
         singleSlot(Slot.$LOCKED_BY, PSlot.NONE_OR_ONE, false, null);
 
         // COMMAND PART
@@ -149,7 +149,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         command(Command.LOAD, Load.class);
         command(Command.UPDATE, Trace.class);
     }
-    
+
     public Stcl(StclContext stclContext, String value) {
         super(stclContext, value);
 
@@ -179,7 +179,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
                 return new IsLockedByMeSlot(stclContext, name, self);
             }
         });
-        
+
         singleSlot(Slot.$LOCKED_BY, PSlot.NONE_OR_ONE, false, null);
 
         // COMMAND PART
@@ -288,7 +288,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         // execute the command
         return ((ComposedActionStcl) cmdStcl.getReleasedStencil(stclContext)).launch(newContext, path, cmdStcl);
     }
-    
+
     public class IsLockedSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
 
         public IsLockedSlot(StclContext stclContext, String name, PStcl self) {
@@ -301,7 +301,7 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         }
 
     }
-    
+
     public class IsLockedByMeSlot extends CalculatedBooleanPropertySlot<StclContext, PStcl> {
 
         public IsLockedByMeSlot(StclContext stclContext, String name, PStcl self) {

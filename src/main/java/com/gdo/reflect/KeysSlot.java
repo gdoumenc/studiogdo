@@ -29,34 +29,34 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class KeysSlot extends MultiCalculatedSlot<StclContext, PStcl> {
-	private PSlot<StclContext, PStcl> _slot;
+    private PSlot<StclContext, PStcl> _slot;
 
-	public KeysSlot(StclContext stclContext, SlotStcl in) {
-		super(stclContext, in, SlotStcl.Slot.KEYS, PSlot.ANY);
-		_slot = in.getSlot();
-	}
+    public KeysSlot(StclContext stclContext, SlotStcl in) {
+        super(stclContext, in, SlotStcl.Slot.KEYS, PSlot.ANY);
+        _slot = in.getSlot();
+    }
 
-	@Override
-	protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-		for (PStcl stencil : _slot.getStencils(stclContext, cond)) {
+    @Override
+    protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+        for (PStcl stencil : _slot.getStencils(stclContext, cond)) {
 
-			// creates the key
-			IKey key = stencil.getKey();
-			if (stencil.isLink(stclContext)) {
-				key = new Key<String>("$" + key.toString());
-			}
+            // creates the key
+            IKey key = stencil.getKey();
+            if (stencil.isLink(stclContext)) {
+                key = new Key("$" + key.toString());
+            }
 
-			// if already in list, does nothing
-			if (getStencilFromList(stclContext, key, self) != null) {
-				keepStencilInList(stclContext, key, self);
-				continue;
-			}
+            // if already in list, does nothing
+            if (getStencilFromList(stclContext, key, self) != null) {
+                keepStencilInList(stclContext, key, self);
+                continue;
+            }
 
-			// creates the new key stencil
-			StclFactory factory = (StclFactory) stclContext.getStencilFactory();
-			PStcl keyStcl = factory.createPStencil(stclContext, self, key, KeyStcl.class, stencil);
-			addStencilInList(stclContext, keyStcl, self);
-		}
-		return cleanList(stclContext, cond, self);
-	}
+            // creates the new key stencil
+            StclFactory factory = (StclFactory) stclContext.getStencilFactory();
+            PStcl keyStcl = factory.createPStencil(stclContext, self, key, KeyStcl.class, stencil);
+            addStencilInList(stclContext, keyStcl, self);
+        }
+        return cleanList(stclContext, cond, self);
+    }
 }

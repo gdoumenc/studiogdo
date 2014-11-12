@@ -25,14 +25,14 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class GdoRootLabel<C extends _StencilContext, S extends _PStencil<C, S>> extends FacetsRenderer<C, S> {
 
-	public GdoRootLabel(RenderContext<C, S> renderContext) {
-		super(renderContext);
-	}
+    public GdoRootLabel(RenderContext<C, S> renderContext) {
+        super(renderContext);
+    }
 
-	// no code between tag (as root used only to store children..)
-	@Override
-	public boolean needExpansion(C stclContext) {
-		return false;
-	}
+    // no code between tag (as root used only to store children..)
+    @Override
+    public boolean needExpansion(C stclContext) {
+        return false;
+    }
 
 }

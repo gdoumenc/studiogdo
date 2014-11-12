@@ -27,17 +27,17 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class StencilDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends InstDescriptor<C, S> {
 
-	// root tag is stencil instead of inst
-	@Override
-	protected String getRootTag() {
-		return InterpretedStencilFactory.STENCIL;
-	}
+    // root tag is stencil instead of inst
+    @Override
+    protected String getRootTag() {
+        return InterpretedStencilFactory.STENCIL;
+    }
 
-	// all instances and plug are in load mode (as all plugs are stored in
-	// stencil descriptor)
-	@Override
-	public IStencilFactory.Mode getMode() {
-		return Mode.ON_LOAD;
-	}
+    // all instances and plug are in load mode (as all plugs are stored in
+    // stencil descriptor)
+    @Override
+    public IStencilFactory.Mode getMode() {
+        return Mode.ON_LOAD;
+    }
 
 }

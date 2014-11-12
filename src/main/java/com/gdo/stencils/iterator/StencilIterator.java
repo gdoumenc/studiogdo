@@ -28,75 +28,75 @@ import com.gdo.stencils.plug._PStencil;
  */
 public interface StencilIterator<C extends _StencilContext, S extends _PStencil<C, S>> extends Iterator<S>, Iterable<S>, Cloneable {
 
-	/**
-	 * @return <tt>true</tt> if the iteration has more stencils.
-	 */
-	@Override
-	boolean hasNext();
+    /**
+     * @return <tt>true</tt> if the iteration has more stencils.
+     */
+    @Override
+    boolean hasNext();
 
-	/**
-	 * @return the next plugged stencil in the iteration.
-	 */
-	@Override
-	S next();
+    /**
+     * @return the next plugged stencil in the iteration.
+     */
+    @Override
+    S next();
 
-	/**
-	 * Reset the stencil iterator (to be able to iterate again on it).
-	 */
-	StencilIterator<C, S> reset();
+    /**
+     * Reset the stencil iterator (to be able to iterate again on it).
+     */
+    StencilIterator<C, S> reset();
 
-	/**
-	 * @return the number of stencils plugged.
-	 */
-	int size();
+    /**
+     * @return the number of stencils plugged.
+     */
+    int size();
 
-	/**
-	 * @return <tt>true</true> if the key exists in the iterator.
-	 */
-	boolean contains(IKey key);
+    /**
+     * @return <tt>true</true> if the key exists in the iterator.
+     */
+    boolean contains(IKey key);
 
-	/**
-	 * @return the plugged stencil in the iteration if the stencil is in
-	 *         iteration.
-	 */
-	S getPlugged(IKey key);
+    /**
+     * @return the plugged stencil in the iteration if the stencil is in
+     *         iteration.
+     */
+    S getPlugged(IKey key);
 
-	/**
-	 * @return <tt>true</true> if the stencil exists in the iterator.
-	 */
-	boolean contains(S stencil);
+    /**
+     * @return <tt>true</true> if the stencil exists in the iterator.
+     */
+    boolean contains(S stencil);
 
-	/**
-	 * @return the plugged stencil in the iteration if the stencil is in
-	 *         iteration.
-	 */
-	S getPlugged(S stencil);
+    /**
+     * @return the plugged stencil in the iteration if the stencil is in
+     *         iteration.
+     */
+    S getPlugged(S stencil);
 
-	/**
-	 * @return the index of the plugged stencil in the iteration if the stencil is
-	 *         in iteration.
-	 */
-	int getIndex(S stencil);
+    /**
+     * @return the index of the plugged stencil in the iteration if the stencil
+     *         is in iteration.
+     */
+    int getIndex(S stencil);
 
-	/**
-	 * @return <tt>true</tt> if the iterator was created without errors.
-	 */
-	boolean isValid();
+    /**
+     * @return <tt>true</tt> if the iterator was created without errors.
+     */
+    boolean isValid();
 
-	/**
-	 * @return <tt>true</tt> if the iterator encountered error during creation.
-	 */
-	boolean isNotValid();
+    /**
+     * @return <tt>true</tt> if the iterator encountered error during creation.
+     */
+    boolean isNotValid();
 
-	/**
-	 * @return The result status on this iterator.
-	 */
-	Result getStatus();
+    /**
+     * @return The result status on this iterator.
+     */
+    Result getStatus();
 
-	/**
-	 * Add result status on this iterator.
-	 */
-	void addStatus(Result result);
+    /**
+     * Add result status on this iterator.
+     */
+    void addStatus(Result result);
 
-	StencilIterator<C, S> clone();
+    StencilIterator<C, S> clone();
 }

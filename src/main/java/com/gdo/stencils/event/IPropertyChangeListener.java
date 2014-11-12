@@ -21,12 +21,12 @@ import com.gdo.stencils.plug._PStencil;
  */
 public interface IPropertyChangeListener<C extends _StencilContext, S extends _PStencil<C, S>> {
 
-	/**
-	 * Called on property value change.
-	 * 
-	 * @param evt
-	 * @return <tt></tt> if no issue in listening.
-	 */
-	public Result propertyChange(PropertyChangeEvent<C, S> evt);
+    /**
+     * Called on property value change.
+     * 
+     * @param evt
+     * @return <tt></tt> if no issue in listening.
+     */
+    public Result propertyChange(PropertyChangeEvent<C, S> evt);
 
 }

@@ -21,50 +21,50 @@ import com.gdo.stencils.util.PathUtils;
  */
 public class CreateDir extends AtomicActionStcl {
 
-	public interface Status {
-		int NO_NAME_DEFINED = 1;
-		int IO_EXCEPTION = 2;
-	}
+    public interface Status {
+        int NO_NAME_DEFINED = 1;
+        int IO_EXCEPTION = 2;
+    }
 
-	private String _name; // file name
+    private String _name; // file name
 
-	public CreateDir(StclContext stclContext) {
-		super(stclContext);
-	}
+    public CreateDir(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
-		String name = target.getName(stclContext);
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
+        String name = target.getName(stclContext);
 
-		try {
-			FolderStcl df = (FolderStcl) target.getReleasedStencil(stclContext);
-			File dir = df.getFile(stclContext, target);
-			String path = PathUtils.compose(dir.getAbsolutePath(), _name);
-			File file = new File(path);
-			if (!file.mkdir()) {
-				String msg = String.format("directory %s not created", path);
-				return error(cmdContext, self, msg);
-			}
-			return success(cmdContext, self, file.hashCode());
-		} catch (Exception e) {
-			String msg = logError(stclContext, "cannot create directory %s in (%s)", _name, name, e);
-			return error(cmdContext, self, msg);
-		}
-	}
+        try {
+            FolderStcl df = (FolderStcl) target.getReleasedStencil(stclContext);
+            File dir = df.getFile(stclContext, target);
+            String path = PathUtils.compose(dir.getAbsolutePath(), _name);
+            File file = new File(path);
+            if (!file.mkdir()) {
+                String msg = String.format("directory %s not created", path);
+                return error(cmdContext, self, msg);
+            }
+            return success(cmdContext, self, file.hashCode());
+        } catch (Exception e) {
+            String msg = logError(stclContext, "cannot create directory %s in (%s)", _name, name, e);
+            return error(cmdContext, self, msg);
+        }
+    }
 
-	@Override
-	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+    @Override
+    protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
 
-		// get directory name
-		_name = getParameter(cmdContext, 1, null);
-		if (StringUtils.isEmpty(_name)) {
-			return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to create directory");
-		}
+        // get directory name
+        _name = getParameter(cmdContext, 1, null);
+        if (StringUtils.isEmpty(_name)) {
+            return error(cmdContext, self, Status.NO_NAME_DEFINED, "no name to create directory");
+        }
 
-		// other verification
-		return super.verifyContext(cmdContext, self);
-	}
+        // other verification
+        return super.verifyContext(cmdContext, self);
+    }
 
 }

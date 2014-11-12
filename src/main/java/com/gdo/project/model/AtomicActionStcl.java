@@ -26,13 +26,13 @@ import com.gdo.stencils.StclContext;
  */
 public abstract class AtomicActionStcl extends CommandStcl {
 
-	public AtomicActionStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public AtomicActionStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public final boolean isAtomic() {
-		return true;
-	}
+    @Override
+    public final boolean isAtomic() {
+        return true;
+    }
 
 }

@@ -30,6 +30,7 @@ import com.gdo.project.model.ComposedActionStcl.Status;
 import com.gdo.project.model.ServletStcl;
 import com.gdo.project.util.CatalinaUtils;
 import com.gdo.servlet.xml.XmlBuilder;
+import com.gdo.sql.model.SQLContextStcl;
 import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
@@ -209,9 +210,6 @@ public class RpcWrapper {
     public static final String TYPE_BOOLEAN = Keywords.BOOLEAN;
     public static final String TYPE_XINHA = Keywords.XINHA; // return value in
 
-    // number of hits from service start
-    public static int HITS = 0;
-
     private RpcWrapper(StclContext stclContext) {
         // singleton pattern
     }
@@ -236,17 +234,12 @@ public class RpcWrapper {
      *            the stencil context.
      * @param entry
      *            the RPC entry called.
+     * @param args
+     *            the RPC arguments
      */
     public void service(StclContext stclContext, String entry, RpcArgs args) {
+        boolean disconnect = false;
         try {
-            boolean disconnect = false;
-
-            // increments hits
-            if (HITS != -1 && HITS < Integer.MAX_VALUE) {
-                HITS++;
-            } else {
-                HITS = -1;
-            }
 
             // gets arguments
             String trace = args.formatForTrace();
@@ -306,15 +299,19 @@ public class RpcWrapper {
                 fault(stclContext, entry, msg, args);
             }
 
-            // releases session if required
+            // releases session if required (close all connections before
+            // deconnection)
             boolean release = args.getBooleanParameter(stclContext, RELEASE_PARAM, false);
+            disconnect = release || disconnect;
             if (release || disconnect) {
+                SQLContextStcl.closeAllConnections(stclContext);
                 disconnect(stclContext);
             }
-
         } catch (Exception e) {
             fault(stclContext, entry, e, null);
-            return;
+        } finally {
+            if (!disconnect)
+                SQLContextStcl.closeAllConnections(stclContext);
         }
     }
 
@@ -421,7 +418,7 @@ public class RpcWrapper {
             if (StringUtils.isBlank(type))
                 type = TYPE_STRING;
             String value = getValue(stclContext, args);
-            
+
             // returns value found
             XmlBuilder builder = new XmlBuilder();
             String xml = builder.get(stclContext, args, stcl, value, type, Result.success());
@@ -862,7 +859,6 @@ public class RpcWrapper {
                 String mime = facetResult.getMimeType();
                 InputStream in = facetResult.getInputStream();
                 StudioGdoServlet.writeResponse(stclContext.getResponse(), HttpServletResponse.SC_OK, mime, in, StclContext.getCharacterEncoding());
-                facetResult.closeInputStream();
                 return;
             }
 

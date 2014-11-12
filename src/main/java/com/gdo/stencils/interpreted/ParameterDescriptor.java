@@ -28,60 +28,60 @@ import com.gdo.util.XmlWriter;
  */
 public final class ParameterDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
 
-	private String _index; // parameter position index (starts from 0)
-	private String _type; // parameter type
-	private String _value; // default value
+    private String _index; // parameter position index (starts from 0)
+    private String _type; // parameter type
+    private String _value; // default value
 
-	// if name is simply getIndex then digester won't use setIndex
-	public byte getIndexAsByte() {
-		try {
-			return Byte.parseByte(_index);
-		} catch (Exception e) {
-			if (getLog().isWarnEnabled()) {
-				String msg = String.format("Wrong value %s for parameter index", _index);
-				getLog().warn(null, msg);
-			}
-		}
-		return 0;
-	}
+    // if name is simply getIndex then digester won't use setIndex
+    public byte getIndexAsByte() {
+        try {
+            return Byte.parseByte(_index);
+        } catch (Exception e) {
+            if (getLog().isWarnEnabled()) {
+                String msg = String.format("Wrong value %s for parameter index", _index);
+                getLog().warn(null, msg);
+            }
+        }
+        return 0;
+    }
 
-	// used by digester
-	public void setIndex(String index) {
-		_index = index;
-	}
+    // used by digester
+    public void setIndex(String index) {
+        _index = index;
+    }
 
-	// used by digester
-	public void setType(String type) {
-		_type = type;
-	}
+    // used by digester
+    public void setType(String type) {
+        _type = type;
+    }
 
-	// convert from expected types
-	public Object getValue() {
-		if (Keywords.INT.equals(_type)) {
-			return ConverterHelper.stringToInteger(_value);
-		} else if (Keywords.BOOLEAN.equals(_type)) {
-			return ConverterHelper.parseBoolean(_value);
-		} else if (Keywords.STRING.equals(_type)) {
-			return _value;
-		}
-		if (getLog().isWarnEnabled()) {
-			String msg = String.format("Unknow type %s for parameter", _type);
-			getLog().warn(null, msg);
-		}
-		return _value;
-	}
+    // convert from expected types
+    public Object getValue() {
+        if (Keywords.INT.equals(_type)) {
+            return ConverterHelper.stringToInteger(_value);
+        } else if (Keywords.BOOLEAN.equals(_type)) {
+            return ConverterHelper.parseBoolean(_value);
+        } else if (Keywords.STRING.equals(_type)) {
+            return _value;
+        }
+        if (getLog().isWarnEnabled()) {
+            String msg = String.format("Unknow type %s for parameter", _type);
+            getLog().warn(null, msg);
+        }
+        return _value;
+    }
 
-	// used by digester
-	public void setValue(String value) {
-		_value = value.replaceAll("<]>", "]]");
-	}
+    // used by digester
+    public void setValue(String value) {
+        _value = value.replaceAll("<]>", "]]");
+    }
 
-	@Override
-	public void save(C stclContext, XmlWriter instPart, XmlWriter plugPart) throws IOException {
-		instPart.startElement("param");
-		instPart.writeAttribute("index", _index);
-		instPart.writeAttribute("type", _type);
-		instPart.writeCDATAAndEndElement(_value);
-	}
+    @Override
+    public void save(C stclContext, XmlWriter instPart, XmlWriter plugPart) throws IOException {
+        instPart.startElement("param");
+        instPart.writeAttribute("index", _index);
+        instPart.writeAttribute("type", _type);
+        instPart.writeCDATAAndEndElement(_value);
+    }
 
 }

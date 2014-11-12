@@ -17,37 +17,37 @@ import com.gdo.stencils.util.SlotUtils;
 
 public class MultiUnplug extends AtomicActionStcl {
 
-	public MultiUnplug(StclContext stclContext) {
-		super(stclContext);
-	}
+    public MultiUnplug(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
 
-		// first, verifies if slot defined by path contains stencils
-		String path = getParameter(cmdContext, 2, null);
-		if (StringUtils.isBlank(path)) {
-			return error(cmdContext, self, "no slot defined for MultiUnplug (param2)");
-		}
-		PSlot<StclContext, PStcl> slot = target.getSlot(stclContext, PathUtils.getSlotPath(path));
-		if (slot.isNull()) {
-			String msg = String.format("Slot %s not defined in %s for MultiUnplug (param2)", path, target);
-			return error(cmdContext, self, msg);
-		}
+        // first, verifies if slot defined by path contains stencils
+        String path = getParameter(cmdContext, 2, null);
+        if (StringUtils.isBlank(path)) {
+            return error(cmdContext, self, "no slot defined for MultiUnplug (param2)");
+        }
+        PSlot<StclContext, PStcl> slot = target.getSlot(stclContext, PathUtils.getSlotPath(path));
+        if (slot.isNull()) {
+            String msg = String.format("Slot %s not defined in %s for MultiUnplug (param2)", path, target);
+            return error(cmdContext, self, msg);
+        }
 
-		// get keys (multi separated string)
-		String keys = getParameter(cmdContext, 3, null);
-		if (StringUtils.isBlank(keys)) {
-			return error(cmdContext, self, "no keys defined for MultiUnplug (param3)");
-		}
+        // get keys (multi separated string)
+        String keys = getParameter(cmdContext, 3, null);
+        if (StringUtils.isBlank(keys)) {
+            return error(cmdContext, self, "no keys defined for MultiUnplug (param3)");
+        }
 
-		if (SlotUtils.isMultiple(stclContext, slot)) {
-			((MultiSlot<StclContext, PStcl>) slot.getSlot()).doMultiUnplug(stclContext, keys, slot);
-		}
+        if (SlotUtils.isMultiple(stclContext, slot)) {
+            ((MultiSlot<StclContext, PStcl>) slot.getSlot()).doMultiUnplug(stclContext, keys, slot);
+        }
 
-		return success(cmdContext, self, false);
-	}
+        return success(cmdContext, self, false);
+    }
 
 }

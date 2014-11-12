@@ -11,13 +11,13 @@ import com.gdo.stencils.plug.PStcl;
 
 public class Nothing extends AtomicActionStcl {
 
-	public Nothing(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Nothing(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		return success(cmdContext, self);
-	}
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        return success(cmdContext, self);
+    }
 
 }

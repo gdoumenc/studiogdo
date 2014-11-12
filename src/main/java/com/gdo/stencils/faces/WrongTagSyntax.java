@@ -14,7 +14,7 @@ package com.gdo.stencils.faces;
 @SuppressWarnings("serial")
 public class WrongTagSyntax extends Exception {
 
-	public WrongTagSyntax(String msg) {
-		super(msg);
-	}
+    public WrongTagSyntax(String msg) {
+        super(msg);
+    }
 }

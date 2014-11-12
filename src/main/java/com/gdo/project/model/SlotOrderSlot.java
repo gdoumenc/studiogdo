@@ -18,30 +18,30 @@ import com.gdo.stencils.slot.MultiSlot;
 
 public class SlotOrderSlot extends MultiSlot<StclContext, PStcl> {
 
-	// keys defined in the slot
-	private List<String> _keys = new ArrayList<String>();
+    // keys defined in the slot
+    private List<String> _keys = new ArrayList<String>();
 
-	public SlotOrderSlot(StclContext stclContext, Stcl in) {
-		super(stclContext, in, Slot.SLOT_ORDER);
-		_verify_unique = false; // do not remove to avoid recursion on creation
-	}
+    public SlotOrderSlot(StclContext stclContext, Stcl in) {
+        super(stclContext, in, Slot.SLOT_ORDER);
+        _verify_unique = false; // do not remove to avoid recursion on creation
+    }
 
-	@Override
-	protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+    @Override
+    protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
-		// checks the property exists for key if needed
-		String key = PathCondition.<StclContext, PStcl> getKeyCondition(cond);
-		if (StringUtils.isNotBlank(key)) {
+        // checks the property exists for key if needed
+        String key = PathCondition.<StclContext, PStcl> getKeyCondition(cond);
+        if (StringUtils.isNotBlank(key)) {
 
-			// creates property if not exist
-			if (!_keys.contains(key)) {
-				PStcl container = self.getContainer();
-				container.newPProperty(stclContext, Slot.SLOT_ORDER, new Key<String>(key), "");
-				_keys.add(key);
-			}
-		}
+            // creates property if not exist
+            if (!_keys.contains(key)) {
+                PStcl container = self.getContainer();
+                container.newPProperty(stclContext, Slot.SLOT_ORDER, new Key(key), "");
+                _keys.add(key);
+            }
+        }
 
-		// return usual multi slot content
-		return super.getStencilsList(stclContext, cond, self);
-	}
+        // return usual multi slot content
+        return super.getStencilsList(stclContext, cond, self);
+    }
 }

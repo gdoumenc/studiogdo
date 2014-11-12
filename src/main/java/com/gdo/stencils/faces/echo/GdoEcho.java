@@ -28,57 +28,57 @@ import com.gdo.stencils.plug._PStencil;
  */
 public class GdoEcho<C extends _StencilContext, S extends _PStencil<C, S>> extends FacetsRenderer<C, S> {
 
-	private StringBuffer _content;
-	private boolean _asText;
+    private StringBuffer _content;
+    private boolean _asText;
 
-	public GdoEcho(RenderContext<C, S> renderContext, String content) {
-		super(renderContext);
-		_content = new StringBuffer(content);
-	}
+    public GdoEcho(RenderContext<C, S> renderContext, String content) {
+        super(renderContext);
+        _content = new StringBuffer(content);
+    }
 
-	public GdoEcho(RenderContext<C, S> renderContext) {
-		this(renderContext, "");
-	}
+    public GdoEcho(RenderContext<C, S> renderContext) {
+        this(renderContext, "");
+    }
 
-	public StringBuffer getContent() {
-		return _content;
-	}
+    public StringBuffer getContent() {
+        return _content;
+    }
 
-	public void setContent(StringBuffer content) {
-		_content = content;
-	}
+    public void setContent(StringBuffer content) {
+        _content = content;
+    }
 
-	public void appendContent(char ch) {
-		_content.append(ch);
-	}
+    public void appendContent(char ch) {
+        _content.append(ch);
+    }
 
-	public void appendContent(String added) {
-		_content.append(added);
-	}
+    public void appendContent(String added) {
+        _content.append(added);
+    }
 
-	public void appendContent(String text, int pos, int len) {
-		if (len == -1)
-			_content.append(text.substring(pos));
-		else
-			_content.append(text.substring(pos, len));
-	}
+    public void appendContent(String text, int pos, int len) {
+        if (len == -1)
+            _content.append(text.substring(pos));
+        else
+            _content.append(text.substring(pos, len));
+    }
 
-	@Override
-	public boolean needExpansion(C stclContext) {
-		return false;
-	}
+    @Override
+    public boolean needExpansion(C stclContext) {
+        return false;
+    }
 
-	public boolean isAsText() {
-		return _asText;
-	}
+    public boolean isAsText() {
+        return _asText;
+    }
 
-	public void setAsText(boolean asText) {
-		_asText = asText;
-	}
+    public void setAsText(boolean asText) {
+        _asText = asText;
+    }
 
-	@Override
-	public void renderEnd(C stclContext, Writer writer) throws IOException {
-		writer.write(getContent().toString());
-	}
+    @Override
+    public void renderEnd(C stclContext, Writer writer) throws IOException {
+        writer.write(getContent().toString());
+    }
 
 }

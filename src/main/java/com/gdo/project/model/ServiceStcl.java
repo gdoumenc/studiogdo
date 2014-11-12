@@ -8,14 +8,14 @@ import com.gdo.stencils.StclContext;
 
 public class ServiceStcl extends Stcl {
 
-	public interface Slot extends Stcl.Slot {
-		String SERVICES = "Services";
-	}
+    public interface Slot extends Stcl.Slot {
+        String SERVICES = "Services";
+    }
 
-	public ServiceStcl(StclContext stclContext) {
-		super(stclContext);
+    public ServiceStcl(StclContext stclContext) {
+        super(stclContext);
 
-		multiSlot(Slot.SERVICES);
-	}
+        multiSlot(Slot.SERVICES);
+    }
 
 }

@@ -25,11 +25,11 @@ import com.gdo.stencils.StclContext;
  */
 public abstract class AttachmentStcl extends NamedStcl implements DataSource {
 
-	public interface Slot extends NamedStcl.Slot {
-		String TYPE = "Type";
-	}
+    public interface Slot extends NamedStcl.Slot {
+        String TYPE = "Type";
+    }
 
-	public AttachmentStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public AttachmentStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 }

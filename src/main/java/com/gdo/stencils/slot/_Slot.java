@@ -114,9 +114,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         _annoted = null;
     }
 
-    public void expunge(C stclContext, PSlot<C, S> self) {
-    }
-
     /**
      * Returns the name of the slot.
      * 
@@ -405,8 +402,8 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * @param self
      *            this slot as a plugged slot.
      */
-    public void afterUnplug(C stclContext, S stencil, PSlot<C, S> self) {
-        stencil.afterUnplug(stclContext, self);
+    public Result afterUnplug(C stclContext, S stencil, PSlot<C, S> self) {
+        return Result.success(getClass().getName());
     }
 
     /**
@@ -552,7 +549,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         plugPart.writeAttribute("ref", ref);
         plugPart.writeAttribute("slot", getName(stclContext));
         IKey key = plugged.getKey();
-        if (!key.isEmpty() && !StencilUtils.isXmlRefId(key.toString())) {
+        if (!key.isEmpty()) {
             plugPart.writeAttribute("key", key);
         }
         plugPart.endElement("plug");
@@ -575,17 +572,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     public void setCompletionLevel(int completionLevel) {
         _completionLevel = completionLevel;
-    }
-
-    private void saveAsProp(C stclContext, String value, XmlWriter out) throws IOException {
-        out.startElement("prop");
-        out.writeAttribute("name", getName(stclContext));
-        out.writeAttribute("type", "string");
-        if (!StringUtils.isEmpty(value)) {
-            out.startElement("data");
-            out.writeCDATAAndEndElement(value);
-        }
-        out.endElement("prop");
     }
 
     public void setLinks(Map<String, String> links) {
@@ -624,7 +610,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         path = PathUtils.compose(PathUtils.PARENT, path);
 
         // create link stencil in slot
-        IKey key = (linkDesc.getKey() != null) ? new Key<String>(linkDesc.getKey()) : Key.NO_KEY;
+        IKey key = (linkDesc.getKey() != null) ? new Key(linkDesc.getKey()) : Key.NO_KEY;
         S link = stencil.newPStencil(stclContext, slot, key, LinkStcl.class.getName(), path);
         if (ConverterHelper.parseBoolean(linkDesc.getLocal())) {
             link.setBoolean(stclContext, LinkStcl.Slot.LOCAL, true);

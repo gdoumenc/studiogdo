@@ -13,31 +13,31 @@ import com.gdo.stencils.plug.PStcl;
  * 
  */
 public abstract class _CommandThread implements ICommandThread {
-	private ThreadStcl _thread;
+    private ThreadStcl _thread;
 
-	public _CommandThread(CommandContext<StclContext, PStcl> cmdContext, PStcl reference) {
-		ThreadStcl.createThread(cmdContext, this, reference);
-	}
+    public _CommandThread(CommandContext<StclContext, PStcl> cmdContext, PStcl reference) {
+        ThreadStcl.createThread(cmdContext, this, reference);
+    }
 
-	@Override
-	public void setThread(ThreadStcl thread) {
-		_thread = thread;
-	}
+    @Override
+    public void setThread(ThreadStcl thread) {
+        _thread = thread;
+    }
 
-	protected StclContext getStencilContext() {
-		return _thread.getStencilContext();
-	}
+    protected StclContext getStencilContext() {
+        return _thread.getStencilContext();
+    }
 
-	protected CommandContext<StclContext, PStcl> getCommandContext() {
-		return _thread.getCommandContext();
-	}
+    protected CommandContext<StclContext, PStcl> getCommandContext() {
+        return _thread.getCommandContext();
+    }
 
-	protected PStcl getThread() {
-		return _thread.self();
-	}
+    protected PStcl getThread() {
+        return _thread.self();
+    }
 
-	protected PStcl getReference() {
-		return _thread.getReference();
-	}
+    protected PStcl getReference() {
+        return _thread.getReference();
+    }
 
 }
