@@ -68,6 +68,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     private SQLCursor _cursor;
 
     // cache optimization
+    boolean _read_only;
+    boolean _load_all_at_start;
     int _stencil_context_uid; // context id
 
     // calculated map stored in each context id
@@ -95,6 +97,14 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     // the cursor should be defined later
     protected SQLSlot(StclContext stclContext, Stcl in, String name) {
         super(stclContext, in, name, PSlot.ANY, true, false);
+    }
+
+    public void readOnly() {
+        _read_only = true;
+    }
+
+    public void loadAllAtStart() {
+        _load_all_at_start = true;
     }
 
     /* (non-Javadoc)
@@ -166,19 +176,27 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      */
     protected boolean initialize(StclContext stclContext, PSlot<StclContext, PStcl> self) {
         if (!_initialized) {
+            _initialized = true;
 
-            // gets SQL context
+            // get SQL context
             PStcl sqlContext = getSQLContext(stclContext, self);
             if (StencilUtils.isNull(sqlContext)) {
                 logWarn(stclContext, "No SQL context defined for slot %s for create stencil", self);
                 return false;
             }
 
-            // initialize SQL table
-            SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
-            String from = getKeysFromWithoutAlias(stclContext, self).toString();
-            context.initializeTable(stclContext, from, sqlContext);
-            _initialized = true;
+            // initializes SQL table
+            if (!_read_only) {
+                SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
+                String from = getKeysFromWithoutAlias(stclContext, self).toString();
+                context.initializeTable(stclContext, from, sqlContext);
+            }
+
+            // reads all values at initialization
+            if (_load_all_at_start) {
+                int size = getStencilsList(stclContext, null, self).size();
+                _cursor.size(size);
+            }
         }
         return true;
     }
@@ -960,21 +978,20 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     @Override
     protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
-        // if the list was already created for the same stencil context and
-        // without any condition
-        if (_stencil_context_uid == stclContext.getId() && _stencil_context_map != null) {
-            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.clone().iterator(), cond, self);
-        }
-
-        SQLCursor cursor = getCursor(stclContext, self);
-
         // should be initialized before used
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
         }
 
+        // if the list was already created for the same stencil context and
+        // without any condition
+        if ((_stencil_context_uid == stclContext.getId() || _read_only) && _stencil_context_map != null) {
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.iterator(), cond, self);
+        }
+
         // creates the stencil list
+        SQLCursor cursor = getCursor(stclContext, self);
         List<IKey> keys = getKeys(stclContext, cond, self);
         List<PStcl> stencils = new Vector<PStcl>(keys.size());
         for (IKey key : keys) {
@@ -1062,6 +1079,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return Stcl.nullPStencil(stclContext, Result.error(msg));
         }
+        
+        if (_read_only) {
+            logWarn(stclContext, "Plug in read only slot : %s", self);
+            _read_only = false;
+        }
 
         // creates new plugged stencil
         // StencilFactory<StclContext, PStcl> factory =
@@ -1130,6 +1152,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             return;
         }
 
+        if (_read_only) {
+            logWarn(stclContext, "Unplug in read only slot : %s", self);
+            _read_only = false;
+        }
+
         // gets SQL context
         PStcl sqlContext = getSQLContext(stclContext, self);
         if (StencilUtils.isNull(sqlContext)) {
@@ -1172,6 +1199,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (!initialize(stclContext, self)) {
             logWarn(stclContext, "Cannot initialize slot %s", self);
             return;
+        }
+
+        if (_read_only) {
+            logWarn(stclContext, "Unplug in read only slot : %s", self);
+            _read_only = false;
         }
 
         // get SQL context
@@ -1220,6 +1252,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return Result.error(msg);
+        }
+
+        if (_read_only) {
+            logWarn(stclContext, "Multi unplug in read only slot : %s", self);
+            _read_only = false;
         }
 
         // get SQL context

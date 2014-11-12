@@ -84,6 +84,10 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
             _modified.clear();
     }
 
+    public void size(int size) {
+        _size = size + 1;
+    }
+
     /**
      * Abstract method to create stencil if not in cursor.
      * 
