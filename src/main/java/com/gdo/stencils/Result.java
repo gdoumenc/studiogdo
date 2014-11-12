@@ -233,12 +233,12 @@ public class Result {
      *            Status (gravity level) expected.
      * @return The list of informations associated to the status.
      */
-    public final List<ResultInfo> getInfos(byte status) {
-        List<ResultInfo> list;
+    public final Vector<ResultInfo> getInfos(byte status) {
+        Vector<ResultInfo> list;
 
         // gets list of informations for this status
         if (_other == null) {
-            list = new ArrayList<ResultInfo>();
+            list = new Vector<ResultInfo>();
         } else {
             list = _other.getInfos(status);
         }
@@ -322,13 +322,7 @@ public class Result {
         return null;
     }
 
-    /**
-     * @param level
-     * @param prefix
-     * @param index
-     * @param value
-     */
-    public final <T> void setInfo(byte level, String prefix, int index, T value) {
+    public final void setInfo(byte level, String prefix, int index, Object value) {
         for (ResultInfo r : getInfos(level)) {
 
             // checks only on same level result
@@ -374,7 +368,7 @@ public class Result {
      * @return <tt>true</tt> if at least one status is <tt>ERROR</tt>.
      */
     public final boolean isNotSuccess() {
-        return (!isSuccess());
+        return !isSuccess();
     }
 
     /**
