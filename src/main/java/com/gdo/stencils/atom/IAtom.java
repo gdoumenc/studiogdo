@@ -9,7 +9,7 @@ package com.gdo.stencils.atom;
  * description file.
  * </p>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@coworks.pro">gdoumenc@studiogdo.com)</a>
  */
 public interface IAtom<C, S> {

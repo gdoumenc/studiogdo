@@ -47,7 +47,7 @@ import com.gdo.stencils.util.StencilUtils;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class CommandStcl extends CommandStencil<StclContext, PStcl> {

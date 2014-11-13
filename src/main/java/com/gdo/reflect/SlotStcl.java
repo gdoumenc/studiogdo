@@ -24,7 +24,7 @@ import com.gdo.stencils.slot.CalculatedStringPropertySlot;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class SlotStcl extends Stcl {

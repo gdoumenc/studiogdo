@@ -17,7 +17,7 @@ import com.gdo.stencils.log.StencilLog;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class FacetFinder<C extends _StencilContext> {

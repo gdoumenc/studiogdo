@@ -79,7 +79,7 @@ import com.gdo.util.XmlWriter;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> {
@@ -227,7 +227,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil context.
      * 
      *            TODO should replace beforeLastUnplug.
-     * @throws Exception
      */
     public void beforeClear(C stclContext, S self) {
     }
@@ -439,7 +438,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the slot where the created stencil is plugged.
      * @param key
      *            the key for plugging.
-     * @param stencilClassName
+     * @param clazz
      *            the stencil class name.
      * @param self
      *            the stencil as a plugged stencil.
@@ -1202,7 +1201,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return _command_descs.containsKey(name);
     }
 
-    /** @see{PStencil.getCommand **/
     public S getCommand(C stclContext, String name, S self) {
 
         // checks name is not empty
@@ -1243,10 +1241,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return pcmd;
     }
 
-    /**
-     * @throws Exception
-     * @see{PStencil.call
-     **/
     public CommandStatus<C, S> call(C stclContext, String name, S self, Object... params) {
 
         // creates a command context with parameters

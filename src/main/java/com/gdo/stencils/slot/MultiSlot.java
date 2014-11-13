@@ -35,8 +35,7 @@ import com.gdo.stencils.util.StencilUtils;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _MultiSlot<C, S> {
 

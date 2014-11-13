@@ -7,7 +7,7 @@
  * Use is subject to license terms.</p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc (<a> href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 package com.gdo.stencils.faces;
 

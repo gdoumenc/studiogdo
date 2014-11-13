@@ -22,8 +22,7 @@ import com.gdo.util.XmlWriter;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public interface IStencilFactory<C extends _StencilContext, S extends _PStencil<C, S>> {
 

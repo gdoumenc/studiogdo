@@ -33,8 +33,7 @@ import com.gdo.util.XmlWriter;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public abstract class StencilFactory<C extends _StencilContext, S extends _PStencil<C, S>> implements IStencilFactory<C, S> {
 
@@ -96,7 +95,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
      *            the slot containing the stencil.
      * @param key
      *            the key for plug.
-     * @param stencilClassName
+     * @param clazz
      *            the template class name.
      * @param params
      *            the tempalte constructor parameters

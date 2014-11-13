@@ -15,7 +15,7 @@ package com.gdo.stencils.key;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 public interface IKeyGenerator {

@@ -34,8 +34,7 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
+ * @author Guillaume Doumenc (<a>>href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class StringHelper {
 

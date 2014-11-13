@@ -36,7 +36,7 @@ import com.gdo.stencils.util.SlotUtils;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>, K extends Comparable<K>> implements IKeyGenerator {

@@ -25,7 +25,7 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class KeysSlot extends MultiCalculatedSlot<StclContext, PStcl> {

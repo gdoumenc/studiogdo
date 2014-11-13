@@ -31,7 +31,7 @@ import com.gdo.util.XmlStringWriter;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class GdoTagExpander<C extends _StencilContext, S extends _PStencil<C, S>> {

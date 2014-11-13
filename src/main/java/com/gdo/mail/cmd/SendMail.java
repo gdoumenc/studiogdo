@@ -13,11 +13,7 @@ import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.plug.PStcl;
 
 /**
- * @author gdo <param0>Title</param0> <param1>From</param1> <param2>To</param2>
- *         <param3>CC : if null, then get from slot, if empty nothing else
- *         ...</param3> <param4>Content</param4> <param5>BCC : if null, then get
- *         from slot, if empty nothing else ...</param5>
- * 
+ * @author gdo
  */
 public class SendMail extends AtomicActionStcl {
 

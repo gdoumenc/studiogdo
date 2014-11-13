@@ -43,8 +43,7 @@ import com.gdo.util.XmlWriter;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
@@ -60,7 +59,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     private String _name; // unique slot name
     private char _arity; // arity
     private boolean _tranzient; // should the plugged stencils be saved?
-    private Annotation _annoted; // a slot may be annoted (error, missing, ..)
 
     private int _completionLevel; // accept plug in this slot only if completion
 
@@ -111,7 +109,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         _desc = null;
         _container = null;
         _name = null;
-        _annoted = null;
     }
 
     /**
@@ -227,17 +224,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     public abstract boolean isFirst(C stclContext, S searched, PSlot<C, S> self);
 
     public abstract boolean isLast(C stclContext, S searched, PSlot<C, S> self);
-
-    /*
-     * Annotation par (not used for now)
-     */
-    public final Annotation getAnnotation(C stclContext, String type, PSlot<C, S> self) {
-        return _annoted;
-    }
-
-    public final void setAnnotation(C stclContext, String type, Annotation annotation, PSlot<C, S> self) {
-        _annoted = annotation;
-    }
 
     /**
      * @return the java classes prototype signature. Should be redefined in each

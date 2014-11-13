@@ -25,8 +25,7 @@ import com.gdo.stencils.plug.PStcl;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public class StclFactory extends InterpretedStencilFactory<StclContext, PStcl> {
 

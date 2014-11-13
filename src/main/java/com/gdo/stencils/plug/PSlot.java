@@ -7,7 +7,6 @@ import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.log.StencilLog;
-import com.gdo.stencils.slot.Annotation;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
@@ -25,7 +24,7 @@ import com.gdo.stencils.util.StencilUtils;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
@@ -308,14 +307,6 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     public boolean isLast(C stclContext, S searched) {
         return _slot.isLast(stclContext, searched, this);
-    }
-
-    public Annotation getAnnotation(C stclContext, String type) {
-        return _slot.getAnnotation(stclContext, type, this);
-    }
-
-    public void setAnnotation(C stclContext, String type, Annotation annotation) {
-        _slot.setAnnotation(stclContext, type, annotation, this);
     }
 
     /**

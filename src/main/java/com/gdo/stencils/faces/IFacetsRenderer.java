@@ -7,7 +7,7 @@
  * Use is subject to license terms.</p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc (<a> href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 package com.gdo.stencils.faces;
 
@@ -25,7 +25,7 @@ import com.gdo.stencils.plug._PStencil;
  * </p>
  * </blockquote>
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public interface IFacetsRenderer<C extends _StencilContext, S extends _PStencil<C, S>> {
