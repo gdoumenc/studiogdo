@@ -97,8 +97,8 @@
 		</plugins>
 	</build>
 	<scm>
-		<connection>scm:git:studiogdo@dev.studiogdo.com:/var/git/studiogdo.git</connection>
-		<developerConnection>scm:git:studiogdo@dev.studiogdo.com:/var/git/studiogdo.git</developerConnection>
-		<url>scm:git:studiogdo@dev.studiogdo.com:/var/git/studiogdo.git</url>
+		<connection>scm:git:https://github.com/gdoumenc/studiogdo.git</connection>
+		<developerConnection>scm:git:https://github.com/gdoumenc/studiogdo.git</developerConnection>
+		<url>https://github.com/gdoumenc/studiogdo.git</url>
 	</scm>
 </project>
