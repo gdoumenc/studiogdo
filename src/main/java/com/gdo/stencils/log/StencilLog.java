@@ -17,16 +17,7 @@ import com.gdo.stencils._StencilContext;
  * Encapsulating log levels.
  * </p>
  * Only available levels are : error, warn and trace. All other levels are
- * declared deprecated. <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
+ * declared deprecated.
  */
 public class StencilLog {
     private static final String SEP = " : ";

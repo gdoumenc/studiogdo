@@ -35,17 +35,6 @@ import com.google.gson.Gson;
  * <li>an index to fetch the information,
  * <li>the default description
  * </ul>
- * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class Result {
 
@@ -165,7 +154,6 @@ public class Result {
      * 
      * @param other
      *            Result to be added to the list of cascading results.
-     * @return The other result added.
      */
     public final void addOther(Result other) {
         if (_other == null) {
@@ -463,14 +451,12 @@ public class Result {
     }
 
     /**
-     * <p>
      * A <tt>ResultInfo</tt> is made of :
      * <ul>
      * <li>a prefix (usually class name),
      * <li>an index,
      * <li>the associated value
      * </ul>
-     * </p>
      */
     public class ResultInfo {
         private String _prefix;

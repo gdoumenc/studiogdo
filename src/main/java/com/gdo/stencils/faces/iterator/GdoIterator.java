@@ -14,24 +14,7 @@ import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.plug._PStencil;
 
 /**
- * <p>
  * Iterator component.
- * </p>
- * An iterator is defined by its path. <$iterator path="SlotName"> ...
- * <$/iterator> The text between those tags is expansed for all stencils in the
- * iterator. <$iterator:first>First<$/iterator:first>
- * <$iterator:last>Last<$/iterator:last> <$button path="." type="submit"
- * value="Aller..."/> <$iterator:not_last>,<$/iterator:not_last>
- * <$iterator:not_selected> <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class GdoIterator<C extends _StencilContext, S extends _PStencil<C, S>> extends FacetsRendererWithContent<C, S> {
 
@@ -66,7 +49,6 @@ public class GdoIterator<C extends _StencilContext, S extends _PStencil<C, S>> e
     /**
      * Return <tt>true</tt> if the iteration has more elements.
      * 
-     * @param context
      * @return <tt>true</tt> if the iteration has more elements.
      */
     public boolean hasNext(C stclContext) {

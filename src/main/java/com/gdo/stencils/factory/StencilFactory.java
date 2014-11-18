@@ -25,16 +25,15 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Stencil factories are defined globally by their class name.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public abstract class StencilFactory<C extends _StencilContext, S extends _PStencil<C, S>> implements IStencilFactory<C, S> {
 
@@ -75,7 +74,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
      *            the containing slot.
      * @param key
      *            the key.
-     * @param stcl
+     * @param stencil
      *            the stencil.
      * @return the plugged stencil.
      */
@@ -96,7 +95,7 @@ public abstract class StencilFactory<C extends _StencilContext, S extends _PSten
      *            the slot containing the stencil.
      * @param key
      *            the key for plug.
-     * @param stencilClassName
+     * @param clazz
      *            the template class name.
      * @param params
      *            the tempalte constructor parameters

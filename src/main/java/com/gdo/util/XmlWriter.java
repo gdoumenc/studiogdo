@@ -17,17 +17,13 @@ import com.gdo.helper.StringHelper;
  * Very simple XML writer.
  * </p>
  * 
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
- * @see com.gdo.stencils.cmd.CommandContext Context
+
  */
 public class XmlWriter extends Writer {
 

@@ -17,17 +17,6 @@ import javax.crypto.Cipher;
  * <p>
  * Helpers on crypto.
  * </p>
- * 
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class CryptoHelper {
 
@@ -84,8 +73,6 @@ public class CryptoHelper {
      * Convertit des octets en leur representation hexadecimale (base 16),
      * chacun se retrouvant finalement 'non signe' et sur 2 caracteres.
      * 
-     * @see http 
-     *      ://java.sun.com/developer/technicalArticles/Security/AES/AES_v1.html
      */
     public static String byteToHex(byte[] bits) {
         if (bits == null) {
@@ -104,9 +91,7 @@ public class CryptoHelper {
 
     /**
      * Convertit une representation d'hexadecimaux (base 16) en octets, chacun
-     * �tant initialement 'non signe' et sur 2 caracteres.
-     * 
-     * @see http://forum.java.sun.com/thread.jspa?threadID=659432
+     * étant initialement 'non signe' et sur 2 caracteres.
      */
     public static byte[] hexToByte(String bits) {
         if ((bits == null) || (bits.length() % 2 != 0)) { // pair [xy]

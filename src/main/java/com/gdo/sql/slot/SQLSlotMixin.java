@@ -43,8 +43,8 @@ public interface SQLSlotMixin extends SQLSlotFilter {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the specific SQL selection.
      */
     default public String keysSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -58,8 +58,10 @@ public interface SQLSlotMixin extends SQLSlotFilter {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param from
+     * @param alias
+     * @param self
+     *            the plugged slot.
      * @return the specific SQL selection.
      */
     default public String keysFrom(StclContext stclContext, String from, String alias, PSlot<StclContext, PStcl> self) {
@@ -80,8 +82,8 @@ public interface SQLSlotMixin extends SQLSlotFilter {
      *            the stencil context.
      * @param cond
      *            the path condition.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the specific SQL clause.
      */
     default public String keysCondition(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, String id_field, PSlot<StclContext, PStcl> self) {

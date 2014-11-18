@@ -29,16 +29,6 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * A project context includes http infos and my faces context.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class StclContext extends _StencilContext {
 
@@ -113,7 +103,7 @@ public class StclContext extends _StencilContext {
         // loads project if not already loaded (only one load at a time)
         PStcl servletStcl = getServletStcl();
         if (StencilUtils.isNull(servletStcl)) {
-            servletStcl = loadServlet(request);
+            servletStcl = loadServlet(this);
         }
 
         // creates session if the session was removed
@@ -352,7 +342,8 @@ public class StclContext extends _StencilContext {
         super.checkValidity();
     }
 
-    private synchronized PStcl loadServlet(HttpServletRequest request) throws Exception {
+    protected synchronized PStcl loadServlet(StclContext stclContext) throws Exception {
+        HttpServletRequest request = stclContext.getRequest();
         HttpSession session = request.getSession();
         ServletContext servletContext = session.getServletContext();
         String context = servletContext.getServletContextName();

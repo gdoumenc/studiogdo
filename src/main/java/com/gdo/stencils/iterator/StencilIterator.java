@@ -14,17 +14,12 @@ import com.gdo.stencils.plug._PStencil;
  * <p>
  * Iterator over plugged stencils.
  * </p>
- * {@see com.gdo.stencils.java.plugged.PluggedStencil} <blockquote>
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
- * @see com.gdo.stencils.cmd.CommandContext Context
+
  */
 public interface StencilIterator<C extends _StencilContext, S extends _PStencil<C, S>> extends Iterator<S>, Iterable<S>, Cloneable {
 
@@ -51,7 +46,7 @@ public interface StencilIterator<C extends _StencilContext, S extends _PStencil<
     int size();
 
     /**
-     * @return <tt>true</true> if the key exists in the iterator.
+     * @return <tt>true</tt> if the key exists in the iterator.
      */
     boolean contains(IKey key);
 
@@ -62,7 +57,7 @@ public interface StencilIterator<C extends _StencilContext, S extends _PStencil<
     S getPlugged(IKey key);
 
     /**
-     * @return <tt>true</true> if the stencil exists in the iterator.
+     * @return <tt>true</tt> if the stencil exists in the iterator.
      */
     boolean contains(S stencil);
 

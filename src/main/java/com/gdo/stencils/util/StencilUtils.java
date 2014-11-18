@@ -30,16 +30,6 @@ import com.gdo.stencils.plug._PStencil;
  * <p>
  * Stencil utility class.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class StencilUtils {
 
@@ -178,7 +168,6 @@ public class StencilUtils {
      *            the stencil for iteration.
      * @param slot
      *            the slot of iteration.
-     * @return
      */
     public static <C extends _StencilContext, S extends _PStencil<C, S>> StencilIterator<C, S> iterator(C stclContext, S stencil, PSlot<C, S> slot) {
 

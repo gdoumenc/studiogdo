@@ -22,8 +22,7 @@ import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
 
 /**
- * @author gdo <param0>Title</param0> <param1>From</param1> <param2>To</param2>
- *         <param3>CC</param3> <param4>Content</param4>
+ * @author gdo
  */
 public class Read extends AtomicActionStcl {
 

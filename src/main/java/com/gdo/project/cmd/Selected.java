@@ -10,15 +10,15 @@ import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.plug.PStcl;
 
 /**
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class Selected extends ComposedActionStcl {

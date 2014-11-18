@@ -35,16 +35,6 @@ import com.gdo.util.XmlWriter;
  * To retrieve the link stencil, a condition should be defined slot[$], will
  * return it.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class LinkStcl extends Stcl implements ISlotEmulator<StclContext, PStcl> {
 

@@ -16,6 +16,7 @@ public class CreateContext extends AtomicActionStcl {
         super(stclContext);
     }
 
+    @Deprecated
     @Override
     public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
         StclContext stclContext = cmdContext.getStencilContext();

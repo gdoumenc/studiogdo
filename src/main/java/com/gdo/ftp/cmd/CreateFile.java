@@ -20,13 +20,6 @@ import com.gdo.stencils.util.StencilUtils;
 
 /**
  * Copies file to a new one.
- * <p>
- * <ol>
- * <li>File name</li>
- * <li>Accept intermediate folder creation.</li>
- * <li>Creation type</li>
- * </ol>
- * </p>
  */
 public class CreateFile extends AtomicActionStcl {
 

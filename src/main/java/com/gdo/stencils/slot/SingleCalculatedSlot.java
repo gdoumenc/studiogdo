@@ -3,8 +3,6 @@
  */
 package com.gdo.stencils.slot;
 
-import com.gdo.project.cmd.Plug;
-import com.gdo.project.cmd.Unplug;
 import com.gdo.stencils.Result;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
@@ -19,23 +17,6 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * This slot determines its plugged stencils thru calculation.
  * </p>
- * <p>
- * Pluging or unplugging a stencil in a single calculated slot is possible but
- * in this case the two following methods
- * {@link SingleSlot#doPlug(_StencilContext, Plug)} and
- * {@link SingleSlot#doUnplug(_StencilContext, Unplug)} must be redefined
- * otherwise nothing is performed.
- * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends SingleSlot<C, S> {
 

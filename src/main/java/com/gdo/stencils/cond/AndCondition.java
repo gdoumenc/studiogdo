@@ -8,13 +8,7 @@ import com.gdo.stencils.plug._PStencil;
 
 /**
  * Condition implementation that returns <tt>true</tt> if both the conditions
- * are verified. <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
+ * are verified.
  */
 public class AndCondition<C extends _StencilContext, S extends _PStencil<C, S>> extends StencilCondition<C, S> {
 

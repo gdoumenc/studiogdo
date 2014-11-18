@@ -35,16 +35,15 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Abstract common class for all slot classes.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+ * @author Guillaume Doumenc
  */
 public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
@@ -60,7 +59,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     private String _name; // unique slot name
     private char _arity; // arity
     private boolean _tranzient; // should the plugged stencils be saved?
-    private Annotation _annoted; // a slot may be annoted (error, missing, ..)
 
     private int _completionLevel; // accept plug in this slot only if completion
 
@@ -111,7 +109,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         _desc = null;
         _container = null;
         _name = null;
-        _annoted = null;
     }
 
     /**
@@ -178,7 +175,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * 
      * @param stclContext
      *            the stencil context.
-     * @return <tt>true</t> if the slot is a cursor slot.
+     * @return <tt>true</tt> if the slot is a cursor slot.
      */
     public boolean isCursorBased(C stclContext) {
         return false;
@@ -227,17 +224,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     public abstract boolean isFirst(C stclContext, S searched, PSlot<C, S> self);
 
     public abstract boolean isLast(C stclContext, S searched, PSlot<C, S> self);
-
-    /*
-     * Annotation par (not used for now)
-     */
-    public final Annotation getAnnotation(C stclContext, String type, PSlot<C, S> self) {
-        return _annoted;
-    }
-
-    public final void setAnnotation(C stclContext, String type, Annotation annotation, PSlot<C, S> self) {
-        _annoted = annotation;
-    }
 
     /**
      * @return the java classes prototype signature. Should be redefined in each
@@ -297,11 +283,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * 
      * @param stclContext
      *            the stencil context.
-     * @param order
-     *            the plig order.
+     * @param stencil
+     *            stencil to be plugged.
      * @param self
      *            this stencil as a plugged stencil.
-     * @return
      */
     public Result beforePlug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
 
@@ -493,7 +478,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      *            the stencil context.
      * @param self
      *            this slot as a plugged slot.
-     * @return the list of stencils unplugged.
      */
     public void unplugAll(C stclContext, PSlot<C, S> self) {
         try {
@@ -587,6 +571,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     // plug the link described by the descriptor when a stencil is plugged in
     // the slot
+    @SuppressWarnings("deprecation")
     private void plugLink(C stclContext, S stencil, LinkDescriptor<C, S> linkDesc, PSlot<C, S> self) {
 
         // get slot where the link will be plugged
@@ -636,6 +621,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         path = PathUtils.compose(PathUtils.PARENT, path);
 
         // create link stencil in slot
+        @SuppressWarnings("deprecation")
         S link = stencil.newPStencil(stclContext, slot, Key.NO_KEY, LinkStcl.class.getName(), path);
         link.setTransient(stclContext, true);
     }

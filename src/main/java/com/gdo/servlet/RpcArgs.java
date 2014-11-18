@@ -364,8 +364,6 @@ public class RpcArgs {
      *            the stencil context.
      * @param name
      *            the parameter name.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the string parameter.
      */
     public String getStringParameter(StclContext stclContext, String name) {
@@ -398,8 +396,6 @@ public class RpcArgs {
      *            the stencil context.
      * @param name
      *            the parameter name.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the parameters as an array of string.
      */
     public String[] getStringParameters(StclContext stclContext, String name) {
@@ -434,8 +430,6 @@ public class RpcArgs {
      *            the parameter name.
      * @param def
      *            the default value if the parameter is not defined.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the boolean parameter.
      */
     public boolean getBooleanParameter(StclContext stclContext, String name, boolean def) {
@@ -531,8 +525,6 @@ public class RpcArgs {
     /**
      * Format arguments for trace.
      * 
-     * @param entry
-     *            the RPC entry.
      * @return a formatted string of all parameters.
      */
     public String formatForTrace() {
