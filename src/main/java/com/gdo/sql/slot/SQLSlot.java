@@ -3,6 +3,7 @@
  */
 package com.gdo.sql.slot;
 
+import java.lang.ref.SoftReference;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     int _stencil_context_uid; // context id
 
     // calculated map stored in each context id
-    StencilIterator<StclContext, PStcl> _stencil_context_map;
+    SoftReference<StencilIterator<StclContext, PStcl>> _stencil_context_map;
 
     /**
      * Simple constructor.
@@ -985,7 +986,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         // if the list was already created for the same stencil context and
         // without any condition
         if ((_stencil_context_uid == stclContext.getId() || _read_only) && _stencil_context_map != null) {
-            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.clone(), cond, self);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.get().clone(), cond, self);
         }
 
         // creates the stencil list
@@ -1001,7 +1002,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         StencilIterator<StclContext, PStcl> map = new ListIterator<StclContext, PStcl>(stencils);
         if (cond == null) {
             _stencil_context_uid = stclContext.getId();
-            _stencil_context_map = map;
+            _stencil_context_map = new SoftReference<>(map);
         }
         return map;
     }
