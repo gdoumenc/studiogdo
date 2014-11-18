@@ -38,7 +38,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
     // container slot name (used for debug only)
     private String _name;
 
-    // cursor size
+    // cursor size (0 for unlimited ursor)
     private int _size;
 
     // stencils stored in cursor (key -> stencil)
@@ -146,7 +146,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
         synchronized (this) {
 
             // blocks if no more place
-            if (_stencils.size() >= _size) {
+            if (_size > 0 &&_stencils.size() >= _size) {
                 try {
                     logWarn(stclContext, "block for %s in %s", key, _name);
                     _available.acquire();
@@ -187,7 +187,7 @@ public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
      *            the stencil key.
      */
     public void release(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, String key) {
-        if (_stencils.size() >= _size) {
+        if (_size > 0 && _stencils.size() >= _size) {
 
             // needs to release more space in memory
             // (release memory only when full)

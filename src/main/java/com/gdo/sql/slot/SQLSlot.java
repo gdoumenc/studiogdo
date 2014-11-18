@@ -65,11 +65,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     protected PStcl _sql_context;
 
     // cursor associated to this slot
-    private SQLCursor _cursor;
+    protected SQLCursor _cursor;
 
-    // cache optimization
+    // optimization
     boolean _read_only;
-    boolean _load_all_at_start;
+    boolean _load_all;
     int _stencil_context_uid; // context id
 
     // calculated map stored in each context id
@@ -104,7 +104,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
     }
 
     public void loadAllAtStart() {
-        _load_all_at_start = true;
+        _load_all = true;
     }
 
     /* (non-Javadoc)
@@ -193,7 +193,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             }
 
             // reads all values at initialization
-            if (_load_all_at_start) {
+            if (_load_all) {
                 int size = getStencilsList(stclContext, null, self).size();
                 _cursor.size(size);
             }
