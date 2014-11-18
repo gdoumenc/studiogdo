@@ -526,6 +526,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
             }
         }
         setConnection(stclContext, null, self);
+        logWarn(stclContext, "Disconnect to database %s", self);
     }
 
     @SuppressWarnings("unchecked")
