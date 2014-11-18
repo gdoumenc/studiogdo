@@ -152,6 +152,7 @@ public class Connect extends AtomicActionStcl {
      *         <li>index 2 : initial mode</li>
      *         </ul>
      */
+    @Deprecated
     @Override
     public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
         StclContext stclContext = cmdContext.getStencilContext();

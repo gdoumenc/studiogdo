@@ -99,6 +99,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                         IKey key = new Key(msg.getMessageNumber());
 
                         // create mail stencil
+                        @SuppressWarnings("deprecation")
                         PStcl mail = self.getContainer().newPStencil(stclContext, self, key, fileTemplate, msg);
                         if (StencilUtils.isNull(mail))
                             continue;
@@ -161,6 +162,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                         }
 
                         // create folder stencil
+                        @SuppressWarnings("deprecation")
                         PStcl stcl = self.getContainer().newPStencil(stclContext, self, key, folderTemplate, f);
                         if (StencilUtils.isNull(stcl))
                             continue;

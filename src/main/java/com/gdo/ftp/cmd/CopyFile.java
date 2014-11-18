@@ -22,11 +22,6 @@ import com.gdo.stencils.util.PathUtils;
 
 /**
  * Copies file to a new one.
- * <p>
- * <ol>
- * <li>File name</li>
- * </ol>
- * </p>
  */
 public class CopyFile extends AtomicActionStcl {
 

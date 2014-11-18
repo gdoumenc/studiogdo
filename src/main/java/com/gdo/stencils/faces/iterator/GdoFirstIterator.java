@@ -7,18 +7,6 @@ import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.plug._PStencil;
 
-/**
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
- */
 public class GdoFirstIterator<C extends _StencilContext, S extends _PStencil<C, S>> extends GdoIterator<C, S> {
 
     private static final String[] FIRST_ITERATORS_TAGS = new String[] { "iterator:first", "/iterator:first" };

@@ -16,13 +16,13 @@ import com.gdo.stencils.util.PathUtils;
  * <p>
  * Abstract encapulation class for a java thread.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)

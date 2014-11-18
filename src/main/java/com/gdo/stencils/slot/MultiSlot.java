@@ -27,13 +27,13 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * A multi slot is a slot in which several stencils may be plugged in.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc
  */

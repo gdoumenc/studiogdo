@@ -45,16 +45,6 @@ import com.gdo.stencils.util.StencilUtils;
  * This servlet will check the session validity to accept entry. Else only
  * Connect command is accept.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 @SuppressWarnings("serial")
 public class StudioGdoServlet extends HttpServlet {
@@ -341,14 +331,13 @@ public class StudioGdoServlet extends HttpServlet {
      * Writes the HTTP response from an input stream. The input stream is closed
      * by the call.
      * 
-     * @param stclContext
-     *            the stencil context.
+     * @param response
+     *            the servlet response.
+     * @param status
      * @param type
-     *            the mime content type.
      * @param in
-     *            the input stream.
-     * @param enc
-     *            the encoding used.
+     * @param charset
+     *            the encoding charset.
      */
     public static void writeResponse(HttpServletResponse response, int status, String type, InputStream in, String charset) throws IOException {
         response.setStatus(status);

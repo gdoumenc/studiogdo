@@ -14,13 +14,13 @@ import com.gdo.stencils.util.PathUtils;
 
 /**
  * Condition defined by the path as having a specific key or property.
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  */
 public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>> extends StencilCondition<C, S> {
 
@@ -274,7 +274,6 @@ public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>>
      *            the value to be tested.
      * @param operator
      *            the testing operator.
-     * @return
      */
     public static final boolean compare(String type, String prop, String value, String operator) {
         if (type.equals(Keywords.STRING)) {

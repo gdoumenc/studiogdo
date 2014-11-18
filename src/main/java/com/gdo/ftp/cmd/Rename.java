@@ -18,11 +18,6 @@ import com.gdo.stencils.util.StencilUtils;
 
 /**
  * Renames file or folder.
- * <p>
- * <ol>
- * <li>File name</li>
- * </ol>
- * </p>
  */
 public class Rename extends AtomicActionStcl {
 

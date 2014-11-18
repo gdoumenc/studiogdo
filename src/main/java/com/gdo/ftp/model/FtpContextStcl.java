@@ -242,7 +242,6 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            the file or folder path.
      * @param self
      *            the stencil as a plugged stencil.
-     * @return
      */
     public synchronized boolean exists(StclContext stclContext, String path, boolean connect, PStcl self) {
         try {
@@ -309,11 +308,10 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            the stencil context.
      * @param path
      *            the folder path.
-     * @param allowCreation
+     * @param connect
      *            if <tt>true</tt> then can create intermediate folders.
      * @param self
      *            the stencil as a plugged stencil.
-     * @return
      */
     public synchronized Result mkdir(StclContext stclContext, String path, boolean connect, PStcl self) {
         try {
@@ -375,7 +373,6 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            then no backup).
      * @param self
      *            the stencil as a plugged stencil.
-     * @return
      */
     public synchronized Result put(StclContext stclContext, InputStream in, String path, boolean allowCreation, String backupSuffix, boolean connect, PStcl self) {
         try {
@@ -461,11 +458,10 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            the stencil context.
      * @param out
      *            the output stream.
-     * @param name
+     * @param path
      *            the file path
      * @param self
      *            the stencil as a pluged stencil.
-     * @return
      */
     public synchronized Result get(StclContext stclContext, OutputStream out, String path, boolean connect, PStcl self) {
         try {
@@ -553,7 +549,6 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            the path of the file to be deleted.
      * @param self
      *            the stencil as a plugged stencil.
-     * @return
      */
     public synchronized Result delete(StclContext stclContext, String path, boolean connect, PStcl self) {
         try {
@@ -596,7 +591,6 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      *            to file name (may not be composed).
      * @param self
      *            the stencil as a plugged stencil.
-     * @return
      */
     public synchronized Result rename(StclContext stclContext, String fromPath, String toName, boolean connect, PStcl self) {
         try {
@@ -653,7 +647,7 @@ public class FtpContextStcl extends FolderStcl implements IPropertyChangeListene
      * 
      * @param stclContext
      *            the stencil context.
-     * @param name
+     * @param path
      *            the path.
      * @param allowFolderCreation
      *            creates the folder if doesn't exist when <tt>true</tt>.

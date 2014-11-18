@@ -330,11 +330,6 @@ public abstract class PathUtils {
      * the form : <tt>container[exp (, exp)*]</tt> where <tt>exp</tt> is in the
      * form <tt>prop op value</tt> (<tt>op</tt> may be <tt>==</tt> or
      * <tt>!=</tt>).
-     * <p>
-     * Multi contained stencils are stencils plugged in a multi slot
-     * {@link com.gdo.stencils.slot.MultPSlot} and verifying boolean expressions
-     * on of its properties. This selection may not be unique.
-     * </p>
      * 
      * @param path
      *            a simple stencil name, not a path with '/'.

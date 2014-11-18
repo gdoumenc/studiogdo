@@ -242,7 +242,7 @@ public class SQLStcl extends Stcl {
      *            the stencil context.
      * @param source
      *            the slot where the stencils are defined (from id).
-     * @param id
+     * @param key
      *            the id of the stencil to be plugged.
      * @param slot
      *            the slot path where the stencil will be plugged.
@@ -343,7 +343,6 @@ public class SQLStcl extends Stcl {
      *            the query result set.
      * @param self
      *            this stencil as a plugged stencil.
-     * @return
      */
     public Result completeCreatedSQLStencil(StclContext stclContext, ResultSet rs, PStcl self) throws SQLException {
 
@@ -364,7 +363,6 @@ public class SQLStcl extends Stcl {
      * @param self
      *            this stencil as a plugged stencil.
      * @return the updatation result.
-     * @throws SQLException
      */
     public Result update(StclContext stclContext, PStcl self) {
         PStcl sqlContext = self.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);

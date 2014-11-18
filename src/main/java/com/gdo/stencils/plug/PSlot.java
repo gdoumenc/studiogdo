@@ -16,16 +16,13 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Basic implementation of {@link com.gdo.stencils.plug.PSlot}
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+
  */
 public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
@@ -166,9 +163,6 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     /**
      * Sets the slot structure.
-     * 
-     * @return the slot structure (should be used only to call java class
-     *         methods).
      */
     public <K extends _Slot<C, S>> void setSlot(K slot) {
         _slot = slot;

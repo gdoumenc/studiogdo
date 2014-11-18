@@ -24,13 +24,13 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * A composed action is a command with steps and having performing views.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -196,7 +196,6 @@ public abstract class ComposedActionStcl extends CommandStcl {
      * Reset the composed action.
      * 
      * @return The status of reseted command excecution.
-     * @throws Exception
      */
     @Override
     public CommandStatus<StclContext, PStcl> reset(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {

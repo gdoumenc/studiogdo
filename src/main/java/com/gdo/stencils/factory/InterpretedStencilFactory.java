@@ -46,13 +46,13 @@ import com.gdo.util.XmlWriter;
  * <tt>S</tt> is the stencil class for stencils created, <tt>T</tt> is the
  * default class used to create empty stencil.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc
  */

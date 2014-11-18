@@ -7,14 +7,12 @@ package com.gdo.stencils.facet;
  * <p>
  * Facet context for a stencil.
  * </p>
- * <p>
  * A facet context defines a context to retrieve the good presentation facet
  * from a stencil:
  * <ul>
  * <li>a facet type (html, flex, model, ..)
  * <li>a facet mode (user defined),
  * </ul>
- * </p>
  */
 
 public class FacetContext implements Cloneable {

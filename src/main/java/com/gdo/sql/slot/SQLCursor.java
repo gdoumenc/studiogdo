@@ -26,8 +26,6 @@ public class SQLCursor extends _SlotCursor {
 
     /**
      * Checks if the slot was initialized.
-     * 
-     * @return
      */
     public boolean isInitialized() {
         return _initialized;

@@ -104,9 +104,6 @@ public class HtmlStudioGdoServlet extends HttpServlet {
      *            the HTTP request.
      * @param response
      *            the HTTP response.
-     * @param post
-     *            <tt>true<//t> if the request was a POST, <tt>false</tt>
-     *            otherwise.
      */
     protected StclContext studiogdo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -552,15 +549,6 @@ public class HtmlStudioGdoServlet extends HttpServlet {
 
     /**
      * Writes the HTTP response from an input stream.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param type
-     *            the mime content type.
-     * @param in
-     *            the input stream.
-     * @param enc
-     *            the encoding used.
      */
     public static void writeResponse(HttpServletResponse response, int status, String type, InputStream in, String charset) throws IOException {
         response.setStatus(status);

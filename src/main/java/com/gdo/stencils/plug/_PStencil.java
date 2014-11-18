@@ -57,16 +57,13 @@ import com.gdo.util.XmlWriter;
  * When there was an error or a warning retrieving the plugged stencil, a status
  * is associated to the plugged stencil.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+
  */
 public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> implements Cloneable {
 
@@ -106,7 +103,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     /**
      * Plugged stencil constructor.
      * 
-     * @param stencil
+     * @param pstencil
      *            the stencil plugged.
      * @param slot
      *            the container slot.
@@ -148,7 +145,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     /**
      * Initialize (used only internaly and by factory pool).
      * 
-     * @param stencil
+     * @param pstencil
      *            the stencil plugged.
      * @param slot
      *            the container slot.
@@ -185,11 +182,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
 
     /**
      * Checks if the plugged stencil is null.
-     * 
-     * @param stclContext
-     *            TODO
-     * 
-     * @return <tt>true</tt> if the stencil is null, <tt>false</tt> otherwise.
      */
     public boolean isNull() {
         if (_stencil != null && _stencil.isCleared()) {
@@ -200,12 +192,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
 
     /**
      * Checks if the plugged stencil is not null.
-     * 
-     * @param stclContext
-     *            TODO
-     * 
-     * @return <tt>true</tt> if the stencil is not null, <tt>false</tt>
-     *         otherwise.
      */
     public boolean isNotNull() {
         return !isNull();
@@ -641,7 +627,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @param params
      *            the parameters redefined.
      * @return the command status.
-     * @throws Exception
      */
     public final CommandStatus<C, S> call(C stclContext, String name, Object... params) {
         if (isNull()) {
@@ -660,7 +645,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * @param name
      *            the command name or the command template name.
      * @return the command status.
-     * @throws Exception
      */
     public final CommandStatus<C, S> call(CommandContext<C, S> cmdContext, String name) {
         if (isNull()) {
@@ -1095,15 +1079,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * factory
      */
 
-    /**
-     * Creates a null plugged stencil.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param msg
-     *            reason why the plugged stencil is null.
-     * @return the null plugged stencil.
-     */
     public S nullPStencil(C stclContext) {
         return StencilUtils.<C, S> nullPStencil(stclContext, Result.success());
     }
@@ -1133,7 +1108,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the slot in where the created stencil will be plugged.
      * @param key
      *            the key for the plug in slot.
-     * @param stencilClassName
+     * @param clazz
      *            the stencil stencil class name (template).
      * @param params
      *            the parameters for stencil constructor (if needed).

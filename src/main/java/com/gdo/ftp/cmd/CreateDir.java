@@ -16,12 +16,6 @@ import com.gdo.stencils.util.PathUtils;
 
 /**
  * Creates folder.
- * <p>
- * <ol>
- * <li>Folder name</li>
- * <li>Accept intermediate folder creation.</li>
- * </ol>
- * </p>
  */
 public class CreateDir extends AtomicActionStcl {
 

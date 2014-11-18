@@ -42,13 +42,13 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Temporary stencils may be stored in database using negative Id.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2005 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -251,8 +251,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the stencil context.
      */
     public PStcl getSQLContext(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -312,8 +312,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the database table alias.
      */
     public String getTableAliasForProperty(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -327,8 +327,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the specific SQL id field.
      */
     public String getKeysIdField(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -441,8 +441,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch all keys.
      */
     public String getSizeQuery(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
@@ -461,8 +461,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch all keys.
      */
     public String getKeysQuery(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
@@ -584,8 +584,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the stencil context.
      * @param rs
      *            the result set of values fetch from keys query.
-     * @param container
-     *            TODO
+     * @param self
+     *            this slot as a plugged slot.
      * @return a map with property path as key and value associated
      *         <tt>null if not optimization/tt>.
      */
@@ -607,8 +607,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -622,8 +622,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL id field.
      */
     public String getStencilIdField(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -636,8 +636,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -650,8 +650,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilGroup(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -666,8 +666,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the stencil context.
      * @param key
      *            the plugged key.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch the stencil values.
      */
     public String getStencilQuery(StclContext stclContext, IKey key, boolean withWhere, PSlot<StclContext, PStcl> self) {
@@ -698,12 +698,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param stcl
+     * @param stencil
      *            the created stencil.
      * @param rs
      *            the result set of values.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the completion result.
      */
     public Result completeStencil(StclContext stclContext, PStcl stencil, ResultSet rs, PSlot<StclContext, PStcl> self) {
@@ -732,14 +732,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * 
      * @param stclContext
      *            the stencil context.
-     * @param key
-     *            the plugged key (may be <tt>null</tt>).
      * @param stencil
      *            the stencil to be inserted.
      * @param sqlContext
      *            the sql context stencil.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the key of the plugged stencil.
      */
     public synchronized Result insertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
@@ -798,8 +796,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the stencil to be updated.
      * @param sqlContext
      *            the sql context stencil.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the key of the plugged stencil.
      */
     public Result updateStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {

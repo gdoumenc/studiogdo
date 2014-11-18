@@ -29,13 +29,13 @@ import com.gdo.stencils.plug.PStcl;
  * <p>
  * Utility clas for SQL interface.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -178,9 +178,6 @@ public class SqlUtils {
     /**
      * Returns the date in datetime format.
      */
-    /**
-     * @return
-     */
     @Deprecated
     public static String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -189,8 +186,7 @@ public class SqlUtils {
 
     /**
      * Copies the connection in a new stencil context.
-     */
-    /**
+     * 
      * @param fromContext
      * @param toContext
      * @throws SQLException
@@ -206,8 +202,6 @@ public class SqlUtils {
      */
     /**
      * @param stclContext
-     * @return
-     * @throws SQLException
      */
     @Deprecated
     public static Connection getConnection(StclContext stclContext) throws SQLException {
@@ -359,7 +353,6 @@ public class SqlUtils {
      * @param stclContext
      * @param col
      * @param value
-     * @return
      */
     @Deprecated
     public static StringReader e4xFacet(StclContext stclContext, String col, int value) {
@@ -462,8 +455,6 @@ public class SqlUtils {
         /**
          * Adds a new string value to this association.
          * 
-         * @param stclContext
-         *            the stencil context.
          * @param label
          *            the database field label.
          * @param value
@@ -510,8 +501,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -587,8 +576,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -603,8 +590,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @param max
@@ -622,8 +607,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -639,8 +622,6 @@ public class SqlUtils {
          *            the stencil context.
          * @param label
          *            the database field label.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -657,8 +638,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -692,8 +671,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @return the field value.
@@ -776,8 +753,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @param trueValue
@@ -848,8 +823,6 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
          * @param formatRead
@@ -949,7 +922,7 @@ public class SqlUtils {
          *            the database field label.
          * @param slot
          *            the slot path where the value can be found.
-         * @param format
+         * @param format_read
          *            the date format in property.
          * @return the field value.
          */
@@ -968,11 +941,9 @@ public class SqlUtils {
          * 
          * @param stclContext
          *            the stencil context.
-         * @param stencil
-         *            the stencil containing the value.
          * @param slot
          *            the slot path where the value can be found.
-         * @param format
+         * @param format_read
          *            the date format in property.
          * @return the field value.
          */

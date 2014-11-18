@@ -9,16 +9,11 @@ import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.plug._PStencil;
 
 /**
- * <blockquote>
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class FacetsRendererWithContent<C extends _StencilContext, S extends _PStencil<C, S>> extends FacetsRenderer<C, S> {
 

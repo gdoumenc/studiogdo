@@ -8,9 +8,6 @@ package com.gdo.stencils.atom;
  * This identifier is used to unically reference this atom in any XML
  * description file.
  * </p>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@coworks.pro">gdoumenc@studiogdo.com)</a>
  */
 public interface IAtom<C, S> {
 

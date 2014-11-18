@@ -44,16 +44,13 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Basic implementation of the studiogdo plugged stencil.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+
  */
 public class PStcl extends _PStencil<StclContext, PStcl> {
 
@@ -630,8 +627,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      *            the stencil context.
      * @param resource
      *            the resources searched.
-     * @param self
-     *            this stencil as a plugged stencil.
      * @return the resources slot path.
      */
     public String getResourcePath(StclContext stclContext, String resource) {
@@ -972,8 +967,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     /**
      * Launches the command in the same command context.
-     * 
-     * @throws Exception
      */
     public final CommandStatus<StclContext, PStcl> launch(CommandContext<StclContext, PStcl> cmdContext, String name, String path) {
         StclContext stclContext = cmdContext.getStencilContext();
@@ -991,8 +984,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param items
-     *            the upload file item list.
      * @param fileName
      *            the upload file name.
      * @param item

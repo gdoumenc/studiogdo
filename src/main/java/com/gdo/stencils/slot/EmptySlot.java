@@ -18,16 +18,13 @@ import com.gdo.stencils.util.StencilUtils;
  * An empty slot is a slot with no stencil in it and in which no stencil can be
  * plugged.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
+
  */
 public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _Slot<C, S> {
 

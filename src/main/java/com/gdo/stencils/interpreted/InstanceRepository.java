@@ -28,17 +28,7 @@ import com.gdo.util.XmlWriter;
  * The instances may be created and add to the repository if they don't exist
  * and if there is a descriptor associated. The instances may be created on
  * demand, for lazy evaluation. A specific slot is defined for PARENT path (..)
- * manipulation. <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
- * @see com.gdo.stencils.cmd.CommandContext Context
+ * manipulation.
  */
 public final class InstanceRepository<C extends _StencilContext, S extends _PStencil<C, S>> {
     private static final StencilLog _log = new StencilLog(InstanceRepository.class);

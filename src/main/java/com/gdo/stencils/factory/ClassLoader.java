@@ -13,13 +13,13 @@ import com.gdo.stencils.atom.IAtom;
  * <p>
  * Main classes defined in this package are subclasses of this atom class.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  */
 public class ClassLoader extends java.lang.ClassLoader {
 

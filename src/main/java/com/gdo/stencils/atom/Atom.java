@@ -8,9 +8,6 @@ package com.gdo.stencils.atom;
  * <p>
  * Main classes defined in this project are subclasses of this atom class.
  * </p>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@coworks.pro">gdoumenc@studiogdo.com)</a>
  */
 public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
 

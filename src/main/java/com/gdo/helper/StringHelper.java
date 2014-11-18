@@ -25,16 +25,6 @@ import org.apache.commons.lang3.StringUtils;
  * <p>
  * Helpers on string.
  * </p>
- * 
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>>href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class StringHelper {
 
@@ -87,31 +77,6 @@ public class StringHelper {
             concat[i++] = s;
         }
         return concat;
-    }
-
-    /**
-     * Converts the specified string into a valid Java identifier. All illegal
-     * characters are replaced by underscores.
-     * 
-     * @param aString
-     *            The string must contain at least one character.
-     * @return <i>(required)</i>.
-     */
-    public static String toJavaIdentifier(String str) {
-        StringBuffer res = new StringBuffer();
-        int idx = 0;
-        char c = str.charAt(idx);
-        if (Character.isJavaIdentifierStart(c)) {
-            res.append(c);
-            idx++;
-        } else if (Character.isJavaIdentifierPart(c)) {
-            res.append('_');
-        }
-        while (idx < str.length()) {
-            c = str.charAt(idx++);
-            res.append(Character.isJavaIdentifierPart(c) ? c : '_');
-        }
-        return res.toString();
     }
 
     public static String read(Reader in) {

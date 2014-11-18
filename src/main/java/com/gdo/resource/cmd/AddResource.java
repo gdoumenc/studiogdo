@@ -52,6 +52,7 @@ public class AddResource extends ComposedActionStcl {
         super(stclContext);
     }
 
+    @Deprecated
     @Override
     public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
         StclContext stclContext = cmdContext.getStencilContext();

@@ -71,16 +71,6 @@ import com.gdo.util.XmlWriter;
  * Should be used only in a plugged form {@link _PStencil} or directly for java
  * interface.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> {
 
@@ -1253,10 +1243,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return call(cmdContext, name, self);
     }
 
-    /**
-     * @throws Exception
-     * @see{PStencil.call
-     **/
     public CommandStatus<C, S> call(CommandContext<C, S> cmdContext, String name, S self) {
         C stclContext = cmdContext.getStencilContext();
 
@@ -1357,11 +1343,11 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil context.
      * @param dir
      *            the container path (in instance repository).
-     * @param container
-     *            the writerused to save the stencil (to avoid writting twice).
+     * @param out
+     *            the writer used to save the stencil (to avoid writting twice).
      * @param self
      *            the stencil as plugged stencil.
-     * @returnthe reference id used to retrieve the instance declaration in the
+     * @return the reference id used to retrieve the instance declaration in the
      *            file.
      */
     public String saveAsInstance(C stclContext, String dir, XmlWriter out, S self) {
@@ -1405,6 +1391,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     /**
      * Should be redefined if the stencil needs parameters at creation.
+     * @param stclContext
+     * @param writer
+     * @param self
      */
     protected void saveConstructorParameters(C stclContext, XmlWriter writer, S self) {
         try {

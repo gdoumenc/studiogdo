@@ -31,17 +31,13 @@ import com.gdo.util.XmlWriter;
  * <p>
  * _Slot descriptor class.
  * <p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
- * @see com.gdo.stencils.cmd.CommandContext Context
+
  */
 public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
 
@@ -261,6 +257,7 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
      * @param completionLevel
      *            if more than the slot's one do nothing as redefined.
      */
+    @SuppressWarnings("deprecation")
     public void createSlot(C stclContext, S container, int completionLevel) {
 
         // if the slot is renamed then this descriptor should be also renamed

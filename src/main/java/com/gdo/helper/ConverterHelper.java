@@ -25,17 +25,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
  * <p>
  * Used to trace errors and allow default value.
  * </p>
- * 
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class ConverterHelper {
 
@@ -113,7 +102,6 @@ public class ConverterHelper {
      * 
      * @param key
      * @param input
-     * @return
      */
     public static byte[] encrypt(Key key, String input) {
         try {
@@ -198,7 +186,6 @@ public class ConverterHelper {
      * Return the number of minutes in a time string.
      * 
      * @param time
-     * @return
      */
     public static int timeToMinutes(String time) {
         int index = time.indexOf(':');

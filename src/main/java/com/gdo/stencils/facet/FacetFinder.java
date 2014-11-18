@@ -9,16 +9,6 @@ import com.gdo.stencils.log.StencilLog;
  * <p>
  * Generic abstract class for facet finder classes.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class FacetFinder<C extends _StencilContext> {
     static final private StencilLog LOG = new StencilLog(FacetFinder.class);

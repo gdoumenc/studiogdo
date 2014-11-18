@@ -29,17 +29,14 @@ import com.gdo.stencils.util.StencilUtils;
  * The <tt>Target</tt> slot contains this stencil. The <tt>PluggedTarget</tt>
  * slot contains this stencil but with this command as parent.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
- * @see com.gdo.stencils.cmd.CommandContext Context
  */
 public abstract class CommandStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends _Stencil<C, S> {
 
@@ -333,7 +330,6 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
      * 
      * @param cmdContext
      * @param self
-     * @return
      */
     public CommandStatus<C, S> reset(CommandContext<C, S> cmdContext, S self) throws Exception {
         return success(cmdContext, self);

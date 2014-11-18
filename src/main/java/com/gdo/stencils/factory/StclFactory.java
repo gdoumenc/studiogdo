@@ -17,13 +17,13 @@ import com.gdo.stencils.plug.PStcl;
  * <p>
  * This stencil factory defines default classes used in studiogdo.
  * <p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
  * @author Guillaume Doumenc
  */
