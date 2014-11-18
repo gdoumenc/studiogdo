@@ -29,16 +29,6 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * A project context includes http infos and my faces context.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public class StclContext extends _StencilContext {
 
@@ -96,83 +86,34 @@ public class StclContext extends _StencilContext {
      */
     public StclContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
-        ServletContext servletContext = session.getServletContext();
-        String context = servletContext.getServletContextName();
 
         // stores last stencil context as default one
-        // if (DEFAULT_CONTEXT == null) {
         DEFAULT_CONTEXT = this;
-        // }
 
         // sets servlet entries
-        this._request = request;
-        this._response = response;
-
-        // set request arguments
-        this._args = new RpcArgs(this);
+        _request = request;
+        _response = response;
 
         // set stencil context id
-        this._id = Atom.uniqueInt();
+        _id = Atom.uniqueInt();
+
+        // set request arguments
+        _args = new RpcArgs(this);
 
         // loads project if not already loaded (only one load at a time)
-        synchronized (getClass()) {
-            PStcl servletStcl = getServletStcl();
-            if (StencilUtils.isNull(servletStcl)) {
-                try {
+        PStcl servletStcl = getServletStcl();
+        if (StencilUtils.isNull(servletStcl)) {
+            servletStcl = loadServlet(this);
+        }
 
-                    // set project auto-save
-                    String autosave = getConfigParameter(StclContext.AUTO_SAVE);
-                    if (StringUtils.isNotBlank(autosave))
-                        ServletStcl.AUTO_SAVE = Boolean.parseBoolean(autosave);
+        // creates session if the session was removed
+        if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
 
-                    // set cursor strategy
-                    String strategy = getConfigParameter(StclContext.CURSOR_STRATEGY);
-                    if (StringUtils.isNotBlank(strategy))
-                        _SlotCursor.STRATEGY = Integer.parseInt(strategy);
+            // creates session stencil
+            SessionStcl.createSessionStcl(this);
 
-                    // clean tmp dir
-                    String tmpDir = getConfigParameter(StclContext.PROJECT_TMP_DIR);
-                    if (StringUtils.isNotBlank(tmpDir)) {
-                        File tmp = new File(tmpDir);
-                        if (!tmp.exists()) {
-                            logWarn(this, "cannot get temporary directory : %s", tmpDir);
-                        } else {
-                            String[] files = tmp.list();
-                            if (files == null) {
-                                logWarn(this, "cannot read temporary directory : %s", tmpDir);
-                            } else {
-                                for (String file : files) {
-                                    File f = new File(tmp, file);
-                                    if (!f.delete()) {
-                                        logWarn(this, "cannot delete temporary file : %s", f.getAbsolutePath());
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // load project
-                    logWarn(this, "Loading project %s", context);
-                    servletStcl = ServletStcl.load(this);
-                    setServletStcl(servletStcl);
-                    logWarn(this, "Project %s loaded", context);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-            }
-            
-            // create session if the session was removed
-            if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
-
-                // creates the session
-                SessionStcl.createSessionStcl(this);
-
-                // handler on after session created
-                ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
-            }
+            // handler on after session created
+            ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
         }
     }
 
@@ -190,7 +131,7 @@ public class StclContext extends _StencilContext {
      */
     public final HttpServletRequest getRequest() {
         checkValidity();
-        return this._request;
+        return _request;
     }
 
     /**
@@ -199,11 +140,11 @@ public class StclContext extends _StencilContext {
      * @return the servlet response.
      */
     public final HttpServletResponse getResponse() {
-        return this._response;
+        return _response;
     }
 
     public final RpcArgs getRpcArgs() {
-        return this._args;
+        return _args;
     }
 
     /**
@@ -215,7 +156,7 @@ public class StclContext extends _StencilContext {
     public Locale getLocale() {
 
         // if the locale is not set then session one (if defined) may be used
-        if (this._locale == null) {
+        if (_locale == null) {
             HttpSession session = getHttpSession();
             Locale locale = (Locale) session.getAttribute(StudioGdoServlet.LOCALE_ENTRY);
             if (locale != null) {
@@ -233,14 +174,14 @@ public class StclContext extends _StencilContext {
      * @return the servlet session used for this context.
      */
     public final HttpSession getHttpSession() {
-        if (this._session == null) {
+        if (_session == null) {
             HttpServletRequest request = getRequest();
             if (request == null) {
                 return null;
             }
-            this._session = request.getSession();
+            _session = request.getSession();
         }
-        return this._session;
+        return _session;
     }
 
     /**
@@ -249,7 +190,7 @@ public class StclContext extends _StencilContext {
      * @param session
      */
     public final void setHttpSession(HttpSession session) {
-        this._session = session;
+        _session = session;
     }
 
     /**
@@ -286,7 +227,7 @@ public class StclContext extends _StencilContext {
      * @return the request parameters as a decomposed structure.
      */
     public RpcArgs getRequestParameters() {
-        return this._request_parameters;
+        return _request_parameters;
     }
 
     /**
@@ -296,13 +237,13 @@ public class StclContext extends _StencilContext {
      *            the request parameters.
      */
     public void setRequestParameters(RpcArgs params) {
-        this._request_parameters = params;
+        _request_parameters = params;
     }
-    
+
     public int getTransactionId() {
-        int ti = this._args.getTransactionId();
+        int ti = _args.getTransactionId();
         if (ti > 0)
-                return ti;
+            return ti;
         return getId();
     }
 
@@ -375,7 +316,7 @@ public class StclContext extends _StencilContext {
     }
 
     public int getId() {
-        return this._id;
+        return _id;
     }
 
     /**
@@ -384,7 +325,7 @@ public class StclContext extends _StencilContext {
      */
     @Override
     public void release() {
-        this._request.getSession().invalidate();
+        _request.getSession().invalidate();
         super.release();
     }
 
@@ -393,12 +334,57 @@ public class StclContext extends _StencilContext {
 
         // _request or _response may be null
         /*
-         * if (this._request != null && this._request.isRequestedSessionIdValid()) {
+         * if (_request != null && _request.isRequestedSessionIdValid()) {
          * throw new IllegalStateException("Session no more valid"); } if
-         * (this._response != null && this._response.isCommitted()) { throw new
+         * (_response != null && _response.isCommitted()) { throw new
          * IllegalStateException("Response already committed"); }
          */
         super.checkValidity();
+    }
+
+    protected synchronized PStcl loadServlet(StclContext stclContext) throws Exception {
+        HttpServletRequest request = stclContext.getRequest();
+        HttpSession session = request.getSession();
+        ServletContext servletContext = session.getServletContext();
+        String context = servletContext.getServletContextName();
+
+        // set project auto-save
+        String autosave = getConfigParameter(StclContext.AUTO_SAVE);
+        if (StringUtils.isNotBlank(autosave))
+            ServletStcl.AUTO_SAVE = Boolean.parseBoolean(autosave);
+
+        // set cursor strategy
+        String strategy = getConfigParameter(StclContext.CURSOR_STRATEGY);
+        if (StringUtils.isNotBlank(strategy))
+            _SlotCursor.STRATEGY = Integer.parseInt(strategy);
+
+        // clean tmp dir
+        String tmpDir = getConfigParameter(StclContext.PROJECT_TMP_DIR);
+        if (StringUtils.isNotBlank(tmpDir)) {
+            File tmp = new File(tmpDir);
+            if (!tmp.exists()) {
+                logWarn(this, "cannot get temporary directory : %s", tmpDir);
+            } else {
+                String[] files = tmp.list();
+                if (files == null) {
+                    logWarn(this, "cannot read temporary directory : %s", tmpDir);
+                } else {
+                    for (String file : files) {
+                        File f = new File(tmp, file);
+                        if (!f.delete()) {
+                            logWarn(this, "cannot delete temporary file : %s", f.getAbsolutePath());
+                        }
+                    }
+                }
+            }
+        }
+
+        // loads project
+        logWarn(this, "Loading project %s", context);
+        PStcl servletStcl = ServletStcl.load(this);
+        setServletStcl(servletStcl);
+        logWarn(this, "Project %s loaded", context);
+        return servletStcl;
     }
 
     //

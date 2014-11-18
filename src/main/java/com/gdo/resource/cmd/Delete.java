@@ -13,22 +13,22 @@ import com.gdo.stencils.util.StencilUtils;
 
 public class Delete extends AtomicActionStcl {
 
-	public Delete(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Delete(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		PStcl target = cmdContext.getTarget();
-		PStcl file = target.getStencil(stclContext, _ResourceStcl.Slot.FILE);
-		if (!StencilUtils.isNull(file)) {
-			CommandStatus<StclContext, PStcl> status = file.call(stclContext, _ResourceStcl.Command.DELETE);
-			target.unplugFromAllSlots(stclContext);
-			return status;
-		}
-		target.unplugFromAllSlots(stclContext);
-		return success(cmdContext, self);
-	}
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        PStcl target = cmdContext.getTarget();
+        PStcl file = target.getStencil(stclContext, _ResourceStcl.Slot.FILE);
+        if (!StencilUtils.isNull(file)) {
+            CommandStatus<StclContext, PStcl> status = file.call(stclContext, _ResourceStcl.Command.DELETE);
+            target.unplugFromAllSlots(stclContext);
+            return status;
+        }
+        target.unplugFromAllSlots(stclContext);
+        return success(cmdContext, self);
+    }
 
 }

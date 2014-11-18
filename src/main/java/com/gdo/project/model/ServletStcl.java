@@ -22,6 +22,7 @@ import com.gdo.project.cmd.Trace;
 import com.gdo.project.util.model.DateStcl;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
+import com.gdo.stencils._Stencil;
 import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.factory.StencilFactory;
@@ -29,7 +30,6 @@ import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.PropStencil;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.util.PathUtils;
@@ -291,15 +291,15 @@ public class ServletStcl extends Stcl {
             PSlot<StclContext, PStcl> self = new PSlot<StclContext, PStcl>(this, null);
             Locale locale = stclContext.getLocale();
             StencilFactory<StclContext, PStcl> factory = (StencilFactory<StclContext, PStcl>) stclContext.getStencilFactory();
-            PropStencil<StclContext, PStcl> prop = factory.createPropStencil(stclContext, locale.getLanguage());
-            this._values.add(factory.newPPropStencil(stclContext, self, new Key<String>("language"), prop));
+            _Stencil<StclContext, PStcl> prop = factory.createPropStencil(stclContext, locale.getLanguage());
+            _values.add(factory.newPStencil(stclContext, self, new Key("language"), prop));
             prop = factory.createPropStencil(stclContext, locale.getCountry());
-            this._values.add(factory.newPPropStencil(stclContext, self, new Key<String>("country"), prop));
+            _values.add(factory.newPStencil(stclContext, self, new Key("country"), prop));
         }
 
         @Override
         protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-            return StencilUtils.iterator(stclContext, this._values.iterator(), cond, self);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _values.iterator(), cond, self);
         }
     }
 

@@ -12,14 +12,14 @@ import com.gdo.stencils.slot.SingleCalculatedSlot;
 
 public class SessionSlot extends SingleCalculatedSlot<StclContext, PStcl> {
 
-	public SessionSlot(StclContext stclContext, Stcl in) {
-		super(stclContext, in, Slot.SESSION);
-	}
+    public SessionSlot(StclContext stclContext, Stcl in) {
+        super(stclContext, in, Slot.SESSION);
+    }
 
-	@Override
-	public PStcl getCalculatedStencil(StclContext stclContext, StencilCondition<StclContext, PStcl> condition, PSlot<StclContext, PStcl> self) {
-		StclFactory factory = (StclFactory) stclContext.getStencilFactory();
-		Stcl stcl = SessionStcl.getSessionStcl(stclContext);
-		return factory.newPStencil(stclContext, self, Key.NO_KEY, stcl);
-	}
+    @Override
+    public PStcl getCalculatedStencil(StclContext stclContext, StencilCondition<StclContext, PStcl> condition, PSlot<StclContext, PStcl> self) {
+        StclFactory factory = (StclFactory) stclContext.getStencilFactory();
+        Stcl stcl = SessionStcl.getSessionStcl(stclContext);
+        return factory.newPStencil(stclContext, self, Key.NO_KEY, stcl);
+    }
 }

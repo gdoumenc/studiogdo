@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.gdo.project.util.SqlUtils;
 import com.gdo.project.util.SqlUtils.SqlAssoc;
 import com.gdo.sql.cmd.ReloadSQLStcl;
@@ -42,7 +40,6 @@ public class SQLStcl extends Stcl {
 
     public interface Command extends Stcl.Command {
         String RELOAD = "Reload"; // reloads stencil from database
-        String UPDATE = "Update"; // updates database from stencil
     }
 
     // SQL container slot.
@@ -114,8 +111,8 @@ public class SQLStcl extends Stcl {
     public void addInSqlAssoc(StclContext stclContext, SqlAssoc assoc, PStcl self, PStcl container) {
         assoc.pushAutoIncrement(stclContext, SQLStcl.Slot.ID);
         /*
-         * usual code could be what is below assoc.pushString(stclContext,
-         * MetierStcl.Slot.NOM, MetierStcl.Slot.NOM);
+         * usual code could be what is below
+         * assoc.pushString(stclContext, MetierStcl.Slot.NOM, MetierStcl.Slot.NOM);
          */
     }
 
@@ -140,14 +137,13 @@ public class SQLStcl extends Stcl {
 
             // plug final object
             self.setString(stclContext, SQLStcl.Slot.ID, "");
-            PStcl plugged = this._sqlSlot.plug(stclContext, self, Key.NO_KEY);
+            PStcl plugged = _sqlSlot.plug(stclContext, self, Key.NO_KEY);
 
             // set new id
-            String newId = plugged.getKey().toString();
-            plugged.setString(stclContext, SQLStcl.Slot.ID, newId);
-            SQLSlot sqlSlot = this._sqlSlot.getSlot();
-            SQLCursor cursor = sqlSlot.getCursor(stclContext, this._sqlSlot);
-            cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(newId));
+            String newId = plugged.getString(stclContext, SQLStcl.Slot.ID);
+            SQLSlot sqlSlot = _sqlSlot.getSlot();
+            SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);
+            cursor.setPropertiesValuesNotModified(stclContext, new Key(newId));
 
             // modify tables with temporary id
             PStcl sqlContext = plugged.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
@@ -157,10 +153,7 @@ public class SQLStcl extends Stcl {
             }
 
             // unplug temporary object
-            if (StringUtils.isNotBlank(oldId) && Integer.parseInt(oldId) < 0) {
-                self.setString(stclContext, SQLStcl.Slot.ID, oldId);
-                this._sqlSlot.unplug(stclContext, self, new Key<String>(oldId));
-            }
+            _sqlSlot.unplug(stclContext, self, new Key(oldId));
 
             // return plugged stencil
             return plugged;
@@ -249,7 +242,7 @@ public class SQLStcl extends Stcl {
      *            the stencil context.
      * @param source
      *            the slot where the stencils are defined (from id).
-     * @param id
+     * @param key
      *            the id of the stencil to be plugged.
      * @param slot
      *            the slot path where the stencil will be plugged.
@@ -257,7 +250,7 @@ public class SQLStcl extends Stcl {
      *            the stencil as a plugged stencil.
      * @return the plugged stencil.
      */
-    public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, Key<?> key, String slot, boolean checkNotEmpty, PStcl self) {
+    public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, IKey key, String slot, boolean checkNotEmpty, PStcl self) {
 
         // checks id
         if (key == null || key.toString().equals("0")) {
@@ -276,7 +269,7 @@ public class SQLStcl extends Stcl {
     }
 
     public PStcl plugFromId(StclContext stclContext, PSlot<StclContext, PStcl> source, int id, String slot, PStcl self) {
-        return plugFromId(stclContext, source, new Key<Integer>(id), slot, false, self);
+        return plugFromId(stclContext, source, new Key(id), slot, false, self);
     }
 
     // --------------------------------------------------------------------------
@@ -286,19 +279,19 @@ public class SQLStcl extends Stcl {
     // --------------------------------------------------------------------------
 
     public PStcl getSQLContext() {
-        return this._sqlContext;
+        return _sqlContext;
     }
 
     public void setSQLContext(PStcl sqlContext) {
-        this._sqlContext = sqlContext;
+        _sqlContext = sqlContext;
     }
 
     public PSlot<StclContext, PStcl> getSQLContainerSlot() {
-        return this._sqlSlot;
+        return _sqlSlot;
     }
 
     public void setSQLContainerSlot(PSlot<StclContext, PStcl> slot) {
-        this._sqlSlot = slot;
+        _sqlSlot = slot;
     }
 
     /**
@@ -319,7 +312,7 @@ public class SQLStcl extends Stcl {
         PSlot<StclContext, PStcl> slot = getSQLContainerSlot();
         SQLCursor cursor = ((SQLSlot) slot.getSlot()).getCursor(stclContext, slot);
         String id = self.getString(stclContext, Slot.ID);
-        cursor.removeFromCursor(stclContext, id);
+        cursor.removeFromCursor(stclContext, new Key(id));
     }
 
     // --------------------------------------------------------------------------
@@ -350,7 +343,6 @@ public class SQLStcl extends Stcl {
      *            the query result set.
      * @param self
      *            this stencil as a plugged stencil.
-     * @return
      */
     public Result completeCreatedSQLStencil(StclContext stclContext, ResultSet rs, PStcl self) throws SQLException {
 
@@ -371,18 +363,17 @@ public class SQLStcl extends Stcl {
      * @param self
      *            this stencil as a plugged stencil.
      * @return the updatation result.
-     * @throws SQLException
      */
     public Result update(StclContext stclContext, PStcl self) {
         PStcl sqlContext = self.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
 
         // the stencil may not be plugged from a sql slot
-        if (this._sqlSlot == null) {
+        if (_sqlSlot == null) {
             return Result.success();
         }
 
         // does updatation
-        SQLSlot sqlSlot = this._sqlSlot.getSlot();
+        SQLSlot sqlSlot = _sqlSlot.getSlot();
         Result result = sqlSlot.updateStencilQuery(stclContext, self, sqlContext, _sqlSlot);
         if (result.isNotSuccess()) {
             return result;
@@ -392,8 +383,8 @@ public class SQLStcl extends Stcl {
         // done
         // witout warning)
         String id = self.getString(stclContext, SQLStcl.Slot.ID);
-        SQLCursor cursor = sqlSlot.getCursor(stclContext, this._sqlSlot);
-        cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(id));
+        SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);
+        cursor.setPropertiesValuesNotModified(stclContext, new Key(id));
 
         // needs to reload from database to reload databased calculated
         // properties
@@ -413,23 +404,23 @@ public class SQLStcl extends Stcl {
         try {
 
             // the stencil may not be plugged in a sql slot
-            if (this._sqlSlot != null) {
-                SQLSlot sqlSlot = this._sqlSlot.getSlot();
-                String id = self.getString(stclContext, SQLStcl.Slot.ID);
+            if (_sqlSlot != null) {
+                SQLSlot sqlSlot = _sqlSlot.getSlot();
+                int id = self.getInt(stclContext, SQLStcl.Slot.ID);
 
                 // does nothing if the id is empty (not already in database)
-                if (StringUtils.isBlank(id)) {
+                if (id == 0) {
                     return Result.success();
                 }
 
-                StencilCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, new Key<String>(id), self);
-                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, cond, this._sqlSlot);
+                ResultSet rs = sqlSlot.getKeysResultSet(stclContext, new Key(id), _sqlSlot);
                 if (rs.next()) {
+                    IKey key = new Key(id);
 
                     // sets properties values in cursor
-                    SQLCursor cursor = sqlSlot.getCursor(stclContext, this._sqlSlot);
-                    Map<String, String> attributes = sqlSlot.getPropertiesValuesFromKeyResults(stclContext, rs, this._sqlSlot);
-                    cursor.setPropertiesValues(stclContext, this._sqlSlot, new Key<String>(id), attributes);
+                    SQLCursor cursor = sqlSlot.getCursor(stclContext, _sqlSlot);
+                    Map<String, String> attributes = sqlSlot.getPropertiesValuesFromKeyResults(stclContext, rs, _sqlSlot);
+                    cursor.setPropertiesValues(stclContext, _sqlSlot, key, attributes);
 
                     // completes stencil
                     Result result = completeCreatedSQLStencil(stclContext, rs, self);
@@ -437,7 +428,7 @@ public class SQLStcl extends Stcl {
                     // sets all values not modified after completion (should be
                     // done after
                     // completeCreatedSQLStencil)
-                    cursor.setPropertiesValuesNotModified(stclContext, new Key<String>(id));
+                    cursor.setPropertiesValuesNotModified(stclContext, key);
 
                     return result;
                 }

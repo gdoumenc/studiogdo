@@ -21,28 +21,18 @@ import com.gdo.stencils.plug._PStencil;
  * <p>
  * A unique key is a key which provides another values if the key is already
  * defined in a slot the other values are created by incrementing this value
- * with "1" . </ul>
+ * with "1" .
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com)</a>
  */
 public class IntKeyGenerator<C extends _StencilContext, S extends _PStencil<C, S>> extends _KeyGenerator<C, S, Integer> {
 
-	public IntKeyGenerator(C stclContext, int key, PSlot<C, S> slot) {
-		super(stclContext, new Key<Integer>(key), slot);
-	}
+    public IntKeyGenerator(C stclContext, int key, PSlot<C, S> slot) {
+        super(stclContext, new Key(key), slot);
+    }
 
-	@Override
-	protected void generateNextKey() {
-		this._key.changeTo(Integer.toString(this._key.getValue() + 1));
-	}
+    @Override
+    protected void generateNextKey() {
+        _key.changeTo(Integer.toString(Integer.valueOf(_key.getValue()) + 1));
+    }
 
 }

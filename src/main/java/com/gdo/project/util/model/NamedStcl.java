@@ -8,8 +8,8 @@ import com.gdo.stencils.StclContext;
 
 public class NamedStcl extends Stcl {
 
-	public NamedStcl(StclContext stclContext) {
-		super(stclContext);
-	}
+    public NamedStcl(StclContext stclContext) {
+        super(stclContext);
+    }
 
 }

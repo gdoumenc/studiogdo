@@ -7,104 +7,104 @@ import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.log.StencilLog;
 
-public class Key<K> implements IKey, Comparable<IKey> {
+public class Key implements IKey {
 
-	// const NO_KEY
-	public static final IKey NO_KEY = new Key<String>(StringHelper.EMPTY_STRING) {
-		@Override
-		public boolean isEmpty() {
-			return true;
-		}
+    // const NO_KEY
+    public static final IKey NO_KEY = new Key(StringHelper.EMPTY_STRING) {
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
 
-		@Override
-		public boolean isNotEmpty() {
-			return false;
-		}
+        @Override
+        public boolean isNotEmpty() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return StringHelper.EMPTY_STRING;
-		}
-	};
+        @Override
+        public String toString() {
+            return "";
+        }
 
-	private K _key; // the real key
+        @Override
+        public int toInt() {
+            return 0;
+        }
+    };
 
-	public Key(K value) {
-		if (value == null) {
-			String msg = logError(null, "creation of a key with null value");
-			throw new NullPointerException(msg);
-		}
-		this._key = value;
-	}
+    private String _key; // the real key
 
-	@Override
-	public String toString() {
-		if (this._key == null)
-			return StringHelper.EMPTY_STRING;
-		return this._key.toString();
-	}
+    public Key(String value) {
+        if (value == null) {
+            String msg = logError(null, "creation of a key with null value");
+            throw new NullPointerException(msg);
+        }
+        _key = value;
+    }
 
-	public K getValue() {
-		return this._key;
-	}
+    public Key(int value) {
+        this(Integer.toString(value));
+    }
 
-	@SuppressWarnings("unchecked")
-	public void changeTo(String value) {
-		if (this._key instanceof String) {
-			this._key = (K) value;
-		} else if (this._key instanceof Integer) {
-			this._key = (K) new Integer(value);
-		}
-	}
+    @Override
+    public String toString() {
+        return _key;
+    }
 
-	@Override
-	public int hashCode() {
-		return this._key.hashCode();
-	}
+    public String getValue() {
+        return _key;
+    }
 
-	@Override
-	public int compareTo(IKey o) {
-		if (o == null || this._key == null)
-			return 0;
-		return this._key.toString().compareTo(o.toString());
-	}
+    public void changeTo(String value) {
+        _key = value;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this._key == null || StringUtils.isEmpty(this._key.toString());
-	}
+    @Override
+    public int hashCode() {
+        return _key.hashCode();
+    }
 
-	@Override
-	public boolean isNotEmpty() {
-		return this._key != null && StringUtils.isNotEmpty(this._key.toString());
-	}
+    @Override
+    public int compareTo(IKey key) {
+        if (key == null)
+            return 0;
+        return _key.compareTo(key.toString());
+    }
 
-	@Override
-	public boolean equals(Object key) {
-		if (this._key == null || key == null)
-			return false;
-		return this._key.toString().equals(key.toString());
-	}
+    @Override
+    public boolean equals(Object key) {
+        if (key == null)
+            return false;
+        return _key.equals(key.toString());
+    }
 
-	//
-	// LOG PART
-	//
+    @Override
+    public boolean isEmpty() {
+        return StringUtils.isBlank(_key);
+    }
 
-	private static final StencilLog LOG = new StencilLog(_Stencil.class);
+    @Override
+    public boolean isNotEmpty() {
+        return StringUtils.isNotBlank(_key);
+    }
 
-	protected StencilLog getLog() {
-		return LOG;
-	}
+    //
+    // LOG PART
+    //
 
-	public String logTrace(_StencilContext stclContext, String format, Object... params) {
-		return getLog().logTrace(stclContext, format, params);
-	}
+    private StencilLog getLog() {
+        return _Stencil._LOG;
+    }
 
-	public String logWarn(_StencilContext stclContext, String format, Object... params) {
-		return getLog().logWarn(stclContext, format, params);
-	}
+    public String logTrace(_StencilContext stclContext, String format, Object... params) {
+        return getLog().logTrace(stclContext, format, params);
+    }
 
-	public String logError(_StencilContext stclContext, String format, Object... params) {
-		return getLog().logError(stclContext, format, params);
-	}
+    public String logWarn(_StencilContext stclContext, String format, Object... params) {
+        return getLog().logWarn(stclContext, format, params);
+    }
+
+    public String logError(_StencilContext stclContext, String format, Object... params) {
+        return getLog().logError(stclContext, format, params);
+    }
 }

@@ -29,69 +29,70 @@ import com.gdo.stencils.util.PathUtils;
  */
 public class Load extends AtomicActionStcl {
 
-	public interface Status {
-		int NO_FILE_NAME = 0;
-		int CANNOT_READ = 1;
-	}
+    public interface Status {
+        int NO_FILE_NAME = 0;
+        int CANNOT_READ = 1;
+    }
 
-	private String _fileName; // file name for reading
+    private String _fileName; // file name for reading
 
-	public Load(StclContext stclContext) {
-		super(stclContext);
-	}
+    public Load(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		try {
-			StclContext stclContext = cmdContext.getStencilContext();
+    @Override
+    public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        try {
+            StclContext stclContext = cmdContext.getStencilContext();
 
-			// loads stencil from file
-			File file = new File(this._fileName);
-			if (!file.canRead()) {
-				String msg = String.format("cannot read file : %s", this._fileName);
-				return error(cmdContext, self, Status.CANNOT_READ, msg);
-			}
-			Reader in = new FileReader(file);
-			IStencilFactory<StclContext, PStcl> factory = stclContext.getStencilFactory();
-			PStcl stcl = factory.loadStencil(stclContext, in, this._fileName).self(stclContext, null);
+            // loads stencil from file
+            File file = new File(_fileName);
+            if (!file.canRead()) {
+                String msg = String.format("cannot read file : %s", _fileName);
+                return error(cmdContext, self, Status.CANNOT_READ, msg);
+            }
+            Reader in = new FileReader(file);
+            IStencilFactory<StclContext, PStcl> factory = stclContext.getStencilFactory();
+            PStcl stcl = factory.loadStencil(stclContext, in, _fileName).self(stclContext, null);
 
-			// plugs the stencil
-			String plugPath = getParameter(cmdContext, 2, null);
-			String key = getParameter(cmdContext, 3, null);
-			if (StringUtils.isNotEmpty(plugPath)) {
-				PStcl target = cmdContext.getTarget();
-				if (StringUtils.isNotEmpty(key))
-					target.plug(stclContext, stcl, plugPath, key);
-				else
-					target.plug(stclContext, stcl, plugPath);
-			} else {
-				plugPath = PathUtils.ROOT;
-				stclContext.setServletStcl(stcl);
-			}
+            // plugs the stencil
+            String plugPath = getParameter(cmdContext, 2, null);
+            String key = getParameter(cmdContext, 3, null);
+            if (StringUtils.isNotEmpty(plugPath)) {
+                PStcl target = cmdContext.getTarget();
+                if (StringUtils.isNotEmpty(key))
+                    target.plug(stclContext, stcl, plugPath, key);
+                else
+                    target.plug(stclContext, stcl, plugPath);
+            } else {
+                plugPath = PathUtils.ROOT;
+                stclContext.setServletStcl(stcl);
+            }
 
-			// returns status
-			String msg = String.format("Stencil loaded from %s and plugged in %s (at key %s)", file.getAbsolutePath(), plugPath, key);
-			return success(cmdContext, self, msg);
-		} catch (Exception e) {
-			return error(cmdContext, self, e);
-		}
-	}
+            // returns status
+            String msg = String.format("Stencil loaded from %s and plugged in %s (at key %s)", file.getAbsolutePath(), plugPath, key);
+            return success(cmdContext, self, msg);
+        } catch (Exception e) {
+            return error(cmdContext, self, e);
+        }
+    }
 
-	@Override
-	protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
+    @Override
+    protected CommandStatus<StclContext, PStcl> verifyContext(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
 
-		// gets file name (absolute path ore relative to configuration directory)
-		this._fileName = getParameter(cmdContext, 1, null);
-		if (StringUtils.isBlank(this._fileName)) {
-			return error(cmdContext, self, Status.NO_FILE_NAME, "wrong empty file name (param1)");
-		}
-		if (!this._fileName.startsWith(PathUtils.ROOT)) {
-			String home = stclContext.getConfigParameter(StclContext.PROJECT_CONF_DIR);
-			this._fileName = PathUtils.compose(home, this._fileName);
-		}
+        // gets file name (absolute path ore relative to configuration
+        // directory)
+        _fileName = getParameter(cmdContext, 1, null);
+        if (StringUtils.isBlank(_fileName)) {
+            return error(cmdContext, self, Status.NO_FILE_NAME, "wrong empty file name (param1)");
+        }
+        if (!_fileName.startsWith(PathUtils.ROOT)) {
+            String home = stclContext.getConfigParameter(StclContext.PROJECT_CONF_DIR);
+            _fileName = PathUtils.compose(home, _fileName);
+        }
 
-		return super.verifyContext(cmdContext, self);
-	}
+        return super.verifyContext(cmdContext, self);
+    }
 
 }

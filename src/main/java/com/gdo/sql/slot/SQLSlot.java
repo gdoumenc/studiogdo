@@ -21,6 +21,7 @@ import com.gdo.sql.model.SQLStcl;
 import com.gdo.sql.model.SQLStcl.Slot;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
+import com.gdo.stencils.Stcl.Command;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.cond.StencilCondition;
@@ -41,18 +42,18 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Temporary stencils may be stored in database using negative Id.
  * </p>
- * <blockquote>
+
  * <p>
  * &copy; 2004, 2005 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
- * </blockquote>
+
  * 
- * @author Guillaume Doumenc (<a
+ * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
-public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
+public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotMixin {
 
     // prefix to retrieve the plugged stencil after insertion
     public static final String PLUGGED_PREFIX = "plugged";
@@ -64,9 +65,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
     protected PStcl _sql_context;
 
     // cursor associated to this slot
-    private SQLCursor _cursor;
+    protected SQLCursor _cursor;
 
-    // cache optimization
+    // optimization
+    boolean _read_only;
+    boolean _load_all;
     int _stencil_context_uid; // context id
 
     // calculated map stored in each context id
@@ -87,13 +90,21 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      */
     public SQLSlot(StclContext stclContext, Stcl in, String name, int size) {
         super(stclContext, in, name, PSlot.ANY, true, false);
-        this._cursor = new SQLCursor(name, size);
+        _cursor = new SQLCursor(name, size);
     }
 
     // creator for sub slot
     // the cursor should be defined later
     protected SQLSlot(StclContext stclContext, Stcl in, String name) {
         super(stclContext, in, name, PSlot.ANY, true, false);
+    }
+
+    public void readOnly() {
+        _read_only = true;
+    }
+
+    public void loadAllAtStart() {
+        _load_all = true;
     }
 
     /* (non-Javadoc)
@@ -115,7 +126,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * @return the slot cursor.
      */
     public SQLCursor getCursor(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return this._cursor;
+        return _cursor;
     }
 
     /**
@@ -164,20 +175,28 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * @throws Exception
      */
     protected boolean initialize(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        if (!this._initialized) {
+        if (!_initialized) {
+            _initialized = true;
 
-            // gets SQL context
+            // get SQL context
             PStcl sqlContext = getSQLContext(stclContext, self);
             if (StencilUtils.isNull(sqlContext)) {
                 logWarn(stclContext, "No SQL context defined for slot %s for create stencil", self);
                 return false;
             }
 
-            // initialize SQL table
-            SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
-            String from = getKeysFromWithoutAlias(stclContext, self).toString();
-            context.initializeTable(stclContext, from, sqlContext);
-            this._initialized = true;
+            // initializes SQL table
+            if (!_read_only) {
+                SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
+                String from = getKeysFromWithoutAlias(stclContext, self).toString();
+                context.initializeTable(stclContext, from, sqlContext);
+            }
+
+            // reads all values at initialization
+            if (_load_all) {
+                int size = getStencilsList(stclContext, null, self).size();
+                _cursor.size(size);
+            }
         }
         return true;
     }
@@ -214,7 +233,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
             } catch (Exception e) {
                 logError(stclContext, e.toString());
             } finally {
-                SqlUtils.closeResultSet(stclContext, rs);
+                SQLContextStcl.closeResultSet(rs);
             }
         }
         return 0;
@@ -222,7 +241,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
 
     @Override
     public void clear() {
-        this._stencils.clear();
+        _cursor.clear();
         super.clear();
     }
 
@@ -232,16 +251,16 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the stencil context.
      */
     public PStcl getSQLContext(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        if (this._sql_context == null) {
+        if (_sql_context == null) {
             PStcl container = self.getContainer();
-            this._sql_context = container.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
+            _sql_context = container.getStencil(stclContext, SQLStcl.Slot.SQL_CONTEXT);
         }
-        return this._sql_context;
+        return _sql_context;
     }
 
     /**
@@ -274,31 +293,16 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         return new Object[0];
     }
 
-    /**
-     * Returns the database name.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            this slot as a plugged slot.
-     * @return the database name.
-     */
+    //
+    // SQL BEHAVIOR DEFINED THROUGH MIXIN
+    //
+
     public String getDatabaseName(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "";
+        return databaseName(stclContext, self);
     }
 
-    /**
-     * Returns the database table name. If the table used for query is a
-     * jointure you have to change <tt>getKeysFrom</tt>
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            this slot as a plugged slot.
-     * @return the database table name.
-     */
     public String getTableName(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "table not defined";
+        return tableName(stclContext, self);
     }
 
     /**
@@ -308,27 +312,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the database table alias.
      */
     public String getTableAliasForProperty(StclContext stclContext, PSlot<StclContext, PStcl> self) {
         return getTableName(stclContext, self);
-    }
-
-    /**
-     * Returns a specific SQL selection clause which must be used to the query
-     * to retrieve the stencil keys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL selection.
-     */
-    public String getKeysSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return "*";
     }
 
     /**
@@ -338,8 +327,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            the plugged slot.
      * @return the specific SQL id field.
      */
     public String getKeysIdField(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -352,74 +341,59 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         return "Id";
     }
 
-    private StringBuffer getKeysFromWithoutAlias(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+    private String getKeysFromWithoutAlias(StclContext stclContext, PSlot<StclContext, PStcl> self) {
         StringBuffer from = new StringBuffer();
         String database = getDatabaseName(stclContext, self);
         if (StringUtils.isNotBlank(database)) {
-            from.append("`").append(database).append("`.");
+            if (database.indexOf("`") < 0)
+                from.append("`").append(database).append("`");
+            else
+                from.append(database);
+            from.append(".");
         }
-        String name = getTableName(stclContext, self);
-        if (name.indexOf("`") < 0)
-            from.append("`").append(name).append("`");
+        String table = getTableName(stclContext, self);
+        if (table.indexOf("`") < 0)
+            from.append("`").append(table).append("`");
         else
-            from.append(name);
-        return from;
-    }
-
-    /**
-     * Returns a specific SQL from clause which must be used to the query to
-     * retrieve the stencil keys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL selection.
-     */
-    public String getKeysFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        StringBuffer from = getKeysFromWithoutAlias(stclContext, self);
-        String alias = getTableAliasForProperty(stclContext, self);
-        if (StringUtils.isNotBlank(alias)) {
-            if (alias.indexOf("`") < 0)
-                alias = "`" + alias + "`";
-            from.append(" ").append(alias);
-        }
+            from.append(table);
         return from.toString();
     }
 
-    /**
-     * Returns a specific SQL condition clause which must be added to the query
-     * to retrieve the stencilkeys. This specific clause is used only if no
-     * specific keys query is defined.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param cond
-     *            the path condition.
-     * @param container
-     *            the container stencil.
-     * @return the specific SQL clause.
-     */
+    public String getKeysSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+        return keysSelect(stclContext, self);
+    }
+
+    public String getKeysFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
+        String from = getKeysFromWithoutAlias(stclContext, self);
+        String alias = getTableAliasForProperty(stclContext, self);
+        return keysFrom(stclContext, from, alias, self);
+    }
+
     public String getKeysCondition(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-        return String.format("%s >= 0", getKeysIdField(stclContext, self));
+        String id_field = getKeysIdField(stclContext, self);
+        return keysCondition(stclContext, cond, id_field, self);
     }
 
     public String getKeysOrder(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return String.format("ORDER BY %s", getKeysIdField(stclContext, self));
+        String id_field = getKeysIdField(stclContext, self);
+        return order(stclContext, id_field, self);
     }
 
     public String getKeysGroup(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return null;
+        return group(stclContext, self);
     }
 
     public String getKeysLimit(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        return null;
+        return limit(stclContext, self);
     }
 
     public String getKeysHaving(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
         return (cond == null) ? null : cond.toSQL(stclContext, getTableAliasForProperty(stclContext, self), self.getContainer());
     }
+
+    //
+    // INTERNAL CODE
+    //
 
     private String getInternalKeysOrder(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
@@ -467,8 +441,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch all keys.
      */
     public String getSizeQuery(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
@@ -487,8 +461,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch all keys.
      */
     public String getKeysQuery(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
@@ -497,12 +471,16 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         if (cond != null) {
             try {
                 int k = Integer.parseInt(PathCondition.getKeyCondition(cond));
-                return getStencilQuery(stclContext, new Key<Integer>(k), self);
+                return getStencilQuery(stclContext, new Key(k), k > 0, self);
             } catch (NumberFormatException e) {
             }
         }
 
         return getInternalKeysQuery(stclContext, cond, true, true, self);
+    }
+
+    public String getKeysQueryWithoutCondition(StclContext stclContext, String key, PSlot<StclContext, PStcl> self) {
+        return getStencilQuery(stclContext, new Key(key), false, self);
     }
 
     /**
@@ -606,8 +584,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      *            the stencil context.
      * @param rs
      *            the result set of values fetch from keys query.
-     * @param container
-     *            TODO
+     * @param self
+     *            this slot as a plugged slot.
      * @return a map with property path as key and value associated
      *         <tt>null if not optimization/tt>.
      */
@@ -629,8 +607,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilSelect(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -644,8 +622,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL id field.
      */
     public String getStencilIdField(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -658,8 +636,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilFrom(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -672,8 +650,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the specific SQL selection.
      */
     public String getStencilGroup(StclContext stclContext, PSlot<StclContext, PStcl> self) {
@@ -688,18 +666,23 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      *            the stencil context.
      * @param key
      *            the plugged key.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the query to fetch the stencil values.
      */
-    public String getStencilQuery(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
+    public String getStencilQuery(StclContext stclContext, IKey key, boolean withWhere, PSlot<StclContext, PStcl> self) {
         String select = getStencilSelect(stclContext, self);
         String from = getStencilFrom(stclContext, self);
         String group = getStencilGroup(stclContext, self);
         String id = getStencilIdField(stclContext, self);
 
         // creates query
-        String query = String.format("SELECT %s FROM %s WHERE %s='%s'", select, from, id, key);
+        String query = null;
+        if (withWhere) {
+            String where = getKeysCondition(stclContext, null, self);
+            query = String.format("SELECT %s FROM %s WHERE %s='%s' AND %s", select, from, id, key, where);
+        } else
+            query = String.format("SELECT %s FROM %s WHERE %s='%s'", select, from, id, key);
 
         // adds group, having, order and limit
         if (StringUtils.isNotBlank(group)) {
@@ -715,12 +698,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param stcl
+     * @param stencil
      *            the created stencil.
      * @param rs
      *            the result set of values.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the completion result.
      */
     public Result completeStencil(StclContext stclContext, PStcl stencil, ResultSet rs, PSlot<StclContext, PStcl> self) {
@@ -749,17 +732,15 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      * 
      * @param stclContext
      *            the stencil context.
-     * @param key
-     *            the plugged key (may be <tt>null</tt>).
      * @param stencil
      *            the stencil to be inserted.
      * @param sqlContext
      *            the sql context stencil.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the key of the plugged stencil.
      */
-    public Result insertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
+    public synchronized Result insertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
         try {
 
             // verifies if insert can be done
@@ -790,34 +771,18 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
     }
 
     protected Result afterInsertStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
+        PStcl plugged = stencil;
 
         // returns key created if was not defined
         String id = stencil.getString(stclContext, SQLStcl.Slot.ID, "");
         if (StringUtils.isBlank(id)) {
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
-            id = Integer.toString(stcl.queryLastInsertID(stclContext, sqlContext));
-            stencil.setString(stclContext, SQLStcl.Slot.ID, id);
+            int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
+            plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
+            plugged.call(stclContext, Command.UPDATE);
+            plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
+            plugged.addCursor(stclContext, self, _cursor, new Key(last_inserted_id));
         }
-
-        // gets the plugged stencil with new key or same if negative id
-        // (temporary
-        // stencil are already plugged)
-        /*
-         * PStcl plugged; if ("-".equals(id.substring(0, 1))) { plugged = stencil; }
-         * else { PathCondition<StclContext, PStcl> cond =
-         * PathCondition.<StclContext, PStcl> newKeyCondition(new Key<String>(id));
-         * plugged = getStencil(stclContext, cond, self); }
-         */
-        // gets the stencil from a request to update all fields (some fields are
-        // created by SQL select formula)
-        PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key<String>(id), self.getContainer());
-        PStcl plugged = getStencil(stclContext, cond, self);
-        if (plugged.isNull()) {
-            logError(stclContext, "Cannot retrieve created SQL stencil from %s at key %s", self, id);
-        }
-
-        // plugs the SQL context in it
-        plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
 
         return Result.success(PLUGGED_PREFIX, plugged);
     }
@@ -831,8 +796,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      *            the stencil to be updated.
      * @param sqlContext
      *            the sql context stencil.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a plugged slot.
      * @return the key of the plugged stencil.
      */
     public Result updateStencilQuery(StclContext stclContext, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
@@ -944,7 +909,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      */
     public IKey retrieveKeyFromStencil(StclContext stclContext, PStcl stencil, PStcl sqlContext, PStcl container) {
         String id = SqlUtils.getStringFromStencil(stclContext, stencil, SQLStcl.Slot.ID);
-        return new Key<String>(id);
+        return new Key(id);
     }
 
     public SqlAssoc getSqlAssoc(StclContext stclContext, PStcl stencil, PSlot<StclContext, PStcl> self) {
@@ -985,39 +950,66 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         return sql.selectQuery(stclContext, query, sqlContext);
     }
 
-    @Override
-    protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
+    // TO BE REMOVED (getStencil should be used)
+    public ResultSet getKeysResultSet(StclContext stclContext, IKey key, PSlot<StclContext, PStcl> self) {
 
-        // if the list was already created for the same stencil context and
-        // without
-        // any condition
-        if (this._stencil_context_uid == stclContext.getId() && this._stencil_context_map != null) {
-            return StencilUtils.iterator(stclContext, this._stencil_context_map.clone().iterator(), cond, self);
+        // get keys query
+        PathCondition<StclContext, PStcl> cond = PathCondition.newKeyCondition(stclContext, key, self.getContainer());
+        String query = getKeysQuery(stclContext, cond, self);
+        if (StringUtils.isBlank(query)) {
+            logWarn(stclContext, "Keys query not defined for slot %s for key result set", self);
+            return null;
         }
 
-        SQLCursor cursor = getCursor(stclContext, self);
+        // get sql context
+        PStcl sqlContext = getSQLContext(stclContext, self);
+        if (StencilUtils.isNull(sqlContext)) {
+            logWarn(stclContext, "No SQL context defined for slot %s for key result set", self);
+            return null;
+        }
+
+        // creates list
+        SQLContextStcl sql = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
+        return sql.selectQuery(stclContext, query, sqlContext);
+    }
+
+    @Override
+    protected StencilIterator<StclContext, PStcl> getStencilsList(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
         // should be initialized before used
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
-            return StencilUtils.iterator(Result.error(msg));
+            return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
+        }
+
+        // if the list was already created for the same stencil context and
+        // without any condition
+        if ((_stencil_context_uid == stclContext.getId() || _read_only) && _stencil_context_map != null) {
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.clone(), cond, self);
         }
 
         // creates the stencil list
-        String[] keys = getKeys(stclContext, cond, self);
-        List<PStcl> stencils = new Vector<PStcl>(keys.length);
-        for (String key : keys) {
-            PStcl stencil = new PStcl(stclContext, self, new Key<String>(key), cursor);
+        SQLCursor cursor = getCursor(stclContext, self);
+        List<IKey> keys = getKeys(stclContext, cond, self);
+        List<PStcl> stencils = new Vector<PStcl>(keys.size());
+        for (IKey key : keys) {
+            PStcl stencil = new PStcl(stclContext, self, key, cursor);
             stencils.add(stencil);
         }
 
         // returns the iterator (save for optimization on complete list)
         StencilIterator<StclContext, PStcl> map = new ListIterator<StclContext, PStcl>(stencils);
         if (cond == null) {
-            this._stencil_context_uid = stclContext.getId();
-            this._stencil_context_map = map;
+            _stencil_context_uid = stclContext.getId();
+            _stencil_context_map = map;
         }
         return map;
+    }
+
+    // not using other condition than ID...
+    protected PStcl getStencil(StclContext stclContext, int key, PSlot<StclContext, PStcl> self) {
+        SQLCursor cursor = getCursor(stclContext, self);
+        return new PStcl(stclContext, self, new Key(key), cursor);
     }
 
     /**
@@ -1030,57 +1022,51 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
      *            this slot as a plugged slot.
      * @return
      */
-    protected String[] getKeys(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
-        SQLCursor cursor = getCursor(stclContext, self);
+    protected List<IKey> getKeys(StclContext stclContext, StencilCondition<StclContext, PStcl> cond, PSlot<StclContext, PStcl> self) {
 
         // get keys query
         ResultSet rs = getKeysResultSet(stclContext, cond, self);
         if (rs != null) {
             try {
-
-                // getArray not supported in SQL lib
-                // List<String> keys = (ArrayList<String>) rs.getArray(1);
-                List<String> keys = new ArrayList<String>();
+                SQLCursor cursor = getCursor(stclContext, self);
+                List<IKey> keys = new ArrayList<>();
                 while (rs.next()) {
 
                     // keys are id
-                    String key = rs.getString(SQLStcl.Slot.ID);
+                    String id = rs.getString(SQLStcl.Slot.ID);
 
-                    // for some jointure the id may be null (such result
-                    // should not be taken in account)
-                    if (StringUtils.isBlank(key)) {
+                    // for some jointure the id may be null (such result should
+                    // not be taken in account)
+                    if (StringUtils.isBlank(id))
                         continue;
-                    }
 
                     // adds slot value attributes to get string optimization
                     // only if not currently already modified
                     // (or properties are more uptodate that from request)
+                    IKey key = new Key(id);
                     Boolean modified = cursor._modified.get(key);
                     if (modified == null || !modified) {
                         try {
                             Map<String, String> attributes = getPropertiesValuesFromKeyResults(stclContext, rs, self);
-                            cursor.setPropertiesValues(stclContext, self, new Key<String>(key), attributes);
+                            cursor.setPropertiesValues(stclContext, self, key, attributes);
                             keys.add(key);
                         } catch (Exception e) {
-                            // don't add key in list if cannot set property values
+                            // don't add key in list if cannot set property
+                            // values
                             logError(stclContext, e.toString());
                         }
                     } else {
                         keys.add(key);
                     }
                 }
-
-                // transforms to string array
-                String[] array = new String[keys.size()];
-                keys.toArray(array);
-                return array;
+                return keys;
             } catch (Exception e) {
                 logError(stclContext, e.toString());
             } finally {
-                SqlUtils.closeResultSet(stclContext, rs);
+                SQLContextStcl.closeResultSet(rs);
             }
         }
-        return new String[0];
+        return new ArrayList<IKey>();
     }
 
     @Override
@@ -1090,6 +1076,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return Stcl.nullPStencil(stclContext, Result.error(msg));
+        }
+        
+        if (_read_only) {
+            logWarn(stclContext, "Plug in read only slot : %s", self);
+            _read_only = false;
         }
 
         // creates new plugged stencil
@@ -1118,7 +1109,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         }
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
 
         // does insert query
         Result result = insertStencilQuery(stclContext, stencil, sqlContext, self);
@@ -1159,6 +1150,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
             return;
         }
 
+        if (_read_only) {
+            logWarn(stclContext, "Unplug in read only slot : %s", self);
+            _read_only = false;
+        }
+
         // gets SQL context
         PStcl sqlContext = getSQLContext(stclContext, self);
         if (StencilUtils.isNull(sqlContext)) {
@@ -1179,7 +1175,9 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
 
         // remove stencil from cursor (if not in cursor (negative id for ex)
         // then get order stencil)
-        cursor.remove(stclContext, self, self, key);
+        int id = key.toInt();
+        if (id >= 0)
+            cursor.remove(stclContext, self, self, key);
 
         // does deletion query (if key can be found)
         Result result = deleteStencilQuery(stclContext, key, stencil, sqlContext, self);
@@ -1189,7 +1187,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         }
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
     }
 
     @Override
@@ -1199,6 +1197,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         if (!initialize(stclContext, self)) {
             logWarn(stclContext, "Cannot initialize slot %s", self);
             return;
+        }
+
+        if (_read_only) {
+            logWarn(stclContext, "Unplug in read only slot : %s", self);
+            _read_only = false;
         }
 
         // get SQL context
@@ -1222,7 +1225,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         stcl.updateQuery(stclContext, query, sqlContext);
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
     }
 
     @Override
@@ -1247,6 +1250,11 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         if (!initialize(stclContext, self)) {
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return Result.error(msg);
+        }
+
+        if (_read_only) {
+            logWarn(stclContext, "Multi unplug in read only slot : %s", self);
+            _read_only = false;
         }
 
         // get SQL context
@@ -1274,7 +1282,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         Result result = stcl.updateQuery(stclContext, query, sqlContext);
 
         // the stencil context map is then obsolete
-        this._stencil_context_uid = 0;
+        _stencil_context_uid = 0;
 
         return result;
     }
@@ -1291,11 +1299,5 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> {
         String table = getTableName(stclContext, self);
         String alias = getTableAliasForProperty(stclContext, self);
         return SqlUtils.newSqlCondition(from, table, alias, stencil);
-    }
-
-    @Override
-    public void expunge(StclContext stclContext, PSlot<StclContext, PStcl> self) {
-        SQLCursor cursor = getCursor(stclContext, self);
-        cursor.expunge();
     }
 }

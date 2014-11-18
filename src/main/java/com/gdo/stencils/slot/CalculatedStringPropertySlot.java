@@ -13,64 +13,53 @@ import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.prop.IPropCalculator;
-import com.gdo.stencils.prop.PropStencil;
 
 /**
  * <p>
  * This slot contains a calculated string property stencil.
  * </p>
- * <blockquote>
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
- * </blockquote>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class CalculatedStringPropertySlot<C extends _StencilContext, S extends _PStencil<C, S>> extends SingleCalculatedPropertySlot<C, S> implements IPropCalculator<C, S> {
 
-	public CalculatedStringPropertySlot(C stclContext, _Stencil<C, S> in, String name) {
-		super(stclContext, in, name, null);
-		setCalculator(this);
-	}
+    public CalculatedStringPropertySlot(C stclContext, _Stencil<C, S> in, String name) {
+        super(stclContext, in, name, null);
+        setCalculator(this);
+    }
 
-	/**
-	 * Sets the calculated value of the contained property (by default throws an
-	 * exception).
-	 * 
-	 * @param stclContext
-	 *          the stencil context.
-	 * @param value
-	 *          the new value.
-	 * @param self
-	 *          the calculated property contained in the slot.
-	 * @return the new value set (may not be exactly the one set...)
-	 */
-	@Override
-	public String setValue(C stclContext, String value, S self) {
-		String msg = String.format("Cannot change %s value", self.getContainingSlot().getName(stclContext));
-		throw new NotImplementedException(msg);
-	}
+    /**
+     * Sets the calculated value of the contained property (by default throws an
+     * exception).
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param value
+     *            the new value.
+     * @param self
+     *            the calculated property contained in the slot.
+     * @return the new value set (may not be exactly the one set...)
+     */
+    @Override
+    public String setValue(C stclContext, String value, S self) {
+        String msg = String.format("Cannot change %s value", self.getContainingSlot().getName(stclContext));
+        throw new NotImplementedException(msg);
+    }
 
-	@Override
-	public InputStream getInputStream(C stclContext, S self) {
-		PropStencil<C, S> prop = getProperty(stclContext);
-		if (prop == null) {
-			return IOHelper.EMPTY_INPUT_STREAM;
-		}
-		return prop.getInputStream(stclContext, self);
-	}
+    @Override
+    public InputStream getInputStream(C stclContext, S self) {
+        _Stencil<C, S> prop = getProperty(stclContext);
+        if (prop == null) {
+            return IOHelper.EMPTY_INPUT_STREAM;
+        }
+        return prop.getInputStream(stclContext, self);
+    }
 
-	@Override
-	public OutputStream getOutputStream(C stclContext, S self) {
-		PropStencil<C, S> prop = getProperty(stclContext);
-		if (prop == null) {
-			return IOHelper.EMPTY_OUTPUT_STREAM;
-		}
-		return prop.getOutputStream(stclContext, self);
-	}
+    @Override
+    public OutputStream getOutputStream(C stclContext, S self) {
+        _Stencil<C, S> prop = getProperty(stclContext);
+        if (prop == null) {
+            return IOHelper.EMPTY_OUTPUT_STREAM;
+        }
+        return prop.getOutputStream(stclContext, self);
+    }
 
 }

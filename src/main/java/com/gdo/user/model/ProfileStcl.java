@@ -9,16 +9,15 @@ import com.gdo.stencils.plug.PSlot;
 
 public class ProfileStcl extends NamedStcl {
 
-	public interface Slot extends NamedStcl.Slot {
-		String ID = "Id";
+    public interface Slot extends NamedStcl.Slot {
+        String ID = "Id";
+        String USERS = "Users";
+    }
 
-		String USERS = "Users";
-	}
+    public ProfileStcl(StclContext stclContext) {
+        super(stclContext);
 
-	public ProfileStcl(StclContext stclContext) {
-		super(stclContext);
-
-		propSlot(Slot.ID);
-		multiSlot(Slot.USERS, PSlot.ANY, true, null);
-	}
+        propSlot(Slot.ID);
+        multiSlot(Slot.USERS, PSlot.ANY, true, null);
+    }
 }

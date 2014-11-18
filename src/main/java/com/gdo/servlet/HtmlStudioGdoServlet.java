@@ -18,21 +18,27 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.authenticator.Constants;
 import org.apache.catalina.realm.GenericPrincipal;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.util.Base64;
 
 import com.gdo.helper.ConverterHelper;
 import com.gdo.helper.StringHelper;
+import com.gdo.project.model.ServletStcl;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
+import com.gdo.stencils._Stencil;
+import com.gdo.stencils._StencilContext;
 import com.gdo.stencils.cmd.CommandStatus;
+import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -46,10 +52,50 @@ import com.gdo.stencils.util.StencilUtils;
  * </p>
  */
 @SuppressWarnings("serial")
-public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
+public class HtmlStudioGdoServlet extends HttpServlet {
+
+    // command entries
+    private static final String GDO_EXT = ".gdo"; // common extension
 
     private static final Pattern POST_PATTERN = Pattern.compile("(.*)_([^_]*)");
     private static final Pattern CURRENCY = Pattern.compile("(\\S*)\\s*€?");
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        try {
+
+            // performs studiogdo entries
+            StclContext stclContext = studiogdo(request, response);
+            if (stclContext == null)
+                return;
+
+            // saves project if needed (by default don't save project
+            // configuration)
+            RpcArgs args = stclContext.getRequestParameters();
+            if (args.mustSaveProject() != null && args.mustSaveProject())
+                saveProject(stclContext);
+        } catch (Exception e) {
+            alertResponse(request, response, e);
+        }
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+
+            // performs studiogdo entries
+            StclContext stclContext = studiogdo(request, response);
+            if (stclContext == null)
+                return;
+
+            // aves project if needed (by default saves project configuration)
+            RpcArgs args = stclContext.getRequestParameters();
+            if (args.mustSaveProject() == null || args.mustSaveProject())
+                saveProject(stclContext);
+        } catch (Exception e) {
+            alertResponse(request, response, e);
+        }
+    }
 
     /**
      * Common servlet answer.
@@ -58,84 +104,30 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
      *            the HTTP request.
      * @param response
      *            the HTTP response.
-     * @param post
-     *            <tt>true<//t> if the request was a POST, <tt>false</tt>
-     *            otherwise.
      */
-    @Override
     protected StclContext studiogdo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
 
-            // traces
+            // trace
             String path = request.getPathInfo();
             logTrace("Servlet path: " + path);
             logTrace("Servlet query: " + request.getQueryString());
 
-            // checks service entry defined and has gdo extension
+            // get entry
             if (StringUtils.isBlank(path)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty path");
                 return null;
             }
             String service = StringHelper.substringEnd(path.substring(1), GDO_EXT.length());
             if (StringUtils.isBlank(service)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty entry service");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No entry defined");
                 return null;
             }
 
-            // org.apache.catalina.Session session1 =
-            // (org.apache.catalina.Session)
-            // request.getSession();
-            // String username1 =
-            // (String) session1.getNote(Constants.SESS_USERNAME_NOTE);
-            // returns first role defined
-            // if ("/j_security_check".equals(path) || "login".equals(service))
-            // {
-            if ("login".equals(service)) {
-
-                // rechecks from login info
-                Principal userPrincipal = request.getUserPrincipal();
-
-                /*
-                Realm realm = genericPrincipal.getRealm();
-                String username = request.getParameter(Constants.FORM_USERNAME);
-                String password = request.getParameter(Constants.FORM_PASSWORD);
-                userPrincipal = realm.authenticate(username, password);
-                /* */
-                /*
-                userPrincipal = genericPrincipal.getUserPrincipal();
-                /* */
-                if (userPrincipal == null) {
-                    HttpSession session = request.getSession();
-                    session.invalidate();
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                    return null;
-                }
-
-                // returns associated role
-                GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
-                logUserConnected(request);
-                String[] roles = genericPrincipal.getRoles();
-                InputStream in = new ByteArrayInputStream(roles[0].getBytes());
+            // ping entry
+            if (RpcWrapper.PING_SERVICE.equals(service)) {
+                InputStream in = new ByteArrayInputStream("ping".getBytes());
                 StudioGdoServlet.writeResponse(response, HttpServletResponse.SC_OK, "text/html", in, null);
-                return null;
-            }
-
-            // forces javascript redirection to login page
-            if ("login-form".equals(service)) {
-
-                // rechecks from login info
-                String username = request.getParameter(Constants.FORM_USERNAME);
-                // String password =
-                // request.getParameter(Constants.FORM_PASSWORD);
-                if (StringUtils.isBlank(username) || true) {
-                    response.sendError(HttpServletResponse.SC_CREATED);
-                    return null;
-                }
-            }
-
-            // shows login fail message
-            if ("login-failed".equals(service)) {
-                response.sendError(418, "Connexion invalide");
                 return null;
             }
 
@@ -165,6 +157,7 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
             // call service wrapper
             RpcWrapper wrapper = RpcWrapper.getInstance(stclContext);
             wrapper.service(stclContext, service, args);
+
             return stclContext;
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.toString());
@@ -172,7 +165,6 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
         return null;
     }
 
-    @Override
     protected void doUpload(StclContext stclContext, RpcArgs args) throws Exception {
 
         // checks the stencil target
@@ -208,15 +200,6 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
 
             while (k.hasNext()) {
                 String param = k.next();
-                /*
-                 * for (String p : params.get(param)) { if (param.matches(".*_.*")) {
-                 * String type = param.substring(0, 1); String path_decode = new
-                 * String(base.decode(param.substring(2).getBytes()));
-                 * logWarn(" param -> %s_%s : %s", type, path_decode, p); } else if
-                 * ("ap".equals(param)) { String p_decode = new
-                 * String(base.decode(p.getBytes())); logWarn(" param -> %s : %s", param,
-                 * p_decode); } else { logWarn(" param -> %s : %s", param, p); } }
-                 */
                 if ("$".equals(param)) {
                     for (String p : params.get(param)) {
                         logTrace("env : %s", p);
@@ -551,6 +534,104 @@ public class HtmlStudioGdoServlet extends LocalStudioGdoServlet {
             stcl.plug(stclContext, toBePlugged, slot);
         } else {
             stcl.clearSlot(stclContext, slot);
+        }
+    }
+
+    private void saveProject(StclContext stclContext) throws IOException {
+        PStcl project = stclContext.getServletStcl();
+        ((ServletStcl) project.getReleasedStencil(stclContext)).save(stclContext);
+        logTrace("project saved");
+    }
+
+    //
+    // CATALINA PART
+    //
+
+    /**
+     * Writes the HTTP response from an input stream.
+     */
+    public static void writeResponse(HttpServletResponse response, int status, String type, InputStream in, String charset) throws IOException {
+        response.setStatus(status);
+        if (StringUtils.isNotBlank(charset)) {
+            response.setCharacterEncoding(charset);
+        }
+        response.setContentType(type);
+        response.addHeader("Cache-Control", "no-cache");
+        response.addHeader("Cache-Control", "no-store");
+        response.addHeader("Access-Control-Allow-Methods", "POST, GET");
+        response.setDateHeader("Expires", 0);
+        if (in != null) {
+            IOUtils.copy(in, response.getOutputStream());
+        }
+    }
+
+    public static void writeHTMLResponse(HttpServletResponse response, String text, String enc) throws IOException {
+        InputStream in = IOUtils.toInputStream(text);
+        writeResponse(response, HttpServletResponse.SC_OK, "text/html", in, enc);
+        in.close();
+    }
+
+    public static void writeXMLResponse(HttpServletResponse response, InputStream in, String enc) throws IOException {
+        writeResponse(response, HttpServletResponse.SC_OK, "text/xml", in, enc);
+    }
+
+    public static void writeXMLResponse(HttpServletResponse response, String text, String enc) throws IOException {
+        InputStream in = IOUtils.toInputStream(text);
+        writeXMLResponse(response, in, enc);
+        in.close();
+    }
+
+    protected static void alertResponse(HttpServletRequest request, HttpServletResponse response, Exception e) {
+        try {
+            StclContext stclContext = new StclContext(request, response);
+            writeHTMLResponse(stclContext.getResponse(), e.toString(), null);
+            logError(e.toString());
+        } catch (Exception ee) {
+        }
+    }
+
+    //
+    // LOG PART
+    //
+
+    public static StencilLog getLog() {
+        return _Stencil._LOG;
+    }
+
+    public static <C extends _StencilContext> String logTrace(String format, Object... params) {
+        return getLog().logTrace(null, format, params);
+    }
+
+    public static <C extends _StencilContext> String logWarn(String format, Object... params) {
+        return getLog().logWarn(null, format, params);
+    }
+
+    public static <C extends _StencilContext> String logError(String format, Object... params) {
+        return getLog().logError(null, format, params);
+    }
+
+    private static final Log SESSION_LOG = LogFactory.getLog(StudioGdoServlet.class);
+
+    protected static void logUserConnected(HttpServletRequest request) {
+        Principal userPrincipal = request.getUserPrincipal();
+        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
+        String roles = "";
+        for (String role : genericPrincipal.getRoles()) {
+            if (roles.length() > 0) {
+                roles += ",";
+            }
+            roles += role;
+        }
+        String msg = String.format("%s [%s] connected", genericPrincipal.getName(), roles);
+        SESSION_LOG.info(msg);
+    }
+
+    protected static void logUserDisconnected(HttpServletRequest request) {
+        Principal userPrincipal = request.getUserPrincipal();
+        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
+        if (genericPrincipal != null) {
+            String msg = String.format("%s disconnected", genericPrincipal.getName());
+            SESSION_LOG.info(msg);
         }
     }
 }

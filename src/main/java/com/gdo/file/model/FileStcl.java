@@ -55,7 +55,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
     public FileStcl(StclContext stclContext, File file) {
         super(stclContext);
 
-        this._file = file;
+        _file = file;
 
         new PathSlot(stclContext);
         new AbsolutePathSlot(stclContext);
@@ -87,11 +87,11 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
 
     // this method is public to allow commands to access it
     public File getFile(StclContext stclContext, PStcl self) {
-        if (this._file == null) {
+        if (_file == null) {
             String name = getName(stclContext, self);
-            this._file = new File(name);
+            _file = new File(name);
         }
-        return this._file;
+        return _file;
     }
 
     /**
@@ -206,7 +206,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
             // gets the associated file
             File file = getFile(stclContext, self.getContainer());
             if (file == null)
-                return StencilUtils.iterator();
+                return StencilUtils.<StclContext, PStcl> iterator();
 
             // if key defined, then used as format
             PStcl prop = null;
@@ -219,7 +219,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
                 Date lastModified = new Date(file.lastModified());
                 String date = dateFormat.format(lastModified);
                 self.getContainer().newPProperty(stclContext, self,
-                        new Key<String>(format), date);
+                        new Key(format), date);
             } else {
 
                 // if no key then returns integer value
@@ -228,7 +228,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
                         Key.NO_KEY, date);
             }
 
-            return StencilUtils.iterator(stclContext, prop, self);
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, prop, self);
         }
     }
 

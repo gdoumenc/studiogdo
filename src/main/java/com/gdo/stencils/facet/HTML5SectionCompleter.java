@@ -31,8 +31,6 @@ import com.gdo.helper.ConverterHelper;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils.iterator.SingleIterator;
 import com.gdo.stencils.iterator.StencilIterator;
-import com.gdo.stencils.key.Key;
-import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.util.PathUtils;
 
@@ -101,7 +99,6 @@ public class HTML5SectionCompleter {
     protected static final String DATA_TEXT_CSS = "data-text-css-";
     protected static final String DATA_CSS = "data-css-";
 
-    private static Base64 BASE = new Base64();
     private HashMap<String, String> _values = new HashMap<String, String>();
     protected PStcl prop = null;
     protected PStcl prop_stcl = null;
@@ -351,21 +348,10 @@ public class HTML5SectionCompleter {
                 String value = "";
                 try {
                     PStcl s = null;
-                    if (isPropertyPath(stclContext, path, stcl)) {
-                        if (prop == null) {
-                            prop = stcl.newPProperty(stclContext, "/Session/PropHtmlCompleter", Key.NO_KEY, "");
-                        }
-                        String str = stcl.getString(stclContext, path);
-                        prop.setValue(stclContext, str);
-                        s = prop;
-                        prop_stcl = stcl;
-                        prop_path = path;
+                    if (StringUtils.isNotBlank(path)) {
+                        s = stcl.getStencil(stclContext, path);
                     } else {
-                        if (StringUtils.isNotBlank(path)) {
-                            s = stcl.getStencil(stclContext, path);
-                        } else {
-                            s = stcl;
-                        }
+                        s = stcl;
                     }
                     value = _getFacetFromSkeleton(stclContext, s, skeleton);
                 } catch (Exception e) {
@@ -1434,7 +1420,7 @@ public class HTML5SectionCompleter {
             if (format.endsWith("%")) {
                 return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 1), span) + "%";
             }
-            
+
             // decimal format
             if (format.equals(",##")) {
                 return String.format(locale, "%.2f", Float.parseFloat(value));
@@ -1506,7 +1492,7 @@ public class HTML5SectionCompleter {
             formatted = formattedValue(stclContext, container, value, name, span);
             if (formatted != null)
                 return formatted;
-            
+
             // no format found
             return value;
         } catch (Exception e) {
@@ -1599,7 +1585,7 @@ public class HTML5SectionCompleter {
      * 
      * @param element
      *            the DOM element
-     * @return <tt>true</tt> if the DOM is a block element, <false/> otherwise.
+     * @return <tt>true</tt> if the DOM is a block element, <tt>false</tt> otherwise.
      */
     protected boolean isPostElement(Element element) {
         String name = element.tagName();
@@ -1734,8 +1720,9 @@ public class HTML5SectionCompleter {
     }
 
     protected String encode(String path) {
+        Base64 base = new Base64();
         try {
-            String encoded = new String(BASE.encode(path.getBytes()));
+            String encoded = new String(base.encode(path.getBytes()));
             return encoded.replaceAll("\\r\\n|\\r|\\n", "");
         } catch (Exception e) {
             return "";
@@ -1743,7 +1730,8 @@ public class HTML5SectionCompleter {
     }
 
     protected String decode(String path) {
-        return new String(BASE.decode(path.getBytes()));
+        Base64 base = new Base64();
+        return new String(base.decode(path.getBytes()));
     }
 
     private boolean tdFromHeader(Element th) {
@@ -1909,17 +1897,6 @@ public class HTML5SectionCompleter {
         } catch (Exception e) {
             return new ConditionTestResult();
         }
-    }
-
-    private boolean isPropertyPath(StclContext stclContext, String path, PStcl stcl) {
-        if (PathUtils.isComposed(path)) {
-            return false;
-        }
-        PSlot<StclContext, PStcl> slot = stcl.getContainingSlot();
-        if (slot != null && slot.isCursorBased(stclContext)) {
-            return slot.getProperty(stclContext, stcl.getKey(), path, slot) != null;
-        }
-        return false;
     }
 
     private String getPwd(StclContext stclContext, PStcl stcl) {

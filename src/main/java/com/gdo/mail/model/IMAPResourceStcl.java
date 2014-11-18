@@ -16,26 +16,26 @@ import com.gdo.stencils.plug.PStcl;
 
 public class IMAPResourceStcl extends NamedStcl {
 
-	private Writer _out;
+    private Writer _out;
 
-	public interface Slot extends NamedStcl.Slot {
-		String CONTENT = "Content";
-		String SIZE = "Size";
-	}
+    public interface Slot extends NamedStcl.Slot {
+        String CONTENT = "Content";
+        String SIZE = "Size";
+    }
 
-	public IMAPResourceStcl(StclContext stclContext, Writer out) {
-		super(stclContext);
-		this._out = out;
-	}
+    public IMAPResourceStcl(StclContext stclContext, Writer out) {
+        super(stclContext);
+        _out = out;
+    }
 
-	@Override
-	public FacetResult getFacet(RenderContext<StclContext, PStcl> renderContext) {
-		String type = renderContext.getFacetType();
-		if (FacetType.FILE.equals(type)) {
-			InputStream reader = new ByteArrayInputStream(this._out.toString().getBytes());
-			return new FacetResult(reader, "");
-		}
-		return super.getFacet(renderContext);
-	}
+    @Override
+    public FacetResult getFacet(RenderContext<StclContext, PStcl> renderContext) {
+        String type = renderContext.getFacetType();
+        if (FacetType.FILE.equals(type)) {
+            InputStream reader = new ByteArrayInputStream(_out.toString().getBytes());
+            return new FacetResult(reader, "");
+        }
+        return super.getFacet(renderContext);
+    }
 
 }

@@ -9,6 +9,6 @@ import com.gdo.stencils.plug.PStcl;
 
 public interface IRecipient {
 
-	Result getInternetAddress(StclContext stclContext, PStcl self);
+    Result getInternetAddress(StclContext stclContext, PStcl self);
 
 }

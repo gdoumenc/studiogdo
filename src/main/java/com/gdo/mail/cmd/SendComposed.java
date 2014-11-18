@@ -11,39 +11,39 @@ import com.gdo.stencils.plug.PStcl;
 
 public class SendComposed extends ComposedActionStcl {
 
-	public interface Slot extends ComposedActionStcl.Slot {
-		String MAIL = "Mail";
-	}
+    public interface Slot extends ComposedActionStcl.Slot {
+        String MAIL = "Mail";
+    }
 
-	public SendComposed(StclContext stclContext) {
-		super(stclContext);
-	}
+    public SendComposed(StclContext stclContext) {
+        super(stclContext);
+    }
 
-	@Override
-	public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
-		StclContext stclContext = cmdContext.getStencilContext();
-		int currentStep = getActiveStepIndex();
+    @Override
+    public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
+        StclContext stclContext = cmdContext.getStencilContext();
+        int currentStep = getActiveStepIndex();
 
-		if (currentStep == 2) {
-			String mode = getParameter(cmdContext, 1, "simple");
+        if (currentStep == 2) {
+            String mode = getParameter(cmdContext, 1, "simple");
 
-			// replacing content's \n by <br/>
-			String content = cmdContext.getTarget().getString(stclContext, MailStcl.Slot.CONTENT, "");
-			content = content.replaceAll("\n", "<br/>");
-			content = content.replaceAll("\r", "<br/>");
-			cmdContext.getTarget().setString(stclContext, MailStcl.Slot.CONTENT, content);
+            // replacing content's \n by <br/>
+            String content = cmdContext.getTarget().getString(stclContext, MailStcl.Slot.CONTENT, "");
+            content = content.replaceAll("\n", "<br/>");
+            content = content.replaceAll("\r", "<br/>");
+            cmdContext.getTarget().setString(stclContext, MailStcl.Slot.CONTENT, content);
 
-			if ("simple".equals(mode)) {
-				return cmdContext.getTarget().call(cmdContext, MailStcl.Command.SEND);
-			}
-			if ("multi".equals(mode)) {
-				return cmdContext.getTarget().call(cmdContext, MailStcl.Command.MULTI_SEND);
-			}
-			String msg = String.format("Unknown sending mode %s", mode);
-			return error(cmdContext, self, msg);
-		}
+            if ("simple".equals(mode)) {
+                return cmdContext.getTarget().call(cmdContext, MailStcl.Command.SEND);
+            }
+            if ("multi".equals(mode)) {
+                return cmdContext.getTarget().call(cmdContext, MailStcl.Command.MULTI_SEND);
+            }
+            String msg = String.format("Unknown sending mode %s", mode);
+            return error(cmdContext, self, msg);
+        }
 
-		return success(cmdContext, self);
-	}
+        return success(cmdContext, self);
+    }
 
 }

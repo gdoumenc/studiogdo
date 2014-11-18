@@ -51,7 +51,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
 
     public FolderStcl(StclContext stclContext, File dir) {
         super(stclContext);
-        this._dir = dir;
+        _dir = dir;
 
         propSlot(Slot.FOLDER_TEMPLATE, FolderStcl.class.getName());
         propSlot(Slot.FILE_TEMPLATE, FileStcl.class.getName());
@@ -87,9 +87,9 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
      * @return the java file associated.
      */
     public File getFile(StclContext stclContext, PStcl self) {
-        if (this._dir == null || !this._dir.isDirectory())
+        if (_dir == null || !_dir.isDirectory())
             return null;
-        return this._dir;
+        return _dir;
     }
 
     /**
@@ -152,13 +152,13 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
             try {
                 File dir = getFile(stclContext, self.getContainer());
                 if (dir == null)
-                    return StencilUtils.iterator();
+                    return StencilUtils.<StclContext, PStcl> iterator();
 
                 // for all files
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -180,7 +180,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 return cleanList(stclContext, condition, self);
             } catch (Exception e) {
                 String msg = logWarn(stclContext, "Cannot get files list", e);
-                return StencilUtils.iterator(Result.error(msg));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
         }
     }
@@ -196,14 +196,14 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 File dir = getFile(stclContext, self.getContainer());
                 if (dir == null) {
                     String msg = logWarn(stclContext, "Cannot get root dir");
-                    return StencilUtils.iterator(Result.error(msg));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                 }
 
                 // for all files
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -221,7 +221,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 return cleanList(stclContext, condition, self);
             } catch (Exception e) {
                 String msg = logWarn(stclContext, "Cannot get files list", e);
-                return StencilUtils.iterator(Result.error(msg));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
         }
     }
@@ -237,14 +237,14 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 File dir = getFile(stclContext, self.getContainer());
                 if (dir == null) {
                     String msg = logWarn(stclContext, "Cannot get root dir");
-                    return StencilUtils.iterator(Result.error(msg));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                 }
 
                 // for all files
                 File[] files = dir.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        IKey key = new Key<String>(file.getName());
+                        IKey key = new Key(file.getName());
 
                         // if already in list, do nothing
                         if (getStencilFromList(stclContext, key, self) != null) {
@@ -262,7 +262,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 return cleanList(stclContext, condition, self);
             } catch (Exception e) {
                 String msg = logWarn(stclContext, "Cannot get files list", e);
-                return StencilUtils.iterator(Result.error(msg));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
         }
     }
@@ -278,10 +278,10 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
 
                 // cannot accept no path condition as key contained
                 if (!(condition instanceof PathCondition))
-                    return StencilUtils.iterator();
+                    return StencilUtils.<StclContext, PStcl> iterator();
                 String path = ((PathCondition<StclContext, PStcl>) condition).getCondition();
                 if (!PathUtils.isKeyContained(path))
-                    return StencilUtils.iterator();
+                    return StencilUtils.<StclContext, PStcl> iterator();
                 path = PathUtils.getKeyContained(path);
 
                 // get initial directory for searching the file
@@ -293,7 +293,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                     dir = getFile(stclContext, self.getContainer());
                 }
                 if (dir == null) {
-                    return StencilUtils.iterator(Result.error("dir not found"));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error("dir not found"));
                 }
 
                 // get name
@@ -308,7 +308,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 }
                 if (StringUtils.isBlank(name)) {
                     String msg = logWarn(stclContext, "Cannot get files list without key");
-                    return StencilUtils.iterator(Result.error(msg));
+                    return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                 }
                 FileFilter filter = new PathFilter(name);
 
@@ -332,10 +332,10 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                     }
                 }
 
-                return StencilUtils.iterator(stclContext, list.iterator(), null, self);
+                return StencilUtils.<StclContext, PStcl> iterator(stclContext, list.iterator(), null, self);
             } catch (Exception e) {
                 String msg = logWarn(stclContext, "Cannot get files list", e);
-                return StencilUtils.iterator(Result.error(msg));
+                return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
         }
     }
@@ -344,12 +344,12 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
         private String _path;
 
         public PathFilter(String path) {
-            this._path = path;
+            _path = path;
         }
 
         @Override
         public boolean accept(File pathname) {
-            return this._path.matches(pathname.getName());
+            return _path.matches(pathname.getName());
         }
     }
 }

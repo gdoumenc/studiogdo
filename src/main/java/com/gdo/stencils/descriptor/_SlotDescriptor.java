@@ -9,9 +9,9 @@ import com.gdo.stencils.slot._Slot;
 
 public abstract class _SlotDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> {
 
-	/**
-	 * The stencil which will contain the slot.
-	 */
+    /**
+     * The stencil which will contain the slot.
+     */
     public Map<String, String> _links;
 
     /**
@@ -20,19 +20,19 @@ public abstract class _SlotDescriptor<C extends _StencilContext, S extends _PSte
     protected boolean _tranzient = true;
 
     public _SlotDescriptor() {
-	}
+    }
 
-	public _SlotDescriptor(Map<String, String> links) {
-		this();
-		this._links = links;
-	}
+    public _SlotDescriptor(Map<String, String> links) {
+        this();
+        _links = links;
+    }
 
-	public void addLink(String slot, String path) {
-		if (this._links == null) {
-			this._links = new Hashtable<String, String>();
-		}
-		this._links.put(slot, path);
-	}
+    public void addLink(String slot, String path) {
+        if (_links == null) {
+            _links = new Hashtable<>();
+        }
+        _links.put(slot, path);
+    }
 
-	public abstract _Slot<C, S> add(C stclContext, String name, S self);
+    public abstract _Slot<C, S> add(C stclContext, String name, S self);
 }

@@ -52,22 +52,26 @@ public class RpcArgs {
     private PStcl _stencil; // stencil defined from path
 
     public RpcArgs(StclContext stclContext) throws Exception {
+        parseParameters(stclContext);
+    }
+
+    private void parseParameters(StclContext stclContext) throws Exception {
         Base64 encoder = new Base64();
         setRequestParams(stclContext);
 
         // transaction id
         int tid = getIntegerParameter(stclContext, RpcWrapper.TRANSACTION_ID_PARAM, 0);
-        this._transaction_id = tid;
+        _transaction_id = tid;
 
         // encoding charset is used for all parameters
         String enc = getStringParameter(stclContext, RpcWrapper.ENC_PARAM);
-        this._enc = enc;
+        _enc = enc;
 
         // gets path
-        this._path = getStringParameter(stclContext, RpcWrapper.PATH_PARAM);
+        _path = getStringParameter(stclContext, RpcWrapper.PATH_PARAM);
         String apath = getStringParameter(stclContext, RpcWrapper.ABSOLUTE_PATH_PARAM);
-        if (StringUtils.isBlank(this._path) && StringUtils.isNotBlank(apath)) {
-            this._path = new String(encoder.decode(apath.getBytes()));
+        if (StringUtils.isBlank(_path) && StringUtils.isNotBlank(apath)) {
+            _path = new String(encoder.decode(apath.getBytes()));
         }
 
         // gets complementary path
@@ -85,7 +89,7 @@ public class RpcArgs {
             }
         }
         if (StringUtils.isNotBlank(p1)) {
-            this._path = PathUtils.compose(this._path, p1);
+            _path = PathUtils.compose(_path, p1);
         }
 
         // gets complementary key
@@ -103,20 +107,20 @@ public class RpcArgs {
             }
         }
         if (StringUtils.isNotBlank(k1)) {
-            this._path = PathUtils.createPath(this._path, k1);
+            _path = PathUtils.createPath(_path, k1);
         }
 
         // starts by encoding as will be used to decode all other ones
-        this._acceptNoStencil = getBooleanParameter(stclContext, RpcWrapper.ACCEPT_NO_STENCIL, false);
-        this._attrPathes = getStringParameters(stclContext, RpcWrapper.ATTRS_PARAM);
-        this._facets = getStringParameters(stclContext, RpcWrapper.FACETS_PARAM);
-        this._format = getStringParameter(stclContext, RpcWrapper.FORMAT_PARAM);
-        this._modes = getStringParameters(stclContext, RpcWrapper.MODES_PARAM);
-        this._save = getBooleanParameter(stclContext, RpcWrapper.SAVE_PARAM);
+        _acceptNoStencil = getBooleanParameter(stclContext, RpcWrapper.ACCEPT_NO_STENCIL, false);
+        _attrPathes = getStringParameters(stclContext, RpcWrapper.ATTRS_PARAM);
+        _facets = getStringParameters(stclContext, RpcWrapper.FACETS_PARAM);
+        _format = getStringParameter(stclContext, RpcWrapper.FORMAT_PARAM);
+        _modes = getStringParameters(stclContext, RpcWrapper.MODES_PARAM);
+        _save = getBooleanParameter(stclContext, RpcWrapper.SAVE_PARAM);
 
         // may force the locale of the context
         String locale = getStringParameter(stclContext, RpcWrapper.LOCALE_PARAM);
-        if (StringUtils.isNotEmpty(locale)) {
+        if (StringUtils.isNotBlank(locale)) {
             int pos = locale.indexOf('_');
             if (pos != -1) {
                 String language = locale.substring(0, pos);
@@ -139,14 +143,14 @@ public class RpcArgs {
      * @return Gets the full parameters list.
      */
     public Map<String, String[]> getParams(StclContext stclContext) {
-        return this._params;
+        return _params;
     }
 
     public int getTransactionId() {
-        return this._transaction_id;
+        return _transaction_id;
     }
 
-   /**
+    /**
      * Gets the charset encoding used for this response.
      * 
      * @param stclContext
@@ -154,8 +158,8 @@ public class RpcArgs {
      * @return the character set encoding.
      */
     public String getCharacterEncoding(StclContext stclContext) {
-        if (StringUtils.isNotBlank(this._enc)) {
-            return this._enc;
+        if (StringUtils.isNotBlank(_enc)) {
+            return _enc;
         }
         String enc = stclContext.getRequest().getCharacterEncoding();
         if (StringUtils.isNotBlank(enc)) {
@@ -170,7 +174,7 @@ public class RpcArgs {
      * @return the list of attribute pathes.
      */
     public String[] getAttributePathes() {
-        return this._attrPathes;
+        return _attrPathes;
     }
 
     /**
@@ -179,7 +183,7 @@ public class RpcArgs {
      * @return <tt>true</tt> if the request contains uploaded file.
      */
     public boolean hasUploadedFile() {
-        return this._fileContent != null;
+        return _fileContent != null;
     }
 
     /**
@@ -188,7 +192,7 @@ public class RpcArgs {
      * @return the file uploaded content.
      */
     public FileItem fileUploadedContent() {
-        return this._fileContent;
+        return _fileContent;
     }
 
     /**
@@ -198,7 +202,7 @@ public class RpcArgs {
      *         stencil.
      */
     public boolean acceptNoStencil() {
-        return this._acceptNoStencil;
+        return _acceptNoStencil;
     }
 
     /**
@@ -207,19 +211,19 @@ public class RpcArgs {
      * @return <tt>true</tt> if the project must be saved.
      */
     public Boolean mustSaveProject() {
-        return this._save;
+        return _save;
     }
 
     public void setSaveProject(Boolean bool) {
-        this._save = bool;
+        _save = bool;
     }
 
     public void setPath(String path) {
-        this._path = path;
+        _path = path;
     }
 
     public String getPath() {
-        return this._path;
+        return _path;
     }
 
     /**
@@ -230,23 +234,23 @@ public class RpcArgs {
      * @return the stencil referenced.
      */
     public PStcl getStencilFromPath(StclContext stclContext) {
-        if (this._stencil == null) {
+        if (_stencil == null) {
             PStcl stcl = stclContext.getServletStcl();
-            if (StringUtils.isBlank(this._path))
-                this._stencil = stcl;
+            if (StringUtils.isBlank(_path))
+                _stencil = stcl;
             else
-                this._stencil = stcl.getStencil(stclContext, this._path);
+                _stencil = stcl.getStencil(stclContext, _path);
         }
-        return this._stencil;
+        return _stencil;
     }
 
     public StencilIterator<StclContext, PStcl> getStencilsFromPath(StclContext stclContext) {
         PStcl stcl = stclContext.getServletStcl();
 
-        if (StringUtils.isBlank(this._path)) {
-            return StencilUtils.iterator(stclContext, stcl, null);
+        if (StringUtils.isBlank(_path)) {
+            return StencilUtils.<StclContext, PStcl> iterator(stclContext, stcl, null);
         }
-        return stcl.getStencils(stclContext, this._path);
+        return stcl.getStencils(stclContext, _path);
     }
 
     /**
@@ -270,18 +274,18 @@ public class RpcArgs {
         }
 
         // write the number of attributes and facets
-        writer.writeAttribute("attributes", this._attrPathes.length);
+        writer.writeAttribute("attributes", _attrPathes.length);
         if (writeFacets) {
-            writer.writeAttribute("facets", this._facets.length);
+            writer.writeAttribute("facets", _facets.length);
         }
 
         // adds attributes and facets
-        addAttributes(stclContext, writer, stcl, this._attrPathes);
+        addAttributes(stclContext, writer, stcl, _attrPathes);
         if (writeFacets) {
-            addFacets(stclContext, writer, stcl, this._facets, this._modes);
+            addFacets(stclContext, writer, stcl, _facets, _modes);
         }
 
-        addFormat(stclContext, writer, stcl, this._format);
+        addFormat(stclContext, writer, stcl, _format);
     }
 
     /**
@@ -360,19 +364,17 @@ public class RpcArgs {
      *            the stencil context.
      * @param name
      *            the parameter name.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the string parameter.
      */
     public String getStringParameter(StclContext stclContext, String name) {
-        if (this._params == null) {
+        if (_params == null) {
             return null;
         }
-        String[] values = this._params.get(name);
+        String[] values = _params.get(name);
         if (values == null) {
             return null;
         }
-        String value = this._params.get(name)[0];
+        String value = _params.get(name)[0];
 
         // flex issue (parameters are encoded in utf-8 not in iso ????)
         String type = stclContext.getRequest().getContentType();
@@ -394,8 +396,6 @@ public class RpcArgs {
      *            the stencil context.
      * @param name
      *            the parameter name.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the parameters as an array of string.
      */
     public String[] getStringParameters(StclContext stclContext, String name) {
@@ -421,7 +421,7 @@ public class RpcArgs {
         return Integer.parseInt(value);
     }
 
-   /**
+    /**
      * Returns the boolean parameter defined by name.
      * 
      * @param stclContext
@@ -430,8 +430,6 @@ public class RpcArgs {
      *            the parameter name.
      * @param def
      *            the default value if the parameter is not defined.
-     * @param charset
-     *            the charset used to encode parameter.
      * @return the boolean parameter.
      */
     public boolean getBooleanParameter(StclContext stclContext, String name, boolean def) {
@@ -456,7 +454,7 @@ public class RpcArgs {
             HttpServletRequest request = stclContext.getRequest();
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             if (isMultipart) {
-                this._params = new HashMap<String, String[]>();
+                _params = new HashMap<String, String[]>();
 
                 // multi part environment
                 DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -491,18 +489,18 @@ public class RpcArgs {
 
                         // recreates parameters map
                         String param = item.getFieldName();
-                        if (this._params.containsKey(param)) {
-                            String[] values = this._params.get(param);
-                            this._params.put(param, ArrayUtils.<String> add(values, value));
+                        if (_params.containsKey(param)) {
+                            String[] values = _params.get(param);
+                            _params.put(param, ArrayUtils.<String> add(values, value));
                         } else {
-                            this._params.put(param, new String[] { value });
+                            _params.put(param, new String[] { value });
                         }
                     } else {
-                        this._fileContent = item;
+                        _fileContent = item;
                     }
                 }
             } else {
-                this._params = request.getParameterMap();
+                _params = request.getParameterMap();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -527,12 +525,10 @@ public class RpcArgs {
     /**
      * Format arguments for trace.
      * 
-     * @param entry
-     *            the RPC entry.
      * @return a formatted string of all parameters.
      */
     public String formatForTrace() {
-        return String.format("path=%s", this._path);
+        return String.format("path=%s", _path);
     }
 
 }

@@ -8,25 +8,23 @@ package com.gdo.stencils.atom;
  * This identifier is used to unically reference this atom in any XML
  * description file.
  * </p>
- * 
- * @author Guillaume Doumenc (<a
- *         href="mailto:gdoumenc@coworks.pro">gdoumenc@studiogdo.com)</a>
  */
 public interface IAtom<C, S> {
 
-	/**
-	 * @return this object casted to the generic signature.
-	 */
-	public S self();
+    /**
+     * @return this object casted to the generic signature.
+     */
+    public S self();
 
-	/**
-	 * @return the session identifier for this atom.
-	 */
-	String getId(C stclContext);
+    /**
+     * @return the session identifier for this atom.
+     */
+    String getId(C stclContext);
 
-	/**
-	 * @return the unique internal identificator for this atom for store purpose.
-	 */
-	String getUId(C stclContext);
+    /**
+     * @return the unique internal identificator for this atom for store
+     *         purpose.
+     */
+    String getUId(C stclContext);
 
 }
