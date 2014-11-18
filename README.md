@@ -1,5 +1,4 @@
 studiogdo
-=========
 
 Java implementation of the StudioGdo MVC model.
 
