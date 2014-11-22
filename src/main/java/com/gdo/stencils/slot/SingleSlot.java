@@ -310,13 +310,9 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
                     pstcl.updateCursor((StclContext) stclContext);
                 }
             }
-
-            // the contained stencil may be created in instance repository so
-            // containing slot may be wrong
-            // TODO when contained stencil is created, should check parent to
-            // see if in repository
-            // then change containing slot once used! (only once)
-            _containedStcl.setContainingSlot(self);
+            if (_containedStcl != null)
+                _containedStcl.setContainingSlot(self);
+            
             return _containedStcl;
         }
 

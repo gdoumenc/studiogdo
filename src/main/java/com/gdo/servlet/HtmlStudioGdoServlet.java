@@ -7,7 +7,6 @@ package com.gdo.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,12 +21,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.catalina.realm.GenericPrincipal;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.util.Base64;
 
 import com.gdo.helper.ConverterHelper;
@@ -132,7 +128,7 @@ public class HtmlStudioGdoServlet extends HttpServlet {
             }
 
             // creates stencil context
-            StclContext stclContext = new StclContext(request, response);
+            StclContext stclContext = getContext(request, response);
             RpcArgs args = stclContext.getRpcArgs();
 
             // multi part upload and post values must be done before real
@@ -163,6 +159,10 @@ public class HtmlStudioGdoServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.toString());
         }
         return null;
+    }
+    
+    protected StclContext getContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return new StclContext(request, response);
     }
 
     protected void doUpload(StclContext stclContext, RpcArgs args) throws Exception {
@@ -610,28 +610,4 @@ public class HtmlStudioGdoServlet extends HttpServlet {
         return getLog().logError(null, format, params);
     }
 
-    private static final Log SESSION_LOG = LogFactory.getLog(StudioGdoServlet.class);
-
-    protected static void logUserConnected(HttpServletRequest request) {
-        Principal userPrincipal = request.getUserPrincipal();
-        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
-        String roles = "";
-        for (String role : genericPrincipal.getRoles()) {
-            if (roles.length() > 0) {
-                roles += ",";
-            }
-            roles += role;
-        }
-        String msg = String.format("%s [%s] connected", genericPrincipal.getName(), roles);
-        SESSION_LOG.info(msg);
-    }
-
-    protected static void logUserDisconnected(HttpServletRequest request) {
-        Principal userPrincipal = request.getUserPrincipal();
-        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
-        if (genericPrincipal != null) {
-            String msg = String.format("%s disconnected", genericPrincipal.getName());
-            SESSION_LOG.info(msg);
-        }
-    }
 }

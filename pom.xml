@@ -5,7 +5,6 @@
 	<artifactId>studiogdo</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<version>2.3-SNAPSHOT</version>
 	<description>Java implementation of the StudioGdo model.</description>
 	<url>http://www.studiogdo.com</url>
 	<licenses>
@@ -181,12 +180,6 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>catalina</artifactId>
-			<version>6.0.30</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.1</version>
@@ -221,4 +214,5 @@
 		<name>FPR-CoWorks</name>
 		<url>http://www.coworks.pro</url>
 	</organization>
+	<version>3.0-SNAPSHOT</version>
 </project>

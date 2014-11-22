@@ -29,13 +29,13 @@ import com.gdo.stencils.util.StencilUtils;
  * The <tt>Target</tt> slot contains this stencil. The <tt>PluggedTarget</tt>
  * slot contains this stencil but with this command as parent.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
+ * 
  * 
  */
 public abstract class CommandStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends _Stencil<C, S> {
@@ -306,6 +306,14 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
     }
 
     /**
+     * @param cmdContext
+     *            the command context.
+     * @param index
+     *            the index for the ommand parameter.
+     * @param def
+     *            the default value.
+     * @param self
+     *            the command as a plugged command.
      * @return expanded parameter in command execution context first, if not
      *         found then gets in default command context.
      */
@@ -329,7 +337,10 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
      * performed when the command is reset.
      * 
      * @param cmdContext
+     *            the command context.
      * @param self
+     *            the command as a plugged command.
+     * @return the command status.
      */
     public CommandStatus<C, S> reset(CommandContext<C, S> cmdContext, S self) throws Exception {
         return success(cmdContext, self);
