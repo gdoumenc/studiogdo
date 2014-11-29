@@ -99,14 +99,14 @@ public class ClassHelper {
      */
     public static URL getResource(String resource) {
 
-        // searches in current thread
+        /* searches in current thread
         URL url = Thread.currentThread().getContextClassLoader().getResource(resource);
         if (url != null) {
             return url;
-        }
+        }*/
 
         // searches in class loader
-        url = ClassHelper.class.getClassLoader().getResource(resource);
+        URL url = ClassHelper.class.getClassLoader().getResource(resource);
         if (url != null) {
             return url;
         }
