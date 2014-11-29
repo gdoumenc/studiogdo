@@ -6,7 +6,6 @@ package com.gdo.helper;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -26,13 +25,6 @@ public class ClassHelper {
 
     private ClassHelper() {
         // utility class, disable instanciation
-    }
-
-    /**
-     * Tests if two objects are equals. Accepts <tt>null</tt> objects.
-     */
-    public static boolean equals(Object obj1, Object obj2) {
-        return ((obj1 != null) && obj1.equals(obj2));
     }
 
     /**
@@ -80,9 +72,7 @@ public class ClassHelper {
 
         // tests from all constructors (cannot use get constructor from type as
         // using generic)
-        Constructor<?> constructors[] = clazz.getConstructors();
-        for (int i = 0; i < constructors.length; i++) {
-            Constructor<?> constructor = constructors[i];
+        for (Constructor<?> constructor : clazz.getConstructors()) {
 
             // must have same parameters numbers
             if (constructor.getParameterTypes().length != params.length) {
@@ -202,25 +192,7 @@ public class ClassHelper {
      * @return <tt>true</tt> if the array is null or empty.
      */
     public static boolean isEmpty(Object[] array) {
-        return ((array == null) || (array.length == 0));
-    }
-
-    /**
-     * Tests if an array contains a value.
-     * 
-     * @param array
-     *            the array.
-     * @param value
-     *            the searched value.
-     * @return <tt>true</tt> if the array contains the value. The array is
-     *         sorted before to use a binary search.
-     */
-    public static boolean contains(Object[] array, Object value) {
-        if (isEmpty(array)) {
-            return false;
-        }
-        Arrays.sort(array);
-        return Arrays.binarySearch(array, value) >= 0;
+        return (array == null || array.length == 0);
     }
 
     /**
@@ -231,7 +203,7 @@ public class ClassHelper {
      * @return <tt>true</tt> if the array is null or empty.
      */
     public static boolean isEmpty(Collection<?> list) {
-        return ((list == null) || (list.size() == 0));
+        return (list == null || list.size() == 0);
     }
 
     /**

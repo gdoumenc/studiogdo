@@ -67,30 +67,14 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     protected _Slot(C stclContext, _Stencil<C, S> container, String name, char arity, boolean tranzient, boolean override) {
 
-        // does nothing if the slot is hidden
-        String[] discardedSlots = container.discardedSlots(stclContext);
-        if (ClassHelper.contains(discardedSlots, name)) {
-            return;
-        }
-
-        // rename it if needed
-        String n = name;
-        Map<String, String> renamedSlots = container.renamedSlots(stclContext);
-        if (renamedSlots != null) {
-            String renamed = renamedSlots.get(name);
-            if (renamed != null) {
-                n = renamed;
-            }
-        }
-
-        // verifie unique
+        // verify unique
         _Slot<C, S> slot = container.getSlots().get(name);
         if (slot != null && !override)
             logWarn(stclContext, "slot %s is already defined in %s (will be redefined...)", name, container);
 
         // set characteristics
         _container = container;
-        _name = n;
+        _name = name;
         _arity = arity;
         _tranzient = tranzient;
 

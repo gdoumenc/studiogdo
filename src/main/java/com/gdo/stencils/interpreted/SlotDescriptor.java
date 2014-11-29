@@ -8,7 +8,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -263,12 +262,6 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
         // if the slot is renamed then this descriptor should be also renamed
         String name = getName();
         _Stencil<C, S> stcl = container.getReleasedStencil(stclContext);
-        Map<String, String> renamedSlots = stcl.renamedSlots(stclContext);
-        if (renamedSlots != null) {
-            String renamed = renamedSlots.get(name);
-            if (renamed != null)
-                name = renamed;
-        }
 
         // verify parameters
         if (isCalculated() && isDelegated()) {

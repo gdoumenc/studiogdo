@@ -692,50 +692,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return getSlots().remove(name);
     }
 
-    /**
-     * Defines the list of slots which should not be created. This allow stencil
-     * implementation to override slots from super implementation. A discarded
-     * slot must be redefined or the behavior may be unprevisisble.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @return the array of discarded slots (those slot won't be created even if
-     *         defined in super).
-     */
-    public String[] discardedSlots(C stclContext) {
-        return StringHelper.EMPTY_STRINGS;
-    }
-
-    /**
-     * Defines the list of slots which should be renamed. This allow stencil
-     * implementation to override slots from super implementation.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @return the map of discarded slots (key is previous name).
-     */
-    public Map<String, String> renamedSlots(C stclContext) {
-        return null;
-    }
-
-    // TODO should be defined in plugged stencil
-    /*
-     * public Map<String, String> renamedSlots(C stclContext) { return
-     * StringHelper.EMPTY_STRINGS_MAP; }
-     */
-
-    // TODO should be defined in plugged stencil
-    /*
-     * @return the array of hidden slots (those slot may be created in super but
-     * are no more visible). public String[] hiddenSlots(C stclContext) { return
-     * StringHelper.EMPTY_STRINGS; }
-     */
-
-    //
-    // Informations relative to containing slots (to understand where the
-    // stencil is..)
-    //
-
     //
     // Informations relative to contained slots
     //
