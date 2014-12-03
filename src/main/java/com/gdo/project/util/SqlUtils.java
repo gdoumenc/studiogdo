@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.ConverterHelper;
@@ -523,7 +522,7 @@ public class SqlUtils {
          */
         public String pushString(StclContext stclContext, String label, String slot) {
             String value = _stcl.getString(stclContext, slot, "");
-            push(label, StringEscapeUtils.escapeSql(value));
+            push(label, value);
             return value;
         }
 
