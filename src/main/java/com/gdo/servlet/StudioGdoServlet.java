@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.security.Principal;
 import java.util.Locale;
 import java.util.Map;
 
@@ -18,13 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.realm.GenericPrincipal;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.gdo.helper.ClassHelper;
 import com.gdo.helper.StringHelper;
@@ -389,28 +385,4 @@ public class StudioGdoServlet extends HttpServlet {
         return getLog().logError(null, format, params);
     }
 
-    private static final Log SESSION_LOG = LogFactory.getLog(StudioGdoServlet.class);
-
-    protected static void logUserConnected(HttpServletRequest request) {
-        Principal userPrincipal = request.getUserPrincipal();
-        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
-        String roles = "";
-        for (String role : genericPrincipal.getRoles()) {
-            if (roles.length() > 0) {
-                roles += ",";
-            }
-            roles += role;
-        }
-        String msg = String.format("%s [%s] connected", genericPrincipal.getName(), roles);
-        SESSION_LOG.info(msg);
-    }
-
-    protected static void logUserDisconnected(HttpServletRequest request) {
-        Principal userPrincipal = request.getUserPrincipal();
-        GenericPrincipal genericPrincipal = (GenericPrincipal) userPrincipal;
-        if (genericPrincipal != null) {
-            String msg = String.format("%s disconnected", genericPrincipal.getName());
-            SESSION_LOG.info(msg);
-        }
-    }
 }

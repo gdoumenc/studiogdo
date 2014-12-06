@@ -321,7 +321,6 @@ public class RpcWrapper {
      *            the RPC arguments.
      */
     private void disconnect(StclContext stclContext) {
-        StudioGdoServlet.logUserDisconnected(stclContext.getRequest());
         stclContext.getHttpSession().invalidate();
         stclContext.release();
     }
@@ -519,7 +518,6 @@ public class RpcWrapper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void mset(StclContext stclContext, RpcArgs args) {
         try {
             Result result = Result.success();
@@ -1050,7 +1048,6 @@ public class RpcWrapper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void doPost(StclContext stclContext, RpcArgs args) {
         try {
 
