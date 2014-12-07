@@ -204,7 +204,6 @@ public class StudioGdoServlet extends HttpServlet {
                 if (!isCallValid(stclContext, service, args)) {
                     logWarn("Invalid connexion");
                     writeXMLResponse(stclContext.getResponse(), "<disconnected/>", StclContext.getCharacterEncoding());
-                    stclContext.release();
                     return null;
                 }
 

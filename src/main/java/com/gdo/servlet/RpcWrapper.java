@@ -321,8 +321,7 @@ public class RpcWrapper {
      *            the RPC arguments.
      */
     private void disconnect(StclContext stclContext) {
-        stclContext.getHttpSession().invalidate();
-        stclContext.release();
+        stclContext.getSession().invalidate();
     }
 
     /**

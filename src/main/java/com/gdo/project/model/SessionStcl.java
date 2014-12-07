@@ -75,7 +75,7 @@ public class SessionStcl extends Stcl {
      * @return the session stencil.
      */
     public static Stcl getSessionStcl(StclContext stclContext) {
-        HttpSession session = stclContext.getHttpSession();
+        HttpSession session = stclContext.getSession();
         SessionListener listener = (SessionListener) session.getAttribute(SESSION_KEY);
         return (listener != null) ? listener.getSessionStcl() : null;
     }
@@ -90,7 +90,7 @@ public class SessionStcl extends Stcl {
      *            the stencil context.
      */
     public static void createSessionStcl(StclContext stclContext) {
-        HttpSession session = stclContext.getHttpSession();
+        HttpSession session = stclContext.getSession();
         HttpServletRequest request = stclContext.getRequest();
 
         // checks another one wasn't created before
@@ -199,7 +199,7 @@ public class SessionStcl extends Stcl {
 
         @Override
         public String getValue(StclContext stclContext, PStcl self) {
-            return stclContext.getHttpSession().getId();
+            return stclContext.getSession().getId();
         }
     }
 

@@ -26,9 +26,6 @@ public abstract class _StencilContext implements Cloneable {
 
     private static final String CHARACTER_ENCODING = System.getProperty("file.encoding");
 
-    // once released, should not be used
-    private boolean _released = false;
-
     // this context may be in another locale to
     // retrieve locale sensitive information
     protected Locale _locale;
@@ -50,24 +47,6 @@ public abstract class _StencilContext implements Cloneable {
      */
     public String getName() {
         return "stencil context";
-    }
-
-    /**
-     * Verifies the context is valid (should be used in all prefix method
-     * verification).
-     */
-    protected void checkValidity() throws IllegalStateException {
-        if (_released) {
-            throw new IllegalStateException("StencilContext already released, should not be used");
-        }
-    }
-
-    /**
-     * Should be called when the context should be no more used.
-     */
-    public void release() {
-        checkValidity();
-        _released = true;
     }
 
     /**
@@ -130,7 +109,6 @@ public abstract class _StencilContext implements Cloneable {
      * @return pathes where the template descriptors can be found.
      */
     public String[] getTemplatePathes() {
-        checkValidity();
         return StringHelper.EMPTY_STRINGS;
     }
 
