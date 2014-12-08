@@ -231,7 +231,6 @@ public final class PropDescriptor<C extends _StencilContext, S extends _PStencil
         // add property proto
         slotDesc.setTransient(isTransient());
         slotDesc.setCalculated(isCalculated());
-        slotDesc.setOverride(isOverride());
         slotDesc.expandedFromProp(this);
         return slotDesc;
     }

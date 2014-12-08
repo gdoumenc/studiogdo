@@ -19,7 +19,7 @@ import com.gdo.stencils.plug._PStencil;
 public class SearchInAnotherSlotFirst<C extends _StencilContext, S extends _PStencil<C, S>> extends SingleSlot<C, S> {
 
     public SearchInAnotherSlotFirst(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
-        super(stclContext, in, name, arity, tranzient, false);
+        super(stclContext, in, name, arity, tranzient);
     }
 
     public SearchInAnotherSlotFirst(C stclContext, _Stencil<C, S> in, String name, char arity) {

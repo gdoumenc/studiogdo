@@ -47,7 +47,7 @@ public abstract class MultiCalculatedSlot<C extends _StencilContext, S extends _
     // (default).
 
     public MultiCalculatedSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
-        super(stclContext, in, name, arity, true, false);
+        super(stclContext, in, name, arity, true);
     }
 
     /**

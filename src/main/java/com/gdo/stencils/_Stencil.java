@@ -165,7 +165,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public _Stencil(C stclContext) {
 
         // internal slot (used temporary to retrieve command stencil)
-        _commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true, false);
+        _commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true);
 
         // predefined slots
         addDescriptor(Slot.THIS, new _SlotDescriptor<C, S>() {

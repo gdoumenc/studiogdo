@@ -38,8 +38,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
                                     // arity
                                     // is ONE (default property value)
 
-    public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-        super(stclContext, in, name, arity, tranzient, override);
+    public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
+        super(stclContext, in, name, arity, tranzient);
 
         // check parameters
         if (!SlotUtils.isSingle(arity)) {
@@ -48,11 +48,11 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
     }
 
     public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
-        this(stclContext, in, name, arity, false, false);
+        this(stclContext, in, name, arity, false);
     }
 
     public SingleSlot(C stclContext, _Stencil<C, S> in, String name) {
-        this(stclContext, in, name, PSlot.NONE_OR_ONE, false, false);
+        this(stclContext, in, name, PSlot.NONE_OR_ONE, false);
     }
 
     @Override

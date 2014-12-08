@@ -47,12 +47,12 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
     // something wrong was found
 
-    public MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-        super(stclContext, in, name, arity, tranzient, override);
+    public MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
+        super(stclContext, in, name, arity, tranzient);
     }
 
     public MultiSlot(C stclContext, _Stencil<C, S> in, String name) {
-        this(stclContext, in, name, PSlot.ANY, false, false);
+        this(stclContext, in, name, PSlot.ANY, false);
     }
 
     @Override

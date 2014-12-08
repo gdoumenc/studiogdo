@@ -29,7 +29,7 @@ import com.gdo.stencils.util.StencilUtils;
 public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _Slot<C, S> {
 
     public EmptySlot(C stclContext, _Stencil<C, S> in, String name) {
-        super(stclContext, in, name, PSlot.ANY, true, false);
+        super(stclContext, in, name, PSlot.ANY, true);
     }
 
     @Override

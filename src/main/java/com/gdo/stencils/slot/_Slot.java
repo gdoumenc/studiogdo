@@ -58,17 +58,18 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     private String _name; // unique slot name
     private char _arity; // arity
     private boolean _tranzient; // should the plugged stencils be saved?
+    private boolean _read_only; // the slot is read only
 
     private int _completionLevel; // accept plug in this slot only if completion
 
     // level of plug is lower
     // else means slot redefined and then plugs are no more visible
 
-    protected _Slot(C stclContext, _Stencil<C, S> container, String name, char arity, boolean tranzient, boolean override) {
+    protected _Slot(C stclContext, _Stencil<C, S> container, String name, char arity, boolean tranzient) {
 
         // verify unique
         _Slot<C, S> slot = container.getSlots().get(name);
-        if (slot != null && !override)
+        if (slot != null)
             logWarn(stclContext, "slot %s is already defined in %s (will be redefined...)", name, container);
 
         // set characteristics

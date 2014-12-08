@@ -40,8 +40,8 @@ import com.gdo.stencils.util.StencilUtils;
  */
 public abstract class _MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _Slot<C, S> implements Comparator<S> {
 
-    public _MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-        super(stclContext, in, name, arity, tranzient, override);
+    public _MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
+        super(stclContext, in, name, arity, tranzient);
         if (!SlotUtils.isMultiple(arity)) {
             logWarn(stclContext, "Multi slot %s created with strange arity %s in %s", name, Character.toString(arity), in);
         }

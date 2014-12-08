@@ -90,14 +90,14 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            needed then remove previous ones)
      */
     public SQLSlot(StclContext stclContext, Stcl in, String name, int size) {
-        super(stclContext, in, name, PSlot.ANY, true, false);
+        super(stclContext, in, name, PSlot.ANY, true);
         _cursor = new SQLCursor(name, size);
     }
 
     // creator for sub slot
     // the cursor should be defined later
     protected SQLSlot(StclContext stclContext, Stcl in, String name) {
-        super(stclContext, in, name, PSlot.ANY, true, false);
+        super(stclContext, in, name, PSlot.ANY, true);
     }
 
     public void readOnly() {
