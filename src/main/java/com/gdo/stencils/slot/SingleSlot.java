@@ -317,7 +317,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
         }
 
         // creates it only arity is set to one
-        if (getArity(stclContext, self) != PSlot.ONE) {
+        if (getArity(stclContext) != PSlot.ONE) {
             String msg = String.format("empty single slot %s", self);
             return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }

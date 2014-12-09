@@ -42,7 +42,6 @@ import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.factory.InterpretedStencilFactory;
 import com.gdo.stencils.factory.StencilFactory;
-import com.gdo.stencils.interpreted.SlotDescriptor;
 import com.gdo.stencils.interpreted.TemplateDescriptor;
 import com.gdo.stencils.iterator.ListIterator;
 import com.gdo.stencils.iterator.StencilIterator;
@@ -1398,15 +1397,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
                 pslot = new PSlot<C, S>(slot, self);
             } else {
                 pslot.setSlot(slot);
-            }
-
-            // if the slot is redefined locally, then saves the local
-            // description
-            if (slot.isRedefined(stclContext)) {
-
-                // the local slot declaration is done in plug part
-                SlotDescriptor<C, S> slotDesc = slot.getDescriptor();
-                slotDesc.save(stclContext, plugPart, null);
             }
 
             // saves all the plugs in the the slot

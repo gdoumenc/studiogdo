@@ -17,7 +17,7 @@ public class PropSlotDescriptor<C extends _StencilContext, S extends _PStencil<C
     public _Slot<C, S> add(C stclContext, String name, S self) {
         _Slot<C, S> slot = new PropSlot<C, S, K>(stclContext, self.getReleasedStencil(stclContext), name, _initial);
         if (_tranzient)
-            slot.setTransient();
+            slot.setTransient(stclContext);
         return slot;
     }
 }

@@ -215,7 +215,7 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
         if (_slot == null) {
             return PSlot.UNDEFINED;
         }
-        return _slot.getArity(stclContext, this);
+        return _slot.getArity(stclContext);
     }
 
     public boolean isCursorBased(C stclContext) {

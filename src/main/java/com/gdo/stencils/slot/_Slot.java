@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.ConverterHelper;
-import com.gdo.helper.StringHelper;
 import com.gdo.project.adaptor.LinkStcl;
 import com.gdo.stencils.Result;
 import com.gdo.stencils._Stencil;
@@ -34,15 +33,6 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Abstract common class for all slot classes.
  * </p>
-
- * <p>
- * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
- * Use is subject to license terms.
- * </p>
-
- * 
- * @author Guillaume Doumenc
  */
 public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
@@ -67,10 +57,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     protected _Slot(C stclContext, _Stencil<C, S> container, String name, char arity, boolean tranzient) {
 
-        // verify unique
+        // verifies unique
         _Slot<C, S> slot = container.getSlots().get(name);
-        if (slot != null)
+        if (slot != null) {
             logWarn(stclContext, "slot %s is already defined in %s (will be redefined...)", name, container);
+        }
 
         // set characteristics
         _container = container;
@@ -78,25 +69,21 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         _arity = arity;
         _tranzient = tranzient;
 
-        // store structure
+        // stores structure
         _container.addSlot(stclContext, this);
-    }
-
-    public void setTransient() {
-        _tranzient = true;
     }
 
     /**
      * Clears all internal structures to free memory.
      */
     public void clear() {
+        _links = null;
         _desc = null;
         _container = null;
-        _name = null;
     }
 
     /**
-     * Returns the name of the slot.
+     * Returns the name of this slot.
      * 
      * @param stclContext
      *            the stencil context.
@@ -121,37 +108,45 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
 
     /**
+     * Returns the arity of this slot.
+     * 
      * @return the slot's arity.
      */
-    public char getArity(C stclContext, PSlot<C, S> self) {
+    public char getArity(C stclContext) {
         return _arity;
     }
 
     /**
-     * @return <tt>true</tt> if the stencils plugged in the slot must not be
+     * Checks if this slot is transient.
+     * 
+     * @return <tt>true</tt> if the stencils plugged in this slot must not be
      *         saved in stencil configuration.
      */
     public boolean isTransient(C stclContext) {
         return _tranzient;
     }
 
-    // slot may have parameters to defined them (search in another slot first
-    // for example)
-    @SuppressWarnings("unchecked")
-    public <T> T getParameter(C stclContext, int index) {
-        if (getDescriptor() == null) {
-            throw new NullPointerException("parameters are defined for slot only if a descriptor is associated");
-        }
-        return (T) getDescriptor().getParameter(stclContext, index);
+    /**
+     * Set this slot transient.
+     */
+    public void setTransient(C stclContext) {
+        _tranzient = true;
     }
 
     /**
-     * @return <tt>true</tt> if the slot is redefined locally . Not same as the
-     *         one defined on template descriptors.
+     * Checks if this slot is read only.
+     * 
+     * @return <tt>true</tt> if the slot is read only.
      */
-    public boolean isRedefined(C stclContext) {
-        SlotDescriptor<C, S> slotDesc = getDescriptor();
-        return (slotDesc != null && slotDesc.isRedefined());
+    public boolean isReadOnly(C stclContext) {
+        return _read_only;
+    }
+
+    /**
+     * Set this slot read only.
+     */
+    public void setReadOnly(C stclContext) {
+        _read_only = true;
     }
 
     /**
@@ -159,16 +154,45 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * 
      * @param stclContext
      *            the stencil context.
-     * @return <tt>true</tt> if the slot is a cursor slot.
+     * @return <tt>true</tt> if the slot is cursor based.
      */
     public boolean isCursorBased(C stclContext) {
         return false;
     }
 
+    /**
+     * 
+     * A property can be accessed directly from this slot.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param key
+     *            the stencil key.
+     * @param name
+     *            the property's name.
+     * @param self
+     *            this slot as a plugged slot.
+     * @return the property value. <tt>null</tt> if the property is not defined
+     *         by this slot.
+     */
     public String getProperty(C stclContext, IKey key, String name, PSlot<C, S> self) {
         return null;
     }
 
+    /**
+     * Set the property accessed directly from this slot.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param value
+     *            the property value.
+     * @param key
+     *            the stencil key.
+     * @param name
+     *            the property's name
+     * @param self
+     *            this slot as a plugged slot.
+     */
     public void setProperty(C stclContext, String value, IKey key, String name, PSlot<C, S> self) {
     }
 
@@ -223,13 +247,8 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      *         specific inner declaration. By default, no signature means any
      *         kind of stencil is accepted.
      */
-    protected String[] getSlotsProto(C stclContext) {
-        SlotDescriptor<C, S> slotDesc = getDescriptor();
-        if (slotDesc != null && slotDesc.getProto() != null) {
-            String list = slotDesc.getProto().getSlots();
-            return StringHelper.splitShortString(list, PathUtils.MULTI);
-        }
-        return StringHelper.EMPTY_STRINGS;
+    protected Iterable<String> getSlotsProto(C stclContext) {
+        return Collections.<String> emptyList();
     }
 
     /**
@@ -237,28 +256,15 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      *         specific inner declaration. By default, no signature means any
      *         kind of stencil is accepted.
      */
-    protected String[] getPropsProto(C stclContext) {
-        SlotDescriptor<C, S> slotDesc = getDescriptor();
-        if (slotDesc != null && slotDesc.getProto() != null) {
-            String list = slotDesc.getProto().getProps();
-            return StringHelper.splitShortString(list, PathUtils.MULTI);
-        }
-        return StringHelper.EMPTY_STRINGS;
+    protected Iterable<String> getCommandsProto(C stclContext) {
+        return Collections.<String> emptyList();
     }
-
-    /**
-     * @return the prop names prototype signature. Should be redefined in each
-     *         specific inner declaration. By default, no signature means any
-     *         kind of stencil is accepted.
-     */
-    protected String[] getCommandsProto(C stclContext) {
-        SlotDescriptor<C, S> slotDesc = getDescriptor();
-        if (slotDesc != null && slotDesc.getProto() != null) {
-            String list = slotDesc.getProto().getCommands();
-            return StringHelper.splitShortString(list, PathUtils.MULTI);
-        }
-        return StringHelper.EMPTY_STRINGS;
-    }
+    
+    
+    //
+    // PLUG PART
+    //
+    
 
     /**
      * Method called before the plug order will be executed for this slot and if
@@ -277,7 +283,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         // the stencil must be defined in the plug order
         if (StencilUtils.isNull(stencil)) {
             String msg = logWarn(stclContext, "no stencil defined when plugging in %s", self);
-            return Result.error(getClass().getName(), 1, msg);
+            return Result.error(msg);
         }
 
         // production optimization
@@ -285,6 +291,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
             return Result.success();
         }
 
+        // checks prototypes
         Result result = null; // warnings can be raised
         if (!stencil.isLink(stclContext)) {
 
@@ -294,14 +301,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
                 if (!cl.isAssignableFrom(clazz)) {
                     String msg = logWarn(stclContext, "Should not plug %s in %s : wrong java prototype (found %s, expected %s)", stencil, self, clazz, cl);
                     result = Result.warn(getClass().getName(), 2, msg, result);
-                }
-            }
-
-            // test props prototype
-            for (String prop : getPropsProto(stclContext)) {
-                if (!stencil.getStencil(stclContext, prop).isProp(stclContext)) {
-                    String msg = logWarn(stclContext, "Should not plug %s in %s : this stencil plugged doesn't have the prop %s", stencil, self, prop);
-                    result = Result.warn(getClass().getName(), 4, msg, result);
                 }
             }
 
@@ -317,7 +316,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         }
 
         // all was ok, the plug can be performed
-        return Result.success(getClass().getName(), 0, null, result);
+        return Result.success();
     }
 
     /**
@@ -354,36 +353,36 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * order if stencil is not empty.
      */
     public Result beforeUnplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
-        return Result.success(getClass().getName());
+        return Result.success();
     }
 
     public Result beforeUnplugAll(C stclContext, PSlot<C, S> self) {
-        return Result.success(getClass().getName());
+        return Result.success();
     }
 
     /**
      * This method is called after an unplug order is executed.
      * 
      * @param stclContext
-     *            the stenicl context.
+     *            the stencil context.
      * @param stencil
      *            the stencil unplugged.
      * @param self
      *            this slot as a plugged slot.
      */
     public Result afterUnplug(C stclContext, S stencil, PSlot<C, S> self) {
-        return Result.success(getClass().getName());
+        return Result.success();
     }
 
     /**
-     * Internal use only.
+     * Internal use only (cannot be private as used by plug package).
      */
     public final S plug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
 
         // verifies the plug is enabled
         try {
             Result before = beforePlug(stclContext, stencil, key, self);
-            if (!before.isSuccess()) {
+            if (before.isNotSuccess()) {
                 return StencilUtils.<C, S> nullPStencil(stclContext, before);
             }
         } catch (Exception e) {
@@ -391,17 +390,21 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
             return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }
 
+        // performs the real plug
         try {
-
-            // performs the real plug
             S plugged = doPlug(stclContext, stencil, key, self);
             if (StencilUtils.isNotNull(plugged)) {
                 logTrace(stclContext, "Plug %s in %s", plugged, self);
                 plugged.addThisReferenceToStencil(stclContext);
             }
 
-            afterPlug(stclContext, plugged, self);
-
+            // performs extra jobs after plugging
+            try {
+                afterPlug(stclContext, plugged, self);
+            } catch (Exception e) {
+                String msg = logError(stclContext, "Exception in afterPlug method on %s in %s: %s", stencil, self, e);
+                return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
+            }
             return plugged;
         } catch (Exception e) {
             String msg = logError(stclContext, "Exception in doPlug method on %s in %s: %s", stencil, self, e);
@@ -419,24 +422,21 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      */
     public final void unplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
 
-        // verify the unplug is enabled
-        Result before = null;
+        // verifies the unplug is enabled
         try {
-            before = beforeUnplug(stclContext, stencil, key, self);
-            if (before.isNotSuccess())
+            Result before = beforeUnplug(stclContext, stencil, key, self);
+            if (before.isNotSuccess()) {
                 return;
+            }
         } catch (Exception e) {
             logError(stclContext, "Exception in before unplug method on %s in %s: %s", stencil, self, e);
             return;
         }
 
+        // performs the real unplug
         try {
-
-            // perform the real unplug
             doUnplug(stclContext, stencil, key, self);
             stencil.removeThisReferenceFromStencil(stclContext);
-
-            // trace
             logTrace(stclContext, "Unplug %s from %s", stencil, self);
 
             // performs extra jobs after unplugging
@@ -444,9 +444,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
                 afterUnplug(stclContext, stencil, self);
             } catch (Exception e) {
                 logError(stclContext, "Exception in after unplug method on %s in %s: %s", stencil, self, e);
+                return;
             }
         } catch (Exception e) {
             logError(stclContext, "Exception in unplug method on %s in %s: %s", stencil, self, e);
+            return;
         }
     }
 
@@ -479,6 +481,23 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
 
     protected abstract void doUnplugAll(C stclContext, PSlot<C, S> self);
+    
+    
+    //
+    // SAVE PART
+    //
+
+    
+    /**
+     * Returns the stencils to be saved as plugged in the description.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param self
+     *            the slot as a plugged slot.
+     * @return an iteraotr to the stencils to be saved.
+     */
+    protected abstract StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self);
 
     /**
      * Declared public to be accessed by stencil.
@@ -490,9 +509,8 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
             return;
         }
 
-        // save plugs
-        StencilIterator<C, S> stencils = getStencilsToSave(stclContext, self);
-        for (S plugged : stencils) {
+        // saves plugs
+        for (S plugged : getStencilsToSave(stclContext, self)) {
 
             // don't save transient stencils
             if (StencilUtils.isNull(plugged) || plugged.isTransient(stclContext)) {
@@ -522,17 +540,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         }
         plugPart.endElement("plug");
     }
-
-    /**
-     * Returns the stencils to be saved as plugged in the description.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param self
-     *            the slot as a plugged slot.
-     * @return an iteraotr to the stencils to be saved.
-     */
-    protected abstract StencilIterator<C, S> getStencilsToSave(C stclContext, PSlot<C, S> self);
 
     public int getCompletionLevel() {
         return _completionLevel;
@@ -610,22 +617,29 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         link.setTransient(stclContext, true);
     }
 
+    
+    //
+    // MISC
+    //
+    
+    
     @Override
     public String toString() {
         try {
-            PSlot<C, S> self = new PSlot<C, S>(this, null);
-            StringBuffer str = new StringBuffer(getName(null));
-            str.append('{').append(getArity(null, self)).append('}');
+            StringBuffer str = new StringBuffer(_name);
+            str.append('{').append(_arity).append('}');
             return str.toString();
         } catch (Exception e) {
-            return getName(null);
+            return _name;
         }
     }
 
+    
     //
     // LOG PART
     //
 
+    
     protected static final StencilLog LOG = new StencilLog(_Slot.class);
 
     public static StencilLog getLog() {
