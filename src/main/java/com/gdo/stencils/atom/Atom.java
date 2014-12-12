@@ -1,5 +1,7 @@
 package com.gdo.stencils.atom;
 
+import com.gdo.stencils._StencilContext;
+
 /**
  * <p>
  * The <tt>Atom</tt> class is the simpliest abstract class that implements the
@@ -9,7 +11,7 @@ package com.gdo.stencils.atom;
  * Main classes defined in this project are subclasses of this atom class.
  * </p>
  */
-public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
+public abstract class Atom<S> implements IAtom<S>, Comparable<S> {
 
     // unique identifier for a null atom
     public static final String NULL_ATOM_ID = "null";
@@ -62,7 +64,7 @@ public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
      * @see com.gdo.stencils.atom.IAtom#getId(java.lang.Object)
      */
     @Override
-    public String getId(C stclContext) {
+    public String getId(_StencilContext stclContext) {
         if (_id == null) {
             StringBuffer str = new StringBuffer();
             str.append('_').append(uniqueInt());
@@ -77,7 +79,7 @@ public abstract class Atom<C, S> implements IAtom<C, S>, Comparable<S> {
      * @see com.gdo.stencils.atom.IAtom#getUId(java.lang.Object)
      */
     @Override
-    public String getUId(C stclContext) {
+    public String getUId(_StencilContext stclContext) {
         if (_uid == null) {
             _uid = getId(stclContext) + time();
         }

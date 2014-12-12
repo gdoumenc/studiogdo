@@ -71,7 +71,7 @@ import com.gdo.util.XmlWriter;
  * interface.
  * </p>
  */
-public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> {
+public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<S> {
 
     // defines to true if performs lot of checking (decrease performance..)
     public static final boolean STRICT_MODE = false;

@@ -27,7 +27,7 @@ import com.gdo.stencils.util.StencilUtils;
  * Some attributes my be also stored for each stencil to allow getString returns
  * without creating the stencil.
  */
-public abstract class _SlotCursor extends Atom<StclContext, PStcl> {
+public abstract class _SlotCursor extends Atom<PStcl> {
 
     public static int STRATEGY = 0;
     private int _transaction_id;

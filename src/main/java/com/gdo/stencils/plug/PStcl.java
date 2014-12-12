@@ -282,12 +282,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         _stencil = null;
     }
 
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see com.gdo.stencils.plug.PStencil#getId(com.gdo.stencils.StencilContext)
+     * IAtom interface
      */
-    @Override
+
+
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
             return _cursor.getId(stclContext) + _cursor_key;
@@ -295,12 +295,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return super.getId(stclContext);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.gdo.stencils.plug.PStencil#getUID(com.gdo.stencils.StencilContext)
-     */
-    @Override
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
             return _cursor.getUId(stclContext) + _cursor_key;

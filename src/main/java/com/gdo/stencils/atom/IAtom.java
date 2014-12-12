@@ -1,5 +1,7 @@
 package com.gdo.stencils.atom;
 
+import com.gdo.stencils._StencilContext;
+
 /**
  * <p>
  * Interface for an atom : an object with an unique identifier and comparable.
@@ -9,7 +11,7 @@ package com.gdo.stencils.atom;
  * description file.
  * </p>
  */
-public interface IAtom<C, S> {
+public interface IAtom<S> {
 
     /**
      * @return this object casted to the generic signature.
@@ -19,12 +21,12 @@ public interface IAtom<C, S> {
     /**
      * @return the session identifier for this atom.
      */
-    String getId(C stclContext);
+    String getId(_StencilContext stclContext);
 
     /**
      * @return the unique internal identificator for this atom for store
      *         purpose.
      */
-    String getUId(C stclContext);
+    String getUId(_StencilContext stclContext);
 
 }
