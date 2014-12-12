@@ -259,12 +259,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     protected Iterable<String> getCommandsProto(C stclContext) {
         return Collections.<String> emptyList();
     }
-    
-    
+
     //
     // PLUG PART
     //
-    
 
     /**
      * Method called before the plug order will be executed for this slot and if
@@ -481,13 +479,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
 
     protected abstract void doUnplugAll(C stclContext, PSlot<C, S> self);
-    
-    
+
     //
     // SAVE PART
     //
 
-    
     /**
      * Returns the stencils to be saved as plugged in the description.
      * 
@@ -617,12 +613,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         link.setTransient(stclContext, true);
     }
 
-    
     //
     // MISC
     //
-    
-    
+
     @Override
     public String toString() {
         try {
@@ -634,12 +628,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         }
     }
 
-    
     //
     // LOG PART
     //
 
-    
     protected static final StencilLog LOG = new StencilLog(_Slot.class);
 
     public static StencilLog getLog() {

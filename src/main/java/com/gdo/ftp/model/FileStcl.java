@@ -21,13 +21,13 @@ import com.gdo.helper.StringHelper;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.facet.FacetType;
 import com.gdo.stencils.facet.IFacetInputStream;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
 
@@ -160,7 +160,7 @@ public class FileStcl extends _FileStcl {
 
         // if no name creates one
         if (StringUtils.isBlank(_path)) {
-            _path = Atom.uniqueID() + fileName;
+            _path = GlobalCounter.uniqueID() + fileName;
         }
 
         // gets the FTP context

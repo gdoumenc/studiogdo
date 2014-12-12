@@ -13,13 +13,12 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Link descriptor class.
  * <p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public final class LinkDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
 

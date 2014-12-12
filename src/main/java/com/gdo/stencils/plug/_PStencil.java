@@ -21,7 +21,6 @@ import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cond.PathCondition;
@@ -36,6 +35,7 @@ import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.key.LinkedKey;
 import com.gdo.stencils.log.StencilLog;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -57,15 +57,14 @@ import com.gdo.util.XmlWriter;
  * When there was an error or a warning retrieving the plugged stencil, a status
  * is associated to the plugged stencil.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
-public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom implements Cloneable {
+public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends GlobalCounter implements Cloneable {
 
     // maximum level search for root
     private static final int MAX_ROOT_LEVEL = 20;
@@ -125,7 +124,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         _result = (result != null) ? result : Result.error("empty stencil without any reason");
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public S self() {
         return (S) this;
     }
@@ -1466,16 +1465,18 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return slot;
     }
 
-    /*
-     * IAtom interface
-     */
-
-    @Override
-    public String getId(_StencilContext stclContext) {
+    public String getId(C stclContext) {
         if (isNull()) {
             throw new UnsupportedOperationException("cannot get the id of an empty stencil: " + getNullReason());
         }
         return getReleasedStencil(stclContext).getId(stclContext);
+    }
+
+    public String getUId(C stclContext) {
+        if (isNull()) {
+            throw new UnsupportedOperationException("cannot get the id of an empty stencil: " + getNullReason());
+        }
+        return getReleasedStencil(stclContext).getUId(stclContext);
     }
 
     //

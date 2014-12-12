@@ -14,10 +14,10 @@ import com.gdo.ftp.model.FtpContextStcl;
 import com.gdo.project.model.AtomicActionStcl;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 
 /**
@@ -64,7 +64,7 @@ public class CopyFile extends AtomicActionStcl {
                     String msg = String.format("cannot copy as the file %s already exist", newName);
                     return error(cmdContext, self, msg);
                 } else {
-                    File tmp = File.createTempFile(Atom.uniqueID(), "");
+                    File tmp = File.createTempFile(GlobalCounter.uniqueID(), "");
                     FileOutputStream out = new FileOutputStream(tmp);
                     result = context.get(stclContext, out, path, true, self);
 

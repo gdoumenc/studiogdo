@@ -18,7 +18,6 @@ import com.gdo.helper.ClassHelper;
 import com.gdo.stencils.Keywords;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStencil;
 import com.gdo.stencils.factory.IStencilFactory.Mode;
@@ -26,6 +25,7 @@ import com.gdo.stencils.factory.InterpretedStencilFactory;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.slot._Slot;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.util.XmlWriter;
 
@@ -34,13 +34,12 @@ import com.gdo.util.XmlWriter;
  * A template descriptor contains all informations to create an interpreted
  * stencil.
  * <p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
     private String _name; // complete _templateDesc _name defined by the java
@@ -172,7 +171,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
             Class<?> clazz = TemplateDescriptor.class.getClassLoader().loadClass(_java);
             do {
                 Class<?> superClass = clazz.getSuperclass();
-                if (superClass == null || superClass.equals(Atom.class)) {
+                if (superClass == null || superClass.equals(GlobalCounter.class)) {
                     return null;
                 }
                 _extends = superClass.getName();
@@ -554,7 +553,7 @@ public class TemplateDescriptor<C extends _StencilContext, S extends _PStencil<C
         }
         do {
             Class<?> superClass = clazz.getSuperclass();
-            if (superClass == null || superClass.equals(Atom.class)) {
+            if (superClass == null || superClass.equals(GlobalCounter.class)) {
                 break;
             }
             clazz = superClass;

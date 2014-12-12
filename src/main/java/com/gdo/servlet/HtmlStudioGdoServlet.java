@@ -160,7 +160,7 @@ public class HtmlStudioGdoServlet extends HttpServlet {
         }
         return null;
     }
-    
+
     protected StclContext getContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return new StclContext(request, response);
     }

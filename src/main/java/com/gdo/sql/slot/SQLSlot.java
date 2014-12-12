@@ -43,13 +43,13 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Temporary stencils may be stored in database using negative Id.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2005 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
-
+ * 
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -1078,7 +1078,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             String msg = logWarn(stclContext, "Cannot initialize slot %s", self);
             return Stcl.nullPStencil(stclContext, Result.error(msg));
         }
-        
+
         if (_read_only) {
             logWarn(stclContext, "Plug in read only slot : %s", self);
             _read_only = false;

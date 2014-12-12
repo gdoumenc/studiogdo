@@ -145,7 +145,7 @@ public abstract class _SlotCursor {
         synchronized (this) {
 
             // blocks if no more place
-            if (_size > 0 &&_stencils.size() >= _size) {
+            if (_size > 0 && _stencils.size() >= _size) {
                 try {
                     logWarn(stclContext, "block for %s in %s", key, _name);
                     _available.acquire();

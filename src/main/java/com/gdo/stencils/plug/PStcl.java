@@ -44,13 +44,12 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Basic implementation of the studiogdo plugged stencil.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class PStcl extends _PStencil<StclContext, PStcl> {
 
@@ -282,12 +281,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         _stencil = null;
     }
 
-
-    /*
-     * IAtom interface
-     */
-
-
+    @Override
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
             return super.getId(stclContext) + "_" + _cursor_key;
@@ -295,6 +289,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return super.getId(stclContext);
     }
 
+    @Override
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
             return super.getUId(stclContext) + "_" + _cursor_key;

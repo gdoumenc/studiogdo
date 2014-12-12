@@ -114,7 +114,7 @@ public abstract class FacetsRenderer<C extends _StencilContext, S extends _PSten
                 StencilFactory<C, S> f = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
                 Map<String, Object> params = getAttributes();
                 Class<? extends _Stencil<C, S>> factoryClass = ClassHelper.loadClass(factory);
-                return (S) f.createStencil(stclContext, factoryClass, params).self();
+                return f.createStencil(stclContext, factoryClass, params).self(stclContext, null);
             }
 
             // command defined by a name

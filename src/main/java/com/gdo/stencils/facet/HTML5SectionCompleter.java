@@ -1585,7 +1585,8 @@ public class HTML5SectionCompleter {
      * 
      * @param element
      *            the DOM element
-     * @return <tt>true</tt> if the DOM is a block element, <tt>false</tt> otherwise.
+     * @return <tt>true</tt> if the DOM is a block element, <tt>false</tt>
+     *         otherwise.
      */
     protected boolean isPostElement(Element element) {
         String name = element.tagName();

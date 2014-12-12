@@ -312,7 +312,7 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
             }
             if (_containedStcl != null)
                 _containedStcl.setContainingSlot(self);
-            
+
             return _containedStcl;
         }
 

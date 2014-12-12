@@ -19,13 +19,12 @@ import com.gdo.stencils.util.PathUtils;
  * <p>
  * Basic implementation of the studiogdo property stencil.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class CalculatedPropStcl extends CalculatedPropStencil<StclContext, PStcl> {
 

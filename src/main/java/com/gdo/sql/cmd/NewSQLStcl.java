@@ -15,6 +15,7 @@ import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
 
@@ -57,7 +58,7 @@ public class NewSQLStcl extends CreateInOneStep {
         }
 
         // set negative id
-        int id = -uniqueInt();
+        int id = -GlobalCounter.uniqueInt();
         _created.setInt(stclContext, SQLStcl.Slot.ID, id);
         _oldId = Integer.toString(id);
 

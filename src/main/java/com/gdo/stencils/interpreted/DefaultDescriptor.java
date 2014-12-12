@@ -17,13 +17,12 @@ import com.gdo.stencils.plug._PStencil;
  * When a stencil must be created for a single slot which has a default
  * descriptor, this default one is used.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class DefaultDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends TemplateDescriptor<C, S> {
 

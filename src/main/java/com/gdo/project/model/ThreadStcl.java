@@ -5,24 +5,24 @@ package com.gdo.project.model;
 
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 
 /**
  * <p>
  * Abstract encapulation class for a java thread.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
  * is subject to license terms.
  * </p>
-
+ * 
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -60,7 +60,7 @@ public class ThreadStcl extends Stcl implements Runnable {
 
         // creates the thread stencil in the session threads slots
         PStcl session = stclContext.getServletStcl().getStencil(stclContext, ServletStcl.Slot.SESSION);
-        IKey key = new Key(Atom.uniqueID());
+        IKey key = new Key(GlobalCounter.uniqueID());
         PStcl threadStcl = session.newPStencil(stclContext, SessionStcl.Slot.THREADS, key, ThreadStcl.class, cmdContext, runnable);
         if (threadStcl.isNull()) {
             reference.logWarn(stclContext, "Cannot create the thread for command %s", reference);
@@ -82,7 +82,6 @@ public class ThreadStcl extends Stcl implements Runnable {
         return _context.getStencilContext();
     }
 
-    @Override
     public PStcl self() {
         return _self;
     }

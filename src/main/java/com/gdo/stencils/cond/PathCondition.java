@@ -14,13 +14,12 @@ import com.gdo.stencils.util.PathUtils;
 
 /**
  * Condition defined by the path as having a specific key or property.
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class PathCondition<C extends _StencilContext, S extends _PStencil<C, S>> extends StencilCondition<C, S> {
 

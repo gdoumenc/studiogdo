@@ -82,8 +82,9 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
             JsonArray result = new JsonArray();
             for (PStcl s : stcl.getStencils(stclContext, path)) {
                 JsonObject dict = new JsonObject();
-                //dict.add("data-path", new JsonPrimitive(s.pwd(stclContext)));
-                //dict.add(".", new JsonPrimitive(s.getString(stclContext, ".")));
+                // dict.add("data-path", new JsonPrimitive(s.pwd(stclContext)));
+                // dict.add(".", new JsonPrimitive(s.getString(stclContext,
+                // ".")));
                 for (JsonElement elt : data_value.getAsJsonArray()) {
                     try {
                         String value = s.getString(stclContext, elt.getAsString());

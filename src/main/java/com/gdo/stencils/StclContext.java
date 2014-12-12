@@ -18,11 +18,11 @@ import com.gdo.project.model.SessionStcl;
 import com.gdo.project.slot._SlotCursor;
 import com.gdo.servlet.RpcArgs;
 import com.gdo.servlet.StudioGdoServlet;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.factory.IStencilFactory;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.StencilUtils;
 
 /**
@@ -102,7 +102,7 @@ public class StclContext extends _StencilContext {
         _response = response;
 
         // set unique request id
-        _id = Atom.uniqueInt();
+        _id = GlobalCounter.uniqueInt();
 
         // set request arguments
         _args = new RpcArgs(this);
@@ -162,7 +162,8 @@ public class StclContext extends _StencilContext {
     }
 
     /**
-     * Returns the request arguments with default value if not defined in request.
+     * Returns the request arguments with default value if not defined in
+     * request.
      * 
      * @return the request arguments.
      */

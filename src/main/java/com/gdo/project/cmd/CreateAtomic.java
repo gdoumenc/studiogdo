@@ -9,7 +9,6 @@ import com.gdo.project.model.AtomicActionStcl;
 import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cond.PathCondition;
@@ -20,6 +19,7 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.key.StringKeyGenerator;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
 
@@ -260,7 +260,7 @@ public class CreateAtomic extends AtomicActionStcl {
             }
             return self.plug(stclContext, created, slot, initialKey);
         } else if (keyType.equals(Keywords.UNIQUE)) {
-            Integer unique = Atom.uniqueInt();
+            Integer unique = GlobalCounter.uniqueInt();
             return self.plug(stclContext, created, slot, unique);
         } else if (keyType.equals(Keywords.STRING)) {
             if (StringUtils.isBlank(initialKey)) {

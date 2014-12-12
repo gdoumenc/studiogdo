@@ -22,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.StringHelper;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cmd.CommandStencil;
@@ -56,6 +55,7 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
 import com.gdo.stencils.slot._Slot;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -71,7 +71,7 @@ import com.gdo.util.XmlWriter;
  * interface.
  * </p>
  */
-public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom {
+public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     // defines to true if performs lot of checking (decrease performance..)
     public static final boolean STRICT_MODE = false;
@@ -110,6 +110,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     private boolean cleared = false;
 
     // associated default plugged stencil for interface manipulation
+    private String _id = null;
+    private String _uid = null;
     protected _PStencil<C, S> _self;
 
     // template descriptor used to create the stencil (may be null)
@@ -563,6 +565,21 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      */
     public void afterPlugged(C stclContext, PSlot<C, S> slot, IKey key, S self) {
         // nothing by default
+    }
+
+    public String getId(C stclContext) {
+        if (_id == null) {
+            _id = GlobalCounter.ID();
+        }
+        return _id;
+    }
+
+    public String getUId(C stclContext) {
+        if (_uid == null) {
+            _uid = GlobalCounter.uniqueID();
+        }
+        return _uid;
+
     }
 
     // --------------------------------------------------------------------------
@@ -1303,7 +1320,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @param self
      *            the stencil as plugged stencil.
      * @return the reference id used to retrieve the instance declaration in the
-     *            file.
+     *         file.
      */
     public String saveAsInstance(C stclContext, String dir, XmlWriter out, S self) {
         try {
@@ -1346,6 +1363,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     /**
      * Should be redefined if the stencil needs parameters at creation.
+     * 
      * @param stclContext
      * @param writer
      * @param self
@@ -1840,7 +1858,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         writer.startElement("prop");
         writer.writeAttribute("name", name);
         writer.writeAttribute("type", getType());
-        String value = self().getNotExpandedValue(stclContext); // never expand
+        String value = self(stclContext, null).getNotExpandedValue(stclContext); // never
+                                                                                 // expand
         // when saving
         if (value != null) {
             writer.startElement("data");

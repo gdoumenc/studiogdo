@@ -10,13 +10,12 @@ import com.gdo.stencils.plug._PStencil;
  * <p>
  * Event dispatched when the value of a property is changed.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class PropertyChangeEvent<C extends _StencilContext, S extends _PStencil<C, S>> {
 
