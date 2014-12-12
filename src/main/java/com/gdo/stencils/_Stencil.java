@@ -71,7 +71,7 @@ import com.gdo.util.XmlWriter;
  * interface.
  * </p>
  */
-public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<S> {
+public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom {
 
     // defines to true if performs lot of checking (decrease performance..)
     public static final boolean STRICT_MODE = false;
@@ -1402,11 +1402,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             // saves all the plugs in the the slot
             slot.savePlugs(stclContext, descPart, plugPart, pslot);
         }
-    }
-
-    @Override
-    public int compareTo(S obj) {
-        return 0;
     }
 
     /**

@@ -290,14 +290,14 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
-            return _cursor.getId(stclContext) + _cursor_key;
+            return super.getId(stclContext) + "_" + _cursor_key;
         }
         return super.getId(stclContext);
     }
 
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
-            return _cursor.getUId(stclContext) + _cursor_key;
+            return super.getUId(stclContext) + "_" + _cursor_key;
         }
         return super.getUId(stclContext);
     }

@@ -12,7 +12,6 @@ import java.util.concurrent.Semaphore;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
@@ -27,7 +26,7 @@ import com.gdo.stencils.util.StencilUtils;
  * Some attributes my be also stored for each stencil to allow getString returns
  * without creating the stencil.
  */
-public abstract class _SlotCursor extends Atom<PStcl> {
+public abstract class _SlotCursor {
 
     public static int STRATEGY = 0;
     private int _transaction_id;
@@ -437,11 +436,6 @@ public abstract class _SlotCursor extends Atom<PStcl> {
     @Override
     public String toString() {
         return _name;
-    }
-
-    @Override
-    public int compareTo(PStcl o) {
-        return 0;
     }
 
     //

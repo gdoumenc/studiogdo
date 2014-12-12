@@ -1,6 +1,7 @@
 package com.gdo.stencils.atom;
 
 import com.gdo.stencils._StencilContext;
+import com.gdo.stencils.plug._PStencil;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import com.gdo.stencils._StencilContext;
  * Main classes defined in this project are subclasses of this atom class.
  * </p>
  */
-public abstract class Atom<S> implements IAtom<S>, Comparable<S> {
+public abstract class Atom implements IAtom<_PStencil> {
 
     // unique identifier for a null atom
     public static final String NULL_ATOM_ID = "null";
@@ -29,9 +30,8 @@ public abstract class Atom<S> implements IAtom<S>, Comparable<S> {
      * @return this object casted to the generic signature.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public S self() {
-        return (S) this;
+    public _PStencil self() {
+        return (_PStencil) this;
     }
 
     /**

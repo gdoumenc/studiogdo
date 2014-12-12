@@ -65,7 +65,7 @@ import com.gdo.util.XmlWriter;
  * </p>
 
  */
-public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<S> implements Cloneable {
+public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom implements Cloneable {
 
     // maximum level search for root
     private static final int MAX_ROOT_LEVEL = 20;
@@ -123,6 +123,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     public _PStencil(Result result) {
         initialize(null, (_Stencil<C, S>) null, null, Key.NO_KEY);
         _result = (result != null) ? result : Result.error("empty stencil without any reason");
+    }
+
+    @Override
+    public S self() {
+        return (S) this;
     }
 
     /**
@@ -1559,16 +1564,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         str.append('<').append(getClass()).append('>');
         str.append('[').append(getContainingSlot()).append(']');
         return str.toString();
-    }
-
-    @Override
-    public int compareTo(S obj) {
-        if (!(obj instanceof _PStencil))
-            return 0;
-        _PStencil<C, S> stcl = (_PStencil<C, S>) obj;
-        if (StencilUtils.isNull(stcl))
-            return 0;
-        return getKey().compareTo(stcl.getKey());
     }
 
     /*
