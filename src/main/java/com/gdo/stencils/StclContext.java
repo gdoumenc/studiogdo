@@ -81,6 +81,11 @@ public class StclContext extends _StencilContext {
     public StclContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
         create(request, response);
     }
+    
+    @SuppressWarnings("unchecked")
+    public <K extends StclContext> K getProjectContext() {
+        return (K) this;
+    }
 
     /**
      * Loads the project stencil if not already loaded, and creates the session
