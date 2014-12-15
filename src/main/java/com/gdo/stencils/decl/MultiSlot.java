@@ -1,10 +1,8 @@
 package com.gdo.stencils.decl;
 
-public class MultiSlot {
+public class MultiSlot extends _Slot {
 
-    private String _name;
-    
     public MultiSlot(String name) {
-        _name = name;
+        super(name);
     }
 }
