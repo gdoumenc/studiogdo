@@ -635,7 +635,13 @@ public class HTML5SectionCompleter {
         }
 
         // creates optgroup for each stencil
-        for (PStcl s : stcl.getStencils(stclContext, path)) {
+        StencilIterator<StclContext, PStcl> iter;
+        if (path.equals(PathUtils.THIS)) {
+            iter = new SingleIterator<StclContext, PStcl>(stcl);
+        } else {
+            iter = stcl.getStencils(stclContext, path);
+        }
+        for (PStcl s : iter) {
             Element parent = elt.parent();
             Element groupOrList = parent.appendChild(elt.clone());
             String apath = PathUtils.compose(getPwd(stclContext, s));
@@ -686,7 +692,13 @@ public class HTML5SectionCompleter {
             Element last = option; // for insertion order
 
             // iterates over data-path of the option
-            for (PStcl s : stcl.getStencils(stclContext, path)) {
+            StencilIterator<StclContext, PStcl> iter;
+            if (path.equals(PathUtils.THIS)) {
+                iter = new SingleIterator<StclContext, PStcl>(stcl);
+            } else {
+                iter = stcl.getStencils(stclContext, path);
+            }
+            for (PStcl s : iter) {
                 Element opt = option.clone();
                 completeOption(stclContext, s, valuePath, labelPath, opt);
                 last.after(opt);
@@ -855,7 +867,13 @@ public class HTML5SectionCompleter {
             String cond = li.attr(CONDITION_ATTRIBUTE);
 
             // expands li items
-            for (PStcl s : stcl.getStencils(stclContext, path)) {
+            StencilIterator<StclContext, PStcl> iter;
+            if (path.equals(PathUtils.THIS)) {
+                iter = new SingleIterator<StclContext, PStcl>(stcl);
+            } else {
+                iter = stcl.getStencils(stclContext, path);
+            }
+            for (PStcl s : iter) {
 
                 if (satisfyDataCondition(stclContext, cond, s)) {
                     // creates li element
@@ -937,7 +955,13 @@ public class HTML5SectionCompleter {
         }
 
         // creates a row for each stencils
-        for (PStcl s : stcl.getStencils(stclContext, p)) {
+        StencilIterator<StclContext, PStcl> iter;
+        if (p.equals(PathUtils.THIS)) {
+            iter = new SingleIterator<StclContext, PStcl>(stcl);
+        } else {
+            iter = stcl.getStencils(stclContext, p);
+        }
+        for (PStcl s : iter) {
             String pwd = getPwd(stclContext, s);
             Element ntr = tbody.appendElement("tr");
             if (tbr != null) {
