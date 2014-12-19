@@ -72,6 +72,7 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
 
     // expand a data-value from a data-path
     private JsonElement expandObject(StclContext stclContext, PStcl stcl, JsonObject object, boolean full) {
+        JsonArray result = new JsonArray();
         if (object.has("data-path") && object.has("data-value")) {
 
             // get path
@@ -85,7 +86,6 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
             if (!data_value.isJsonArray())
                 throw new JsonParseException("data-value must be a list");
 
-            JsonArray result = new JsonArray();
             for (PStcl s : stcl.getStencils(stclContext, path)) {
                 JsonObject dict = new JsonObject();
                 if (full) {
@@ -94,6 +94,12 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
                 }
                 for (JsonElement elt : data_value.getAsJsonArray()) {
                     try {
+                        if (elt.isJsonObject()) {
+                            JsonObject obj = elt.getAsJsonObject();
+                            String p = obj.get("data-path").getAsString();
+                            JsonElement array = expandObject(stclContext, s, obj, full);
+                            dict.add(p, array);
+                        }
                         String value = s.getString(stclContext, elt.getAsString());
                         dict.add(elt.getAsString(), new JsonPrimitive(value));
                     } catch (Exception e) {
@@ -102,11 +108,8 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
                 }
                 result.add(dict);
             }
-
-            object.remove("data-path");
-            object.remove("data-value");
-            object.add("data-values", result);
         }
-        return object;
+        
+        return result;
     }
 }
