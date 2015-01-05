@@ -1455,6 +1455,18 @@ public class HTML5SectionCompleter {
             if (format.equals("/-100,##")) {
                 return String.format(locale, "%.2f", -Float.parseFloat(value) / 100);
             }
+            if (format.equals("/1000,##")) {
+                return String.format(locale, "%.2f", Float.parseFloat(value) / 1000);
+            }
+            if (format.equals("/-1000,##")) {
+                return String.format(locale, "%.2f", -Float.parseFloat(value) / 1000);
+            }
+            if (format.equals("/10000,##")) {
+                return String.format(locale, "%.2f", Float.parseFloat(value) / 10000);
+            }
+            if (format.equals("/-10000,##")) {
+                return String.format(locale, "%.2f", -Float.parseFloat(value) / 10000);
+            }
 
             return String.format(locale, "%d", Integer.parseInt(value));
         } catch (Exception e) {
