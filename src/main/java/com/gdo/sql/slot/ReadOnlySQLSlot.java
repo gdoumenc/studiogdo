@@ -9,7 +9,6 @@ public abstract class ReadOnlySQLSlot extends SQLSlot {
 
     public ReadOnlySQLSlot(StclContext stclContext, Stcl in, String name) {
         super(stclContext, in, name, 0);
-        readOnly();
         loadAllAtStart();
     }
 
