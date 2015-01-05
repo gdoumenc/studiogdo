@@ -583,10 +583,11 @@ public class HtmlStudioGdoServlet extends HttpServlet {
 
     protected static void alertResponse(HttpServletRequest request, HttpServletResponse response, Exception e) {
         try {
+            logError(e.toString());
             StclContext stclContext = new StclContext(request, response);
             writeHTMLResponse(stclContext.getResponse(), e.toString(), null);
-            logError(e.toString());
         } catch (Exception ee) {
+            logError(ee.toString());
         }
     }
 

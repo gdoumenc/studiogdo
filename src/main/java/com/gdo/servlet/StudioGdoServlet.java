@@ -336,9 +336,6 @@ public class StudioGdoServlet extends HttpServlet {
      */
     public static void writeResponse(HttpServletResponse response, int status, String type, InputStream in, String charset) throws IOException {
         response.setStatus(status);
-        if (StringUtils.isNotBlank(charset)) {
-            response.setCharacterEncoding(charset);
-        }
         response.setContentType(type);
         response.addHeader("Cache-Control", "no-cache");
         response.addHeader("Cache-Control", "no-store");
