@@ -77,7 +77,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * Clears all internal structures to free memory.
      */
     public void clear() {
-        _links = null;
+        if (_links != null) {
+            _links.clear();
+            _links = null;
+        }
         _desc = null;
         _container = null;
     }
@@ -85,10 +88,12 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Returns the name of this slot.
      * 
-     * @param stclContext
-     *            the stencil context.
      * @return the slot's name.
      */
+    public String getName() {
+        return _name;
+    }
+    @Deprecated
     public String getName(C stclContext) {
         return _name;
     }
@@ -96,6 +101,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * @return the slot's descriptor.
      */
+    @Deprecated
     public SlotDescriptor<C, S> getDescriptor() {
         return _desc;
     }
@@ -103,6 +109,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Sets the slot's descriptor.
      */
+    @Deprecated
     public void setDescriptor(SlotDescriptor<C, S> desc) {
         _desc = desc;
     }
@@ -112,6 +119,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * 
      * @return the slot's arity.
      */
+    public char getArity() {
+        return _arity;
+    }
+    @Deprecated
     public char getArity(C stclContext) {
         return _arity;
     }
@@ -122,6 +133,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * @return <tt>true</tt> if the stencils plugged in this slot must not be
      *         saved in stencil configuration.
      */
+    public boolean isTransient() {
+        return _tranzient;
+    }
+    @Deprecated
     public boolean isTransient(C stclContext) {
         return _tranzient;
     }
@@ -129,6 +144,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Set this slot transient.
      */
+    public void setTransient() {
+        _tranzient = true;
+    }
+    @Deprecated
     public void setTransient(C stclContext) {
         _tranzient = true;
     }
@@ -138,6 +157,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * 
      * @return <tt>true</tt> if the slot is read only.
      */
+    public boolean isReadOnly() {
+        return _read_only;
+    }
+    @Deprecated
     public boolean isReadOnly(C stclContext) {
         return _read_only;
     }
@@ -145,6 +168,10 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Set this slot read only.
      */
+    public void setReadOnly() {
+        _read_only = true;
+    }
+    @Deprecated
     public void setReadOnly(C stclContext) {
         _read_only = true;
     }
@@ -152,10 +179,12 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Checks if a slot is a slot cursor.
      * 
-     * @param stclContext
-     *            the stencil context.
      * @return <tt>true</tt> if the slot is cursor based.
      */
+    public boolean isCursorBased() {
+        return false;
+    }
+    @Deprecated
     public boolean isCursorBased(C stclContext) {
         return false;
     }

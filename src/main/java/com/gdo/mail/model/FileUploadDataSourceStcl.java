@@ -77,7 +77,7 @@ public class FileUploadDataSourceStcl extends AttachmentStcl implements DataSour
 
         @Override
         public String setValue(StclContext stclContext, String value, PStcl self) {
-            String msg = String.format("Cannot change %s value", getName(stclContext));
+            String msg = String.format("Cannot change %s value", getName());
             throw new NotImplementedException(msg);
         }
 
@@ -96,7 +96,7 @@ public class FileUploadDataSourceStcl extends AttachmentStcl implements DataSour
 
         @Override
         public int setIntegerValue(StclContext stclContext, int value, PStcl self) {
-            String msg = String.format("Cannot change %s value", getName(stclContext));
+            String msg = String.format("Cannot change %s value", getName());
             throw new NotImplementedException(msg);
         }
 

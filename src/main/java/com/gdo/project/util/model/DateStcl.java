@@ -97,7 +97,7 @@ public class DateStcl extends Stcl {
             // the condition must be a key condition
             String key = PathCondition.getKeyCondition(cond);
             if (StringUtils.isEmpty(key)) {
-                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
+                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(), key);
                 return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
 
@@ -171,7 +171,7 @@ public class DateStcl extends Stcl {
             // the condition must be a key condition
             String key = PathCondition.getKeyCondition(cond);
             if (StringUtils.isEmpty(key)) {
-                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
+                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(), key);
                 return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
 
@@ -209,7 +209,7 @@ public class DateStcl extends Stcl {
             // the condition must be a key condition
             String key = PathCondition.getKeyCondition(cond);
             if (StringUtils.isEmpty(key)) {
-                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(stclContext), key);
+                String msg = String.format("A key path condition should be defined for slot %s (not %s)", getName(), key);
                 return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
             }
 
@@ -255,7 +255,7 @@ public class DateStcl extends Stcl {
                 try {
                     date = new Date(Long.parseLong(time));
                 } catch (Exception e) {
-                    String msg = String.format("A time long should be defined for slot %s (not %s)", getName(stclContext), time);
+                    String msg = String.format("A time long should be defined for slot %s (not %s)", getName(), time);
                     return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                 }
             }

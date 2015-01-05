@@ -207,21 +207,21 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
         if (_slot == null) {
             return getNullReason();
         }
-        return _slot.getName(stclContext);
+        return _slot.getName();
     }
 
     public char getArity(C stclContext) {
         if (_slot == null) {
             return PSlot.UNDEFINED;
         }
-        return _slot.getArity(stclContext);
+        return _slot.getArity();
     }
 
     public boolean isCursorBased(C stclContext) {
         if (_slot == null) {
             return false;
         }
-        return _slot.isCursorBased(stclContext);
+        return _slot.isCursorBased();
     }
 
     // gets the property defined in the slot

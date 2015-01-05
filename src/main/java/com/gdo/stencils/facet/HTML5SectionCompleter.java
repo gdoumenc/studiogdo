@@ -488,7 +488,7 @@ public class HTML5SectionCompleter {
         // expands content
         for (PStcl s : iter) {
             Element cont = container.clone();
-            container.after(cont);
+            container.before(cont);
             copyAndExpandAttributes(stclContext, s, container, cont);
             setDataAPath(stclContext, cont, s.pwd(stclContext));
             completeChildren(stclContext, s, cont);

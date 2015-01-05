@@ -686,7 +686,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public void addSlot(C stclContext, _Slot<C, S> slot) {
 
         // checks the slot not already defined
-        String slotName = slot.getName(stclContext);
+        String slotName = slot.getName();
         if (getSlots().get(slotName) != null) {
             logWarn(stclContext, "adding slot %s which is already defined in %s", slotName, this);
         }

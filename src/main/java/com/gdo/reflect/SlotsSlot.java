@@ -61,7 +61,7 @@ public class SlotsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
             PSlot<StclContext, PStcl> pslot = new PSlot<StclContext, PStcl>(slot, container);
 
             // don't put internal slots
-            String slotName = slot.getName(stclContext);
+            String slotName = slot.getName();
             if (StringUtils.isBlank(slotName)) {
                 slotName = "$EMPTY$";
             } else if (slotName.equals(PathUtils.ROOT)) {
@@ -74,7 +74,7 @@ public class SlotsSlot extends MultiCalculatedSlot<StclContext, PStcl> {
             }
 
             // gets slot's name
-            String name = slot.getName(stclContext);
+            String name = slot.getName();
             if (StringUtils.isNotBlank(pattern) && !name.matches(pattern)) {
                 continue;
             }

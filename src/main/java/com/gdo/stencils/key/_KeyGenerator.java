@@ -47,7 +47,7 @@ public abstract class _KeyGenerator<C extends _StencilContext, S extends _PStenc
             MultiSlot<C, S> multi = (MultiSlot<C, S>) slot.getSlot();
 
             // key generator are not available on cursor slot
-            if (!multi.isCursorBased(stclContext)) {
+            if (!multi.isCursorBased()) {
 
                 // search next unique key value in slot
                 IKey[] keys = multi.getKeys(stclContext, slot);
