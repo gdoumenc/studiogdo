@@ -131,7 +131,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     public void initialize(StclContext stclContext, PStcl pstencil, PSlot<StclContext, PStcl> slot, IKey key) {
         if (pstencil.isCursorBased()) {
             super.initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
-            _cursor = new PStclCursor(stclContext, pstencil);
+            createCursor(stclContext, pstencil);
         } else {
             super.initialize(stclContext, pstencil, slot, key);
         }
@@ -159,7 +159,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     public void setCursorBased(StclContext stclContext, PSlot<StclContext, PStcl> cursorContainer, _SlotCursor cursor, IKey cursorKey) {
         _stencil = null;
-        _cursor = new PStclCursor(stclContext, cursor, cursorContainer, cursorKey);
+        createCursor(stclContext, cursor, cursorContainer, cursorKey);
     }
 
     public void updateCursor(StclContext stclContext) {
@@ -1005,6 +1005,18 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return super.toString();
     }
 
+    private PStclCursor createCursor(StclContext stclContext, _SlotCursor cursor, PSlot<StclContext, PStcl> slot, IKey key) {
+        _cursor = new PStclCursor(cursor, slot, key);
+        addThisReferenceToStencil(stclContext);
+        return _cursor;
+    }
+
+    private PStclCursor createCursor(StclContext stclContext, PStcl stcl) {
+        _cursor = new PStclCursor(stcl._cursor.getCursor(), stcl._cursor.getContainer(), stcl.getCursorKey());
+        addThisReferenceToStencil(stclContext);
+        return _cursor;
+    }
+
     //
     // cursor implementation (SQL, ...)
     //
@@ -1026,24 +1038,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         // TODO should be defined in cursor
         private List<PStcl> _cursor_references;
 
-        private PStclCursor(StclContext stclContext) {
-            addThisReferenceToStencil(stclContext);
-        }
-
-        PStclCursor(StclContext stclContext, _SlotCursor cursor, PSlot<StclContext, PStcl> slot, IKey key) {
-            this(stclContext);
+        PStclCursor(_SlotCursor cursor, PSlot<StclContext, PStcl> slot, IKey key) {
             _cursor = cursor;
             _cursor_slot = slot;
             _cursor_key = key;
             _cursor_references = new ArrayList<PStcl>();
-        }
-
-        PStclCursor(StclContext stclContext, PStcl stcl) {
-            this(stclContext);
-            _cursor = stcl._cursor.getCursor();
-            _cursor_slot = stcl._cursor.getContainer();
-            _cursor_key = stcl._cursor.getKey();
-            _cursor_references = stcl._cursor.getReferences();
         }
 
         void clear(StclContext stclContext) {
