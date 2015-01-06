@@ -1071,12 +1071,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         public String getId(StclContext stclContext) {
             PStcl container = _cursor_slot.getContainer();
-            return container.getId(stclContext) + "_" + container.getName(stclContext) + "_" + _cursor_key;
+            return container.getId(stclContext) + "_" + _cursor_slot.getName(stclContext) + "_" + _cursor_key;
         }
 
         public String getUId(StclContext stclContext) {
             PStcl container = _cursor_slot.getContainer();
-            return container.getUId(stclContext) + "_" + container.getName(stclContext) + "_" + _cursor_key;
+            return container.getUId(stclContext) + "_" + _cursor_slot.getName(stclContext) + "_" + _cursor_key;
         }
 
     }
