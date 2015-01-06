@@ -634,6 +634,7 @@ public class HTML5SectionCompleter {
             return;
         }
 
+        /*
         // creates optgroup for each stencil
         StencilIterator<StclContext, PStcl> iter;
         if (path.equals(PathUtils.THIS)) {
@@ -664,6 +665,23 @@ public class HTML5SectionCompleter {
 
         // removes pattern
         elt.remove();
+        */
+        for (Element child : elt.children()) {
+
+            // checks condition
+            cond = elt.attr(CONDITION_ATTRIBUTE);
+            if (!satisfyDataCondition(stclContext, cond, stcl)) {
+                child.remove();
+                continue;
+            }
+
+            // expands child
+            if (OPTGROUP.equalsIgnoreCase(child.tagName())) {
+                expandOptGroupDataList(stclContext, stcl, child);
+            } else if (OPTION.equalsIgnoreCase(child.tagName())) {
+                expandOption(stclContext, stcl, child);
+            }
+        }
     }
 
     private void expandOption(StclContext stclContext, PStcl stcl, Element option) {
@@ -700,6 +718,8 @@ public class HTML5SectionCompleter {
             }
             for (PStcl s : iter) {
                 Element opt = option.clone();
+                opt.removeAttr(LABEL_ATTRIBUTE);
+                opt.removeAttr(DATA_VALUE_ATTRIBUTE);
                 completeOption(stclContext, s, valuePath, labelPath, opt);
                 last.after(opt);
                 last = opt;
