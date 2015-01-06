@@ -23,7 +23,7 @@ public class LinkedKey implements IKey {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return _key.toString();
     }
 

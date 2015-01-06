@@ -27,6 +27,7 @@ import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
 import com.gdo.stencils.slot._Slot;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.StencilUtils;
 
 public class SQLStcl extends Stcl {
@@ -230,7 +231,7 @@ public class SQLStcl extends Stcl {
      */
     // TODO TO BE REMOVED
     public int setNegativeId(StclContext stclContext, PStcl self) {
-        int id = -uniqueInt();
+        int id = -GlobalCounter.uniqueInt();
         self.setInt(stclContext, Slot.ID, id);
         return id;
     }

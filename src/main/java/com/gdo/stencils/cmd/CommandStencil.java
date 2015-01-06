@@ -348,12 +348,15 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
 
     /**
      * Top level method for command execution.
+     * 
+     * @param cmdContext
+     *            the command context.
+     * @param self
+     *            the command as a plugged command.
      */
     public CommandStatus<C, S> execute(CommandContext<C, S> cmdContext, S self) {
-        if (getLog().isTraceEnabled()) {
-            String msg = String.format("Execute command %s from %s", this, self);
-            getLog().trace(cmdContext.getStencilContext(), msg);
-        }
+        C stclContext = cmdContext.getStencilContext();
+        logTrace(stclContext, "Execute command %s from %s", this, self);
 
         // execute action stacking command context
         _cmdContext = cmdContext; // needed to be able to access target

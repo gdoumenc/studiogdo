@@ -44,13 +44,12 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Basic implementation of the studiogdo plugged stencil.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class PStcl extends _PStencil<StclContext, PStcl> {
 
@@ -282,28 +281,18 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         _stencil = null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.gdo.stencils.plug.PStencil#getId(com.gdo.stencils.StencilContext)
-     */
     @Override
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
-            return _cursor.getId(stclContext) + _cursor_key;
+            return super.getId(stclContext) + "_" + _cursor_key;
         }
         return super.getId(stclContext);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.gdo.stencils.plug.PStencil#getUID(com.gdo.stencils.StencilContext)
-     */
     @Override
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
-            return _cursor.getUId(stclContext) + _cursor_key;
+            return super.getUId(stclContext) + "_" + _cursor_key;
         }
         return super.getUId(stclContext);
     }
@@ -417,6 +406,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         // PYTHON case
         if (FacetType.PYTHON.equals(facet)) {
+            String mode = renderContext.getFacetMode();
+            PythonSectionCompleter completer = new PythonSectionCompleter();
+            completer.setFullStructure();
+            return completer.getFacetFromDOM(stclContext, this, mode);
+        }
+        if (FacetType.REST.equals(facet)) {
             String mode = renderContext.getFacetMode();
             PythonSectionCompleter completer = new PythonSectionCompleter();
             return completer.getFacetFromDOM(stclContext, this, mode);

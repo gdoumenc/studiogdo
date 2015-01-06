@@ -16,13 +16,12 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Basic implementation of {@link com.gdo.stencils.plug.PSlot}
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
 
@@ -208,21 +207,21 @@ public class PSlot<C extends _StencilContext, S extends _PStencil<C, S>> {
         if (_slot == null) {
             return getNullReason();
         }
-        return _slot.getName(stclContext);
+        return _slot.getName();
     }
 
     public char getArity(C stclContext) {
         if (_slot == null) {
             return PSlot.UNDEFINED;
         }
-        return _slot.getArity(stclContext, this);
+        return _slot.getArity();
     }
 
     public boolean isCursorBased(C stclContext) {
         if (_slot == null) {
             return false;
         }
-        return _slot.isCursorBased(stclContext);
+        return _slot.isCursorBased();
     }
 
     // gets the property defined in the slot

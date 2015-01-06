@@ -30,13 +30,12 @@ import com.gdo.util.XmlWriter;
  * <p>
  * _Slot descriptor class.
  * <p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends _Descriptor<C, S> {
 
@@ -56,7 +55,6 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
     private boolean _redefined; // the slot is redefined in the instance
 
     private boolean _final; // this slot override another slot
-    private boolean _override; // this slot override another slot
 
     private String _delegatePath; // slot path for delegation
     private boolean _local; // the slot is considered as local (the container is
@@ -178,9 +176,6 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
      */
     public void setRedefined(boolean value) {
         _redefined = value;
-        if (value)
-            setOverride(true); // by default a local slot may redefined another
-        // slot
     }
 
     /**
@@ -196,20 +191,6 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
      */
     public void setFinal(boolean value) {
         _final = value;
-    }
-
-    /**
-     * @return <tt>true</tt> if this slot declaration override an existing slot.
-     */
-    public boolean isOverride() {
-        return _override;
-    }
-
-    /**
-     * Marks the slot as overriding an existing slot.
-     */
-    public void setOverride(boolean override) {
-        _override = override;
     }
 
     public Collection<LinkDescriptor<C, S>> getLinkDescriptors() {
@@ -317,7 +298,7 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
             }
 
             // may be redefined over an existing one.
-            if (!isOverride() && getLog().isWarnEnabled()) {
+            if (getLog().isWarnEnabled()) {
                 String msg = String.format("Duplicate slot %s definition in %s", name, container);
                 getLog().warn(stclContext, msg);
             }
@@ -415,7 +396,6 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
         declPart.startElement("slot");
         declPart.writeAttribute("name", getName());
         declPart.writeAttribute("final", isFinal());
-        declPart.writeAttribute("override", isOverride());
         if (isDelegated()) {
             declPart.writeAttribute("delegate", getDelegate());
             declPart.writeAttribute("local", Boolean.toString(isLocal()));
@@ -476,7 +456,7 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
         }
 
         _Stencil<C, S> stcl = container.getReleasedStencil(stclContext);
-        SingleSlot<C, S> single = new SingleSlot<C, S>(stclContext, stcl, getName(), getArity(), isTransient(), isOverride());
+        SingleSlot<C, S> single = new SingleSlot<C, S>(stclContext, stcl, getName(), getArity(), isTransient());
         single.setDescriptor(this);
         single.setCompletionLevel(completionLevel);
         return single;
@@ -495,7 +475,7 @@ public final class SlotDescriptor<C extends _StencilContext, S extends _PStencil
         // no slot factory defined
         MultiSlot<C, S> multi = null;
         _Stencil<C, S> stcl = container.getReleasedStencil(stclContext);
-        multi = new MultiSlot<C, S>(stclContext, stcl, getName(), getArity(), isTransient(), isOverride());
+        multi = new MultiSlot<C, S>(stclContext, stcl, getName(), getArity(), isTransient());
         multi.setDescriptor(this);
         multi.setCompletionLevel(completionLevel);
         return multi;

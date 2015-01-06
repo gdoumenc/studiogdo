@@ -14,13 +14,12 @@ import com.gdo.stencils.plug._PStencil;
  * A stencil descriptor is a simple instance descriptor with root tag defined as
  * stencil.
  * <p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class StencilDescriptor<C extends _StencilContext, S extends _PStencil<C, S>> extends InstDescriptor<C, S> {
 

@@ -26,6 +26,6 @@ public class SingleSlotDescriptor<C extends _StencilContext, S extends _PStencil
 
     @Override
     public _Slot<C, S> add(C stclContext, String name, S self) {
-        return new SingleSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, _arity, _tranzient, false);
+        return new SingleSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, _arity, _tranzient);
     }
 }

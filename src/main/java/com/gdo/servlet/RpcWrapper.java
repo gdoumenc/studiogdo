@@ -35,7 +35,6 @@ import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cmd.CommandStencil;
@@ -46,6 +45,7 @@ import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.StencilUtils;
 import com.gdo.util.XmlStringWriter;
@@ -54,13 +54,12 @@ import com.gdo.util.XmlStringWriter;
  * <p>
  * StudioGdo RPC interface wrapper.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class RpcWrapper {
 
@@ -321,9 +320,7 @@ public class RpcWrapper {
      *            the RPC arguments.
      */
     private void disconnect(StclContext stclContext) {
-        StudioGdoServlet.logUserDisconnected(stclContext.getRequest());
-        stclContext.getHttpSession().invalidate();
-        stclContext.release();
+        stclContext.getSession().invalidate();
     }
 
     /**
@@ -519,7 +516,6 @@ public class RpcWrapper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void mset(StclContext stclContext, RpcArgs args) {
         try {
             Result result = Result.success();
@@ -852,7 +848,7 @@ public class RpcWrapper {
             }
 
             // HTML 5 facet or JSON facet
-            if (FacetType.HTML5.equals(type) || FacetType.DOM5.equals(type) || FacetType.JSON.equals(type) || FacetType.JSKEL.equals(type) || FacetType.PYTHON.equals(type)) {
+            if (FacetType.HTML5.equals(type) || FacetType.DOM5.equals(type) || FacetType.JSON.equals(type) || FacetType.JSKEL.equals(type) || FacetType.PYTHON.equals(type) || FacetType.REST.equals(type)) {
                 String mime = facetResult.getMimeType();
                 InputStream in = facetResult.getInputStream();
                 StudioGdoServlet.writeResponse(stclContext.getResponse(), HttpServletResponse.SC_OK, mime, in, StclContext.getCharacterEncoding());
@@ -1023,7 +1019,7 @@ public class RpcWrapper {
             if (cmdStcl.getReleasedStencil(stclContext) instanceof ComposedActionStcl) {
 
                 // calls execution
-                String launchPath = PathUtils.createPath("/Session/Launch", Atom.uniqueInt());
+                String launchPath = PathUtils.createPath("/Session/Launch", GlobalCounter.uniqueInt());
                 CommandContext<StclContext, PStcl> cmdContext = createCommandContext(stclContext, args, stcl);
                 ComposedActionStcl actionStcl = (ComposedActionStcl) cmdStcl.getReleasedStencil(stclContext);
                 CommandStatus<StclContext, PStcl> result = actionStcl.launch(cmdContext, launchPath, cmdStcl);
@@ -1050,7 +1046,6 @@ public class RpcWrapper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void doPost(StclContext stclContext, RpcArgs args) {
         try {
 

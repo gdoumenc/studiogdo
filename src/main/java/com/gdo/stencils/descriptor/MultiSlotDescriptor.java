@@ -23,6 +23,6 @@ public class MultiSlotDescriptor<C extends _StencilContext, S extends _PStencil<
 
     @Override
     public _Slot<C, S> add(C stclContext, String name, S self) {
-        return new MultiSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, _arity, _tranzient, false);
+        return new MultiSlot<C, S>(stclContext, self.getReleasedStencil(stclContext), name, _arity, _tranzient);
     }
 }

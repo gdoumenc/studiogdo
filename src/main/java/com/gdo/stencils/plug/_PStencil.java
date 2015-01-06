@@ -21,7 +21,6 @@ import com.gdo.stencils.Keywords;
 import com.gdo.stencils.Result;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cond.PathCondition;
@@ -36,6 +35,7 @@ import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.key.LinkedKey;
 import com.gdo.stencils.log.StencilLog;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -57,15 +57,14 @@ import com.gdo.util.XmlWriter;
  * When there was an error or a warning retrieving the plugged stencil, a status
  * is associated to the plugged stencil.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
-public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> implements Cloneable {
+public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C, S>> extends GlobalCounter implements Cloneable {
 
     // maximum level search for root
     private static final int MAX_ROOT_LEVEL = 20;
@@ -123,6 +122,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     public _PStencil(Result result) {
         initialize(null, (_Stencil<C, S>) null, null, Key.NO_KEY);
         _result = (result != null) ? result : Result.error("empty stencil without any reason");
+    }
+
+    @SuppressWarnings("unchecked")
+    public S self() {
+        return (S) this;
     }
 
     /**
@@ -249,9 +253,9 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *         methods).
      */
     @SuppressWarnings("unchecked")
-    public final <K extends _Stencil<C, S>> K getReleasedStencil(C stclContext) {
-        K stcl = (K) getStencil(stclContext);
-        release(stclContext);
+    public final <K extends _Stencil<C, S>> K getReleasedStencil(_StencilContext stclContext) {
+        K stcl = (K) getStencil((C) stclContext);
+        release((C) stclContext);
         return stcl;
     }
 
@@ -1461,11 +1465,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return slot;
     }
 
-    /*
-     * IAtom interface
-     */
-
-    @Override
     public String getId(C stclContext) {
         if (isNull()) {
             throw new UnsupportedOperationException("cannot get the id of an empty stencil: " + getNullReason());
@@ -1473,35 +1472,12 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return getReleasedStencil(stclContext).getId(stclContext);
     }
 
-    /*
-     * @Override public void setId(C stclContext, String id) { if (isNull()) throw
-     * new UnsupportedOperationException("cannot get the id of an empty stencil: "
-     * + getNullReason()); try { getStencil(stclContext).setId(stclContext, id); }
-     * finally { release(stclContext); } }
-     */
-
-    @Override
     public String getUId(C stclContext) {
         if (isNull()) {
             throw new UnsupportedOperationException("cannot get the id of an empty stencil: " + getNullReason());
         }
         return getReleasedStencil(stclContext).getUId(stclContext);
     }
-
-    /*
-     * @Override public void setUID(C stclContext, String uid) { if (isNull())
-     * throw new
-     * UnsupportedOperationException("cannot set the id of an empty stencil: " +
-     * getNullReason()); try { getStencil(stclContext).setUID(stclContext, uid); }
-     * finally { release(stclContext); } }
-     */
-
-    /*
-     * public S clone(C stclContext) throws CloneNotSupportedException {
-     * Stencil<C, S> stcl = getReleasedStencil(stclContext); Stencil<C, S> clone =
-     * stcl.clone(stclContext, self()); return new PStencil<C, S>(clone,
-     * getContainingSlot(), getKey()).self(); }
-     */
 
     //
     // Informations relative to containing slots (to understand where the
@@ -1589,16 +1565,6 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         str.append('<').append(getClass()).append('>');
         str.append('[').append(getContainingSlot()).append(']');
         return str.toString();
-    }
-
-    @Override
-    public int compareTo(S obj) {
-        if (!(obj instanceof _PStencil))
-            return 0;
-        _PStencil<C, S> stcl = (_PStencil<C, S>) obj;
-        if (StencilUtils.isNull(stcl))
-            return 0;
-        return getKey().compareTo(stcl.getKey());
     }
 
     /*

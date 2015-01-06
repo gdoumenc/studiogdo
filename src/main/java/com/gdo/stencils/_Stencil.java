@@ -22,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.helper.StringHelper;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.cmd.CommandStencil;
@@ -42,7 +41,6 @@ import com.gdo.stencils.faces.RenderContext;
 import com.gdo.stencils.facet.FacetResult;
 import com.gdo.stencils.factory.InterpretedStencilFactory;
 import com.gdo.stencils.factory.StencilFactory;
-import com.gdo.stencils.interpreted.SlotDescriptor;
 import com.gdo.stencils.interpreted.TemplateDescriptor;
 import com.gdo.stencils.iterator.ListIterator;
 import com.gdo.stencils.iterator.StencilIterator;
@@ -57,6 +55,7 @@ import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
 import com.gdo.stencils.slot._Slot;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.PathUtils;
 import com.gdo.stencils.util.SlotUtils;
 import com.gdo.stencils.util.StencilUtils;
@@ -72,7 +71,7 @@ import com.gdo.util.XmlWriter;
  * interface.
  * </p>
  */
-public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> extends Atom<C, S> {
+public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C, S>> {
 
     // defines to true if performs lot of checking (decrease performance..)
     public static final boolean STRICT_MODE = false;
@@ -111,6 +110,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     private boolean cleared = false;
 
     // associated default plugged stencil for interface manipulation
+    private String _id = null;
+    private String _uid = null;
     protected _PStencil<C, S> _self;
 
     // template descriptor used to create the stencil (may be null)
@@ -165,7 +166,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public _Stencil(C stclContext) {
 
         // internal slot (used temporary to retrieve command stencil)
-        _commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true, false);
+        _commandSlot = new MultiSlot<C, S>(stclContext, this, ".Commands", PSlot.ANY, true);
 
         // predefined slots
         addDescriptor(Slot.THIS, new _SlotDescriptor<C, S>() {
@@ -566,6 +567,21 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         // nothing by default
     }
 
+    public String getId(C stclContext) {
+        if (_id == null) {
+            _id = GlobalCounter.ID();
+        }
+        return _id;
+    }
+
+    public String getUId(C stclContext) {
+        if (_uid == null) {
+            _uid = GlobalCounter.uniqueID();
+        }
+        return _uid;
+
+    }
+
     // --------------------------------------------------------------------------
     //
     // Modification management.
@@ -670,7 +686,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     public void addSlot(C stclContext, _Slot<C, S> slot) {
 
         // checks the slot not already defined
-        String slotName = slot.getName(stclContext);
+        String slotName = slot.getName();
         if (getSlots().get(slotName) != null) {
             logWarn(stclContext, "adding slot %s which is already defined in %s", slotName, this);
         }
@@ -1304,7 +1320,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @param self
      *            the stencil as plugged stencil.
      * @return the reference id used to retrieve the instance declaration in the
-     *            file.
+     *         file.
      */
     public String saveAsInstance(C stclContext, String dir, XmlWriter out, S self) {
         try {
@@ -1347,6 +1363,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
 
     /**
      * Should be redefined if the stencil needs parameters at creation.
+     * 
      * @param stclContext
      * @param writer
      * @param self
@@ -1400,23 +1417,9 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
                 pslot.setSlot(slot);
             }
 
-            // if the slot is redefined locally, then saves the local
-            // description
-            if (slot.isRedefined(stclContext)) {
-
-                // the local slot declaration is done in plug part
-                SlotDescriptor<C, S> slotDesc = slot.getDescriptor();
-                slotDesc.save(stclContext, plugPart, null);
-            }
-
             // saves all the plugs in the the slot
             slot.savePlugs(stclContext, descPart, plugPart, pslot);
         }
-    }
-
-    @Override
-    public int compareTo(S obj) {
-        return 0;
     }
 
     /**
@@ -1855,7 +1858,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         writer.startElement("prop");
         writer.writeAttribute("name", name);
         writer.writeAttribute("type", getType());
-        String value = self().getNotExpandedValue(stclContext); // never expand
+        String value = self(stclContext, null).getNotExpandedValue(stclContext); // never
+                                                                                 // expand
         // when saving
         if (value != null) {
             writer.startElement("data");

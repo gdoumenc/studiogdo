@@ -25,7 +25,7 @@ public abstract class SingleCalculatedSlot<C extends _StencilContext, S extends 
     // calculated slot
 
     public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
-        super(stclContext, in, name, arity, true, false);
+        super(stclContext, in, name, arity, true);
     }
 
     public SingleCalculatedSlot(C stclContext, _Stencil<C, S> in, String name) {

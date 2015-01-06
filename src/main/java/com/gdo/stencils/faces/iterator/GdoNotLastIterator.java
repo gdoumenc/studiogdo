@@ -1,4 +1,3 @@
-
 package com.gdo.stencils.faces.iterator;
 
 import com.gdo.stencils._StencilContext;

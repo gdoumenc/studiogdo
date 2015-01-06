@@ -44,13 +44,13 @@ import com.gdo.stencils.util.PathUtils;
  * <p>
  * The session stencil has any slots which are created on demand.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
+ * 
  * 
  * @author Guillaume Doumenc (<a>
  *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
@@ -75,7 +75,7 @@ public class SessionStcl extends Stcl {
      * @return the session stencil.
      */
     public static Stcl getSessionStcl(StclContext stclContext) {
-        HttpSession session = stclContext.getHttpSession();
+        HttpSession session = stclContext.getSession();
         SessionListener listener = (SessionListener) session.getAttribute(SESSION_KEY);
         return (listener != null) ? listener.getSessionStcl() : null;
     }
@@ -90,7 +90,7 @@ public class SessionStcl extends Stcl {
      *            the stencil context.
      */
     public static void createSessionStcl(StclContext stclContext) {
-        HttpSession session = stclContext.getHttpSession();
+        HttpSession session = stclContext.getSession();
         HttpServletRequest request = stclContext.getRequest();
 
         // checks another one wasn't created before
@@ -199,7 +199,7 @@ public class SessionStcl extends Stcl {
 
         @Override
         public String getValue(StclContext stclContext, PStcl self) {
-            return stclContext.getHttpSession().getId();
+            return stclContext.getSession().getId();
         }
     }
 

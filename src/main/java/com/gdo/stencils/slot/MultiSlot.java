@@ -12,7 +12,6 @@ import com.gdo.helper.ClassHelper;
 import com.gdo.stencils.Result;
 import com.gdo.stencils._Stencil;
 import com.gdo.stencils._StencilContext;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.cond.LinkCondition;
 import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.factory.StencilFactory;
@@ -21,19 +20,20 @@ import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.StencilUtils;
 
 /**
  * <p>
  * A multi slot is a slot in which several stencils may be plugged in.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
+ * 
  * 
  * @author Guillaume Doumenc
  */
@@ -47,12 +47,12 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
     // something wrong was found
 
-    public MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-        super(stclContext, in, name, arity, tranzient, override);
+    public MultiSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
+        super(stclContext, in, name, arity, tranzient);
     }
 
     public MultiSlot(C stclContext, _Stencil<C, S> in, String name) {
-        this(stclContext, in, name, PSlot.ANY, false, false);
+        this(stclContext, in, name, PSlot.ANY, false);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
 
         // get key (define it unique if not defined)
         if (key.isEmpty()) {
-            key = new Key(Atom.uniqueInt());
+            key = new Key(GlobalCounter.uniqueInt());
         }
 
         // create the plugged stencil

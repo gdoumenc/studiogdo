@@ -18,18 +18,17 @@ import com.gdo.stencils.util.StencilUtils;
  * An empty slot is a slot with no stencil in it and in which no stencil can be
  * plugged.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class EmptySlot<C extends _StencilContext, S extends _PStencil<C, S>> extends _Slot<C, S> {
 
     public EmptySlot(C stclContext, _Stencil<C, S> in, String name) {
-        super(stclContext, in, name, PSlot.ANY, true, false);
+        super(stclContext, in, name, PSlot.ANY, true);
     }
 
     @Override

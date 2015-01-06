@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
  * Helper for class and resource manipulations.
  * </p>
  * 
-
  */
 public class ClassHelper {
 

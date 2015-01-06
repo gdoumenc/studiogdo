@@ -25,13 +25,13 @@ import com.gdo.util.XmlWriter;
  * <p>
  * Stencil factories are defined globally by their class name.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
+ * 
  * 
  * @author Guillaume Doumenc
  */

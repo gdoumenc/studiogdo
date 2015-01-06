@@ -38,8 +38,8 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
                                     // arity
                                     // is ONE (default property value)
 
-    public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient, boolean override) {
-        super(stclContext, in, name, arity, tranzient, override);
+    public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity, boolean tranzient) {
+        super(stclContext, in, name, arity, tranzient);
 
         // check parameters
         if (!SlotUtils.isSingle(arity)) {
@@ -48,11 +48,11 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
     }
 
     public SingleSlot(C stclContext, _Stencil<C, S> in, String name, char arity) {
-        this(stclContext, in, name, arity, false, false);
+        this(stclContext, in, name, arity, false);
     }
 
     public SingleSlot(C stclContext, _Stencil<C, S> in, String name) {
-        this(stclContext, in, name, PSlot.NONE_OR_ONE, false, false);
+        this(stclContext, in, name, PSlot.NONE_OR_ONE, false);
     }
 
     @Override
@@ -312,12 +312,12 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
             }
             if (_containedStcl != null)
                 _containedStcl.setContainingSlot(self);
-            
+
             return _containedStcl;
         }
 
         // creates it only arity is set to one
-        if (getArity(stclContext, self) != PSlot.ONE) {
+        if (getArity() != PSlot.ONE) {
             String msg = String.format("empty single slot %s", self);
             return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
         }

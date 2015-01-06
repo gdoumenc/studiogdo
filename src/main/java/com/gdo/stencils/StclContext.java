@@ -18,11 +18,11 @@ import com.gdo.project.model.SessionStcl;
 import com.gdo.project.slot._SlotCursor;
 import com.gdo.servlet.RpcArgs;
 import com.gdo.servlet.StudioGdoServlet;
-import com.gdo.stencils.atom.Atom;
 import com.gdo.stencils.factory.IStencilFactory;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.util.GlobalCounter;
 import com.gdo.stencils.util.StencilUtils;
 
 /**
@@ -57,12 +57,12 @@ public class StclContext extends _StencilContext {
     private static final StclFactory FACTORY = new StclFactory();
 
     // servlet request and response
-    private HttpServletRequest _request;
-    private HttpServletResponse _response;
+    protected HttpSession _session;
+    protected HttpServletRequest _request;
+    protected HttpServletResponse _response;
 
     // the session (must be saved as upload can be done from another session (FF
     // issue)) TODO BADLY RESOLVED
-    private HttpSession _session;
     private RpcArgs _args;
     private int _id;
 
@@ -78,24 +78,36 @@ public class StclContext extends _StencilContext {
         return DEFAULT_CONTEXT;
     }
 
+    public StclContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        create(request, response);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <K extends StclContext> K getProjectContext() {
+        return (K) this;
+    }
+
     /**
      * Loads the project stencil if not already loaded, and creates the session
      * stencil associated.
      * 
-     * @throws Exception
+     * @param request
+     *            the HTTP request.
+     * @param response
+     *            the HTPP response
      */
-    public StclContext(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
+    protected void create(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // stores last stencil context as default one
         DEFAULT_CONTEXT = this;
 
         // sets servlet entries
+        _session = request.getSession();
         _request = request;
         _response = response;
 
-        // set stencil context id
-        _id = Atom.uniqueInt();
+        // set unique request id
+        _id = GlobalCounter.uniqueInt();
 
         // set request arguments
         _args = new RpcArgs(this);
@@ -103,17 +115,20 @@ public class StclContext extends _StencilContext {
         // loads project if not already loaded (only one load at a time)
         PStcl servletStcl = getServletStcl();
         if (StencilUtils.isNull(servletStcl)) {
-            servletStcl = loadServlet(this);
+            synchronized (this) {
+                servletStcl = getServletStcl();
+                if (StencilUtils.isNull(servletStcl))
+                    servletStcl = createServletStcl();
+            }
         }
 
         // creates session if the session was removed
-        if (!SessionStcl.HTTP_SESSIONS.containsKey(session.getId())) {
-
-            // creates session stencil
-            SessionStcl.createSessionStcl(this);
-
-            // handler on after session created
-            ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
+        if (!SessionStcl.HTTP_SESSIONS.containsKey(_session.getId())) {
+            synchronized (this) {
+                if (!SessionStcl.HTTP_SESSIONS.containsKey(_session.getId())) {
+                    createSessionStcl(servletStcl);
+                }
+            }
         }
     }
 
@@ -125,12 +140,20 @@ public class StclContext extends _StencilContext {
     }
 
     /**
+     * Returns the servlet session used for this context.
+     * 
+     * @return the servlet session used for this context.
+     */
+    public final HttpSession getSession() {
+        return _session;
+    }
+
+    /**
      * Returns the servlet request.
      * 
      * @return the servlet request.
      */
     public final HttpServletRequest getRequest() {
-        checkValidity();
         return _request;
     }
 
@@ -143,6 +166,12 @@ public class StclContext extends _StencilContext {
         return _response;
     }
 
+    /**
+     * Returns the request arguments with default value if not defined in
+     * request.
+     * 
+     * @return the request arguments.
+     */
     public final RpcArgs getRpcArgs() {
         return _args;
     }
@@ -157,7 +186,7 @@ public class StclContext extends _StencilContext {
 
         // if the locale is not set then session one (if defined) may be used
         if (_locale == null) {
-            HttpSession session = getHttpSession();
+            HttpSession session = getSession();
             Locale locale = (Locale) session.getAttribute(StudioGdoServlet.LOCALE_ENTRY);
             if (locale != null) {
                 return locale;
@@ -166,22 +195,6 @@ public class StclContext extends _StencilContext {
 
         // return default locale
         return super.getLocale();
-    }
-
-    /**
-     * Returns the servlet session used for this context.
-     * 
-     * @return the servlet session used for this context.
-     */
-    public final HttpSession getHttpSession() {
-        if (_session == null) {
-            HttpServletRequest request = getRequest();
-            if (request == null) {
-                return null;
-            }
-            _session = request.getSession();
-        }
-        return _session;
     }
 
     /**
@@ -199,7 +212,7 @@ public class StclContext extends _StencilContext {
      * @return the servlet context used for this context.
      */
     public final ServletContext getServletContext() {
-        HttpSession session = getHttpSession();
+        HttpSession session = getSession();
         return (session == null) ? null : session.getServletContext();
     }
 
@@ -305,7 +318,6 @@ public class StclContext extends _StencilContext {
      */
     @Override
     public String[] getTemplatePathes() {
-        checkValidity();
         ServletContext servletContext = getServletContext();
         if (servletContext != null) {
             String p1 = servletContext.getRealPath("WEB-INF/classes");
@@ -320,32 +332,11 @@ public class StclContext extends _StencilContext {
     }
 
     /**
-     * Releases the current session. Once released this session cannot be used
-     * anymore.
+     * Creates the ServletStcl.
+     * 
      */
-    @Override
-    public void release() {
-        _request.getSession().invalidate();
-        super.release();
-    }
-
-    @Override
-    protected void checkValidity() {
-
-        // _request or _response may be null
-        /*
-         * if (_request != null && _request.isRequestedSessionIdValid()) {
-         * throw new IllegalStateException("Session no more valid"); } if
-         * (_response != null && _response.isCommitted()) { throw new
-         * IllegalStateException("Response already committed"); }
-         */
-        super.checkValidity();
-    }
-
-    protected synchronized PStcl loadServlet(StclContext stclContext) throws Exception {
-        HttpServletRequest request = stclContext.getRequest();
-        HttpSession session = request.getSession();
-        ServletContext servletContext = session.getServletContext();
+    protected PStcl createServletStcl() throws Exception {
+        ServletContext servletContext = _session.getServletContext();
         String context = servletContext.getServletContextName();
 
         // set project auto-save
@@ -387,6 +378,19 @@ public class StclContext extends _StencilContext {
         return servletStcl;
     }
 
+    /**
+     * Creates the SessionStcl.
+     * 
+     */
+    protected void createSessionStcl(PStcl servletStcl) throws Exception {
+
+        // creates session stencil
+        SessionStcl.createSessionStcl(this);
+
+        // handler on after session created
+        ((ServletStcl) servletStcl.getReleasedStencil(this)).afterSessionCreated(this, servletStcl);
+    }
+
     //
     // LOG PART
     //
@@ -395,8 +399,7 @@ public class StclContext extends _StencilContext {
 
     private static final void logWarn(StclContext stclContext, String format, Object... params) {
         if (LOG.isWarnEnabled()) {
-            String msg = String.format(format, params);
-            LOG.warn(stclContext, msg);
+            LOG.warn(stclContext, String.format(format, params));
         }
     }
 
