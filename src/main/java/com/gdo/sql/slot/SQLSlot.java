@@ -782,7 +782,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-            plugged.addCursor(stclContext, self, _cursor, new Key(last_inserted_id));
+            plugged.setCursorBased(stclContext, self, _cursor, new Key(last_inserted_id));
         }
 
         return Result.success(PLUGGED_PREFIX, plugged);
