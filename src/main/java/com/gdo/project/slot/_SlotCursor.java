@@ -202,7 +202,7 @@ public abstract class _SlotCursor {
 
                     // not same as key as was the last used and may be reused
                     // and stencil must not be locked
-                    if (!k.equals(key) && _locked.get(k) != null)
+                    if (!k.equals(key) && _locked.get(k) == null)
                         keys.push(k);
                 }
 

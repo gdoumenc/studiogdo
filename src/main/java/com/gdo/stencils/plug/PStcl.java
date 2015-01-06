@@ -284,7 +284,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public String getId(StclContext stclContext) {
         if (isCursorBased()) {
-            return super.getId(stclContext) + "_" + _cursor_key;
+            return _cursor_container.getContainer().getId(stclContext) + "_" + _cursor_key;
         }
         return super.getId(stclContext);
     }
@@ -292,7 +292,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     @Override
     public String getUId(StclContext stclContext) {
         if (isCursorBased()) {
-            return super.getUId(stclContext) + "_" + _cursor_key;
+            return _cursor_container.getContainer().getUId(stclContext) + "_" + _cursor_key;
         }
         return super.getUId(stclContext);
     }
@@ -947,10 +947,8 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     /**
      * Launches the command in a new command context.
-     * 
-     * @throws Exception
      */
-    public final CommandStatus<StclContext, PStcl> launch(StclContext stclContext, String name, String path, Object... params) throws Exception {
+    public final CommandStatus<StclContext, PStcl> launch(StclContext stclContext, String name, String path, Object... params) {
         if (isNull()) {
             String prefix = ComposedActionStcl.class.getName();
             String msg = "cannot launch from an unvalid stencil: " + getNullReason();

@@ -249,12 +249,14 @@ public class Stcl extends _Stencil<StclContext, PStcl> {
         return factory.cloneStencil(stclContext, slot, key, self);
     }
 
-    public CommandStatus<StclContext, PStcl> launch(StclContext stclContext, String name, String path, PStcl self, Object... params) throws Exception {
+    public CommandStatus<StclContext, PStcl> launch(StclContext stclContext, String name, String path, PStcl self, Object... params) {
 
         // create context with parameters
         CommandContext<StclContext, PStcl> cmdContext = new CommandContext<StclContext, PStcl>(stclContext, self);
-        for (int i = 0; i < params.length; i++) {
-            cmdContext.setRedefinedParameter(CommandContext.PARAMS[i], params[i]);
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                cmdContext.setRedefinedParameter(CommandContext.PARAMS[i], params[i]);
+            }
         }
 
         // execute the command
