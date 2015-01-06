@@ -14,6 +14,7 @@ public abstract class FileStcl extends Stcl {
          * Property containing the content as text.
          */
         String CONTENT = "Content";
+        String ENCODED_CONTENT = "EncodedContent";
 
         /**
          * Property containing mime type.

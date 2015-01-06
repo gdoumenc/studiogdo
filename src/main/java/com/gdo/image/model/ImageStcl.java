@@ -19,6 +19,10 @@ public class ImageStcl extends FileResourceStcl {
 
     public ImageStcl(StclContext stclContext) {
         super(stclContext);
+        
+        propSlot("Height", 20);
+        propSlot("Width", 20);
+        propSlot("MimeType", "image/jpeg");
     }
 
     public ImageStcl(StclContext stclContext, PStcl file) {

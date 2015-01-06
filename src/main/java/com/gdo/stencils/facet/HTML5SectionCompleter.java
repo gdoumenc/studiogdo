@@ -867,17 +867,10 @@ public class HTML5SectionCompleter {
             String cond = li.attr(CONDITION_ATTRIBUTE);
 
             // expands li items
-            StencilIterator<StclContext, PStcl> iter;
-            if (path.equals(PathUtils.THIS)) {
-                iter = new SingleIterator<StclContext, PStcl>(stcl);
-            } else {
-                iter = stcl.getStencils(stclContext, path);
-            }
-            for (PStcl s : iter) {
-
-                if (satisfyDataCondition(stclContext, cond, s)) {
+            if (PathUtils.THIS.equals(path)) {
+                if (satisfyDataCondition(stclContext, cond, stcl)) {
                     // creates li element
-                    String apath = getPwd(stclContext, s);
+                    String apath = getPwd(stclContext, stcl);
                     setDataAPath(stclContext, li, apath);
                     Element i = li.clone();
                     li.parent().appendChild(i);
@@ -886,7 +879,7 @@ public class HTML5SectionCompleter {
                     if (li.children().size() == 0) {
                         Element span = i.appendElement("span");
                         String valuePath = getDataValuePath(li);
-                        String value = getPropertyValue(stclContext, s, valuePath);
+                        String value = getPropertyValue(stclContext, stcl, valuePath);
                         if (StringUtils.isNotBlank(valuePath)) {
                             span.appendText(value);
                         }
@@ -895,11 +888,43 @@ public class HTML5SectionCompleter {
                     // expands li template content
                     else {
                         for (Element c : i.children()) {
-                            expand(stclContext, s, c);
+                            expand(stclContext, stcl, c);
                         }
                     }
 
-                    expandAttributes(stclContext, s, i);
+                    expandAttributes(stclContext, stcl, i);
+                }
+
+            }
+            else {
+                for (PStcl s : stcl.getStencils(stclContext, path)) {
+
+                    if (satisfyDataCondition(stclContext, cond, s)) {
+                        // creates li element
+                        String apath = getPwd(stclContext, s);
+                        setDataAPath(stclContext, li, apath);
+                        Element i = li.clone();
+                        li.parent().appendChild(i);
+
+                        // if the li template is empty adds value
+                        if (li.children().size() == 0) {
+                            Element span = i.appendElement("span");
+                            String valuePath = getDataValuePath(li);
+                            String value = getPropertyValue(stclContext, s, valuePath);
+                            if (StringUtils.isNotBlank(valuePath)) {
+                                span.appendText(value);
+                            }
+                        }
+
+                        // expands li template content
+                        else {
+                            for (Element c : i.children()) {
+                                expand(stclContext, s, c);
+                            }
+                        }
+
+                        expandAttributes(stclContext, s, i);
+                    }
                 }
             }
 

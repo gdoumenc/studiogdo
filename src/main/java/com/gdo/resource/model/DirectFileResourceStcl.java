@@ -17,6 +17,9 @@ public class DirectFileResourceStcl extends FileResourceStcl {
 
     public DirectFileResourceStcl(StclContext stclContext) {
         super(stclContext);
+        
+        singleSlot(Slot.FILE_ENCAPSULATED);
+        delegateSlot(Slot.FILE, Slot.FILE_ENCAPSULATED);
     }
 
     public DirectFileResourceStcl(StclContext stclContext, PStcl stencil) {

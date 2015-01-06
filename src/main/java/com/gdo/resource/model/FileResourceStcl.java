@@ -23,6 +23,9 @@ public class FileResourceStcl extends _ResourceStcl {
 
     public FileResourceStcl(StclContext stclContext) {
         super(stclContext);
+        
+        delegateSlot(Slot.CONTENT, "File/Content");
+        delegateSlot(Slot.MIME_TYPE, "File/MimeType");
     }
 
     /*

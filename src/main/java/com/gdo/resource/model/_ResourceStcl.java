@@ -11,6 +11,8 @@ import org.apache.poi.ss.formula.eval.NotImplementedException;
 import com.gdo.context.model.FileStcl;
 import com.gdo.context.model.FolderStcl;
 import com.gdo.project.util.model.NamedStcl;
+import com.gdo.resource.cmd.Delete;
+import com.gdo.resource.cmd.Rename;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils._Stencil;
@@ -47,11 +49,24 @@ public abstract class _ResourceStcl extends Stcl {
 
     public _ResourceStcl(StclContext stclContext) {
         super(stclContext);
-
+        
+//        propSlot(Slot.PATH);
+//        propSlot(Slot.SIZE);
+//        propSlot(Slot.URL);
+        
+//        multiSlot(Slot.LAST_MODIFIED);
+        singleSlot(Slot.CONTEXT);
+        singleSlot(Slot.FILE);
+        singleSlot(Slot.CONTAINER_MANAGER);
+        singleSlot(Slot.CONTAINER_FOLDER);
+        
         new PathSlot(stclContext);
         new SizeSlot(stclContext);
         new LastModifiedSlot(stclContext);
         new UrlSlot(stclContext);
+        
+        command(Command.DELETE, Delete.class);
+        command(Command.RENAME, Rename.class);
     }
 
     /**

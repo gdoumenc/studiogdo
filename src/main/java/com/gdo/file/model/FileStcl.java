@@ -16,9 +16,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.util.Base64;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
 
 import com.gdo.file.cmd.CopyFile;
@@ -27,6 +29,7 @@ import com.gdo.file.cmd.RenameFile;
 import com.gdo.helper.StringHelper;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
+import com.gdo.stencils._Stencil;
 import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.faces.RenderContext;
@@ -65,6 +68,7 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
         new MimeTypeSlot(stclContext);
         new SizeSlot(stclContext);
         new ContentSlot(stclContext);
+        new ContentBase64Slot(stclContext, this, Slot.ENCODED_CONTENT);
 
         // COMMAND PART
 
@@ -370,6 +374,64 @@ public class FileStcl extends com.gdo.context.model.FileStcl {
                 IOUtils.copy(is, str);
                 return str.toString();
             } catch (IOException e) {
+                if (getLog().isErrorEnabled()) {
+                    File file = getFile(stclContext,
+                            self.getContainer(stclContext));
+                    logError(stclContext, "cannot get value from %s (%s)",
+                            file.getName(), e);
+                }
+                return "";
+            }
+        }
+
+        @Override
+        public String setValue(StclContext stclContext, String value, PStcl self) {
+            File file = getFile(stclContext, self.getContainer(stclContext));
+            if (file == null)
+                return null;
+            try {
+                StringReader str = new StringReader(value);
+                FileWriter writer = new FileWriter(file);
+                IOUtils.copy(str, writer);
+            } catch (IOException e) {
+                logError(stclContext, "cannot write content to %s (%s)",
+                        file.getName(), e);
+            }
+            return null;
+        }
+    }
+    
+    private class ContentBase64Slot extends CalculatedStringPropertySlot<StclContext, PStcl> {
+        
+        public ContentBase64Slot(StclContext stclContext, _Stencil<StclContext, PStcl> in, String name) {
+            super(stclContext, in, name);
+        }
+        
+        @Override
+        public InputStream getInputStream(StclContext stclContext, PStcl self) {
+            File file = getFile(stclContext, self.getContainer(stclContext));
+            if (file == null)
+                return StringHelper.EMPTY_STRING_INPUT_STREAM;
+            try {
+                return new FileInputStream(file);
+            } catch (IOException e) {
+                logError(stclContext, "cannot read content from %s (%s)",
+                        file.getName(), e);
+                return StringHelper.EMPTY_STRING_INPUT_STREAM;
+            }
+        }
+
+        public Base64InputStream getBase64InputStream(StclContext stclContext, PStcl self) {
+           InputStream in = getInputStream(stclContext, self);
+           return new Base64InputStream(in, true);
+        }
+        
+        @Override
+        public String getValue(StclContext stclContext, PStcl self) {
+            try {
+                Base64InputStream is = getBase64InputStream(stclContext, self);
+                return new String(IOUtils.toByteArray(is), "UTF-8");
+            } catch (Exception e) {
                 if (getLog().isErrorEnabled()) {
                     File file = getFile(stclContext,
                             self.getContainer(stclContext));

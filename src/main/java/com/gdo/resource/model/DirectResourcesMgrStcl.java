@@ -27,7 +27,10 @@ public class DirectResourcesMgrStcl extends ResourcesMgrStcl {
 
     public DirectResourcesMgrStcl(StclContext stclContext) {
         super(stclContext);
-
+        
+        propSlot(Slot.FOLDER_TEMPLATE);
+        propSlot(Slot.FILE_TEMPLATE);
+        
         new FileResourcesSlot(stclContext);
         new FolderResourcesSlot(stclContext);
     }

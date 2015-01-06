@@ -31,7 +31,13 @@ public class DirectFolderResourceStcl extends FolderResourceStcl {
 
     public DirectFolderResourceStcl(StclContext stclContext) {
         super(stclContext);
-
+        
+        propSlot(Slot.FILE_TEMPLATE);
+        propSlot(Slot.FOLDER_TEMPLATE);
+        
+        singleSlot(Slot.FOLDER_ENCAPSULATED);
+        delegateSlot(Slot.FILE, Slot.FOLDER_ENCAPSULATED);
+        
         new FileResourcesSlot(stclContext);
         new FolderResourcesSlot(stclContext);
     }
