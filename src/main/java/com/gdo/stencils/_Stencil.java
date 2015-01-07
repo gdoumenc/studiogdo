@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
@@ -1727,7 +1726,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         }
 
         Map<String, Object> getDefaultParams() {
-            Map<String, Object> map = new ConcurrentHashMap<>();
+            Map<String, Object> map = new HashMap<>(); //not ConcurrentHashMap because map can't be null see: http://stackoverflow.com/questions/698638/why-does-concurrenthashmap-prevent-null-keys-and-values
             int index = 0;
             for (Object param : _params) {
                 String key = CommandStencil.PARAM_PREFIX + ++index;
