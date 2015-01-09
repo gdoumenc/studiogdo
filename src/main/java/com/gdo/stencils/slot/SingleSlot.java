@@ -309,6 +309,11 @@ public class SingleSlot<C extends _StencilContext, S extends _PStencil<C, S>> ex
                 if (pstcl.isCursorBased()) {
                     pstcl.updateCursor((StclContext) stclContext);
                 }
+                
+                // the slot may have been removed from cursor resource
+                if (StencilUtils.isNotNull(_containedStcl)) {
+                    return null;
+                }
             }
 
             // the contained stencil may be created in instance repository so
