@@ -5,6 +5,7 @@ package com.gdo.file.model;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
@@ -197,6 +198,23 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                 if (dir == null) {
                     String msg = logWarn(stclContext, "Cannot get root dir");
                     return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
+                }
+                
+                String nom = PathCondition.getKeyCondition(condition);
+                if (StringUtils.isNotBlank(nom)) {
+                    FilenameFilter filter = new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String name) {
+                            return name.equals(nom);
+                        }
+                    };
+                    File[] files = dir.listFiles(filter);
+                    if (files.length > 0) {
+                        PStcl stcl = createFile(stclContext, files[0], new Key(nom), self);
+                        return StencilUtils.iterator(stclContext, stcl, self);
+                    } else {
+                        return StencilUtils.iterator();
+                    }
                 }
 
                 // for all files
