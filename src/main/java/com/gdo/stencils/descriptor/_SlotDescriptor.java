@@ -17,7 +17,7 @@ public abstract class _SlotDescriptor<C extends _StencilContext, S extends _PSte
     /**
      * The slot will be transient or not.
      */
-    protected boolean _tranzient = true;
+    protected boolean _tranzient = false;
 
     public _SlotDescriptor() {
     }
