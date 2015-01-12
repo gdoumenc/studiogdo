@@ -199,7 +199,7 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                     String msg = logWarn(stclContext, "Cannot get root dir");
                     return StencilUtils.<StclContext, PStcl> iterator(Result.error(msg));
                 }
-                
+
                 String nom = PathCondition.getKeyCondition(condition);
                 if (StringUtils.isNotBlank(nom)) {
                     FilenameFilter filter = new FilenameFilter() {
@@ -212,9 +212,8 @@ public class FolderStcl extends com.gdo.context.model.FolderStcl {
                     if (files.length > 0) {
                         PStcl stcl = createFile(stclContext, files[0], new Key(nom), self);
                         return StencilUtils.iterator(stclContext, stcl, self);
-                    } else {
-                        return StencilUtils.iterator();
                     }
+                    return StencilUtils.<StclContext, PStcl> iterator();
                 }
 
                 // for all files

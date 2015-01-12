@@ -43,14 +43,14 @@ public class SQLCursor extends _SlotCursor {
         String query = sqlSlot.getKeysQueryWithoutCondition(stclContext, key.toString(), container);
         if (StringUtils.isEmpty(query)) {
             String msg = logWarn(stclContext, "Stencil query not defined for slot %s for create stencil", slot);
-            return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
+            return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)));
         }
 
         // get sql context
         PStcl sqlContext = sqlSlot.getSQLContext(stclContext, container);
         if (StencilUtils.isNull(sqlContext)) {
             String msg = logWarn(stclContext, "No SQL context defined for slot %s for create stencil", slot);
-            return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
+            return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)));
         }
         SQLContextStcl context = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
 
@@ -62,48 +62,45 @@ public class SQLCursor extends _SlotCursor {
 
                 if (!rs.next()) {
                     String msg = logWarn(stclContext, "Stencil was removed from database in %s at key (no more in cursor)", slot, key);
-                    return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
+                    return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)));
                 }
 
                 // creates the stencil
                 String template = sqlSlot.getStencilTemplate(stclContext, rs, container);
                 PStcl stcl;
-                if (StringUtils.isEmpty(template)) {
+                if (StringUtils.isBlank(template)) {
+                    logWarn(stclContext, "No template defined for slot %s", slot);
                     stcl = factory.createPProperty(stclContext, slot, key, "");
                 } else {
                     Object params[] = sqlSlot.getStencilParameters(stclContext, rs, container);
                     stcl = factory.createPStencil(stclContext, slot, key, template, params);
+                    stcl.setCursorBased(stclContext, slot, this, key);
                 }
 
-                // checks the stencil is a SQLStcl
-                if (!(stcl.getReleasedStencil(stclContext) instanceof SQLStcl)) {
-                    String msg = logWarn(stclContext, "The template %s must be an instance of SQLStcl to be inserted in the SQLSlot %s", template, slot);
-                    return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
-                }
-
-                // adds containing slot
-                SQLStcl sql = (SQLStcl) stcl.getReleasedStencil(stclContext);
-                sql.setSQLContext(sqlContext);
-                sql.setSQLContainerSlot(container);
-
-                return new SQLCreatedStcl(stcl, rs);
+                return new SQLCreatedStcl(stcl, rs, sqlContext);
             } catch (Exception e) {
                 String msg = logError(stclContext, "%s", e);
-                return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
+                return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)));
             }
         }
 
         // no stencil found from query
         String msg = logError(stclContext, "No stencil found (%s)", query);
-        return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)), null);
+        return new SQLCreatedStcl(Stcl.nullPStencil(stclContext, Result.error(msg)));
     }
 
     @Override
     protected PStcl completeCreatedStencil(StclContext stclContext, PSlot<StclContext, PStcl> container, PSlot<StclContext, PStcl> slot, IKey key, CreatedStcl created) {
         PStcl stencil = ((SQLCreatedStcl) created)._created;
         ResultSet rs = ((SQLCreatedStcl) created)._rs;
+        PStcl sqlContext = ((SQLCreatedStcl) created)._sqlContext;
         if (rs != null) {
             try {
+
+                // adds containing slot
+                SQLStcl sql = (SQLStcl) stencil.getReleasedStencil(stclContext);
+                sql.setSQLContext(sqlContext);
+                sql.setSQLContainerSlot(container);
 
                 // completes stencil
                 Stcl stcl = stencil.getReleasedStencil(stclContext);
@@ -128,10 +125,16 @@ public class SQLCursor extends _SlotCursor {
 
     protected class SQLCreatedStcl extends CreatedStcl {
         public ResultSet _rs;
+        public PStcl _sqlContext;
 
-        protected SQLCreatedStcl(PStcl created, ResultSet rs) {
+        protected SQLCreatedStcl(PStcl created, ResultSet rs, PStcl sqlContext) {
             super(created);
             _rs = rs;
+            _sqlContext = sqlContext;
+        }
+        
+        protected SQLCreatedStcl(PStcl created) {
+            this(created, null, null);
         }
     }
 

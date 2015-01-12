@@ -1480,10 +1480,11 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return getReleasedStencil(stclContext).getUId(stclContext);
     }
 
+    // --------------------------------------------------------------------------
     //
-    // Informations relative to containing slots (to understand where the
-    // stencil is..)
+    // Pluging informations
     //
+    // --------------------------------------------------------------------------
 
     // should be used internally (used only if isPluggedOnce checked before)
     public PSlot<C, S> getContainingSlot(C stclContext) {

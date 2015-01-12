@@ -405,6 +405,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * Internal use only (cannot be private as used by plug package).
      */
     public final S plug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+        
+        // checks if the slot is not read only
+        if (isReadOnly()) {
+            logWarn(stclContext, "Plug in read only slot : %s", self);
+        }
 
         // verifies the plug is enabled
         try {
@@ -448,6 +453,11 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      * Internal use only (cannot be private as used by plug package).
      */
     public final void unplug(C stclContext, S stencil, IKey key, PSlot<C, S> self) {
+
+        // checks if the slot is not read only
+        if (isReadOnly()) {
+            logWarn(stclContext, "Unplug in read only slot : %s", self);
+        }
 
         // verifies the unplug is enabled
         try {
@@ -493,6 +503,12 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
      *            this slot as a plugged slot.
      */
     public void unplugAll(C stclContext, PSlot<C, S> self) {
+        
+        // checks if the slot is not read only
+        if (isReadOnly()) {
+            logWarn(stclContext, "Unplug all in read only slot : %s", self);
+        }
+
         try {
 
             // verifies the unplug is enabled
@@ -693,5 +709,4 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         }
         return "";
     }
-
 }
