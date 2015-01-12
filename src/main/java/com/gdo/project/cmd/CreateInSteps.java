@@ -88,11 +88,12 @@ public abstract class CreateInSteps extends ComposedActionStcl {
     @Override
     public CommandStatus<StclContext, PStcl> performSteps(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
         int currentStep = getActiveStepIndex();
+        CommandStatus<StclContext, PStcl> status = success(cmdContext, self);
 
         // creates the stencil by supplying its constructor value if defined
         // (creates it only on start)
         if (currentStep == getCreationStep() && getPreviousStepIndex() == getCreationStep() - 1) {
-            CommandStatus<StclContext, PStcl> status = createStencil(cmdContext, self);
+            status = createStencil(cmdContext, self);
             if (status.isNotSuccess()) {
                 return status;
             }
@@ -100,13 +101,13 @@ public abstract class CreateInSteps extends ComposedActionStcl {
 
         // plugs the created stencil after validation
         if (currentStep == getPlugStep() && getPreviousStepIndex() == getPlugStep() - 1) {
-            CommandStatus<StclContext, PStcl> status = plugStencil(cmdContext, self);
+            status = plugStencil(cmdContext, self);
             if (status.isNotSuccess()) {
                 return status;
             }
         }
 
-        return success(cmdContext, self);
+        return status;
     }
 
     protected CommandStatus<StclContext, PStcl> createStencil(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
@@ -339,7 +340,7 @@ public abstract class CreateInSteps extends ComposedActionStcl {
             } else {
                 stcl = CreateInSteps.this._created;
             }
-            return factory.createPStencil(stclContext, self, Key.NO_KEY, stcl);
+            return factory.createPStencil(stclContext, self, stcl.getKey(), stcl);
         }
 
     }

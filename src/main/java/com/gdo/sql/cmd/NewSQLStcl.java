@@ -2,6 +2,7 @@ package com.gdo.sql.cmd;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.gdo.project.cmd.CreateAtomic;
 import com.gdo.project.cmd.CreateInOneStep;
 import com.gdo.sql.model.SQLContextStcl;
 import com.gdo.sql.model.SQLStcl;
@@ -76,7 +77,10 @@ public class NewSQLStcl extends CreateInOneStep {
         if (result.isNotSuccess()) {
             return error(cmdContext, self, result);
         }
-        return success(cmdContext, self);
+        
+        CommandStatus<StclContext, PStcl> s = success(cmdContext, self, CreateAtomic.Status.KEY_USED, _created.getKey());
+        s = success(cmdContext, self, CreateAtomic.Status.STENCIL_CREATED, _created, s);
+        return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, _created.pwd(stclContext), s);
     }
 
     @Override
@@ -97,13 +101,16 @@ public class NewSQLStcl extends CreateInOneStep {
             // sets final id to the plugged stencil
             SQLStcl sql = _created.getReleasedStencil(stclContext);
             _plugged = sql.setFinal(stclContext, _created);
+            _newId = _plugged.getString(stclContext, SQLStcl.Slot.ID, "");
+            _plugged.setKey(new Key(_newId));
+            
+            // call after plug action
             status = afterSQLPlug(cmdContext, _plugged, self);
             if (status.isNotSuccess()) {
                 return status;
             }
 
             // modifies tables with temporary id
-            _newId = _plugged.getString(stclContext, SQLStcl.Slot.ID, "");
             PStcl sqlContext = getSQLContext(stclContext, self);
             Result result = updateTablesWithTemporaryId(stclContext, sqlContext, _oldId, _newId);
             if (result.isNotSuccess()) {
@@ -111,7 +118,9 @@ public class NewSQLStcl extends CreateInOneStep {
             }
 
             // all done
-            return success(cmdContext, self);
+            CommandStatus<StclContext, PStcl> s = success(cmdContext, self, CreateAtomic.Status.KEY_USED, _plugged.getKey());
+            s = success(cmdContext, self, CreateAtomic.Status.STENCIL_CREATED, _plugged, s);
+            return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, _plugged.pwd(stclContext), s);
         } catch (Exception e) {
             return error(cmdContext, self, e);
         }

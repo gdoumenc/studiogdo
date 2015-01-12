@@ -352,6 +352,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
             throw new IllegalArgumentException("Illegal null key parameter");
         }
         _key = key;
+        __pwd = null;
     }
 
     /**

@@ -124,13 +124,19 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return _cursor != null;
     }
 
+    public void setCursorBased(StclContext stclContext, PSlot<StclContext, PStcl> cursorContainer, _SlotCursor cursor, IKey cursorKey) {
+        _stencil = null;
+        createCursor(stclContext, cursor, cursorContainer, cursorKey);
+    }
+
     /* (non-Javadoc)
-     * @see com.gdo.stencils.plug._PStencil#initialize(com.gdo.stencils._StencilContext, com.gdo.stencils.plug._PStencil, com.gdo.stencils.plug.PSlot, com.gdo.stencils.key.IKey)
-     */
+      * @see com.gdo.stencils.plug._PStencil#initialize(com.gdo.stencils._StencilContext, com.gdo.stencils.plug._PStencil, com.gdo.stencils.plug.PSlot, com.gdo.stencils.key.IKey)
+      */
     @Override
     public void initialize(StclContext stclContext, PStcl pstencil, PSlot<StclContext, PStcl> slot, IKey key) {
         if (pstencil.isCursorBased()) {
             super.initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
+            //// seems done twice...
             createCursor(stclContext, pstencil);
         } else {
             super.initialize(stclContext, pstencil, slot, key);
@@ -157,11 +163,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         return super.isLink(stclContext);
     }
 
-    public void setCursorBased(StclContext stclContext, PSlot<StclContext, PStcl> cursorContainer, _SlotCursor cursor, IKey cursorKey) {
-        _stencil = null;
-        createCursor(stclContext, cursor, cursorContainer, cursorKey);
-    }
-
     public void updateCursor(StclContext stclContext) {
         PathCondition<StclContext, PStcl> cond = PathCondition.<StclContext, PStcl> newKeyCondition(stclContext, new Key(_cursor.getKey().toString()), null);
         _cursor.getContainer().getStencils(stclContext, cond);
@@ -173,6 +174,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         // if a cursor is defined then removes it from cursor
         if (isCursorBased()) {
             _cursor.clear(stclContext);
+            _cursor = null;
         }
 
         // does classical clear
