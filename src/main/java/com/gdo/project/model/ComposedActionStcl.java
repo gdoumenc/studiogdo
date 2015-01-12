@@ -142,8 +142,12 @@ public abstract class ComposedActionStcl extends CommandStcl {
 
         // returns status, current lauched command and lauching path
         String prefix = ComposedActionStcl.class.getName();
-        status = new CommandStatus<StclContext, PStcl>(prefix, CommandStatus.SUCCESS, Status.LAUNCHED, launched, status);
-        return new CommandStatus<StclContext, PStcl>(prefix, CommandStatus.SUCCESS, Status.LAUNCH_PATH, launchedPath, status);
+        //status = new CommandStatus<StclContext, PStcl>(prefix, CommandStatus.SUCCESS, Status.LAUNCHED, launched, status);
+        //return new CommandStatus<StclContext, PStcl>(prefix, CommandStatus.SUCCESS, Status.LAUNCH_PATH, launchedPath, status);
+        CommandStatus<StclContext, PStcl> s = new CommandStatus<StclContext, PStcl>(ComposedActionStcl.class.getName(), CommandStatus.SUCCESS, Status.LAUNCHED, launched, null);
+        s = new CommandStatus<StclContext, PStcl>(ComposedActionStcl.class.getName(), CommandStatus.SUCCESS, Status.LAUNCH_PATH, launchedPath, s);
+        status.addOther(s);
+        return status;
     }
 
     /*

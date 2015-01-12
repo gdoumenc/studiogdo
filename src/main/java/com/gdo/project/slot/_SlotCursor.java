@@ -240,12 +240,12 @@ public abstract class _SlotCursor {
                 stcl.afterRPCSet(stclContext);
             }
 
-            // removes it from cursor
-            removeFromCursor(stclContext, key);
-
             // replaces the stencil by cursor
             for (PStcl s : stcl.getStencilOtherPluggedReferences(stclContext))
                 s.release(stclContext, container, this, key);
+            
+            // removes it from cursor
+            removeFromCursor(stclContext, key);
         }
     }
 
