@@ -425,7 +425,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return a new plugged stencil.
      */
     @SuppressWarnings("unchecked")
-    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<? extends C, ? extends S>> clazz, S self, Object... params) {
+    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<?, ?>> clazz, S self, Object... params) {
 
         // creates the stencil (without plugging it)
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();

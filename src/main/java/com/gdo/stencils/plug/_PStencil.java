@@ -1126,7 +1126,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the parameters for stencil constructor (if needed).
      * @return the new plugged stencil.
      */
-    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<? extends C, ? extends S>> clazz, Object... params) {
+    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<?, ?>> clazz, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.newPStencil(stclContext, slot, key, clazz, self(), params);
     }
