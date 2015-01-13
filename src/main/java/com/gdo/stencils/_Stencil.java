@@ -109,8 +109,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     private boolean cleared = false;
 
     // associated default plugged stencil for interface manipulation
-    private String _id = null;
-    private String _uid = null;
+    private String _id = GlobalCounter.ID();
+    private String _uid = GlobalCounter.uniqueID();
     protected _PStencil<C, S> _self;
 
     // template descriptor used to create the stencil (may be null)
@@ -136,13 +136,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * Map of slots defined in the stencil (slots' name as key)
      */
     protected Map<String, _Slot<C, S>> _slots = new HashMap<String, _Slot<C, S>>();
-
-    /**
-     * List of plugged references to this stencil (containing slot + key) As the
-     * stencil can be plugged in a same slot with different key, the list is S
-     * composed.
-     */
-    private List<S> _plugged_references = new ArrayList<S>();
 
     /**
      * Internal slot when commands are defined.
@@ -252,12 +245,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             _commandSlot = null;
         }
 
-        // plugged references
-        if (_plugged_references != null) {
-            _plugged_references.clear();
-            _plugged_references = null;
-        }
-
         // descriptors
         if (_slot_descs != null) {
             _slot_descs.clear();
@@ -314,26 +301,27 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil as a plugged stencil.
      * @return <tt>true</tt> if the stencil is transient (should not be stored).
      */
-    public boolean isTransient(C stclContext, S self) {
-        return _transient;
-    }
-
     public boolean isLink(C stclContext, S self) {
         return false;
     }
 
+    public boolean isTransient(C stclContext, S self) {
+        return _transient;
+    }
+
     /**
-     * Sets the transient status of the stencil.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param value
-     *            the transient value.
-     * @param self
-     *            the stencil as a plugged stencil.
+     * Sets the stencil transient.
      */
-    public void setTransient(C stclContext, boolean value, S self) {
-        _transient = value;
+    public void setTransient() {
+        _transient = true;
+    }
+
+    public String getId(C stclContext) {
+        return _id;
+    }
+
+    public String getUId(C stclContext) {
+        return _uid;
     }
 
     /**
@@ -437,7 +425,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @return a new plugged stencil.
      */
     @SuppressWarnings("unchecked")
-    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<C, ? extends S>> clazz, S self, Object... params) {
+    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<? extends C, ? extends S>> clazz, S self, Object... params) {
 
         // creates the stencil (without plugging it)
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
@@ -564,21 +552,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      */
     public void afterPlugged(C stclContext, PSlot<C, S> slot, IKey key, S self) {
         // nothing by default
-    }
-
-    public String getId(C stclContext) {
-        if (_id == null) {
-            _id = GlobalCounter.ID();
-        }
-        return _id;
-    }
-
-    public String getUId(C stclContext) {
-        if (_uid == null) {
-            _uid = GlobalCounter.uniqueID();
-        }
-        return _uid;
-
     }
 
     // --------------------------------------------------------------------------
@@ -1055,17 +1028,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             index++;
         }
         return map;
-    }
-
-    /**
-     * Returns the list of plugged slots (slot + key) referencing this stencil.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @return the list of plugged references.
-     */
-    public List<S> getPluggedReferences(C stclContext) {
-        return _plugged_references;
     }
 
     /**

@@ -6,6 +6,7 @@ package com.gdo.stencils.plug;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -84,6 +85,13 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
 
     // stored to avoid recalculation
     private String __pwd;
+
+    /**
+     * List of plugged references to this stencil (containing slot + key) As the
+     * stencil can be plugged in a same slot with different key, the list is S
+     * composed.
+     */
+    private List<S> _plugged_references = new ArrayList<S>();
 
     /**
      * Plugged stencil constructor.
@@ -181,6 +189,9 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     public void clear(C stclContext) {
         if (_stencil != null) {
             _stencil.clear(stclContext, self());
+        }
+        if (_plugged_references != null) {
+            _plugged_references.clear();
         }
     }
 
@@ -380,16 +391,12 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     /**
-     * Set the transient property of the stencil.
-     * 
-     * @param stclContext
-     *            the stencil context.
-     * @param value
-     *            the transient value.
+     * Sets the stencil transient.
      */
-    public void setTransient(C stclContext, boolean value) {
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        stcl.setTransient(stclContext, value, self());
+    public void setTransient() {
+        if (_stencil != null) {
+            _stencil.setTransient();
+        }
     }
 
     /**
@@ -1119,7 +1126,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *            the parameters for stencil constructor (if needed).
      * @return the new plugged stencil.
      */
-    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<C, S>> clazz, Object... params) {
+    public S newPStencil(C stclContext, PSlot<C, S> slot, IKey key, Class<? extends _Stencil<? extends C, ? extends S>> clazz, Object... params) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
         return stcl.newPStencil(stclContext, slot, key, clazz, self(), params);
     }
@@ -1486,17 +1493,15 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     //
     // --------------------------------------------------------------------------
 
-    // should be used internally (used only if isPluggedOnce checked before)
+    // TOTO : should be used internally (used only if isPluggedOnce checked before)
+    // used only for SaveAsProp, should be removed
     public PSlot<C, S> getContainingSlot(C stclContext) {
         List<S> list = getStencilOtherPluggedReferences(stclContext);
         return list.get(0).getContainingSlot();
     }
 
     public List<S> getStencilOtherPluggedReferences(C stclContext) {
-        _Stencil<C, S> stcl = getStencil(stclContext);
-        List<S> list = stcl.getPluggedReferences(stclContext);
-        release(stclContext);
-        return list;
+        return _plugged_references;
     }
 
     /**

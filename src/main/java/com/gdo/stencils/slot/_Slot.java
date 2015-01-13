@@ -628,11 +628,12 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
         // create link stencil in slot
         IKey key = (linkDesc.getKey() != null) ? new Key(linkDesc.getKey()) : Key.NO_KEY;
-        S link = stencil.newPStencil(stclContext, slot, key, LinkStcl.class.getName(), path);
+        Class<? extends _Stencil<?, ?>> clazz = LinkStcl.class;
+        S link = stencil.newPStencil(stclContext, slot, key, LinkStcl.class, path);
         if (ConverterHelper.parseBoolean(linkDesc.getLocal())) {
             link.setBoolean(stclContext, LinkStcl.Slot.LOCAL, true);
         }
-        link.setTransient(stclContext, true);
+        link.setTransient();
     }
 
     private void plugLink(C stclContext, S stencil, String slotPath, String path, PSlot<C, S> self) {
@@ -653,9 +654,8 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
         path = PathUtils.compose(PathUtils.PARENT, path);
 
         // create link stencil in slot
-        @SuppressWarnings("deprecation")
-        S link = stencil.newPStencil(stclContext, slot, Key.NO_KEY, LinkStcl.class.getName(), path);
-        link.setTransient(stclContext, true);
+        S link = stencil.newPStencil(stclContext, slot, Key.NO_KEY, LinkStcl.class, path);
+        link.setTransient();
     }
 
     //

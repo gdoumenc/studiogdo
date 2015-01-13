@@ -25,12 +25,12 @@ public class IsPlugged extends AtomicActionStcl {
     public CommandStatus<StclContext, PStcl> doAction(CommandContext<StclContext, PStcl> cmdContext, PStcl self) {
         StclContext stclContext = cmdContext.getStencilContext();
         PStcl target = cmdContext.getTarget();
-        List<PStcl> slots = target.getStencilOtherPluggedReferences(stclContext);
+        List<PStcl> other = target.getStencilOtherPluggedReferences(stclContext);
 
         // from which slots (if no slot checks if plugged at another place)
         String path = getParameter(cmdContext, 2, null);
         if (StringUtils.isEmpty(path)) {
-            return success(cmdContext, self, slots.size() > 1);
+            return success(cmdContext, self, other.size() > 1);
         }
 
         // get operator in case of multi slot
