@@ -192,6 +192,17 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         return super.getStencil(StclContext.defaultContext());
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public <K extends _Stencil<StclContext, PStcl>> K getReleasedStencil(StclContext stclContext) {
+        if (_stencil != null) {
+            return (K) _stencil;
+        }
+        K stcl = getStencil(stclContext);
+        release(stclContext);
+        return stcl;
+    }
 
     // cannot return Stcl as CommandStcl is not Stcl
     @Override

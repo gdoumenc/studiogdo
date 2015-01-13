@@ -264,10 +264,8 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      *         methods).
      */
     @SuppressWarnings("unchecked")
-    public final <K extends _Stencil<C, S>> K getReleasedStencil(_StencilContext stclContext) {
-        K stcl = (K) getStencil((C) stclContext);
-        release((C) stclContext);
-        return stcl;
+    public <K extends _Stencil<C, S>> K getReleasedStencil(C stclContext) {
+        return (K) _stencil;
     }
 
     /**
@@ -579,8 +577,13 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (isNull()) {
             throw new IllegalStateException("cannot call cursor after set actions from an unvalid stencil: " + getNullReason());
         }
-        _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        return stcl.afterRPCSet(stclContext, self());
+        
+        // only if on memory
+        if (_stencil != null) {
+            return _stencil.afterRPCSet(stclContext, self());
+        }
+        
+        return Result.success();
     }
 
     /*

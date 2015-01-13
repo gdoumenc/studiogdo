@@ -237,7 +237,7 @@ public abstract class _SlotCursor {
             Boolean modified = _modified.get(key);
             if (modified != null) {
                 logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
-                stcl.afterRPCSet(stclContext);
+                //stcl.afterRPCSet(stclContext);
             }
 
             // replaces the stencil by cursor
