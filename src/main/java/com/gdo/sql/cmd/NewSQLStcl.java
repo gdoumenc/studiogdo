@@ -1,6 +1,8 @@
 package com.gdo.sql.cmd;
 
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.util.Base64;
 
 import com.gdo.project.cmd.CreateAtomic;
 import com.gdo.project.cmd.CreateInOneStep;
@@ -78,9 +80,11 @@ public class NewSQLStcl extends CreateInOneStep {
             return error(cmdContext, self, result);
         }
         
+        Base64 base = new Base64();
+        String encoded_path =  new String(base.encode(_created.pwd(stclContext).getBytes()));
         CommandStatus<StclContext, PStcl> s = success(cmdContext, self, CreateAtomic.Status.KEY_USED, _created.getKey());
         s = success(cmdContext, self, CreateAtomic.Status.STENCIL_CREATED, _created, s);
-        return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, _created.pwd(stclContext), s);
+        return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, encoded_path, s);
     }
 
     @Override
