@@ -5,7 +5,7 @@
 	<artifactId>studiogdo</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<version>2.2.8.1</version>
+	<version>2.2.9</version>
 	<description>Java implementation of the StudioGdo model.</description>
 	<url>http://www.studiogdo.com</url>
 	<licenses>

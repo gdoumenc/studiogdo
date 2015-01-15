@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1506,6 +1507,24 @@ public class HTML5SectionCompleter {
             DateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date date = sqlDateFormat.parse(value);
             DateFormat dateFormat = new SimpleDateFormat(format);
+            return dateFormat.format(date);
+        }
+
+        if ("utc_dd/MM/yyyy".equals(format)) {
+            format = format.substring(4);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = dateFormat.parse(value);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+            return dateFormat.format(date);
+        }
+
+        if ("utc_dd/MM/yyyy HH:mm".equals(format)) {
+            format = format.substring(4);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = dateFormat.parse(value);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
             return dateFormat.format(date);
         }
 
