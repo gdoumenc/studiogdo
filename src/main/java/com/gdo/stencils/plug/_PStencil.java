@@ -982,7 +982,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         // gets string from value
         S prop = getStencil(stclContext, path);
         if (StencilUtils.isNull(prop)) {
-            throw new IllegalStateException(prop.getNullReason());
+            return def;
         }
 
         String value = prop.getReleasedStencil(stclContext).getValue(stclContext, prop);

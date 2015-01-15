@@ -2,6 +2,7 @@ package com.gdo.stencils.facet;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,9 +16,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 public class PythonSectionCompleter extends HTML5SectionCompleter {
-    
+
     private boolean _full;
-    
+
     public void setFullStructure() {
         _full = true;
     }
@@ -70,16 +71,39 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
         return result;
     }
 
-    // expand a data-value from a data-path
+    /**
+     * Expand a data-value from a data-path.
+     * 
+     * @param stclContext
+     * @param stcl
+     * @param object
+     * @param full render more info (path, this) on each expansion if defined to <tt>true</tt>.
+     * @return
+     */
     private JsonElement expandObject(StclContext stclContext, PStcl stcl, JsonObject object, boolean full) {
+        boolean return_array = false;
         JsonArray result = new JsonArray();
         if (object.has("data-path") && object.has("data-value")) {
 
             // get path
             JsonElement data_path = object.get("data-path");
-            if (!data_path.isJsonPrimitive())
+            String path = null;
+            if (data_path.isJsonArray()) {
+                JsonArray array = data_path.getAsJsonArray();
+                if (array.size() != 1) {
+                    throw new JsonParseException("data-path can be only an array of size 1");
+                }
+                data_path = array.get(0);
+                return_array = true;
+            }
+            if (data_path.isJsonPrimitive()) {
+                path = data_path.getAsString();
+            } else {
                 throw new JsonParseException("data-path must be a string");
-            String path = data_path.getAsString();
+            }
+            if (StringUtils.isBlank(path)) {
+                throw new JsonParseException("data-path is not defined (should be a string or a list of string");
+            }
 
             // get result struture
             JsonElement data_value = object.get("data-value");
@@ -106,10 +130,23 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
 
                     }
                 }
+                if (!return_array) {
+                    return dict;
+                }
                 result.add(dict);
             }
+        } else {
+            JsonObject dict = new JsonObject();
+            for (Map.Entry<String, JsonElement> elt : object.entrySet()) {
+                JsonElement value = expand(stclContext, stcl, elt.getValue(), full);
+                dict.add(elt.getKey(), value);
+            }
+            if (!return_array) {
+                return dict;
+            }
+            result.add(dict);
         }
-        
+
         return result;
     }
 }
