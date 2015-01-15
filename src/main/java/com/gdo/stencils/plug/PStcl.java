@@ -526,8 +526,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             return logWarn(stclContext, "The ressource %s is not defined", resource);
         }
         PStcl servlet = stclContext.getServletStcl();
-        String value = servlet.getString(stclContext, path);
-        return (value != null) ? value : def;
+        return servlet.getString(stclContext, path, def);
     }
 
     public int getResourceValue(StclContext stclContext, String resource, int def) {
