@@ -14,6 +14,7 @@
 		<workspace.name>workspace/${war.name}</workspace.name>
 		<deploy.name>pip</deploy.name>
 		<ssh.home>/home/studiogdo/${workspace.name}</ssh.home>
+		<ssh.keyfile>id_rsa</ssh.keyfile>
 		<log.directory>/var/log/${tomcat.version}/${war.name}</log.directory>
 		<conf.directory>/home/studiogdo/${workspace.name}/work/conf</conf.directory>
 		<skel.directory>/home/studiogdo/${workspace.name}/work/skel</skel.directory>
@@ -114,15 +115,15 @@
 								<sshexec host="${ssh.host}" username="${ssh.username}"
 									password="${ssh.password}"
 									command="cp ${ssh.home}/${war.name}.war ${ssh.backup}/${war.name}.war.${DSTAMP}"
-									trust="true" failonerror="false" verbose="true" />
+									trust="true" failonerror="false" verbose="true" keyfile="${ssh.keyfile}" />
 								<scp localFile="${project.build.directory}/${war.name}.war"
 									remoteTofile="${ssh.username}@${ssh.host}:${ssh.home}/${war.name}.new"
 									trust="true" password="${ssh.password}" failonerror="true"
-									verbose="true" />
+									verbose="true" keyfile="${ssh.keyfile}"/>
 								<sshexec host="${ssh.host}" username="${ssh.username}"
 									password="${ssh.password}"
 									command="mv ${ssh.home}/${war.name}.new ${ssh.home}/${war.name}.war &amp;&amp; cd ${war.name} &amp;&amp; bin/update.sh"
-									trust="true" failonerror="true" verbose="true" />
+									trust="true" failonerror="true" verbose="true" keyfile="${ssh.keyfile}" />
 							</target>
 						</configuration>
 					</execution>

@@ -14,11 +14,12 @@
 		<webapp.session.timeout>30</webapp.session.timeout>
 		<war.name>${project.artifactId}</war.name>
 		<deploy.name>pip</deploy.name>
+		<ssh.keyfile>/home/studiogdo/.ssh/id_rsa</ssh.keyfile>
 		<ssh.home>/home/studiogdo/${war.name}</ssh.home>
 		<log.directory>/var/log/${tomcat.version}/${war.name}</log.directory>
-		<conf.directory>/home/studiogdo/${war.name}/work/conf</conf.directory>
-		<skel.directory>/home/studiogdo/${war.name}/work/skel</skel.directory>
-		<tmp.directory>/home/studiogdo/${war.name}/work/tmp</tmp.directory>
+		<conf.directory>${ssh.home}/work/conf</conf.directory>
+		<skel.directory>${ssh.home}/work/skel</skel.directory>
+		<tmp.directory>${ssh.home}/work/tmp</tmp.directory>
 		<auto.save>false</auto.save>
 		<cursor.strategy>0</cursor.strategy>
 		<session.logger>session</session.logger>
@@ -113,15 +114,15 @@
 									<format property="DSTAMP" pattern="yyyy-MM-dd-HH-mm-ss" />
 								</tstamp>
 								<sshexec host="${ssh.host}" username="${ssh.username}"
-									password="${ssh.password}"
+									password="${ssh.password}" keyfile="${ssh.keyfile}"
 									command="cp ${ssh.home}/${war.name}.war ${ssh.backup}/${war.name}.war.${DSTAMP}"
 									trust="true" failonerror="false" verbose="true" />
 								<scp localFile="${project.build.directory}/${war.name}.war"
 									remoteTofile="${ssh.username}@${ssh.host}:${ssh.home}/${war.name}.new"
-									trust="true" password="${ssh.password}" failonerror="true"
+									trust="true" password="${ssh.password}" keyfile="${ssh.keyfile}" failonerror="true"
 									verbose="true" />
 								<sshexec host="${ssh.host}" username="${ssh.username}"
-									password="${ssh.password}"
+									password="${ssh.password}" keyfile="${ssh.keyfile}"
 									command="mv ${ssh.home}/${war.name}.new ${ssh.home}/${war.name}.war &amp;&amp; cd ${war.name} &amp;&amp; bin/update.sh"
 									trust="true" failonerror="true" verbose="true" />
 							</target>
