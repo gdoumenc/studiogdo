@@ -196,11 +196,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     /**
      * Checks if a slot is a slot cursor.
      * 
-<<<<<<< HEAD
-=======
-     * @param stclContext
-     *            the stencil context.
->>>>>>> stable/v2.2
      * @return <tt>true</tt> if the slot is cursor based.
      */
     public boolean isCursorBased() {
