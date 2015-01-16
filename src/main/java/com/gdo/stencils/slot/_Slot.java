@@ -147,6 +147,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     public void setTransient() {
         _tranzient = true;
     }
+
     @Deprecated
     public void setTransient(C stclContext) {
         _tranzient = true;
@@ -177,8 +178,29 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
 
     /**
+     * Checks if this slot is read only.
+     * 
+     * @return <tt>true</tt> if the slot is read only.
+     */
+    public boolean isReadOnly(C stclContext, PSlot<C, S> self) {
+        return _read_only;
+    }
+
+    /**
+     * Set this slot read only.
+     */
+    public void setReadOnly(C stclContext, PSlot<C, S> self) {
+        _read_only = true;
+    }
+
+    /**
      * Checks if a slot is a slot cursor.
      * 
+<<<<<<< HEAD
+=======
+     * @param stclContext
+     *            the stencil context.
+>>>>>>> stable/v2.2
      * @return <tt>true</tt> if the slot is cursor based.
      */
     public boolean isCursorBased() {
