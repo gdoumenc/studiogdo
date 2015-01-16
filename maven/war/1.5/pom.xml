@@ -122,7 +122,7 @@
 									verbose="true" keyfile="${ssh.keyfile}"/>
 								<sshexec host="${ssh.host}" username="${ssh.username}"
 									password="${ssh.password}"
-									command="mv ${ssh.home}/${war.name}.new ${ssh.home}/${war.name}.war &amp;&amp; cd ${war.name} &amp;&amp; bin/update.sh"
+									command="mv ${ssh.home}/${war.name}.new ${ssh.home}/${war.name}.war &amp;&amp; cd ${ssh.home} &amp;&amp; bin/update.sh"
 									trust="true" failonerror="true" verbose="true" keyfile="${ssh.keyfile}" />
 							</target>
 						</configuration>
