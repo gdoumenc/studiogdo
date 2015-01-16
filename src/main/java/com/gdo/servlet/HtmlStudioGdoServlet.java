@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -494,7 +495,6 @@ public class HtmlStudioGdoServlet extends HttpServlet {
             stcl.setString(stclContext, prop, "");
         } else {
 
-            // date
             if ("dt_dd/MM/yyyy".equals(format)) {
                 DateFormat dateFormat = new SimpleDateFormat(format.substring(3));
                 Date date = dateFormat.parse(value);
@@ -502,12 +502,29 @@ public class HtmlStudioGdoServlet extends HttpServlet {
                 stcl.setString(stclContext, prop, sqlDateFormat.format(date));
             }
 
-            // date
             if ("dt_dd/MM/yyyy HH:mm".equals(format)) {
                 DateFormat dateFormat = new SimpleDateFormat(format.substring(3));
                 Date date = dateFormat.parse(value);
                 DateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 stcl.setString(stclContext, prop, sqlDateFormat.format(date));
+            }
+
+            if ("utc_dd/MM/yyyy".equals(format)) {
+                format = format.substring(4);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+                Date date = dateFormat.parse(value);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                stcl.setString(stclContext, prop, dateFormat.format(date));
+            }
+
+            if ("utc_dd/MM/yyyy HH:mm".equals(format)) {
+                format = format.substring(4);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+                Date date = dateFormat.parse(value);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                stcl.setString(stclContext, prop, dateFormat.format(date));
             }
         }
     }
