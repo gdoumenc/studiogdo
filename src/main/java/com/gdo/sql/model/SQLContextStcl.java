@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -495,8 +493,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     // connections are stored in the request attributes
     @SuppressWarnings("unchecked")
     private Connection getConnection(StclContext stclContext, PStcl self) {
-        HttpServletRequest request = stclContext.getRequest();
-        Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+        Map<String, Connection> cons = (Map<String, Connection>) stclContext.getAttribute(CONNECTION);
         if (cons == null)
             return null;
         return cons.get(self.getUId(stclContext));
@@ -504,11 +501,10 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
 
     @SuppressWarnings("unchecked")
     private void setConnection(StclContext stclContext, Connection connection, PStcl self) {
-        HttpServletRequest request = stclContext.getRequest();
-        Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+        Map<String, Connection> cons = (Map<String, Connection>) stclContext.getAttribute(CONNECTION);
         if (cons == null) {
             cons = new ConcurrentHashMap<String, Connection>();
-            request.setAttribute(CONNECTION, cons);
+            stclContext.setAttribute(CONNECTION, cons);
         }
         if (connection == null)
             cons.remove(self.getUId(stclContext));
@@ -532,8 +528,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
     @SuppressWarnings("unchecked")
     public static void closeAllConnections(StclContext stclContext) {
         try {
-            HttpServletRequest request = stclContext.getRequest();
-            Map<String, Connection> cons = (Map<String, Connection>) request.getAttribute(CONNECTION);
+            Map<String, Connection> cons = (Map<String, Connection>) stclContext.getAttribute(CONNECTION);
             if (cons != null) {
                 for (Connection con : cons.values()) {
                     con.close();
