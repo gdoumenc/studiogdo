@@ -48,6 +48,7 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.plug.WrongPathException;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot.MultiCalculatedSlot;

@@ -21,7 +21,6 @@ import com.gdo.helper.StringHelper;
 import com.gdo.stencils.Result;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.WrongPathException;
 import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.factory.StencilFactory;
@@ -31,6 +30,7 @@ import com.gdo.stencils.key.Key;
 import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.plug.WrongPathException;
 import com.gdo.stencils.slot.CalculatedStringPropertySlot;
 import com.gdo.stencils.slot.MultiCalculatedSlot;
 import com.gdo.stencils.slot.MultiSlot;
@@ -157,11 +157,11 @@ public class SessionStcl extends Stcl {
 
         // verifies slot name
         if (StringUtils.isBlank(slotName)) {
-            throw new WrongPathException("No path defined for local slot in session stencil", this);
+            throw new WrongPathException("No path defined for local slot in session stencil", self);
         }
         if (PathUtils.isComposed(slotName)) {
             String msg = String.format("Wrong composed slot name %s for local slot in session stencil", slotName);
-            throw new WrongPathException(msg, this);
+            throw new WrongPathException(msg, self);
         }
 
         // returns the slot if already exists

@@ -4,7 +4,6 @@
 package com.gdo.stencils.factory;
 
 import com.gdo.helper.ClassHelper;
-import com.gdo.stencils.CalculatedPropStcl;
 import com.gdo.stencils.CommandStcl;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
@@ -12,6 +11,7 @@ import com.gdo.stencils.interpreted.TemplateDescriptor;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.prop.CalculatedPropStcl;
 
 /**
  * <p>

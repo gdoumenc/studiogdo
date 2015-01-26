@@ -7,10 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.project.model.AtomicActionStcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.WrongPathException;
 import com.gdo.stencils.cmd.CommandContext;
 import com.gdo.stencils.cmd.CommandStatus;
 import com.gdo.stencils.plug.PStcl;
+import com.gdo.stencils.plug.WrongPathException;
 
 public class SetValue extends AtomicActionStcl {
 
