@@ -3,6 +3,7 @@
  */
 package com.gdo.project.slot;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
@@ -49,6 +50,7 @@ public abstract class _SlotCursor {
     // set to true if properties list of a stencil was modified since last set
     // of those properties (key -> value)
     public Map<IKey, Boolean> _modified;
+    public Map<IKey, Boolean> _in_completion;
 
     // locked stencils (key -> stencil plugged in $locked slot)
     protected Map<IKey, PStcl> _locked;
@@ -81,6 +83,8 @@ public abstract class _SlotCursor {
             _properties.clear();
         if (_modified != null)
             _modified.clear();
+        if (_in_completion != null)
+            _in_completion.clear();
     }
 
     public void size(int size) {
@@ -169,7 +173,13 @@ public abstract class _SlotCursor {
             if (StencilUtils.isNotNull(locked))
                 stcl._created.plug(stclContext, locked, Stcl.Slot.$LOCKED_BY);
 
-            return completeCreatedStencil(stclContext, container, slot, key, stcl);
+            if (_in_completion == null) {
+                _in_completion = new HashMap<IKey, Boolean>();
+            }
+            _in_completion.put(key, Boolean.TRUE);
+            PStcl completed =  completeCreatedStencil(stclContext, container, slot, key, stcl);
+            _in_completion.put(key, Boolean.FALSE);
+            return completed;
         }
 
     }
@@ -374,7 +384,8 @@ public abstract class _SlotCursor {
         }
 
         // sets cursor modified for this stencil
-        _modified.put(key, Boolean.TRUE);
+        if (!_in_completion.get(key))
+            _modified.put(key, Boolean.TRUE);
         return attributes.put(path, value);
     }
 

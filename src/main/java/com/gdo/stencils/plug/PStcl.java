@@ -643,11 +643,13 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (!PathUtils.isComposed(path) && _cursor != null) {
             String value = _cursor.getCursor().getPropertyValue(stclContext, _cursor.getContainer(), getCursorKey(), path);
             if (value != null) {
+                System.out.println("get from cursor");
                 return value;
             }
         }
 
         // search string in slot
+        System.out.println("get from stcl");
         return super.getString(stclContext, path, def);
     }
 
@@ -774,8 +776,8 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             if (old != null) {
 
                 // then replaces it
-                _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, value);
                 super.setString(stclContext, path, value);
+                _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, value);
                 return;
             }
         }
