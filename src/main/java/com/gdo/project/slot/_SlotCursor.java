@@ -202,7 +202,7 @@ public abstract class _SlotCursor {
 
                     // not same as key as was the last used and may be reused
                     // and stencil must not be locked
-                    if (!k.equals(key) && _locked.get(k) == null)
+                    if (!k.equals(key) && !_locked.containsKey(k))
                         keys.push(k);
                 }
 
@@ -231,6 +231,9 @@ public abstract class _SlotCursor {
         // gets the stencil to be removed
         PStcl stcl = inCursor(stclContext, key);
         if (StencilUtils.isNotNull(stcl)) {
+            
+            // lock the stencil to force it to stay in memory
+            lock(stclContext, stcl, key);
 
             // checks was not modified before removing
             // (negative id may be released without being saved)
@@ -246,6 +249,9 @@ public abstract class _SlotCursor {
             
             // removes it from cursor
             removeFromCursor(stclContext, key);
+            
+            // unlock the stencil as it is removed
+            unlock(stclContext, key);
         }
     }
 
