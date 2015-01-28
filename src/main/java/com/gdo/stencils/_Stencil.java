@@ -1789,8 +1789,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
             Map<String, Object> map = new ConcurrentHashMap<String, Object>();
             int index = 0;
             for (Object param : _params) {
-                String key = CommandStencil.PARAM_PREFIX + ++index;
-                map.put(key, param);
+                if (param != null) {
+                    String key = CommandStencil.PARAM_PREFIX + ++index;
+                    map.put(key, param);
+                }
             }
             return map;
         }
