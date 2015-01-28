@@ -643,13 +643,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (!PathUtils.isComposed(path) && _cursor != null) {
             String value = _cursor.getCursor().getPropertyValue(stclContext, _cursor.getContainer(), getCursorKey(), path);
             if (value != null) {
-                System.out.println("get from cursor");
                 return value;
             }
         }
 
         // search string in slot
-        System.out.println("get from stcl");
         return super.getString(stclContext, path, def);
     }
 

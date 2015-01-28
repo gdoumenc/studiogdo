@@ -1659,7 +1659,6 @@ public class HTML5SectionCompleter {
                 // stores values for next use
                 //_values.put(save_index, value);
             }
-            System.out.println(String.format("---> %s, %s", propertyPath, value));
             return value;
         } catch (Exception e) {
             return "";

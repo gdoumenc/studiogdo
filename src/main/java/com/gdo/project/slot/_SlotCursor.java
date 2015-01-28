@@ -178,7 +178,7 @@ public abstract class _SlotCursor {
             }
             _in_completion.put(key, Boolean.TRUE);
             PStcl completed =  completeCreatedStencil(stclContext, container, slot, key, stcl);
-            _in_completion.put(key, Boolean.FALSE);
+            _in_completion.remove(key);
             return completed;
         }
 
@@ -384,8 +384,10 @@ public abstract class _SlotCursor {
         }
 
         // sets cursor modified for this stencil
-        if (!_in_completion.get(key))
+        // if in completion then this is not a modification
+        if (!_in_completion.containsKey(key))
             _modified.put(key, Boolean.TRUE);
+        
         return attributes.put(path, value);
     }
 
