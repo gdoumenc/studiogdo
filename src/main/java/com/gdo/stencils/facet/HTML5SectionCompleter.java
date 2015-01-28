@@ -1635,7 +1635,7 @@ public class HTML5SectionCompleter {
             String save_index = s.getId(stclContext) + propertyPath;
 
             // checks value not already read
-            String value = _values.get(save_index);
+            String value = null; //_values.get(save_index);
             if (value == null) {
                 if (PathUtils.isComposed(propertyPath)) {
                     s = stcl.getStencil(stclContext, PathUtils.getPathName(propertyPath));
@@ -1657,8 +1657,9 @@ public class HTML5SectionCompleter {
                 }
 
                 // stores values for next use
-                _values.put(save_index, value);
+                //_values.put(save_index, value);
             }
+            System.out.println(String.format("---> %s, %s", propertyPath, value));
             return value;
         } catch (Exception e) {
             return "";
