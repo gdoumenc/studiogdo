@@ -129,7 +129,7 @@ public class MultiSlot<C extends _StencilContext, S extends _PStencil<C, S>> ext
         if (stencils.hasNext()) {
             return stencils.next();
         }
-        String msg = logWarn(stclContext, "no stencil in %s for cond %s", self, cond);
+        String msg = String.format("no stencil in %s for cond %s", self, cond);
         return StencilUtils.<C, S> nullPStencil(stclContext, Result.error(msg));
     }
 

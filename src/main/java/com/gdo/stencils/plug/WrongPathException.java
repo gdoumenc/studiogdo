@@ -3,8 +3,6 @@
  */
 package com.gdo.stencils.plug;
 
-import com.gdo.stencils._Stencil;
-
 /**
  * <p>
  * Exception raised when a path is invalid.
