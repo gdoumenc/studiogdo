@@ -620,7 +620,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     // plug the link described by the descriptor when a stencil is plugged in
     // the slot
-    @SuppressWarnings("deprecation")
     private void plugLink(C stclContext, S stencil, LinkDescriptor<C, S> linkDesc, PSlot<C, S> self) {
 
         // get slot where the link will be plugged

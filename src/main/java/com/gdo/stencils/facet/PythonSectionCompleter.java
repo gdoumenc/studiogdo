@@ -77,7 +77,9 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
      * @param stclContext
      * @param stcl
      * @param object
-     * @param full render more info (path, this) on each expansion if defined to <tt>true</tt>.
+     * @param full
+     *            render more info (path, this) on each expansion if defined to
+     *            <tt>true</tt>.
      * @return
      */
     private JsonElement expandObject(StclContext stclContext, PStcl stcl, JsonObject object, boolean full) {
@@ -122,7 +124,27 @@ public class PythonSectionCompleter extends HTML5SectionCompleter {
                             JsonObject obj = elt.getAsJsonObject();
                             String p = obj.get("data-path").getAsString();
                             JsonElement array = expandObject(stclContext, s, obj, full);
-                            dict.add(p, array);
+                            JsonElement previous = dict.get(p);
+                            if (previous == null) {
+                                dict.add(p, array);
+                            } else {
+                                JsonArray new_list = new JsonArray();
+                                JsonArray previous_list = previous.getAsJsonArray();
+                                JsonArray added_list = array.getAsJsonArray();
+                                for (int i = 0; i < previous_list.size(); i++) {
+                                    JsonObject new_elt = new JsonObject();
+                                    JsonObject old_elt = previous_list.get(i).getAsJsonObject();
+                                    for (Map.Entry<String, JsonElement> entry : old_elt.entrySet()) {
+                                        new_elt.add(entry.getKey(), entry.getValue());
+                                    }
+                                    JsonObject added_elt = added_list.get(i).getAsJsonObject();
+                                    for (Map.Entry<String, JsonElement> entry : added_elt.entrySet()) {
+                                        new_elt.add(entry.getKey(), entry.getValue());
+                                    }
+                                    new_list.add(new_elt);
+                                }
+                                dict.add(p, new_list);
+                            }
                         }
                         String value = s.getString(stclContext, elt.getAsString());
                         dict.add(elt.getAsString(), new JsonPrimitive(value));

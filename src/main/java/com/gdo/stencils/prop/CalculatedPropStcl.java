@@ -11,7 +11,6 @@ import com.gdo.reflect.TemplateNameSlot;
 import com.gdo.reflect.WhereSlot;
 import com.gdo.stencils.Stcl;
 import com.gdo.stencils.StclContext;
-import com.gdo.stencils.Stcl.Slot;
 import com.gdo.stencils.plug.PStcl;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.PathUtils;
