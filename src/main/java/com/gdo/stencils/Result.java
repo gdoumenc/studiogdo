@@ -375,8 +375,9 @@ public class Result {
         return gson.toJson(result);
     }
 
-    @SuppressWarnings("unused")
+    // don't add decorator or Gson won't work
     private class JSONResult {
+        @SuppressWarnings("unused")
         byte result;
         Vector<String> infos = new Vector<String>();
     }

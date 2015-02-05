@@ -3,6 +3,7 @@
  */
 package com.gdo.project.slot;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
@@ -49,6 +50,7 @@ public abstract class _SlotCursor {
     // set to true if properties list of a stencil was modified since last set
     // of those properties (key -> value)
     public Map<IKey, Boolean> _modified;
+    public Map<IKey, Boolean> _in_completion;
 
     // locked stencils (key -> stencil plugged in $locked slot)
     protected Map<IKey, PStcl> _locked;
@@ -81,6 +83,8 @@ public abstract class _SlotCursor {
             _properties.clear();
         if (_modified != null)
             _modified.clear();
+        if (_in_completion != null)
+            _in_completion.clear();
     }
 
     public void size(int size) {
@@ -169,7 +173,13 @@ public abstract class _SlotCursor {
             if (StencilUtils.isNotNull(locked))
                 stcl._created.plug(stclContext, locked, Stcl.Slot.$LOCKED_BY);
 
-            return completeCreatedStencil(stclContext, container, slot, key, stcl);
+            if (_in_completion == null) {
+                _in_completion = new HashMap<IKey, Boolean>();
+            }
+            _in_completion.put(key, Boolean.TRUE);
+            PStcl completed =  completeCreatedStencil(stclContext, container, slot, key, stcl);
+            _in_completion.remove(key);
+            return completed;
         }
 
     }
@@ -202,7 +212,7 @@ public abstract class _SlotCursor {
 
                     // not same as key as was the last used and may be reused
                     // and stencil must not be locked
-                    if (!k.equals(key) && _locked.get(k) == null)
+                    if (!k.equals(key) && !_locked.containsKey(k))
                         keys.push(k);
                 }
 
@@ -231,13 +241,16 @@ public abstract class _SlotCursor {
         // gets the stencil to be removed
         PStcl stcl = inCursor(stclContext, key);
         if (StencilUtils.isNotNull(stcl)) {
+            
+            // lock the stencil to force it to stay in memory
+            lock(stclContext, stcl, key);
 
             // checks was not modified before removing
             // (negative id may be released without being saved)
             Boolean modified = _modified.get(key);
             if (modified != null) {
                 logWarn(stclContext, "Stencil removed from cursor without being updated : %s", stcl);
-                //stcl.afterRPCSet(stclContext);
+                stcl.afterRPCSet(stclContext);
             }
 
             // replaces the stencil by cursor
@@ -246,6 +259,9 @@ public abstract class _SlotCursor {
             
             // removes it from cursor
             removeFromCursor(stclContext, key);
+            
+            // unlock the stencil as it is removed
+            unlock(stclContext, key);
         }
     }
 
@@ -368,7 +384,10 @@ public abstract class _SlotCursor {
         }
 
         // sets cursor modified for this stencil
-        _modified.put(key, Boolean.TRUE);
+        // if in completion then this is not a modification
+        if (!_in_completion.containsKey(key))
+            _modified.put(key, Boolean.TRUE);
+        
         return attributes.put(path, value);
     }
 

@@ -1,9 +1,7 @@
 /**
  * Copyright GDO - 2004
  */
-package com.gdo.stencils;
-
-import com.gdo.stencils.plug._PStencil;
+package com.gdo.stencils.plug;
 
 /**
  * <p>
@@ -24,10 +22,6 @@ public class WrongPathException extends RuntimeException {
 
     public WrongPathException(String msg) {
         super(msg);
-    }
-
-    public WrongPathException(String msg, _Stencil<?, ?> stencil) {
-        super(msg + " in " + stencil);
     }
 
     public WrongPathException(String msg, _PStencil<?, ?> stencil) {

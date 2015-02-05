@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -1502,6 +1501,18 @@ public class HTML5SectionCompleter {
             if (format.equals("/-100,##")) {
                 return String.format(locale, "%.2f", -Float.parseFloat(value) / 100);
             }
+            if (format.equals("/1000,##")) {
+                return String.format(locale, "%.2f", Float.parseFloat(value) / 1000);
+            }
+            if (format.equals("/-1000,##")) {
+                return String.format(locale, "%.2f", -Float.parseFloat(value) / 1000);
+            }
+            if (format.equals("/10000,##")) {
+                return String.format(locale, "%.2f", Float.parseFloat(value) / 10000);
+            }
+            if (format.equals("/-10000,##")) {
+                return String.format(locale, "%.2f", -Float.parseFloat(value) / 10000);
+            }
 
             return String.format(locale, "%d", Integer.parseInt(value));
         } catch (Exception e) {
@@ -1561,7 +1572,6 @@ public class HTML5SectionCompleter {
             dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
             return dateFormat.format(date);
         }
-        
         return value;
     }
 
@@ -1624,7 +1634,7 @@ public class HTML5SectionCompleter {
             String save_index = s.getId(stclContext) + propertyPath;
 
             // checks value not already read
-            String value = _values.get(save_index);
+            String value = null; //_values.get(save_index);
             if (value == null) {
                 if (PathUtils.isComposed(propertyPath)) {
                     s = stcl.getStencil(stclContext, PathUtils.getPathName(propertyPath));
@@ -1646,7 +1656,7 @@ public class HTML5SectionCompleter {
                 }
 
                 // stores values for next use
-                _values.put(save_index, value);
+                //_values.put(save_index, value);
             }
             return value;
         } catch (Exception e) {

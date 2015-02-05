@@ -147,6 +147,7 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     public void setTransient() {
         _tranzient = true;
     }
+
     @Deprecated
     public void setTransient(C stclContext) {
         _tranzient = true;
@@ -173,6 +174,22 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
     }
     @Deprecated
     public void setReadOnly(C stclContext) {
+        _read_only = true;
+    }
+
+    /**
+     * Checks if this slot is read only.
+     * 
+     * @return <tt>true</tt> if the slot is read only.
+     */
+    public boolean isReadOnly(C stclContext, PSlot<C, S> self) {
+        return _read_only;
+    }
+
+    /**
+     * Set this slot read only.
+     */
+    public void setReadOnly(C stclContext, PSlot<C, S> self) {
         _read_only = true;
     }
 
@@ -603,7 +620,6 @@ public abstract class _Slot<C extends _StencilContext, S extends _PStencil<C, S>
 
     // plug the link described by the descriptor when a stencil is plugged in
     // the slot
-    @SuppressWarnings("deprecation")
     private void plugLink(C stclContext, S stencil, LinkDescriptor<C, S> linkDesc, PSlot<C, S> self) {
 
         // get slot where the link will be plugged

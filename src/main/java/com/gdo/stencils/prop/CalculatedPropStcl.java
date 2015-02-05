@@ -1,7 +1,7 @@
 /**
  * Copyright GDO - 2004
  */
-package com.gdo.stencils;
+package com.gdo.stencils.prop;
 
 import com.gdo.project.slot.RootSlot;
 import com.gdo.reflect.CommandsSlot;
@@ -9,9 +9,9 @@ import com.gdo.reflect.PwdSlot;
 import com.gdo.reflect.SlotsSlot;
 import com.gdo.reflect.TemplateNameSlot;
 import com.gdo.reflect.WhereSlot;
+import com.gdo.stencils.Stcl;
+import com.gdo.stencils.StclContext;
 import com.gdo.stencils.plug.PStcl;
-import com.gdo.stencils.prop.CalculatedPropStencil;
-import com.gdo.stencils.prop.IPropCalculator;
 import com.gdo.stencils.slot._Slot;
 import com.gdo.stencils.util.PathUtils;
 

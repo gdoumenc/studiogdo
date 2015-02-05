@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -935,6 +936,16 @@ public class SqlUtils {
             return strDate;
         }
 
+        public String pushDateNowUTC(StclContext stclContext, String label, String slot, String format_read) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(format_read);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date now = new Date();
+            String strDate = dateFormat.format(now);
+            _stcl.setString(stclContext, slot, strDate);
+            push(label, ConverterHelper.dateConverter(strDate, format_read, "yyyy-MM-dd"));
+            return strDate;
+        }
+
         /**
          * Adds a current date field value to this association if the slot and
          * the label field are same (which is certainly a very good idea).
@@ -951,6 +962,10 @@ public class SqlUtils {
             return pushDateNow(stclContext, "`" + slot + "`", slot, format_read);
         }
 
+        public String pushDateNowUTC(StclContext stclContext, String slot, String format_read) {
+            return pushDateNowUTC(stclContext, "`" + slot + "`", slot, format_read);
+        }
+
         public String pushDateOrNow(StclContext stclContext, String label, String slot, String format_read) {
             String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
@@ -961,12 +976,22 @@ public class SqlUtils {
             return value;
         }
 
+        public String pushDateOrNowUTC(StclContext stclContext, String label, String slot, String format_read) {
+            String value = _stcl.getString(stclContext, slot, "");
+            if (StringUtils.isNotBlank(value)) {
+                push(label, ConverterHelper.dateConverter(value, format_read, "yyyy-MM-dd"));
+            } else {
+                pushDateNowUTC(stclContext, "`" + slot + "`", slot, format_read);
+            }
+            return value;
+        }
+
         public String pushDateOrNow(StclContext stclContext, String slot, String format_read) {
             return pushDateOrNow(stclContext, "`" + slot + "`", slot, format_read);
         }
 
-        public String pushDateTimeNow(StclContext stclContext, String slot) {
-            return pushDateTimeNow(stclContext, "`" + slot + "`", slot);
+        public String pushDateOrNowUTC(StclContext stclContext, String slot, String format_read) {
+            return pushDateOrNowUTC(stclContext, "`" + slot + "`", slot, format_read);
         }
 
         public String pushDateTimeNow(StclContext stclContext, String label, String slot) {
@@ -978,7 +1003,25 @@ public class SqlUtils {
             return strDate;
         }
 
-        public String pushTimeOrNull(StclContext stclContext, String label, String slot) {
+        public String pushDateTimeNowUTC(StclContext stclContext, String label, String slot) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date now = new Date();
+            String strDate = dateFormat.format(now);
+            _stcl.setString(stclContext, slot, strDate);
+            push(label, strDate);
+            return strDate;
+        }
+
+        public String pushDateTimeNow(StclContext stclContext, String slot) {
+            return pushDateTimeNow(stclContext, "`" + slot + "`", slot);
+        }
+
+        public String pushDateTimeNowUTC(StclContext stclContext, String slot) {
+            return pushDateTimeNowUTC(stclContext, "`" + slot + "`", slot);
+        }
+
+       public String pushTimeOrNull(StclContext stclContext, String label, String slot) {
             String value = _stcl.getString(stclContext, slot, "");
             if (StringUtils.isNotBlank(value)) {
                 push(label, value);
@@ -1004,9 +1047,19 @@ public class SqlUtils {
          * @return the field value.
          */
         public String pushTimeNow(StclContext stclContext, String label, String slot) {
-            SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             Date now = new Date();
-            String strTime = sdfTime.format(now);
+            String strTime = dateFormat.format(now);
+            _stcl.setString(stclContext, slot, strTime);
+            pushString(stclContext, label, slot);
+            return strTime;
+        }
+
+        public String pushTimeNowUTC(StclContext stclContext, String label, String slot) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date now = new Date();
+            String strTime = dateFormat.format(now);
             _stcl.setString(stclContext, slot, strTime);
             pushString(stclContext, label, slot);
             return strTime;
@@ -1024,6 +1077,10 @@ public class SqlUtils {
          */
         public String pushTimeNow(StclContext stclContext, String slot) {
             return pushTimeNow(stclContext, "`" + slot + "`", slot);
+        }
+
+        public String pushTimeNowUTC(StclContext stclContext, String slot) {
+            return pushTimeNowUTC(stclContext, "`" + slot + "`", slot);
         }
 
         /**

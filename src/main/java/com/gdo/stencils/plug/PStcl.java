@@ -774,8 +774,8 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             if (old != null) {
 
                 // then replaces it
-                _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, value);
                 super.setString(stclContext, path, value);
+                _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, value);
                 return;
             }
         }

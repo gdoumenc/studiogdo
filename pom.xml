@@ -5,7 +5,7 @@
 	<artifactId>studiogdo</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<version>2.3.0</version>
+	<version>3.0</version>
 	<description>Java implementation of the StudioGdo model.</description>
 	<url>http://www.studiogdo.com</url>
 	<licenses>
@@ -60,7 +60,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<skip>true</skip>
+					<directory>target/classes</directory>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
@@ -190,6 +190,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.25</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>

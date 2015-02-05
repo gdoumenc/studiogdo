@@ -5,6 +5,7 @@ package com.gdo.stencils;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,8 @@ public class StclContext extends _StencilContext {
     private int _id;
 
     private RpcArgs _request_parameters;
-
+    
+    protected ConcurrentHashMap<String, Object> _params = null;
     /**
      * Returns a default stencil context which may be used in case of no stencil
      * context defined.
@@ -402,5 +404,21 @@ public class StclContext extends _StencilContext {
             LOG.warn(stclContext, String.format(format, params));
         }
     }
+    
+    public Object getAttribute(String key) {
+        if (_params == null)
+            return null;
+        return _params.get(key);
+    }
 
+    public void setAttribute(String key, Object value) {
+        if (_params == null) {
+            _params = new ConcurrentHashMap<>();
+        }
+        if (_params.containsKey(key)) {
+            _params.replace(key, value);
+        } else {
+            _params.put(key, value);
+        }
+    }
 }

@@ -916,10 +916,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (stcl instanceof SQLStcl) {
             ((SQLStcl) stcl).addInSqlAssoc(stclContext, assoc, stencil, self.getContainer());
         } else {
-            if (getLog().isTraceEnabled()) {
-                String msg = String.format("The stencil %s is not a SQL stencil", stencil);
-                getLog().warn(stclContext, msg);
-            }
+            logWarn(stclContext, "The stencil %s is not a SQL stencil", stencil);
         }
 
         return assoc;

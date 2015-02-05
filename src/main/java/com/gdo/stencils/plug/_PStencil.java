@@ -577,13 +577,16 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (isNull()) {
             throw new IllegalStateException("cannot call cursor after set actions from an unvalid stencil: " + getNullReason());
         }
-        
+
         // only if on memory
         if (_stencil != null) {
             return _stencil.afterRPCSet(stclContext, self());
         }
-        
-        return Result.success();
+
+        _Stencil<C, S> stencil = getStencil(stclContext);
+        Result result = stencil.afterRPCSet(stclContext, self());
+        release(stclContext);
+        return result;
     }
 
     /*
@@ -1496,7 +1499,8 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     //
     // --------------------------------------------------------------------------
 
-    // TOTO : should be used internally (used only if isPluggedOnce checked before)
+    // TOTO : should be used internally (used only if isPluggedOnce checked
+    // before)
     // used only for SaveAsProp, should be removed
     public PSlot<C, S> getContainingSlot(C stclContext) {
         List<S> list = getStencilOtherPluggedReferences(stclContext);
