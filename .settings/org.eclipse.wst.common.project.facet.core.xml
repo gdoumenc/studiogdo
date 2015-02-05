@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
+<<<<<<< HEAD
   <runtime name="Apache Tomcat v7.0"/>
   <secondary-runtime name="Apache Tomcat v8.0"/>
+=======
+>>>>>>> fc246a4640dd0ce3b4efaf7d8787559b04809e52
   <installed facet="jst.utility" version="1.0"/>
   <installed facet="java" version="1.8"/>
 </faceted-project>

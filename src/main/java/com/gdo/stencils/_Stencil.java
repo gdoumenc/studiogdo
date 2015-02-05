@@ -209,6 +209,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * 
      * @param stclContext
      *            the stencil context.
+     * @param self
+     *            this stencils as a plugged stencil.
      * 
      *            TODO should replace beforeLastUnplug.
      */
@@ -220,6 +222,8 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * 
      * @param stclContext
      *            the stencil context.
+     * @param self
+     *            this stencils as a plugged stencil.
      */
     public void clear(C stclContext, S self) {
 
@@ -462,7 +466,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil constructor parameters.
      * @return a new plugged property.
      */
-    public <V> S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, V value, S self, Object... params) {
+    public S newPProperty(C stclContext, PSlot<C, S> slot, IKey key, Object value, S self, Object... params) {
 
         // creates the property (without plugging it)
         StencilFactory<C, S> factory = (StencilFactory<C, S>) stclContext.<C, S> getStencilFactory();
@@ -587,16 +591,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         return verify(stclContext, self);
     }
 
-    /**
-     * Called when the stencil is unplugged from a slot.
-     */
     @Deprecated
     public void afterUnplug(C stclContext, PSlot<C, S> from, IKey key, S self) {
     }
 
-    /**
-     * Deprecated : Use beforeClear
-     */
     @Deprecated
     public void afterLastUnplug(C stclContext, S last) {
         // TODO remove all stencils from slots
@@ -614,10 +612,13 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * 
      * @param stclContext
      *            the stencil context.
+     * @param slot
+     *            the containing slot.
      * @param key
      *            the plug key for the clone.
      * @param self
      *            this stencil as a plugged stencil
+     * @throws CloneNotSupportedException
      * @return the stencil cloned
      */
     public S clone(C stclContext, PSlot<C, S> slot, IKey key, S self) throws CloneNotSupportedException {
@@ -625,6 +626,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     }
 
     /**
+     * @param stclContext
+     *            the stencil context.
+     * @param self
+     *            this stencil as a plugged stencil
      * @return <tt>true</tt> if the stencil is complete, then it can be
      *         manipulated without structural error. Should be redefined for all
      *         sub stencil class.
@@ -676,6 +681,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the stencil context.
      * @param name
      *            the slot's name.
+     * @return the removed slot.
      */
     public _Slot<C, S> removeSlot(C stclContext, String name) {
         return getSlots().remove(name);
@@ -764,10 +770,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     }
 
     @Deprecated
-    /**
-     * should used get slot and test if null
-     * @return <tt>true</tt> is the slot defined by the name exists.
-     */
     public boolean hasSlot(C stclContext, String slotPath, S self) {
         if (StringUtils.isEmpty(slotPath))
             return false;
@@ -794,6 +796,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the path to the slot.
      * @param self
      *            the stencil as a plugged stencil.
+     * @return the slot found.
      */
     public PSlot<C, S> getSlot(C stclContext, String slotPath, S self) {
 
@@ -810,7 +813,16 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
     }
 
     /**
+     * Returns the number of stencils in the path.
+     * 
+     * @param stclContext
+     *            the stencil context.
+     * @param path
+     *            the seraching path.
+     * @param self
+     *            this stencil as a plugged stencil.
      * @return the number of stencils in path.
+     * @throws WrongPathException
      */
     public int size(C stclContext, String path, S self) throws WrongPathException {
         return size(stclContext, path, null, self);
@@ -1689,7 +1701,10 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         }
 
         Map<String, Object> getDefaultParams() {
-            Map<String, Object> map = new HashMap<>(); //not ConcurrentHashMap because map can't be null see: http://stackoverflow.com/questions/698638/why-does-concurrenthashmap-prevent-null-keys-and-values
+            Map<String, Object> map = new HashMap<>(); // not ConcurrentHashMap
+                                                       // because map can't be
+                                                       // null see:
+                                                       // http://stackoverflow.com/questions/698638/why-does-concurrenthashmap-prevent-null-keys-and-values
             int index = 0;
             for (Object param : _params) {
                 String key = CommandStencil.PARAM_PREFIX + ++index;
