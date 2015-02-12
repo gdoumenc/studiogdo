@@ -101,14 +101,22 @@ public class HTML5SectionCompleter {
     protected static final String DATA_CSS = "data-css-";
 
     private HashMap<String, String> _values = new HashMap<String, String>();
-    protected PStcl prop = null;
-    protected PStcl prop_stcl = null;
-    protected String prop_path = null;
+    protected PStcl prop;
+    protected PStcl prop_stcl;
+    protected String prop_path;
+    protected boolean add_blocktrans;
 
     /**
      * Retrieves a facet from a template descriptor.
      */
     public HTML5SectionCompleter() {
+    }
+
+    /**
+     * Set translation mode enabled.
+     */
+    public void addTrans() {
+        add_blocktrans = true;
     }
 
     /**
@@ -167,6 +175,11 @@ public class HTML5SectionCompleter {
             e.printStackTrace();
             return new FacetResult(FacetResult.ERROR, e.toString(), null);
         }
+    }
+
+    public FacetResult getTransFacetFromSkeleton(StclContext stclContext, PStcl stcl, String skel) {
+        addTrans();
+        return getFacetFromSkeleton(stclContext, stcl, skel);
     }
 
     private String _getFacetFromSkeleton(StclContext stclContext, PStcl stcl, String skel) throws Exception {
@@ -580,7 +593,11 @@ public class HTML5SectionCompleter {
         // sets value or select attribute
         String type = elt.attr("type");
         if ("textarea".equalsIgnoreCase(elt.tagName())) {
-            elt.val(formatValue(stclContext, elt, value, format, null));
+            String val = formatValue(stclContext, elt, value, format, null);
+            if (add_blocktrans) {
+                val = String.format("{%% blocktrans %%}%s{%% endblocktrans %%}", val);
+            }
+            elt.val(val);
         } else if ("checkbox".equalsIgnoreCase(type)) {
 
             // compares to value defined if exists
@@ -1439,6 +1456,9 @@ public class HTML5SectionCompleter {
         Element span = container.appendElement("span");
         String val = formatValue(stclContext, container, value, format, span);
         if (val != null) {
+            if (add_blocktrans) {
+                val = String.format("{%% blocktrans %%}%s{%% endblocktrans %%}", val);
+            }
             span.appendText(val);
         }
         setDataAPath(stclContext, span, path);
@@ -1634,7 +1654,7 @@ public class HTML5SectionCompleter {
             String save_index = s.getId(stclContext) + propertyPath;
 
             // checks value not already read
-            String value = null; //_values.get(save_index);
+            String value = null; // _values.get(save_index);
             if (value == null) {
                 if (PathUtils.isComposed(propertyPath)) {
                     s = stcl.getStencil(stclContext, PathUtils.getPathName(propertyPath));
@@ -1656,7 +1676,7 @@ public class HTML5SectionCompleter {
                 }
 
                 // stores values for next use
-                //_values.put(save_index, value);
+                // _values.put(save_index, value);
             }
             return value;
         } catch (Exception e) {

@@ -359,13 +359,20 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
         logTrace(stclContext, "Execute command %s from %s", this, self);
 
         // execute action stacking command context
-        _cmdContext = cmdContext; // needed to be able to access target
-        // during the execution
+        // needed to be able to access target during the execution
+        _cmdContext = cmdContext;
+
+        // checks if action should be performed
         CommandStatus<C, S> status = verifyContext(cmdContext, self);
         if (!status.isSuccess()) {
             return status;
         }
+
+        // performs action
         status = doAction(cmdContext, self);
+        if (!status.isSuccess()) {
+            logTrace(stclContext, "Command %s from %sdoesn't succeed", this, self);
+        }
 
         return status;
     }

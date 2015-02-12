@@ -371,6 +371,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         }
 
         // PYTHON case
+        if (FacetType.TRANS.equals(facet)) {
+            String skel = renderContext.getFacetMode();
+            HTML5SectionCompleter completer = new HTML5SectionCompleter();
+            return completer.getTransFacetFromSkeleton(stclContext, this, skel);
+        }
         if (FacetType.PYTHON.equals(facet)) {
             String mode = renderContext.getFacetMode();
             PythonSectionCompleter completer = new PythonSectionCompleter();

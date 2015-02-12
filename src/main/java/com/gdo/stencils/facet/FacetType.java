@@ -30,6 +30,7 @@ public interface FacetType {
     public static final String JSKEL = "jskel";
     public static final String PYTHON = "python";
     public static final String REST = "rest";
+    public static final String TRANS = "trans";
 
     public static final String FILE = "file";
     public static final String BYTES = "bytes";
