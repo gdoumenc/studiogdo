@@ -15,6 +15,7 @@ import com.gdo.stencils.cond.StencilCondition;
 import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.key.Key;
+import com.gdo.stencils.log.StencilLog;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug._PStencil;
 import com.gdo.stencils.slot.SingleCalculatedSlot;
@@ -485,4 +486,17 @@ public abstract class CommandStencil<C extends _StencilContext, S extends _PSten
         }
 
     }
+    
+    //
+    // LOG PART
+    //
+
+    public static final StencilLog _LOG = new StencilLog(CommandStencil.class);
+
+    @Override
+    protected StencilLog getLog() {
+        return _LOG;
+    }
+
+
 }
