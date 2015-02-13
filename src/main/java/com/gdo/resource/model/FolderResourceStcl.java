@@ -9,7 +9,6 @@ import com.gdo.stencils.Result;
 import com.gdo.stencils.StclContext;
 import com.gdo.stencils.cond.PathCondition;
 import com.gdo.stencils.cond.StencilCondition;
-import com.gdo.stencils.descriptor.Links;
 import com.gdo.stencils.iterator.StencilIterator;
 import com.gdo.stencils.plug.PSlot;
 import com.gdo.stencils.plug.PStcl;
@@ -30,7 +29,7 @@ public class FolderResourceStcl extends _ResourceStcl {
     public FolderResourceStcl(StclContext stclContext) {
         super(stclContext);
         
-        Links links = new Links();
+//        Links links = new Links();
 //        links.put(,"../FolderResources");
 //        links.put(,"../FileResources");
         multiSlot(Slot.RESOURCES);

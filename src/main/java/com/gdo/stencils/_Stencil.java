@@ -1763,7 +1763,7 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
         _value = value;
         notifyListeners(stclContext, value, old, self);
 
-        return value;
+        return old;
     }
 
     public Reader getReader(C stclContext, S self) {
