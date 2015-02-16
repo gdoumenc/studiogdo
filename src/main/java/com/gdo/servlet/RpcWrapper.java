@@ -54,13 +54,12 @@ import com.gdo.util.XmlStringWriter;
  * <p>
  * StudioGdo RPC interface wrapper.
  * </p>
-
+ * 
  * <p>
  * &copy; 2004, 2008 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
  * software is the proprietary information of StudioGdo &amp; Guillaume Doumenc.
  * Use is subject to license terms.
  * </p>
-
  */
 public class RpcWrapper {
 
@@ -852,7 +851,8 @@ public class RpcWrapper {
             }
 
             // HTML 5 facet or JSON facet
-            if (FacetType.HTML5.equals(type) || FacetType.DOM5.equals(type) || FacetType.JSON.equals(type) || FacetType.JSKEL.equals(type) || FacetType.PYTHON.equals(type)) {
+            if (FacetType.HTML5.equals(type) || FacetType.DOM5.equals(type) || FacetType.TRANS.equals(type) || FacetType.JSON.equals(type)
+                    || FacetType.JSKEL.equals(type) || FacetType.PYTHON.equals(type)) {
                 String mime = facetResult.getMimeType();
                 InputStream in = facetResult.getInputStream();
                 StudioGdoServlet.writeResponse(stclContext.getResponse(), HttpServletResponse.SC_OK, mime, in, StclContext.getCharacterEncoding());

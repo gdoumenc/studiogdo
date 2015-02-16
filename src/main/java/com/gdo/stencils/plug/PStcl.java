@@ -392,6 +392,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             HTML5SectionCompleter completer = new HTML5SectionCompleter();
             return completer.getFacetFromDOM(stclContext, this, dom);
         }
+        if (FacetType.TRANS.equals(facet)) {
+            String dom = renderContext.getFacetMode();
+            HTML5SectionCompleter completer = new HTML5SectionCompleter();
+            completer.setTransMode();
+            return completer.getFacetFromDOM(stclContext, this, dom);
+        }
         if (FacetType.HTML5_TEXT.equals(facet)) {
             String skel = renderContext.getFacetMode();
             HTML5SectionCompleter completer = new HTML5SectionCompleter();
