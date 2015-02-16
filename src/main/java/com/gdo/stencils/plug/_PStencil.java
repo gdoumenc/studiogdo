@@ -530,14 +530,17 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         }
 
         // add slot and key (if not THIS)
-        String slotName = stcl.getContainingSlot().getName(stclContext);
+        PSlot<C, S> slot = stcl.getContainingSlot();
+        String slotName = slot.getName(stclContext);
         if (PathUtils.THIS.equals(slotName)) {
             return true;
         }
-        IKey key = stcl.getKey();
         path.append(slotName);
-        if (key != null && key.isNotEmpty()) {
-            path.append(PathUtils.KEY_SEP_OPEN).append(key.toString()).append(PathUtils.KEY_SEP_CLOSE);
+        if (SlotUtils.isMultiple(slot.getArity(stclContext))) {
+            IKey key = stcl.getKey();
+            if (key != null && key.isNotEmpty()) {
+                path.append(PathUtils.KEY_SEP_OPEN).append(key.toString()).append(PathUtils.KEY_SEP_CLOSE);
+            }
         }
         return false;
     }
