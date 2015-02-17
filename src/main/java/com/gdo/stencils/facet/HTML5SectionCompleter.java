@@ -25,6 +25,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities.EscapeMode;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
@@ -209,6 +210,7 @@ public class HTML5SectionCompleter {
             Document doc = Jsoup.parseBodyFragment(dom);
             expand(stclContext, stcl, doc.body());
 
+            doc.outputSettings().escapeMode(EscapeMode.xhtml);
             InputStream reader = IOUtils.toInputStream(doc.body().html());
             return new FacetResult(reader, "text/html");
         } catch (Exception e) {
