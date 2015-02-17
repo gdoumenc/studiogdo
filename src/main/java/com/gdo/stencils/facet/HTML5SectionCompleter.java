@@ -838,6 +838,7 @@ public class HTML5SectionCompleter {
                 labelPath = valuePath;
             }
             String value = getPropertyValue(stclContext, currentStcl, labelPath);
+            value = addBlockTrans(value);
             for (Element option : elt.select(OPTION)) {
                 if (StringUtils.isNotBlank(value) && value.equals(option.text())) {
                     option.attr("selected", "selected");
@@ -1535,7 +1536,7 @@ public class HTML5SectionCompleter {
 
         if (format.equals("w")) {
             for (String s : value.split("\n")) {
-                span.appendText(s);
+                span.appendText(addBlockTrans(s));
                 Element parent = span.parent();
                 parent.appendElement("br");
                 span = parent.appendElement("span");
