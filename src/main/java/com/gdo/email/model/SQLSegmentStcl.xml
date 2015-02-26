@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.email.model.SQLSegmentStcl">
+
+	<prop name="Title" type ="string"/>
+
+	<prop name="Content" type ="string"/>
+
+	<inst id="gen" template="com.gdo.mail.model.SQLGeneratorStcl"/>
+	<plug ref="gen" slot="Generator"/>
+
+	<prop name="TrackerDataBase" type="string"/>
+	<slot name="Mail" arity="1">
+		<link slot="SqlSegment" path=".."/>
+		<link slot="SqlContext" path="../SqlContext"/>
+		<link slot="MailContext" path="../MailContext"/>
+		<link slot="To" path="../To/To"/>
+		<link slot="BCC" path="../BCC/To"/>
+		<link slot="Content" path="../Content"/>
+	</slot>
+	<inst id="mail" template="com.gdo.mail.model.SQLMailStcl">
+		<slot name="Generator" arity="1">
+			<link slot="Mask" path="../../Generator/Mask"/>
+		</slot>
+		<inst id="generator" template="com.gdo.generator.model.GeneratorStcl"/>
+		<plug ref="generator" slot="Generator"/>
+		<slot name="TrackerPattern" delegate="../Generator/TrackerPattern"/>
+		<slot name="TrackerReplacement" delegate="../Generator/TrackerReplacement"/>
+		<slot name="TrackerDataBase" delegate="../TrackerDataBase"/>
+	</inst>
+	<plug ref="mail" slot="Mail"/>
+
+	<prop name="FromTable" type ="string"/>
+	
+	<slot name="To" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="to" template="com.gdo.email.model.SQLDistributionListStcl">
+		<prop name="Status" type="string"><data>tbs</data></prop>
+		<slot name="FromTable" delegate="../FromTable"/>
+		<prop name="InsertQuery" type="string"><data><![CDATA[
+   		INSERT INTO <$stencil path='../FromTable'/> 
+   		(Id, Email, Status, Date)
+   		VALUES (<$stencil path="Id" prefix="'" suffix="'" default="NULL"/>,'<$stencil path="Address" escape="sql"/>','<$stencil path='../Status'/>',NOW())
+   	]]></data></prop>
+	</inst>
+	<plug ref="to" slot="To"/>
+
+	<slot name="Sent" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="sent" template="com.gdo.email.model.SQLDistributionListStcl">
+		<prop name="Status" type="string"><data>sent</data></prop>
+		<slot name="FromTable" delegate="../FromTable"/>
+		<prop name="DeleteQuery" type="string"><data><![CDATA[
+   		UPDATE <$stencil path='../FromTable'/> SET
+   		Status='tbs', Date=Now()
+   		WHERE Id='<$stencil path="Id"/>'
+   	]]></data></prop>
+	</inst>
+	<plug ref="sent" slot="Sent"/>
+
+	<slot name="Error" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="error" template="com.gdo.email.model.SQLDistributionListStcl">
+		<prop name="Status" type="string"><data>err</data></prop>
+		<slot name="FromTable" delegate="../FromTable"/>
+		<prop name="DeleteQuery" type="string"><data><![CDATA[
+   		UPDATE <$stencil path='../FromTable'/> SET
+   		Status='tbs', Date=Now()
+   		WHERE Id='<$stencil path="Id"/>'
+   	]]></data></prop>
+	</inst>
+	<plug ref="error" slot="Error"/>
+
+	<slot name="Already" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="already" template="com.gdo.email.model.SQLDistributionListStcl">
+		<prop name="Status" type="string"><data>tbr</data></prop>
+		<slot name="FromTable" delegate="../FromTable"/>
+	</inst>
+	<plug ref="already" slot="Already"/>
+
+	<slot name="BCC" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="bcc" template="com.gdo.email.model.SQLDistributionListStcl">
+		<prop name="Status" type="string"><data>bcc</data></prop>
+		<slot name="FromTable" delegate="../FromTable"/>
+	</inst>
+	<plug ref="bcc" slot="BCC"/>
+
+	<slot name="Read" arity="1">
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+	<inst id="read" template="com.gdo.email.model.SQLDistributionListStcl">
+		<slot name="FromTable" delegate="../FromTable"/>
+		<prop name="Condition" type="string" expand="true"><data><![CDATA[
+   		DateRead IS NOT NULL AND id > 0
+		]]></data></prop>
+		<prop name="InsertQuery" type="string"/>
+		<prop name="UpdateQuery" type="string"/>
+		<prop name="DeleteQuery" type="string"/>
+		
+	</inst>
+	<plug ref="read" slot="Read"/>
+	
+	
+	<!-- COMMAND PART -->
+	
+	
+	<command name="Unplug" template="com.gdo.email.cmd.DeleteSegment"/>
+	
+
+</template>

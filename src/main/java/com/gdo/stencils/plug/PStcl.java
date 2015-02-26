@@ -134,7 +134,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     public void initialize(StclContext stclContext, PStcl pstencil, PSlot<StclContext, PStcl> slot, IKey key) {
         if (_cursor != null) {
             super.initialize(stclContext, (_Stencil<StclContext, PStcl>) null, slot, key);
-            //// seems done twice...
+            // // seems done twice...
             _cursor = new PStclCursor(pstencil._cursor.getCursor(), pstencil._cursor.getContainer(), pstencil.getCursorKey());
             addThisReferenceToStencil(stclContext);
         } else {
@@ -192,7 +192,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
         return super.getStencil(StclContext.defaultContext());
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public <K extends _Stencil<StclContext, PStcl>> K getReleasedStencil(StclContext stclContext) {
@@ -345,6 +345,12 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (FacetType.DOM5.equals(facet)) {
             String dom = renderContext.getFacetMode();
             HTML5SectionCompleter completer = new HTML5SectionCompleter();
+            return completer.getFacetFromDOM(stclContext, this, dom);
+        }
+        if (FacetType.TRANS.equals(facet)) {
+            String dom = renderContext.getFacetMode();
+            HTML5SectionCompleter completer = new HTML5SectionCompleter();
+            completer.setTransMode();
             return completer.getFacetFromDOM(stclContext, this, dom);
         }
         if (FacetType.HTML5_TEXT.equals(facet)) {
@@ -625,7 +631,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         }
 
         // searches if a property was associated at this key in the cursor
-        if (!PathUtils.isComposed(path) && _cursor != null) {
+        if (_cursor != null && !PathUtils.isComposed(path)) {
             return Keywords.STRING;
         }
 
@@ -640,23 +646,21 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         }
 
         // searches if a property was associated at this key in the cursor
-        if (!PathUtils.isComposed(path) && _cursor != null) {
+        if (_cursor != null && !PathUtils.isComposed(path)) {
             String value = _cursor.getCursor().getPropertyValue(stclContext, _cursor.getContainer(), getCursorKey(), path);
             if (value != null) {
                 return value;
             }
         }
 
-        // search string in slot
+        // search string in stencil
         return super.getString(stclContext, path, def);
     }
 
     @Override
     public int getInt(StclContext stclContext, String path, int def) {
-
-        // checks validity
         if (isNull()) {
-            throw new IllegalStateException("cannot get an int property from an unvalid stencil: " + getNullReason());
+            throw new IllegalStateException("cannot get an integer property from an unvalid stencil: " + getNullReason());
         }
 
         // searches if a property was associated at this key in the cursor
@@ -665,7 +669,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
             if (value != null) {
                 try {
                     return Integer.parseInt(value);
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     return def;
                 }
             }
@@ -677,8 +681,6 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     @Override
     public boolean getBoolean(StclContext stclContext, String path, boolean def) {
-
-        // checks validity
         if (isNull()) {
             throw new IllegalStateException("cannot get a boolean property from an unvalid stencil: " + getNullReason());
         }
@@ -697,17 +699,19 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
 
     @Override
     public double getDouble(StclContext stclContext, String path, double def) {
-
-        // checks validity
         if (isNull()) {
-            throw new IllegalStateException("cannot get a boolean property from an unvalid stencil: " + getNullReason());
+            throw new IllegalStateException("cannot get a double property from an unvalid stencil: " + getNullReason());
         }
 
         // searches if a property was associated at this key in the cursor
         if (_cursor != null && !PathUtils.isComposed(path)) {
             String value = _cursor.getCursor().getPropertyValue(stclContext, getContainingSlot(), getCursorKey(), path);
             if (value != null) {
-                return Double.parseDouble(value);
+                try {
+                    return Double.parseDouble(value);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
             }
         }
 
@@ -763,7 +767,7 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      * java.lang.String, java.lang.String)
      */
     @Override
-    public void setString(StclContext stclContext, String path, String value) {
+    public String setString(StclContext stclContext, String path, String value) {
         if (isNull()) {
             throw new IllegalStateException("cannot set a string property from an unvalid stencil: " + getNullReason());
         }
@@ -772,16 +776,13 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (_cursor != null && !PathUtils.isComposed(path)) {
             String old = _cursor.getCursor().getPropertyValue(stclContext, getContainingSlot(), getCursorKey(), path);
             if (old != null) {
-
-                // then replaces it
-                super.setString(stclContext, path, value);
                 _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, value);
-                return;
+                return old;
             }
         }
 
         // search string in slot
-        super.setString(stclContext, path, value);
+        return super.setString(stclContext, path, value);
     }
 
     /*
@@ -792,14 +793,22 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      */
     @Override
     public int setInt(StclContext stclContext, String path, int value) {
+        if (isNull()) {
+            throw new IllegalStateException("cannot set an integer property from an unvalid stencil: " + getNullReason());
+        }
 
         // searches if a property was associated at this key in the cursor
-        if (_cursor != null) {
+        if (_cursor != null && !PathUtils.isComposed(path)) {
             String old = _cursor.getCursor().getPropertyValue(stclContext, getContainingSlot(), getCursorKey(), path);
 
             // replaces it if already defined
             if (old != null) {
                 _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, Integer.toString(value));
+                try {
+                    return Integer.parseInt(old);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
             }
         }
 
@@ -816,14 +825,20 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      */
     @Override
     public boolean setBoolean(StclContext stclContext, String path, boolean value) {
+        if (isNull()) {
+            throw new IllegalStateException("cannot set a boolean property from an unvalid stencil: " + getNullReason());
+        }
 
         // searches if a property was associated at this key in the cursor
-        if (_cursor != null) {
+        if (_cursor != null && !PathUtils.isComposed(path)) {
             String old = _cursor.getCursor().getPropertyValue(stclContext, getContainingSlot(), getCursorKey(), path);
             if (old != null) {
-
-                // then replaces it
                 _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, Boolean.toString(value));
+                try {
+                    return Boolean.parseBoolean(old);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
             }
         }
 
@@ -840,14 +855,20 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
      */
     @Override
     public double setDouble(StclContext stclContext, String path, double value) {
+        if (isNull()) {
+            throw new IllegalStateException("cannot set a double property from an unvalid stencil: " + getNullReason());
+        }
 
         // searches if a property was associated at this key in the cursor
-        if (_cursor != null) {
+        if (_cursor != null && !PathUtils.isComposed(path)) {
             String old = _cursor.getCursor().getPropertyValue(stclContext, getContainingSlot(), getCursorKey(), path);
             if (old != null) {
-
-                // then replaces it
                 _cursor.getCursor().addPropertyValue(stclContext, _cursor.getContainer(), getContainingSlot(), getCursorKey(), path, Double.toString(value));
+                try {
+                    return Double.parseDouble(old);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
             }
         }
 

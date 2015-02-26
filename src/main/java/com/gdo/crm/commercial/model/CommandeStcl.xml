@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template java="com.gdo.crm.commercial.model.CommandeStcl">
+
+	<prop name="Libelle" type="string" />
+	<prop name="Commentaire" type="string" />
+	<prop name="MontantHT" type="int" />
+	<prop name="Date" type="string" />
+	<prop name="DatePrevisionnelle" type="string" />
+	<prop name="EstUnDevis" type="boolean" />
+	<prop name="Perdu" type="boolean" />
+	<prop name="TypePerte" type="string" />
+	<prop name="RaisonPerte" type="string" />
+	<prop name="TypeGain" type="string" />
+	<prop name="RaisonGain" type="string" />
+
+	<slot name="PasseAvec" arity="1" />
+
+	<!-- FLEX -->
+
+	<slot name="Commercial" arity="?" />
+	<slot name="Societe" arity="?" />
+
+	<!-- SQL OPTIMIZATION -->
+
+	<prop name="IdSociete" type="string" />
+	<prop name="NomSociete" type="string" />
+	<prop name="NomContact" type="string" />
+	<prop name="NomCommercial" type="string" />
+
+</template>

@@ -442,13 +442,13 @@ public abstract class _SlotCursor {
     public synchronized void removeFromCursor(StclContext stclContext, IKey key) {
         PStcl stcl = _stencils.get(key);
         _stencils.remove(key);
-        _properties.remove(key);
+        //_properties.remove(key);
         _modified.remove(key);
         _locked.remove(key);
 
         // done after removing from list to avoid recursion
         if (stcl != null) {
-            stcl.clear(stclContext);
+            //stcl.clear(stclContext);
         }
     }
 

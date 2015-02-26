@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template java="com.gdo.crm.commercial.model.CommercialStcl">
+
+	<!-- CRM CONTAINER SERVICE -->
+	
+	<prop name="ServicePath" type="string"><data>/Services(commercial)</data></prop>
+
+	<!-- STRUCTURE -->
+	
+	<prop name="Nom" type="string" />
+	<prop name="Prenom" type="string" />
+	<prop name="Fonction" type="string" />
+	<prop name="Telephone" type="string" />
+	<prop name="Fax" type="string" />
+	<prop name="Mobile" type="string" />
+	<prop name="Email" type="string" />
+
+	<slot name="Manager" arity="?" />
+	<slot name="ChefDe" arity="*" calculated="true" />
+
+	<slot name="EstResponsableDe" arity="*" calculated="true" />
+	<slot name="DoitFaire" arity="*" calculated="true" />
+
+	<slot name="Contacts" arity="*" calculated="true" />
+	<slot name="Commandes" arity="*" calculated="true" />
+
+	<slot name="Mailings" arity="1">
+		<description>Contains mailing operation.</description>
+	</slot>
+	<slot name="MailContext" delegate="/Contexts(mail)" />
+	<slot name="SqlContext" delegate="/Contexts(sql)" />
+
+	<!-- LOGIN PART -->
+
+	<prop name="name" type="string" />
+	<prop name="passwd" type="string" />
+	<prop name="mode" type="string" />
+
+	<!-- COMMAND PART -->
+
+	<command name="NewSociete" template="com.gdo.crm.commercial.cmd.NewSociete" />
+	<command name="NewActionCommerciale" template="com.gdo.crm.commercial.cmd.NewActionCommerciale" />
+	<command name="NewCommande" template="com.gdo.crm.commercial.cmd.NewCommande" />
+
+</template>

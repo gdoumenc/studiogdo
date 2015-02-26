@@ -530,14 +530,17 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         }
 
         // add slot and key (if not THIS)
-        String slotName = stcl.getContainingSlot().getName(stclContext);
+        PSlot<C, S> slot = stcl.getContainingSlot();
+        String slotName = slot.getName(stclContext);
         if (PathUtils.THIS.equals(slotName)) {
             return true;
         }
-        IKey key = stcl.getKey();
         path.append(slotName);
-        if (key != null && key.isNotEmpty()) {
-            path.append(PathUtils.KEY_SEP_OPEN).append(key.toString()).append(PathUtils.KEY_SEP_CLOSE);
+        if (SlotUtils.isMultiple(slot.getArity(stclContext))) {
+            IKey key = stcl.getKey();
+            if (key != null && key.isNotEmpty()) {
+                path.append(PathUtils.KEY_SEP_OPEN).append(key.toString()).append(PathUtils.KEY_SEP_CLOSE);
+            }
         }
         return false;
     }
@@ -1054,7 +1057,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
      * Set property values.
      */
 
-    public void setString(C stclContext, String path, String value) {
+    public String setString(C stclContext, String path, String value) {
 
         // checks validity
         if (isNull()) {
@@ -1066,8 +1069,7 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
             String p = PathUtils.getPathName(path);
             String l = PathUtils.getLastName(path);
             S container = getStencil(stclContext, p);
-            container.setString(stclContext, l, value);
-            return;
+            return container.setString(stclContext, l, value);
         }
 
         // sets it to this stencil
@@ -1075,22 +1077,34 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         if (StencilUtils.isNull(prop)) {
             throw new IllegalStateException(prop.getNullReason());
         }
-        prop.setValue(stclContext, value);
+        return prop.setValue(stclContext, value);
     }
 
     public int setInt(C stclContext, String path, int value) {
-        setString(stclContext, path, Integer.toString(value));
-        return value;
+        String old = setString(stclContext, path, Integer.toString(value));
+        try {
+            return Integer.parseInt(old);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     public boolean setBoolean(C stclContext, String path, boolean value) {
-        setString(stclContext, path, Boolean.toString(value));
-        return value;
+        String old = setString(stclContext, path, Boolean.toString(value));
+        try {
+            return Boolean.parseBoolean(old);
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public double setDouble(C stclContext, String path, double value) {
-        setString(stclContext, path, Double.toString(value));
-        return value;
+        String old = setString(stclContext, path, Double.toString(value));
+        try {
+            return Double.parseDouble(old);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /*
@@ -1600,9 +1614,9 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
         return stcl.getValue(stclContext, self());
     }
 
-    public void setValue(C stclContext, String value) {
+    public String setValue(C stclContext, String value) {
         _Stencil<C, S> stcl = getReleasedStencil(stclContext);
-        stcl.setValue(stclContext, value, self());
+        return stcl.setValue(stclContext, value, self());
     }
 
     public boolean isExpand(C stclContext) {

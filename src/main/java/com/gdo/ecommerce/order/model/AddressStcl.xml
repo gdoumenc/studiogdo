@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.ecommerce.order.model.AddressStcl">
+
+	<description><![CDATA[
+		Address for billing or for shipping.
+	]]></description>
+	
+	<!-- product ordered -->
+	<prop name="Nom" type="string" />
+	<prop name="Prenom" type="string" />
+	<prop name="Adresse1" type="string" />
+	<prop name="Adresse2" type="string" />
+	<prop name="CodePostal" type="string" />
+	<prop name="Ville" type="string" />
+	<prop name="Pays" type="string" />
+	<prop name="Telephone" type="string" />
+
+</template>
+

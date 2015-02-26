@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.SQLMailStcl">
+
+	<slot name="SqlContext" arity="1">
+		<description>Context where the email addresses are taken.</description>
+	</slot>
+
+	<slot name="To" arity="1">
+		<description>Only one recipient to track id.</description>
+		<proto classes="com.gdo.mail.model.RecipientStcl"/>
+	</slot>
+	
+	<slot name="SqlSegment" arity="1">
+		<description>Segment where the tracking is performed (java method called before/after send).</description>
+		<proto classes="com.gdo.mail.model.SQLSegmentStcl"/>
+	</slot>
+	
+	<prop name="TrackerPattern" type="string"><data>%tracker%</data>
+		<descrition>exp which defined the tracker expresssion in mail.</descrition>
+	</prop>
+	
+	<prop name="TrackerReplacement" type="string"><data>%tracker%</data>
+		<descrition>string which replaces traker pattern, and must contain tracker pattern for real tracker replacement (base/table/id).</descrition>
+	</prop>
+
+  <prop name="TrackerDataBase" type="string">
+    <descrition>tracker database</descrition>
+  </prop>
+  
+</template>
+

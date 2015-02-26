@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.commercial.cmd.NewCommercial">
+
+	<description>
+		Create a new commercial, create a new mailing operation for it (in /Services(mailing)/Services(id)).
+	</description>
+	
+	<prop name="StclMode" type="string">
+		<data>modify</data>
+	</prop>
+
+</template>

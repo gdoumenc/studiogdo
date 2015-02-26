@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.site.model._ChapterStcl">
+
+	<!-- chapters hierarchy -->
+	<slot name="Page" delegate="Parent(Page)"/>
+
+	<!-- cms properties -->
+	<slot name="Owner" delegate="Parent(Page)/Owner"/>
+	<slot name="Validator" delegate="Parent(Page)/Validator"/>
+	
+</template>

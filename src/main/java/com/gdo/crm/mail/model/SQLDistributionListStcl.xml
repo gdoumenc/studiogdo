@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.email.model.SQLDistributionListStcl">
+
+	<prop name="Select" type="string" expand="true">
+		<data><![CDATA[
+   		Id Id, Email Address, Msg Message
+		]]></data>
+	</prop>
+
+	<prop name="Condition" type="string" expand="true">
+		<data><![CDATA[
+   		Status = '<$stencil path='Status'/>' AND 
+   		Commercial = '<$stencil path='/Session/Commercial/Id'/>' AND
+   		id > 0
+		]]></data>
+	</prop>
+
+	<prop name="UpdateQuery" type="string">
+		<data><![CDATA[
+   		UPDATE <$stencil path='../FromTable'/> SET
+   		Email = '<$stencil path="Address" escape="sql"/>', Msg = '<$stencil path="Message" escape="sql"/>',
+   		Status='<$stencil path='../Status'/>', Date=Now()
+   		WHERE Id='<$stencil path="Id"/>'
+   	]]></data>
+	</prop>
+
+	<!-- COMMAND PART -->
+
+	<command name="NewRecipient" template="com.gdo.crm.mail.cmd.NewRecipient"/>
+	<command name="Insert" template="com.gdo.crm.mail.cmd.InsertContacts"/>
+
+</template>

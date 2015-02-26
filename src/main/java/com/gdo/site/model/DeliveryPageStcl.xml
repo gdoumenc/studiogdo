@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.site.model.StructuredPageStcl">
+	
+	<slot name="ResourcesMgr" arity="1">
+		<description>Resource manager to manage resources</description>
+		<default template="com.gdo.resource.model.ResourcesMgrStcl"/>
+	</slot>
+	
+	<slot name="Chapters" arity="*">
+		<description>Slot redefined to add link on plug</description>
+		<link slot="ResourcesMgr" path="../ResourcesMgr"/>
+	</slot>
+	
+	<command name="AddDeliveryChapter" template="com.gdo.project.cmd.CreateAtomic">
+	  <param index="0" type="string">com.gdo.site.model.DeliveryPageChapterStcl</param>
+	  <param index="1" type="string">Target/Chapters</param>
+	  <param index="2" type="string">int</param>
+	  <param index="3" type="string">1</param>
+	</command>
+	
+</template>

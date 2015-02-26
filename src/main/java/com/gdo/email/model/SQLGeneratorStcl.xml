@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.email.model.SQLGeneratorStcl">
+
+	<prop name="TrackerPattern" type="string"><data>%tracker%</data>
+		<descrition>exp which defined the tracker expresssion in mail.</descrition>
+	</prop>
+
+	<prop name="TrackerReplacement" type="string"><data>%tracker%</data>
+		<descrition>string which replaces traker pattern, and must contain tracker pattern for real tracker replacement (base/table/id).</descrition>
+	</prop>
+
+	<!-- commands part -->
+            
+</template>

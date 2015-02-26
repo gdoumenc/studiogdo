@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.SQLDistributionListStcl">
+
+	<description>Distribution list where addresses are defined in SQL datatbase.</description>
+
+	<slot name="SqlContext" arity="1">
+		<description>Context where the email addresses are taken.</description>
+		<default template="com.gdo.sql.model.SQLContextStcl"/>
+	</slot>
+	
+	<slot name="To" arity="*" calculated="true">
+		<description>All valid recipients.</description>
+	</slot>
+
+	<slot name="Test" arity="1" transient="true">
+		<description>Address for test</description>
+		<default template="com.gdo.mail.model.SQLRecipientStcl"/>
+		<link slot="SqlContext" path="../SqlContext"/>
+	</slot>
+
+	<!-- simple parametrized SQL requests -->
+	
+	<prop name="Table" type="string">
+		<description>Table to retrieve recipients (main table).</description>
+		<data>addresses</data>
+	</prop>
+	<prop name="Select" type="string">
+		<description>Select to retrieve recipients (Id and Address field should always be defined).</description>
+		<data>Id as Id, Email as Name, Email as Address</data>
+	</prop>
+	<prop name="FromTable" type="string">
+		<description>Table to retrieve recipients (may use join tables).</description>
+		<data>addresses</data>
+	</prop>
+	<prop name="Alias" type="string">
+		<description>Alias main table.</description>
+	</prop>
+	<prop name="Condition" type="string">
+		<description>Clause to filter recipients (used only in KeysQuery).</description>
+	</prop>
+	
+	<!-- specific SQL requests -->
+	
+	<prop name="InsertQuery" type="string">
+		<description>Query to insert the recipient.</description>
+	</prop>
+	<prop name="UpdateQuery" type="string">
+		<description>Query to update the recipient.</description>
+	</prop>
+	<prop name="DeleteQuery" type="string">
+		<description>Query to delete the recipient.</description>
+	</prop>
+	
+	<!-- COMMAND PART -->
+
+	<command name="AddTo" template="com.gdo.project.cmd.CreateAtomic">
+		<description>Add a new TO empty address</description>
+		<param index="0" type="string">com.gdo.mail.model.SQlRecipientStcl</param>
+	  <param index="1" type="string">Target/To</param>
+	  <param index="2" type="string">int</param>
+	  <param index="3" type="string">1</param>
+	</command>
+	
+	<command name="NewRecipient" template="com.gdo.mail.cmd.NewRecipient">
+		<description>Add a new TO address with creation dialog</description>
+	</command>
+	
+	<command name="Clear" template="com.gdo.mail.cmd.ClearSQLDistributionList">
+		<description>Remove all emails</description>
+	</command>
+	
+</template>

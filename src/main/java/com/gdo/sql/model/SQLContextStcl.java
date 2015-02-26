@@ -364,12 +364,16 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
         }
         return StringHelper.EMPTY_STRING_READER;
     }
+    
+    public FacetResult excelFileFacet(StclContext stclContext, ExcelQuery[] queries, PStcl self) {
+        return excelFileFacet(stclContext, queries, self, null);
+    }
 
     /**
      * @return an input stream on an excel file with one worksheet per excel
      *         query defined.
      */
-    public FacetResult excelFileFacet(StclContext stclContext, ExcelQuery[] queries, PStcl self) {
+    public FacetResult excelFileFacet(StclContext stclContext, ExcelQuery[] queries, PStcl self, ExcelFilter filter) {
 
         // checks parameters
         if (queries == null) {
@@ -393,7 +397,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                 return new FacetResult(StringHelper.EMPTY_STRING_INPUT_STREAM, "text/html");
             }
 
-            // ceates worksheets
+            // creates worksheets
             for (ExcelQuery query : queries) {
                 HSSFSheet sheet = workBook.createSheet(query.getSheetName());
                 ResultSet rs = stmt.executeQuery(query.getSqlQuery());
@@ -403,8 +407,14 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                     // write title row
                     if (query.hasTitleRow()) {
                         HSSFRow title = sheet.createRow(0);
-                        for (int j = 1; j <= cols; j++) {
-                            HSSFCell cell = title.createCell(j - 1);
+                        for (int j = 1, j_xls = 1; j <= cols; j++, j_xls++) {
+                            // skip filtered invalid columns
+                            if (filter != null && !filter.isColumnValid(rs, j))
+                            {
+                                j_xls--;
+                                continue;
+                            }
+                            HSSFCell cell = title.createCell(j_xls - 1);
                             cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                             String str = rs.getMetaData().getColumnLabel(j);
                             if (query.getHeaders() != null && query.getHeaders().length >= j) {
@@ -412,6 +422,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                                     str = query.getHeaders()[j - 1];
                             }
                             HSSFRichTextString value = new HSSFRichTextString(str);
+                            
                             cell.setCellValue(value);
                         }
                     }
@@ -419,9 +430,19 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                     // write row content
                     int i = 1;
                     while (rs.next()) {
+                        // skip filtered invalid rows
+                        if (filter != null && !filter.isRowValid(rs)) {
+                            continue;
+                        }
+                        
                         HSSFRow row = sheet.createRow(i);
-                        for (int j = 1; j <= cols; j++) {
-                            HSSFCell cell = row.createCell(j - 1);
+                        for (int j = 1, j_xls = 1; j <= cols; j++, j_xls++) {
+                            // skip filtered invalid columns
+                            if (filter != null && !filter.isColumnValid(rs, j)) {
+                                j_xls--;
+                                continue;
+                            }
+                            HSSFCell cell = row.createCell(j_xls - 1);
 
                             // gets type
                             String type = "string";
@@ -429,7 +450,7 @@ public class SQLContextStcl extends Stcl implements IPropertyChangeListener<Stcl
                                 if (StringUtils.isNotBlank(query.getTypes()[j - 1]))
                                     type = query.getTypes()[j - 1];
                             }
-
+                            
                             // sets cell value
                             if ("int".equals(type)) {
                                 DataFormat format = workBook.createDataFormat();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.email.model.SQLDistributionListStcl">
+
+		<prop name="FromTable" type="string" expand="true">
+			<description>Table are defined from segment key.</description>
+			<data><![CDATA[addresses_<$stencil facet='../.@'/>]]></data>
+		</prop>
+		
+		<prop name="Status" type="string">
+			<description>Sending status.</description>
+		</prop>
+
+		<prop name="Condition" type="string" expand="true"><data><![CDATA[
+   		Status = '<$stencil path='Status'/>' AND id > 0
+		]]></data></prop>
+
+		<prop name="InsertQuery" type="string"><data><![CDATA[
+   		UPDATE <$stencil path='../FromTable'/> SET
+   		Email = '<$stencil path="Address" escape="sql"/>', Status='<$stencil path='../Status'/>', Date=Now()
+   		WHERE Id='<$stencil path="Id"/>'
+   	]]></data></prop>
+   	
+		<prop name="UpdateQuery" type="string"><data><![CDATA[
+   		UPDATE <$stencil path='../FromTable'/> SET
+   		Email = '<$stencil path="Address" escape="sql"/>', Status='<$stencil path='../Status'/>', Date=Now()
+   		WHERE Id='<$stencil path="Id"/>'
+   	]]></data></prop>
+   	
+		<prop name="DeleteQuery" type="string"><data><![CDATA[
+   		DELETE FROM <$stencil path='../FromTable'/> 
+   		WHERE Id='<$stencil path="Id"/>' AND Status='<$stencil path='../Status'/>'
+   	]]></data></prop>
+
+  
+
+  <!--  COMMAND PART -->
+
+
+  <command name="NewRecipient" template="com.gdo.email.cmd.NewRecipient">
+    <description>Add a new TO address with creation dialog</description>
+  </command>
+  
+</template>

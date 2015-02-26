@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.cmd.ReadRecipientsFromFile">
+
+	<prop name="FirstLines" type="string" calculated="true">
+		<description>Shows the first 5 first lines if a file was uploaded.</description>
+	</prop>
+	
+	<!-- Properties for reading characterstic -->
+	<prop name="SkipFirstLine" type="boolean"/>
+	<prop name="SplitedBy" type="string"><data>\t</data></prop>
+	<prop name="ColumnIndex" type="int"><data>1</data></prop>
+	<prop name="EnclosedBy" type="string"/>
+	
+	<prop name="Test" type="string" calculated="true">
+		<description>Show the test email matched.</description>
+	</prop>
+	
+	<prop name="Counter" type="int" calculated="true">
+		<description>Number of email inserted.</description>
+	</prop>
+	
+	
+	<!-- Property to set an option to Add Recipients in existing list or Replace List -->
+	<prop name="AddInList" type="boolean"><data>true</data></prop>
+
+	<inst id="step1" template="com.gdo.project.model.StepStcl">
+		<description>Loads file list and render first line.</description>
+	</inst>
+	<inst id="step2" template="com.gdo.project.model.StepStcl">
+		<description> Set Reading Characterstic and Generate the list</description>
+	</inst>
+	<inst id="step3" template="com.gdo.project.model.StepStcl">
+		<description> Show the Result</description>
+	</inst>
+	<plug ref="step1" key="1" slot="Steps"/>
+	<plug ref="step2" key="2" slot="Steps"/>
+	<plug ref="step3" key="3" slot="Steps"/>
+	
+</template>

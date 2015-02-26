@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.site.model._PageStcl">
+
+	<slot name="Content" arity="?">
+		<description>Content undefined in this abstract page</description>
+	</slot>
+
+	<slot name="ResFtpContext" arity="1">
+		<description>ftp context for resources</description>
+		<default template="com.gdo.ftp.model.FtpContextStcl"/>
+	</slot>
+
+	<!-- resources associated to this page -->
+	<slot name="Images" arity="*"/>
+	<slot name="Documents" arity="*"/>
+	
+	<!-- Generator associated -->
+	<slot name="Generator" arity="1">
+		<description>Default generator associated to the page.</description>
+		<default template="com.gdo.generator.model.GeneratorStcl"/>
+	</slot>
+	
+	<slot name="FtpContext" arity="1">
+		<description>ftp context for upload</description>
+		<default template="com.gdo.ftp.model.FtpContextStcl"/>
+	</slot>
+	
+	<prop name="Url" type="string">
+		<description>Url where the page can be visible on the net</description>
+	</prop>
+
+	<!-- cms properties -->
+	<slot name="Owner" arity="?"/>
+	<slot name="Validator" arity="?"/>
+	
+</template>
+

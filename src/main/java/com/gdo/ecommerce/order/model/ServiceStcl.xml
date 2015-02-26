@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.ecommerce.order.model.ServiceStcl">
+
+	<description>This is the service to manage the product orders.</description>
+
+	<slot name="SqlContext" delegate="/Contexts(sql)" />
+	
+	<slot name="Orders" calculated="true"/>
+
+</template>
+	
