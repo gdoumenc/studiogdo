@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.commercial.cmd.NewContact">
+
+	<description>
+		Create a new contact in the societe (plug the societe in the contact).
+	</description>
+	
+	<prop name="StclMode" type="string">
+		<data>create</data>
+	</prop>
+
+</template>

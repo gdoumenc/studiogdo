@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.mail.cmd.InsertContacts">
+
+  <slot name="Contact" arity="*" calculated="true"/>
+
+	<inst id="step1" template="com.gdo.project.model.StepStcl">
+		<description>Filtering step.</description>
+	</inst>
+	<plug ref="step1" key="1" slot="Steps"/>
+	<inst id="step2" template="com.gdo.project.model.StepStcl">
+		<description>Show head list.</description>
+	</inst>
+	<plug ref="step2" key="2" slot="Steps"/>
+
+</template>

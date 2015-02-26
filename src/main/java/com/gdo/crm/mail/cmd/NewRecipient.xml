@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.mail.cmd.NewRecipient">
+
+		<param index="0" type="string">com.gdo.mail.model.SQLRecipientStcl</param>
+		<param index="1" type="string">Target/To</param>
+		<param index="2" type="string">int</param>
+		<param index="3" type="string">1</param>
+
+</template>
