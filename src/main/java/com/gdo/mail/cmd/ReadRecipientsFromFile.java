@@ -8,12 +8,9 @@ package com.gdo.mail.cmd;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.gdo.mail.model.DistributionListStcl;
@@ -122,7 +119,8 @@ public class ReadRecipientsFromFile extends ComposedActionStcl {
 			super(stclContext, ReadRecipientsFromFile.this, Slot.FIRST_LINES);
 		}
 
-		public String getValue(StclContext stclContext, PStcl self) {
+		@Override
+        public String getValue(StclContext stclContext, PStcl self) {
 			try {
 				if (ReadRecipientsFromFile.this._file != null) {
 					BufferedReader reader = new BufferedReader(new FileReader(ReadRecipientsFromFile.this._file));
@@ -152,7 +150,8 @@ public class ReadRecipientsFromFile extends ComposedActionStcl {
 			super(stclContext, ReadRecipientsFromFile.this, Slot.TEST);
 		}
 
-		public String getValue(StclContext stclContext, PStcl self) {
+		@Override
+        public String getValue(StclContext stclContext, PStcl self) {
 			try {
 				if (ReadRecipientsFromFile.this._file != null) {
 					PStcl command = self.getContainer(stclContext);
@@ -197,7 +196,8 @@ public class ReadRecipientsFromFile extends ComposedActionStcl {
 			super(cmdContext, reference);
 		}
 
-		public void run() {
+		@Override
+        public void run() {
 			try {
 				StclContext stclContext = getStencilContext();
 				PStcl cmd = getReference();

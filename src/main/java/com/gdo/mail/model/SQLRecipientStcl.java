@@ -81,7 +81,8 @@ public class SQLRecipientStcl extends SQLStcl implements IRecipient {
 	/**
 	 * @return the java internet address.
 	 */
-	public Result getInternetAddress(StclContext stclContext, PStcl self) {
+	@Override
+    public Result getInternetAddress(StclContext stclContext, PStcl self) {
 		try {
 			String add = self.getExpandedString(stclContext, Slot.ADDRESS, StringHelper.EMPTY_STRING);
 			if (StringUtils.isBlank(add))

@@ -87,7 +87,8 @@ public class SegmentStcl extends Stcl implements IMailSendListener {
 	// IMailSendListener implementation
 	//
 
-	public Result afterSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
+	@Override
+    public Result afterSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
 
 		// plugs it in sent segment
@@ -96,7 +97,8 @@ public class SegmentStcl extends Stcl implements IMailSendListener {
 		return Result.success();
 	}
 
-	public Result afterError(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, String reason, PStcl self) {
+	@Override
+    public Result afterError(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, String reason, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
 
 		// plugs it in error segment
@@ -105,11 +107,13 @@ public class SegmentStcl extends Stcl implements IMailSendListener {
 		return Result.success();
 	}
 
-	public Result beforeFirst(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
+	@Override
+    public Result beforeFirst(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
 		return Result.success();
 	}
 
-	public Result afterLast(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
+	@Override
+    public Result afterLast(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl self) {
 		return Result.success();
 	}
 
@@ -196,7 +200,8 @@ public class SegmentStcl extends Stcl implements IMailSendListener {
 	// IMailSendListener implementation
 	//
 
-	public Result beforeSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
+	@Override
+    public Result beforeSend(CommandContext<StclContext, PStcl> cmdContext, PStcl mail, PStcl recipient, PStcl self) {
 		StclContext stclContext = cmdContext.getStencilContext();
 
 		// searches in sent segment

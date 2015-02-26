@@ -24,7 +24,8 @@ public class NewRecipient extends com.gdo.mail.cmd.NewRecipient {
 			super(stclContext, NewRecipient.this, Slot.STATUS);
 		}
 
-		public String getValue(StclContext stclContext, PStcl self) throws Exception {
+		@Override
+        public String getValue(StclContext stclContext, PStcl self) throws Exception {
 			return NewRecipient.this._slot.getContainer().getString(stclContext, Slot.STATUS);
 		}
 	}

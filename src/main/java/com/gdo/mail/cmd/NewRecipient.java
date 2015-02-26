@@ -25,7 +25,8 @@ public class NewRecipient extends NewSQLStcl {
 			super(stclContext, NewRecipient.this, Slot.FROM_TABLE);
 		}
 
-		public String getValue(StclContext stclContext, PStcl self) throws Exception {
+		@Override
+        public String getValue(StclContext stclContext, PStcl self) throws Exception {
 			return NewRecipient.this._slot.getContainer().getString(stclContext, Slot.FROM_TABLE);
 		}
 	}
