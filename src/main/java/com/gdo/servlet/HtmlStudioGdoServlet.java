@@ -116,12 +116,14 @@ public class HtmlStudioGdoServlet extends HttpServlet {
 
             // get entry
             if (StringUtils.isBlank(path)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty path");
+                String msg = logWarn("Empty path");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
                 return null;
             }
             String service = StringHelper.substringEnd(path.substring(1), GDO_EXT.length());
             if (StringUtils.isBlank(service)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No entry defined");
+                String msg = logWarn("No entry defined");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
                 return null;
             }
 
@@ -299,17 +301,10 @@ public class HtmlStudioGdoServlet extends HttpServlet {
                                 postDateTime(stclContext, modifiedStcl, slot, format, params.get(param)[0]);
                                 continue;
                             }
-                        } catch (NumberFormatException e) {
-                            HttpServletResponse response = stclContext.getResponse();
-                            String msg = e.toString() + " for parameter " + slot;
-                            InputStream in = new ByteArrayInputStream(msg.toString().getBytes());
-                            StudioGdoServlet.writeResponse(response, 418, "text/html", in, null);
-                            return false;
                         } catch (Exception e) {
+                            String msg = logWarn("%s for parameter %s", e, slot);
                             HttpServletResponse response = stclContext.getResponse();
-                            String msg = e.toString() + " for parameter " + slot;
-                            InputStream in = new ByteArrayInputStream(msg.toString().getBytes());
-                            StudioGdoServlet.writeResponse(response, 418, "text/html", in, null);
+                            response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, msg);
                             return false;
                         }
                     }
@@ -329,9 +324,9 @@ public class HtmlStudioGdoServlet extends HttpServlet {
             }
             return true;
         } catch (Exception e) {
+            String msg = logWarn("%s", e);
             HttpServletResponse response = stclContext.getResponse();
-            InputStream in = new ByteArrayInputStream(e.toString().getBytes());
-            StudioGdoServlet.writeResponse(response, 418, "text/html", in, null);
+            response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, msg);
             return false;
         }
     }
