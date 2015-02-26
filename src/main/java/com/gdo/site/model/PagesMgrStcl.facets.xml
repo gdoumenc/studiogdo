@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+
+ 
+	<label mode="line"><![CDATA[
+<$stencil path="Name" facet="label" mode="label"/>
+	]]></label>
+
+	<panel mode="modify.content"><![CDATA[
+<$tree path="." label="Pages" panelFacet="none" mode="modify.content"/>
+	]]></panel>
+
+
+	<tree mode="nav" default="true"><![CDATA[
+<$tree path="Pages"/>
+	]]></tree>
+	
+	<tree mode="modify"><![CDATA[
+<$stencil path="Name" mode="label"/>
+<$button command="AddStencil" value="Ajouter un chapitre"/>
+<$button factory="com.gdo.project.cmd.Unplug" value="Supprimer"/>
+<$tree path="Chapters" mode="label"/>
+	]]></tree>
+	
+	<tree mode="modify.content"><![CDATA[
+<$tree path="Pages" labelFacet="panel" labelMode="tree.label" panelMode="tree.panel"/>
+	]]></tree>
+	
+</facets>

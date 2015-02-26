@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.site.model.ResourcesMgrStcl"
+	extends="com.gdo.project.model.ServiceStcl">
+
+	<!-- contained pages -->
+	<slot name="Resources" arity="*" parent="ResourcesMgr" />
+
+	<slot name="FtpContext" delegate="Parent(Service)/ResFtpContext" />
+
+</template>
+

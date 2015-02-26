@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.murphy.order.model.OrderedProductStcl">
+
+	<description><![CDATA[
+		Product ordered in an order.
+	]]></description>
+	
+	<!-- product ordered -->
+	<slot name="Produit" arity="1"/>	
+	
+	<!-- order info -->
+	<prop name="Quantite" type="int"/>
+	<prop name="PrixTTC" type="int"/>
+
+</template>
+

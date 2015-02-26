@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+
+	<panel mode="valid"><![CDATA[
+<table>
+<tr>
+<td>Rédacteur : </td><td><$stencil path="Owner" select="/Users" mode="text" arity="1"/></td>
+</tr>
+<tr>
+<td>Profil de validation : </td><td><$stencil path="Validator" select="/Profiles" mode="text" arity="1"/></td>
+</tr>
+</table>
+	]]></panel>
+	
+	<tree mode="resources"><![CDATA[
+Ressources :
+<$tree path="." labelFacet="panel" labelMode="tree.label.imgs" panelFacet="none" mode="modify.imgs"/>
+<$tree path="." labelFacet="panel" labelMode="tree.label.docs" panelFacet="none" mode="modify.docs"/>
+	]]></tree>
+
+	<!-- used when the page is created -->
+	<tree mode="creation"><![CDATA[
+Nom de la page : <$stencil path="Name" mode="text" arity="1"/>
+<$tree path="." mode="valid"/>
+<$tree path="FtpContext" mode="structure"/>
+	]]></tree>
+	
+	<tree mode="valid"><![CDATA[
+Validation :
+<$pattern name="toggle.div.begin" param1="see" param2="Voir"/>
+	<$stencil path="." facet="panel" mode="valid"/>
+<$pattern name="toggle.div.end"/>	
+	]]></tree>
+	
+	 <flex mode="actions"><![CDATA[<flex>
+  	<className>com.gdo.site::ValidateSimplePageStcl</className>
+  	<initialState>actions</initialState>
+  </flex>]]></flex>
+	
+  <flex mode="modify"><![CDATA[<flex>
+  	<className>com.gdo.site::ValidateSimplePageStcl</className>
+  	<initialState>modify</initialState>
+  </flex>]]></flex>
+  
+  <flex mode="validate"><![CDATA[<flex>
+  	<className>com.gdo.site::ValidateSimplePageStcl</className>
+  	<initialState>validate</initialState>
+  </flex>]]></flex>
+
+</facets>

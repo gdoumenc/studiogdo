@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+	<label mode="simple" default="true"><![CDATA[<$stencil path="Name" mode="label"/>]]></label>
+
+	<panel mode="simple" default="true"><![CDATA[<$stencil path="Name" mode="label"/>]]></panel>
+	
+	<panel mode="modify"><![CDATA[
+<$tree path="." labelFacet="panel" labelMode="tree.modify.label" panelMode="tree.modify.panel" mode="modify" expanded="true"/>
+	]]></panel>
+
+	<panel mode="tree.modify.label"><![CDATA[
+Nom de la page : <$stencil path="Name" mode="text" arity="1" style="width:200px;"/>
+<$stencil path="." mode="delete"/>
+	]]></panel>
+
+	<panel mode="tree.modify.panel"><![CDATA[
+Context FTP : <$stencil path="FtpContext" mode="modify.toggle"/>
+	]]></panel>
+
+	<panel mode="modify.without.delete"><![CDATA[
+Nom de la page : <$stencil path="Name" mode="text" arity="1" style="width:200px;"/>
+<$tree path="FtpContext" label="Contexte FTP" panelMode="tree.panel" mode="modify"/>
+<$tree path="Generator" label="Générateur" panelMode="tree.creation.panel" mode="modify"/>
+	]]></panel>
+
+	<panel mode="modify.content"><![CDATA[
+<$tree path="." labelFacet="panel" labelMode="tree.modify.content.label" panelMode="tree.modify.content.panel" mode="modify.content" expanded="true"/>
+	]]></panel>
+	
+	<panel mode="tree.modify.content.label"><![CDATA[
+<$stencil path="." facet="label" mode="name"/>
+<$toggle openTitle="Voir le contenu" openBeforeLabel="">
+	<div style="width:1000px;height:400px" >
+	 <iframe width="100%" height="100%" src="rpc/facet.gdo?p=<$stencil path='/@'/>/FilesGenerated(<$stencil path='FilesGeneratedPath' facet='label' mode='label'/>)&f=label&m=label">
+	 </iframe>
+	</div>
+<$/toggle>
+<$stencil path="." mode="edit.toggle"/>
+<$stencil path="." mode="upload"/>
+	]]></panel>
+
+	<panel mode="tree.modify.content.panel"><![CDATA[
+Page affichée : <$stencil path="FilesGeneratedPath" facet="label" mode="text"/>
+	]]></panel>
+
+	<panel mode="edit.toggle"><![CDATA[
+<$pattern file="patterns" name="content.edit"
+	param1="Content" param2="<$stencil path='XinhaScript' facet='label'/>" param3="<$stencil path='XinhaPlugins' facet='label'/>"/>
+<$toggle init="close" openTitle="Options de l'éditeur" openBeforeLabel="" openStyleClass="more">
+  <table style="text-align:left;">
+  <tr><td>Script Xinha : </td><td><$stencil path="XinhaScript" mode="textarea" rows="5" cols="80"/></td></tr>
+  <tr><td>Plugins Xinha: </td><td><$stencil path="XinhaPlugins" mode="textarea" rows="1" cols="80"/></td></tr>
+  </table>
+<$/toggle>
+	]]></panel>
+
+	<panel mode="upload"><![CDATA[
+<$button styleClass="upload" title="Upload content to site" beforeLabel="" value=""
+	command="Update"/>
+	]]></panel>
+
+	<panel mode="tree.label"><![CDATA[
+<$stencil path="." mode="tree.label.without.delete"/>
+<$button styleClass="delete" title="Suppression de la page" value="" beforeLabel=""
+	factory="com.gdo.project.cmd.Unplug"/>
+	]]></panel>
+
+	<panel mode="tree.label.without.delete"><![CDATA[
+<$stencil path="Name" facet="label" mode="label"/>
+<$pattern file="patterns" name="content.edit"
+	param1="Content" param2="<$stencil path="XinhaScript"/>" param3="<$stencil path="XinhaPlugins"/>"/>
+<$toggle init="close" openTitle="Voir le contenu" openBeforeLabel="" openStyleClass="more">
+TO BE DONE
+<$/toggle>
+<$stencil path="." mode="upload"/>
+	]]></panel>
+
+	<panel mode="tree.panel"><![CDATA[
+<$stencil path="." mode="tree.panel.without.delete"/>
+<$button styleClass="delete" title="Suppression de la page" value="" beforeLabel=""
+	factory="com.gdo.project.cmd.Unplug"/>
+	]]></panel>
+
+	<panel mode="tree.panel.without.delete"><![CDATA[
+Name : <$stencil path="Name" facet="label" mode="text"/><br/>
+<hr/>
+FTPContext : <$stencil path="FtpContext" mode="modify"/><br/>
+ResFtpContext : <$stencil path="ResFtpContext" mode="modify"/><br/>
+	]]></panel>
+
+	<panel mode="tree.doc.label"><![CDATA[
+	  Documents
+		<$button styleClass="add_document" value="" beforeLabel="" title="Ajouter un document"
+			factory="com.gdo.project.cmd.CreateAtomic"
+			param1="com.gdo.site.model.MyDocumentStcl"
+			param2="Target/Documents"/>
+
+	]]></panel>
+
+	<panel mode="tree.img.label"><![CDATA[
+	  Images
+	  <$button styleClass="add_image" value="" beforeLabel="" title="Ajouter une image"
+   		 factory="com.gdo.project.cmd.CreateAtomic"
+		param1="com.gdo.site.model.MyImageStcl"
+		param2="Target/Images"/>
+	]]></panel>
+
+	<tree mode="creation"><![CDATA[
+Nom de la page : <$stencil path="Name" mode="text" arity="1"/>
+<$tree path="." mode="valid"/>
+<$tree path="FtpContext" mode="structure"/>
+	]]></tree>
+	
+	<tree mode="valid"><![CDATA[
+Validation :
+<$pattern name="toggle.div.begin" param1="see" param2="Voir"/>
+	<$stencil path="." facet="panel" mode="valid"/>
+<$pattern name="toggle.div.end"/>	
+	]]></tree>
+
+	<tree mode="modify"><![CDATA[
+<$tree path="Generator" labelFacet="panel" labelMode="tree.creation.label" panelMode="tree.creation.panel" mode="modify"/>
+	]]></tree>
+	
+	<tree mode="modify.content"><![CDATA[
+<$tree path="." labelFacet="panel" labelMode="tree.img.label" panelFacet="none" mode="modify.img" />
+<$tree path="." labelFacet="panel" labelMode="tree.doc.label" panelFacet="none" mode="modify.doc" />
+	]]></tree>
+	<tree mode="modify.img"><![CDATA[
+<$tree path="Images" labelFacet="panel" labelMode="tree.label" panelMode="tree.panel" mode="modify" />
+	]]></tree>
+	<tree mode="modify.doc"><![CDATA[
+<$tree path="Documents" labelFacet="panel" labelMode="tree.label" panelMode="tree.panel" mode="modify" />
+	]]></tree>
+	
+  <model mode="modify.imgs"><![CDATA[<model>
+  	<subTreePath>Images</subTreePath>
+		<subTreeModelMode>modify</subTreeModelMode>
+  	<stclSelectedMode>modify</stclSelectedMode>
+  </model>]]></model>
+  
+  <model mode="modify.docs"><![CDATA[<model>
+  	<subTreePath>Documents</subTreePath>
+		<subTreeModelMode>modify</subTreeModelMode>
+  	<stclSelectedMode>modify</stclSelectedMode>
+  </model>]]></model>
+  
+</facets>

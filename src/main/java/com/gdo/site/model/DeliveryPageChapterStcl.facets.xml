@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+	
+	<flex mode="modify.user"><![CDATA[<flex>
+		<className>com.gdo.site::DeliveryPageChapterStcl</className>
+		<initialState>modify.user</initialState>
+	</flex>]]></flex>
+	
+	<flex mode="modify"><![CDATA[<flex>
+		<className>com.gdo.site::DeliveryPageChapterStcl</className>
+		<initialState>modify</initialState>
+	</flex>]]></flex>
+	
+</facets>

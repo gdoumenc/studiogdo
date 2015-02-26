@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.project.cmd.Modify">
+	<description>Show validations</description>
+</template>
