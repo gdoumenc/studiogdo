@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.mail.model.SQLSegmentStcl">
+
+	<slot name="Generator" arity="?">
+		<description>Generator selected for this segment</description>
+	</slot>
+
+	<prop name="Content1" type="string" />
+	<prop name="Content2" type="string" />
+	<prop name="Content3" type="string" />
+	<prop name="Content4" type="string" />
+	<prop name="Content5" type="string" />
+	<prop name="Content6" type="string" />
+	<prop name="Content7" type="string" />
+	<prop name="Content8" type="string" />
+
+	<slot name="Image1" arity="1" />
+	<inst id="img1" template="com.gdo.image.model.ImageStcl">
+		<inst id="file1" template="com.gdo.ftp.model.FileStcl">
+			<param index="0" type="string"></param>
+			<slot name="Context" delegate="/Contexts(ftp_img_newsletters)" />
+		</inst>
+		<plug ref="file1" slot="File" />
+	</inst>
+	<plug ref="img1" slot="Image1" />
+
+	<slot name="Image2" arity="1" />
+	<inst id="img2" template="com.gdo.image.model.ImageStcl">
+		<inst id="file2" template="com.gdo.ftp.model.FileStcl">
+			<param index="0" type="string"></param>
+			<slot name="Context" delegate="/Contexts(ftp_img_newsletters)" />
+		</inst>
+		<plug ref="file2" slot="File" />
+	</inst>
+	<plug ref="img2" slot="Image2" />
+
+	<prop name="TrackerDataBase" type="string"><data>crm</data></prop>
+	<inst id="mail" template="com.gdo.mail.model.SQLMailStcl">
+		<slot name="Generator" delegate="../Generator" />
+		<slot name="Content" delegate="Generator/FilesGenerated($content)" />
+		<slot name="TrackerPattern" delegate="../Generator/TrackerPattern"/>
+		<slot name="TrackerReplacement" delegate="../Generator/TrackerReplacement"/>
+		<slot name="TrackerDataBase" delegate="../TrackerDataBase"/>
+	</inst>
+
+	<prop name="FromTable" type="string" calculated="true" />
+
+	<slot name="To" arity="1" transient="true">
+		<link slot="SqlContext" path="../SqlContext" />
+		<link slot="FromTable" path="../FromTable" />
+	</slot>
+	<inst id="to" template="com.gdo.crm.mail.model.SQLDistributionListStcl">
+		<prop name="Status" type="string">
+			<data>tbs</data>
+		</prop>
+	</inst>
+	<plug ref="to" slot="To" on="always"/>
+	
+	<slot name="Sent" arity="1" transient="true">
+    <link slot="SqlContext" path="../SqlContext"/>
+    <link slot="FromTable" path="../FromTable" />
+  </slot>
+  <inst id="sent" template="com.gdo.crm.mail.model.SQLDistributionListStcl">
+    <prop name="Status" type="string"><data>sent</data></prop>
+    <prop name="InsertQuery" type="string"><data><![CDATA[
+      UPDATE <$stencil path='../FromTable'/> SET
+      Status='sent', Date=Now()
+      WHERE Id='<$stencil path="Id"/>'
+    ]]></data></prop>
+    <prop name="DeleteQuery" type="string"><data><![CDATA[
+      UPDATE <$stencil path='../FromTable'/> SET
+      Status='tbs', Date=Now()
+      WHERE Id='<$stencil path="Id"/>'
+    ]]></data></prop>
+  </inst>
+  <plug ref="sent" slot="Sent" on="always"/>
+
+  <slot name="Error" arity="1" transient="true">
+    <link slot="SqlContext" path="../SqlContext"/>
+    <link slot="FromTable" path="../FromTable" />
+  </slot>
+  <inst id="error" template="com.gdo.crm.mail.model.SQLDistributionListStcl">
+    <prop name="Status" type="string"><data>err</data></prop>
+    <prop name="DeleteQuery" type="string"><data><![CDATA[
+      UPDATE <$stencil path='../FromTable'/> SET
+      Status='tbs', Date=Now()
+      WHERE Id='<$stencil path="Id"/>'
+    ]]></data></prop>
+  </inst>
+  <plug ref="error" slot="Error" on="always"/>
+
+  <slot name="Already" arity="1" transient="true">
+    <link slot="SqlContext" path="../SqlContext"/>
+    <link slot="FromTable" path="../FromTable" />
+  </slot>
+  <inst id="already" template="com.gdo.crm.mail.model.SQLDistributionListStcl">
+    <prop name="Status" type="string"><data>tbr</data></prop>
+  </inst>
+  <plug ref="already" slot="Already" on="always"/>
+
+	<slot name="Read" arity="1" transient="true">
+		<link slot="SqlContext" path="../SqlContext"/>
+    <link slot="FromTable" path="../FromTable" />
+	</slot>
+	<inst id="read" template="com.gdo.crm.mail.model.SQLDistributionListStcl">
+		<prop name="Condition" type="string" expand="true"><data><![CDATA[
+   		DateRead IS NOT NULL AND Commercial = '<$stencil path='/Session/Commercial/Id'/>' AND id > 0
+		]]></data></prop>
+		<prop name="InsertQuery" type="string"/>
+		<prop name="UpdateQuery" type="string"/>
+		<prop name="DeleteQuery" type="string"/>
+	</inst>
+	<plug ref="read" slot="Read" on="always"/>
+
+	<!-- COMMAND PART -->
+
+	<command name="CopySegment" template="com.gdo.crm.mail.cmd.CopySegment">
+	</command>
+
+</template>

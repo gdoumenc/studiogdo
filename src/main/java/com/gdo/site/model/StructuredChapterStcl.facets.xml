@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE facets PUBLIC
+  "-//StudioGdo//DTD Facets 1.0//EN" "facets.dtd">
+
+<facets>
+
+  <model mode="modify"><![CDATA[<model>
+  	<subTreePath>Chapters</subTreePath>
+		<subTreeModelMode>modify</subTreeModelMode>
+  	<stclSelectedMode>modify</stclSelectedMode>
+  </model>]]></model>
+  <model mode="validate"><![CDATA[<model>
+  	<subTreePath>Chapters</subTreePath>
+		<subTreeModelMode>validate</subTreeModelMode>
+  	<stclSelectedMode>validate</stclSelectedMode>
+  </model>]]></model>
+		
+</facets>

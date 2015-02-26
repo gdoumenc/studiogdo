@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.commercial.model.ServiceStcl">
+
+	<slot name="SqlContext" delegate="/Contexts(sql)" />
+
+	<!-- FILTERED SLOTS -->
+
+	<slot name="Societes" arity="*" calculated="true" />
+	<slot name="Contacts" arity="*" calculated="true" />
+	<slot name="Commerciaux" arity="*" calculated="true" />
+	<slot name="Commandes" arity="*" calculated="true" />
+	<slot name="ActionsCommerciales" arity="*" calculated="true" />
+	
+	<slot name="Activites" arity="*" calculated="true" />
+	<slot name="TypesDActionCommerciale" arity="*" calculated="true" />
+
+	<!-- ALL SLOTS -->
+
+	<slot name="AllSocietes" arity="*" calculated="true" />
+	<slot name="AllContacts" arity="*" calculated="true" />
+	<slot name="AllCommandes" arity="*" calculated="true" />
+
+	<slot name="ActionsCommerciales" arity="*" calculated="true" />
+
+	<!-- USED TEMPLATES -->
+
+	<prop name="ActionCommercialeTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.ActionCommercialeStcl</data>
+	</prop>
+	<prop name="ActiviteTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.ActiviteStcl</data>
+	</prop>
+	<prop name="CommandeTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.CommandeStcl</data>
+	</prop>
+	<prop name="CommercialTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.CommercialStcl</data>
+	</prop>
+	<prop name="ContactTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.ContactStcl</data>
+	</prop>
+	<prop name="SocieteTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.SocieteStcl</data>
+	</prop>
+	<prop name="TypeDActionCommercialeTemplate" type="string">
+		<data>com.gdo.crm.commercial.model.TypeDActionCommercialeStcl</data>
+	</prop>
+
+	<!-- COMMAND PART -->
+
+	<command name="NewSociete" template="com.gdo.crm.commercial.cmd.NewSociete" />
+
+	<command name="NewActivite" template="com.gdo.sql.cmd.NewSQLStcl">
+		<param index="0" type="string">com.gdo.crm.commercial.model.ActiviteStcl</param>
+		<param index="1" type="string">Target/Activites</param>
+		<param index="2" type="string">int</param>
+		<prop name="StclMode" type="string">
+			<data>modify</data>
+		</prop>
+	</command>
+
+	<command name="NewTypeDActionCommerciale" template="com.gdo.sql.cmd.NewSQLStcl">
+		<param index="0" type="string">com.gdo.crm.commercial.model.TypeDActionCommercialeStcl</param>
+		<param index="1" type="string">Target/TypesDActionCommerciale</param>
+		<param index="2" type="string">int</param>
+		<prop name="StclMode" type="string">
+			<data>modify</data>
+		</prop>
+	</command>
+
+	<command name="NewCommercial" template="com.gdo.crm.commercial.cmd.NewCommercial" />
+
+	<command name="NewActionCommerciale" template="com.gdo.crm.commercial.cmd.NewActionCommerciale" />
+
+</template>

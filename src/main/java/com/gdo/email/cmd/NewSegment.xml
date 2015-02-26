@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.email.cmd.NewSegment">
+
+	<description>
+		Create a new segment
+		plug current Generator of operation container in Generator slot
+		Plug link in Mail/Content to Generator/FilesGenerated($content).
+		Create database of addresses.
+		
+		Plug the service site which contains the page to put on server.
+	</description>
+
+	<param index="0" type="string">com.gdo.email.model.SQLSegmentStcl</param>
+	<param index="1" type="string">Target/Segments</param>
+	<param index="2" type="string">int</param>
+	<param index="3" type="string">1</param>
+	
+</template>

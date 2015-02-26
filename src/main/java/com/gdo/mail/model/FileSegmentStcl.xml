@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.mail.model.SegmentStcl">
+
+	<slot name="To" arity="1">
+		<link slot="Name" path="../Mail/FromName"/>
+		<link slot="From" path="../Mail/From"/>
+	</slot>
+	<inst id="to" template="com.gdo.mail.model.DistributionListFromFileStcl"/>
+	<plug ref="to" slot="To"/>
+
+	<slot name="Sent" arity="1"/>
+	<inst id="sent" template="com.gdo.mail.model.DistributionListFromFileStcl">
+	</inst>
+	<plug ref="sent" slot="Sent"/>
+
+	<slot name="Error" arity="1"/>
+	<inst id="error" template="com.gdo.mail.model.DistributionListFromFileStcl">
+	</inst>
+	<plug ref="error" slot="Error"/>
+
+	<slot name="Already" arity="1"/>
+	<inst id="already" template="com.gdo.mail.model.DistributionListFromFileStcl">
+	</inst>
+	<plug ref="already" slot="Already"/>
+
+	<!-- commands part -->
+            
+</template>

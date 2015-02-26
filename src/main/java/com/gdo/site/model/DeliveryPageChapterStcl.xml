@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.site.model.SimpleChapterStcl">
+	<!-- deprecated use DeliveryStatus -->
+
+	<prop name="Title" type="string"/>
+	<prop name="Priority" type="string"/>
+	<prop name="Version" type="string"/>
+	<prop name="Missing" type="string"/>
+	<prop name="Comment" type="string"/>
+	<prop name="InternalComment" type="string"/>
+	<prop name="Link" type="string"/>
+	<prop name="Delivered" type="string"><data>false</data></prop>
+	<prop name="Accepted" type="string"><data>false</data></prop>
+	
+	<slot name="ResourcesMgr" arity="1">
+		<description>Resource manager to manage resources</description>
+		<default template="com.gdo.resource.model.ResourcesMgrStcl"/>
+	</slot>
+</template>

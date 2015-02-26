@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.site.model._PageStcl">
+
+	<!-- only a simple content -->
+	<prop name="Content" type="string"><data><![CDATA[]]></data></prop>
+  <prop name="XinhaPlugins" type="string"><data><![CDATA[]]></data></prop>
+  <prop name="XinhaScript" type="string"><data><![CDATA[c.fullPage=true;]]></data></prop>
+
+
+	<!-- delegated ftp context -->
+	<slot name="FtpContext" delegate="Parent(PagesMgr)/FtpContext" />
+	<slot name="ResFtpContext" delegate="Parent(PagesMgr)/ResFtpContext" /> 
+		
+	<command name="Update" template="com.gdo.site.cmd.Update">
+		<param index="0" type="string"><![CDATA[FilesGenerated]]></param>
+		<param index="1" type="string"><![CDATA[FtpContext]]></param>
+	</command>	
+	<!--<param index="0" type="string"><![CDATA[FilesGenerated]]></param>
+		<param index="1" type="string"><![CDATA[FtpContext]]></param>-->
+</template>
+

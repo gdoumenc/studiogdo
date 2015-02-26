@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.mail.model.SQLOperationStcl">
+
+	<slot name="Generators" delegate="/Services(mailing)/Generators">
+		<description>The generators are defined at the service level</description>
+	</slot>
+
+	<!-- no more used I think -->
+	<slot name="Commercial" arity="1" transient="true" />
+
+	<!-- COMMAND PART -->
+
+	<command name="AddSegment" template="com.gdo.crm.mail.cmd.NewSegment">
+	</command>
+
+</template>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.SQLRecipientStcl">
+
+	<description>
+		A SQL recipient is a recipient with a status (tbs, sent, err, tbr, resent, test).
+		Eventually a message can be added.
+		They are defined in a SQLDistribution list.
+	</description>
+
+	<prop name="Address" type="string">
+		<description>Why redefined</description>
+	</prop>
+
+	<prop name="Status" type="string" />
+
+	<prop name="Message" type="string" />
+
+</template>

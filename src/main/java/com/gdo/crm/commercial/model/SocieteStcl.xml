@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template java="com.gdo.crm.commercial.model.SocieteStcl">
+
+	<command name="Unplug" template="com.gdo.crm.commercial.cmd.DeleteSociete" />
+	<command name="NewContact" template="com.gdo.crm.commercial.cmd.NewContact" />
+	<command name="NewActionCommerciale" template="com.gdo.crm.commercial.cmd.NewActionCommerciale"/>
+
+</template>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.inscription.site.FieldStcl">
+	
+	<prop name="Format" type="string"><data>DD/MM/YYYY</data></prop>
+
+</template>

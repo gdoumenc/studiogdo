@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template java="com.gdo.crm.commercial.model.ContactStcl">
+
+	<prop name="Civilite" type="string" />
+	<prop name="Nom" type="string" />
+	<prop name="Prenom" type="string" />
+	<prop name="Fonction" type="string" />
+	<prop name="Adresse1" type="string" />
+	<prop name="Adresse2" type="string" />
+	<prop name="Adresse3" type="string" />
+	<prop name="CodePostal" type="string" />
+	<prop name="Ville" type="string" />
+	<prop name="Telephone" type="string" />
+	<prop name="Mobile" type="string" />
+	<prop name="Fax" type="string" />
+	<prop name="Email" type="string" />
+	<prop name="Referent" type="boolean" />
+	
+	<slot name="ActionCommerciale" arity="*" calculated="true" />
+	<slot name="Commande" arity="*" calculated="true" />
+	
+	<prop name="IdentifiantBase" type="string" />
+
+	<slot name="Societe" arity="1" />
+
+  <prop name="Remarques" type="string" />
+
+	<!-- SQL OPTIMIZATION -->
+
+	<prop name="SocieteRaisonSociale" type="string" />
+	<prop name="SocieteEstUnProspect" type="string" />
+	<prop name="SocietePriorite" type="string" />
+	<prop name="SocieteActiviteLibelle" type="string" />
+	<prop name="IdSociete" type="int" />
+	<prop name="IdCommercialResponsable" type="int" />
+	<prop name="APourResponsableNom" type="string" />
+
+	<prop name="SocieteAdresse1" type="string" />
+	<prop name="SocieteAdresse2" type="string" />
+	<prop name="SocieteAdresse3" type="string" />
+	<prop name="SocieteCodePostal" type="string" />
+  <prop name="SocieteVille" type="string" />
+  <prop name="SocieteTel" type="string" />
+
+  <prop name="NomPrenom" type="string" />
+  
+	<!-- COMMAND PART -->
+
+	<command name="Unplug" template="com.gdo.crm.commercial.cmd.DeleteContact" />
+	<command name="NewActionCommerciale" template="com.gdo.crm.commercial.cmd.NewActionCommerciale"/>
+	<command name="NewCommande" template="com.gdo.crm.commercial.cmd.NewCommande"/>
+
+</template>

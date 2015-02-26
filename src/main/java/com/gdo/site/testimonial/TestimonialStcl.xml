@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.project.util.model.NamedStcl">
+	
+	<prop name="Who" type="string"/>
+	<prop name="Title" type="string"/>
+	<prop name="Where" type="string"/>
+	<prop name="Text" type="string"/>
+	<prop name="Category" type="string"/>
+	
+</template>

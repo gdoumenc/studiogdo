@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.commercial.cmd.NewSociete">
+
+	<description>
+		Create a new societe in the service (checks soundex in step 2).
+	</description>
+	
+	<inst id="step2" template="com.gdo.project.model.StepStcl"/>
+	<plug ref="step2" key="2" slot="Steps"/>
+
+	<prop name="CreatedSoundex" type="string"/>
+	<prop name="CloseSoundex" type="string"/>
+
+	<prop name="StclMode" type="string">
+		<data>create</data>
+	</prop>
+
+</template>

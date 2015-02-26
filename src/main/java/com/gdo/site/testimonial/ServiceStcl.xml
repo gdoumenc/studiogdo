@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+
+<template extends="com.gdo.site.model.SimplePageStcl">
+
+	<slot name="Testimonials" arity="*"/>
+	
+	<command name="NewTestimonial" template="com.gdo.project.cmd.CreateAtomic">
+	  <param index="0" type="string">com.gdo.site.testimonial.TestimonialStcl</param>
+	  <param index="1" type="string">Target/Testimonials</param>
+	  <param index="2" type="string">int</param>
+	  <param index="3" type="string">1</param>
+	</command>
+	
+</template>

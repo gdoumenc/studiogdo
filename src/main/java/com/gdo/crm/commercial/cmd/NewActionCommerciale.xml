@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='iso-8859-1' ?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.crm.commercial.cmd.NewActionCommerciale">
+
+	<param index="2" type="string"></param>
+
+	<prop name="StclMode" type="string">
+		<data>modify</data>
+	</prop>
+
+</template>
