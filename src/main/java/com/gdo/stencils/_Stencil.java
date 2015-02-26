@@ -618,7 +618,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      *            the plug key for the clone.
      * @param self
      *            this stencil as a plugged stencil
-     * @throws CloneNotSupportedException
      * @return the stencil cloned
      */
     public S clone(C stclContext, PSlot<C, S> slot, IKey key, S self) throws CloneNotSupportedException {
@@ -822,7 +821,6 @@ public abstract class _Stencil<C extends _StencilContext, S extends _PStencil<C,
      * @param self
      *            this stencil as a plugged stencil.
      * @return the number of stencils in path.
-     * @throws WrongPathException
      */
     public int size(C stclContext, String path, S self) throws WrongPathException {
         return size(stclContext, path, null, self);

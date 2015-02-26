@@ -848,7 +848,10 @@ public class RpcWrapper {
             }
 
             // HTML 5 facet or JSON facet
-            if (FacetType.HTML5.equals(type) || FacetType.DOM5.equals(type) || FacetType.JSON.equals(type) || FacetType.JSKEL.equals(type) || FacetType.PYTHON.equals(type) || FacetType.REST.equals(type)) {
+            if (FacetType.HTML5.equals(type)
+                    || FacetType.DOM5.equals(type) || FacetType.TRANS.equals(type)
+                    || FacetType.JSON.equals(type) || FacetType.JSKEL.equals(type)
+                    || FacetType.PYTHON.equals(type) || FacetType.REST.equals(type)) {
                 String mime = facetResult.getMimeType();
                 InputStream in = facetResult.getInputStream();
                 StudioGdoServlet.writeResponse(stclContext.getResponse(), HttpServletResponse.SC_OK, mime, in, StclContext.getCharacterEncoding());

@@ -104,7 +104,7 @@ public class HTML5SectionCompleter {
     protected PStcl prop;
     protected PStcl prop_stcl;
     protected String prop_path;
-    protected boolean add_blocktrans;
+    protected boolean trans_mod;
 
     /**
      * Retrieves a facet from a template descriptor.
@@ -115,8 +115,8 @@ public class HTML5SectionCompleter {
     /**
      * Set translation mode enabled.
      */
-    public void addTrans() {
-        add_blocktrans = true;
+    public void setTransMode() {
+        trans_mod = true;
     }
 
     /**
@@ -175,11 +175,6 @@ public class HTML5SectionCompleter {
             e.printStackTrace();
             return new FacetResult(FacetResult.ERROR, e.toString(), null);
         }
-    }
-
-    public FacetResult getTransFacetFromSkeleton(StclContext stclContext, PStcl stcl, String skel) {
-        addTrans();
-        return getFacetFromSkeleton(stclContext, stcl, skel);
     }
 
     private String _getFacetFromSkeleton(StclContext stclContext, PStcl stcl, String skel) throws Exception {
@@ -593,11 +588,7 @@ public class HTML5SectionCompleter {
         // sets value or select attribute
         String type = elt.attr("type");
         if ("textarea".equalsIgnoreCase(elt.tagName())) {
-            String val = formatValue(stclContext, elt, value, format, null);
-            if (add_blocktrans) {
-                val = String.format("{%% blocktrans %%}%s{%% endblocktrans %%}", val);
-            }
-            elt.val(val);
+            elt.val(formatValue(stclContext, elt, value, format, null));
         } else if ("checkbox".equalsIgnoreCase(type)) {
 
             // compares to value defined if exists
@@ -758,7 +749,7 @@ public class HTML5SectionCompleter {
             labelPath = valuePath;
         }
         String label = getPropertyValue(stclContext, stcl, labelPath);
-        option.appendText(label);
+        option.appendText(addBlockTrans(label));
 
         // sets path value
         String apath = getPwd(stclContext, stcl);
@@ -766,7 +757,7 @@ public class HTML5SectionCompleter {
 
         // sets value
         String value = getPropertyValue(stclContext, stcl, valuePath);
-        option.attr("value", value);
+        option.attr("value", addBlockTrans(value));
     }
 
     /**
@@ -847,6 +838,7 @@ public class HTML5SectionCompleter {
                 labelPath = valuePath;
             }
             String value = getPropertyValue(stclContext, currentStcl, labelPath);
+            value = addBlockTrans(value);
             for (Element option : elt.select(OPTION)) {
                 if (StringUtils.isNotBlank(value) && value.equals(option.text())) {
                     option.attr("selected", "selected");
@@ -1456,9 +1448,6 @@ public class HTML5SectionCompleter {
         Element span = container.appendElement("span");
         String val = formatValue(stclContext, container, value, format, span);
         if (val != null) {
-            if (add_blocktrans) {
-                val = String.format("{%% blocktrans %%}%s{%% endblocktrans %%}", val);
-            }
             span.appendText(val);
         }
         setDataAPath(stclContext, span, path);
@@ -1472,19 +1461,20 @@ public class HTML5SectionCompleter {
     private String formattedValue(StclContext stclContext, Element elt, String value, String format, Element span) throws ParseException {
         if (StringUtils.isNotEmpty(format)) {
             if (format.startsWith("i")) {
-                return formatIntegerValue(stclContext, value, format.substring(1), span);
+                return formatIntegerValue(stclContext, value, format.substring(1));
             }
             if (format.startsWith("s")) {
-                return formatStringValue(stclContext, value, format.substring(1), span);
+                String v = formatStringValue(stclContext, value, format.substring(1), span);
+                return addBlockTrans(v);
             }
             if (format.startsWith("dt")) {
-                return formatDateTimeValue(stclContext, value, format.substring(3), span);
+                return formatDateTimeValue(stclContext, value, format.substring(3));
             }
         }
         return null;
     }
 
-    private String formatIntegerValue(StclContext stclContext, String value, String format, Element span) {
+    private String formatIntegerValue(StclContext stclContext, String value, String format) {
         Locale locale = Locale.FRENCH;
         try {
             if (StringUtils.isBlank(format) || format.length() == 0)
@@ -1499,16 +1489,16 @@ public class HTML5SectionCompleter {
 
             // suffix
             if (format.endsWith(" €")) {
-                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 2), span) + " €";
+                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 2)) + " €";
             }
             if (format.endsWith("€")) {
-                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 1), span) + "€";
+                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 1)) + "€";
             }
             if (format.endsWith(" %")) {
-                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 2), span) + " %";
+                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 2)) + " %";
             }
             if (format.endsWith("%")) {
-                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 1), span) + "%";
+                return formatIntegerValue(stclContext, value, format.substring(0, format.length() - 1)) + "%";
             }
 
             // decimal format
@@ -1546,7 +1536,7 @@ public class HTML5SectionCompleter {
 
         if (format.equals("w")) {
             for (String s : value.split("\n")) {
-                span.appendText(s);
+                span.appendText(addBlockTrans(s));
                 Element parent = span.parent();
                 parent.appendElement("br");
                 span = parent.appendElement("span");
@@ -1557,7 +1547,7 @@ public class HTML5SectionCompleter {
         return value;
     }
 
-    private String formatDateTimeValue(StclContext stclContext, String value, String format, Element span) throws ParseException {
+    private String formatDateTimeValue(StclContext stclContext, String value, String format) throws ParseException {
         if (StringUtils.isBlank(value) || StringUtils.isBlank(format) || format.length() == 0)
             return value;
 
@@ -1606,17 +1596,25 @@ public class HTML5SectionCompleter {
             // format from name attribute
             String name = container.attr("name");
             if (StringUtils.isBlank(name) || name.indexOf('_') < 0)
-                return value;
+                return addBlockTrans(value);
             format = name.substring(0, name.lastIndexOf('_'));
             formatted = formattedValue(stclContext, container, value, name, span);
             if (formatted != null)
                 return formatted;
 
             // no format found
-            return value;
+            return addBlockTrans(value);
+
         } catch (Exception e) {
             return e.toString();
         }
+    }
+
+    private String addBlockTrans(String value) {
+        if (trans_mod && StringUtils.isNotBlank(value)) {
+            value = String.format("{%% blocktrans %%}%s{%% endblocktrans %%}", value);
+        }
+        return value;
     }
 
     /**
@@ -1679,6 +1677,7 @@ public class HTML5SectionCompleter {
                 // _values.put(save_index, value);
             }
             return value;
+
         } catch (Exception e) {
             return "";
         }
