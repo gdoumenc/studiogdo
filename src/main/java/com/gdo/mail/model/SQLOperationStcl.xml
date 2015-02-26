@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template java="com.gdo.mail.model.SQLOperationStcl">
+
+	<slot name="SqlContext" arity="1">
+		<description>SQL context to retrieve addresses and counters.</description>
+		<default template="com.gdo.sql.model.SQLContextStcl"/>
+	</slot>
+	
+	<slot name="Segments" arity="*">
+		<description>The SQL segments defined for this operation</description>
+		<link slot="MailContext" path="../MailContext"/>
+		<link slot="SqlContext" path="../SqlContext"/>
+		<link slot="Generators" path="../Generators"/>
+		<link slot="Services" path="../Services"/>
+	</slot>
+
+	<command name="AddSegment" template="com.gdo.project.cmd.CreateAtomic">
+		<description>Add a sql segment</description>
+		<param index="0" type="string">com.gdo.mail.model.SqlSegmentStcl</param>
+	  <param index="1" type="string">Target/Segments</param>
+	  <param index="2" type="string">int</param>
+	  <param index="3" type="string">1</param>
+	</command>
+
+</template>

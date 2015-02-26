@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.mail.model.SQLOperationStcl">
+
+	<slot name="SqlContext" delegate="/Contexts(sql)"/>
+	<slot name="MailContext" delegate="/Contexts(mail)"/>
+	
+	<inst id="site" template="com.gdo.site.model.ServiceStcl">
+		<inst id="page" template="com.gdo.site.model.SimplePageStcl"/>
+		<plug ref="page" slot="Pages" key="newsletter"/>
+		<slot name="FtpContext" delegate="/Contexts(ftp)"/>
+	</inst>
+	<plug ref="site" slot="Services" key="site"/>
+	
+	<!-- Think to set the generator and define the Remove tracker -->
+	
+	<!-- COMMAND PART -->
+
+	<command name="AddSegment" template="com.gdo.email.cmd.NewSegment"/>
+
+</template>
