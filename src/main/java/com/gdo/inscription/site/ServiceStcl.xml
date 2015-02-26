@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template PUBLIC
+  "-//StudioGdo//DTD Stencil 1.0//EN" "stencil.dtd">
+
+<template extends="com.gdo.site.model.ServiceStcl">
+
+	<description>
+		Site service used to generate inscription form page.
+	</description>
+	
+	<inst id="form" template="com.gdo.inscription.site.FormPageStcl"/>
+	<plug ref="form" slot="Pages" key="form"/>
+
+</template>
+
