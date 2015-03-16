@@ -43,16 +43,6 @@ import com.gdo.stencils.util.StencilUtils;
  * <p>
  * Temporary stencils may be stored in database using negative Id.
  * </p>
- * 
- * <p>
- * &copy; 2004, 2005 StudioGdo/Guillaume Doumenc. All Rights Reserved. This
- * software is the proprietary information of StudioGdo & Guillaume Doumenc. Use
- * is subject to license terms.
- * </p>
- * 
- * 
- * @author Guillaume Doumenc (<a>
- *         href="mailto:gdoumenc@studiogdo.com">gdoumenc@studiogdo.com</a>)
  */
 public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements SQLSlotMixin {
 
@@ -583,7 +573,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      * @param self
      *            this slot as a plugged slot.
      * @return a map with property path as key and value associated
-     *         <tt>null if not optimization/tt>.
+     *         <tt>null if not optimization</tt>.
      */
     public Map<String, String> getPropertiesValuesFromKeyResults(StclContext stclContext, ResultSet rs, PSlot<StclContext, PStcl> self) throws SQLException {
         Map<String, String> map = new HashMap<String, String>();
@@ -846,8 +836,8 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
      *            the stencil to be deleted.
      * @param sqlContext
      *            the sql context stencil.
-     * @param container
-     *            the container stencil.
+     * @param self
+     *            this slot as a contained slot.
      */
     protected Result deleteStencilQuery(StclContext stclContext, IKey key, PStcl stencil, PStcl sqlContext, PSlot<StclContext, PStcl> self) {
         try {
