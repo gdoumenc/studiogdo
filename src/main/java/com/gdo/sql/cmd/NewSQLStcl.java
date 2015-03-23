@@ -33,7 +33,7 @@ public class NewSQLStcl extends CreateInOneStep {
 
     /**
      * Determines the step index when the SQL stencil should be inserted in the
-     * database (with an id > 0.
+     * database (with an id &gt; 0).
      * 
      * @return the insertion step index.
      */

@@ -16,7 +16,6 @@ import com.gdo.stencils.plug.PStcl;
 
 /**
  * Create a stencil, validate it and then only plug it in target slot.
- * <p>
  * <ol>
  * <li>stencil created class (stencil template full name)</li>
  * <li>destination slot path (where the stencil created will be plugged in -
@@ -25,7 +24,6 @@ import com.gdo.stencils.plug.PStcl;
  * <li>initial key value (default 1 for int, "a" for string)</li>
  * <li>initial parameter for constructor if needed</li>
  * </ol>
- * </p>
  */
 public class CreateInOneStep extends CreateInSteps {
 

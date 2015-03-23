@@ -25,6 +25,7 @@ import com.gdo.stencils.util.StencilUtils;
  * createStencil and beforePlug may be redefined for specific stencil creation.
  * <p>
  * Parameters are :
+ * </p>
  * <ol>
  * <li>stencil created class (stencil template full name)</li>
  * <li>destination slot path (where the stencil created will be plugged in -
@@ -33,7 +34,6 @@ import com.gdo.stencils.util.StencilUtils;
  * <li>initial key value (default 1 for int, "a" for string)</li>
  * <li>initial parameter for constructor if needed</li>
  * </ol>
- * </p>
  */
 public abstract class CreateInSteps extends ComposedActionStcl {
 

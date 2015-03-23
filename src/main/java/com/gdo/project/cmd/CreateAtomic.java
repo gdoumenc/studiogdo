@@ -33,7 +33,7 @@ import com.gdo.stencils.util.StencilUtils;
  * <li>key type (none, fixed, unique, string, int - default : none)</li>
  * <li>initial key value (default 1 for int, "a" for string)</li>
  * <li>initial parameter for constructor if needed</li>
- * <ol>
+ * </ol>
  */
 public class CreateAtomic extends AtomicActionStcl {
 

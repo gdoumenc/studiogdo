@@ -30,7 +30,7 @@ import com.gdo.stencils.util.StencilUtils;
  * found at another specific key, 3 : all instances (all same stencil no matter
  * on key).</li>
  * <li>the key if type is 2.</li>
- * <ol>
+ * </ol>
  */
 public class Unplug extends AtomicActionStcl {
 
