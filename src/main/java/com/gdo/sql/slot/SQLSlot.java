@@ -777,7 +777,12 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);
-            plugged.setCursorBased(stclContext, self, _cursor, new Key(last_inserted_id));
+            if (_cursor != null) {
+                plugged.setCursorBased(stclContext, self, _cursor, new Key(last_inserted_id));
+            } else {
+                SQLCursor cursor = getCursor(stclContext, self);
+                plugged.setCursorBased(stclContext, self, cursor, new Key(last_inserted_id));
+            }
         }
 
         return Result.success(PLUGGED_PREFIX, plugged);
@@ -977,11 +982,13 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
 
         // if the list was already created for the same stencil context and
         // without any condition
-        //synchronized (this) {
-        //    if ((_stencil_context_uid == stclContext.getId() || _read_only) && _stencil_context_map != null) {
-        //        return StencilUtils.<StclContext, PStcl> iterator(stclContext, _stencil_context_map.get().clone(), cond, self);
-        //    }
-        //}
+        // synchronized (this) {
+        // if ((_stencil_context_uid == stclContext.getId() || _read_only) &&
+        // _stencil_context_map != null) {
+        // return StencilUtils.<StclContext, PStcl> iterator(stclContext,
+        // _stencil_context_map.get().clone(), cond, self);
+        // }
+        // }
 
         // creates the stencil list
         SQLCursor cursor = getCursor(stclContext, self);
