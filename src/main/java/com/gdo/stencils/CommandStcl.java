@@ -23,6 +23,7 @@ import com.gdo.stencils.facet.FacetType;
 import com.gdo.stencils.facet.HTML5SectionCompleter;
 import com.gdo.stencils.facet.JSONSectionCompleter;
 import com.gdo.stencils.facet.PythonSectionCompleter;
+import com.gdo.stencils.facet.RestPythonSectionCompleter;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.factory.StencilFactory;
 import com.gdo.stencils.key.IKey;
@@ -166,6 +167,11 @@ public abstract class CommandStcl extends CommandStencil<StclContext, PStcl> {
         if (FacetType.PYTHON.equals(facet)) {
             String mode = renderContext.getFacetMode();
             PythonSectionCompleter completer = new PythonSectionCompleter();
+            return completer.getFacetFromDOM(stclContext, self, mode);
+        }
+        if (FacetType.REST.equals(facet)) {
+            String mode = renderContext.getFacetMode();
+            RestPythonSectionCompleter completer = new RestPythonSectionCompleter();
             return completer.getFacetFromDOM(stclContext, self, mode);
         }
 

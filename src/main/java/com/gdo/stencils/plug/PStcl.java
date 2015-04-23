@@ -33,6 +33,7 @@ import com.gdo.stencils.facet.FacetType;
 import com.gdo.stencils.facet.HTML5SectionCompleter;
 import com.gdo.stencils.facet.JSONSectionCompleter;
 import com.gdo.stencils.facet.PythonSectionCompleter;
+import com.gdo.stencils.facet.RestPythonSectionCompleter;
 import com.gdo.stencils.factory.StclFactory;
 import com.gdo.stencils.key.IKey;
 import com.gdo.stencils.key.Key;
@@ -425,6 +426,11 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
         if (FacetType.PYTHON.equals(facet)) {
             String mode = renderContext.getFacetMode();
             PythonSectionCompleter completer = new PythonSectionCompleter();
+            return completer.getFacetFromDOM(stclContext, this, mode);
+        }
+        if (FacetType.REST.equals(facet)) {
+            String mode = renderContext.getFacetMode();
+            RestPythonSectionCompleter completer = new RestPythonSectionCompleter();
             return completer.getFacetFromDOM(stclContext, this, mode);
         }
 
