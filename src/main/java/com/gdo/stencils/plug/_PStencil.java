@@ -338,12 +338,12 @@ public abstract class _PStencil<C extends _StencilContext, S extends _PStencil<C
     }
 
     /**
-     * Changes the key. Should be used only by slot implementation.
+     * Changes the key.
      * 
      * @param key
      *            the new key.
      */
-    public final void setKey(IKey key) {
+    public void setKey(IKey key) {
         if (key == null) {
             throw new IllegalArgumentException("Illegal null key parameter");
         }

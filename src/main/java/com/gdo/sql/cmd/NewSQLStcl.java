@@ -1,7 +1,9 @@
 package com.gdo.sql.cmd;
 
+import org.apache.commons.net.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 
+import com.gdo.project.cmd.CreateAtomic;
 import com.gdo.project.cmd.CreateInOneStep;
 import com.gdo.sql.model.SQLContextStcl;
 import com.gdo.sql.model.SQLStcl;
@@ -75,7 +77,12 @@ public class NewSQLStcl extends CreateInOneStep {
         if (result.isNotSuccess()) {
             return error(cmdContext, self, result);
         }
-        return success(cmdContext, self);
+        
+        Base64 base = new Base64();
+        String encoded_path =  new String(base.encode(_created.pwd(stclContext).getBytes()));
+        CommandStatus<StclContext, PStcl> s = success(cmdContext, self, CreateAtomic.Status.KEY_USED, _created.getKey());
+        s = success(cmdContext, self, CreateAtomic.Status.STENCIL_CREATED, _created, s);
+        return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, encoded_path, s);
     }
 
     @Override
@@ -110,8 +117,10 @@ public class NewSQLStcl extends CreateInOneStep {
             }
 
             // all done
-            return success(cmdContext, self);
-        } catch (Exception e) {
+            CommandStatus<StclContext, PStcl> s = success(cmdContext, self, CreateAtomic.Status.KEY_USED, _plugged.getKey());
+            s = success(cmdContext, self, CreateAtomic.Status.STENCIL_CREATED, _plugged, s);
+            return success(cmdContext, self, CreateAtomic.Status.STENCIL_PATH, _plugged.pwd(stclContext), s);
+         } catch (Exception e) {
             return error(cmdContext, self, e);
         }
     }

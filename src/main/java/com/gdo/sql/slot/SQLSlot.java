@@ -774,6 +774,7 @@ public abstract class SQLSlot extends MultiSlot<StclContext, PStcl> implements S
         if (StringUtils.isBlank(id)) {
             SQLContextStcl stcl = (SQLContextStcl) sqlContext.getReleasedStencil(stclContext);
             int last_inserted_id = stcl.queryLastInsertID(stclContext, sqlContext);
+            plugged.setKey(new Key(last_inserted_id));
             plugged.setInt(stclContext, SQLStcl.Slot.ID, last_inserted_id);
             plugged.call(stclContext, Command.UPDATE);
             plugged.plug(stclContext, sqlContext, SQLStcl.Slot.SQL_CONTEXT);

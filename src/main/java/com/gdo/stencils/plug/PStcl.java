@@ -1053,6 +1053,15 @@ public class PStcl extends _PStencil<StclContext, PStcl> {
     public IKey getKey() {
         return super.getKey();
     }
+    
+    @Override
+    public void setKey(IKey key) {
+        super.setKey(key);
+        if (isCursorBased()) {
+            this._cursor_key = key;
+        }
+    }
+
 
     @Override
     public String toString() {
